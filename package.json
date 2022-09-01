@@ -1,0 +1,23 @@
+{
+  "name": "web-community-project",
+  "version": "1.0.0",
+  "description": "창의 융합 프로젝트",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JongDeug/web-community-project.git"
+  },
+  "author": "JongDeug",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JongDeug/web-community-project/issues"
+  },
+  "homepage": "https://github.com/JongDeug/web-community-project#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
