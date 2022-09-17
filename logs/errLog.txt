@@ -24,3 +24,5 @@
 2022/09/1	23:19:21	TypeError: res.status(...).sen is not a function
 2022/09/1	23:19:23	TypeError: res.status(...).sen is not a function
 2022/09/1	23:20:40	TypeError: res.status(...).sen is not a function
+2022/09/17	13:31:26	TypeError: Cannot read properties of undefined (reading 'username')
+2022/09/17	13:31:28	TypeError: Cannot read properties of undefined (reading 'username')
