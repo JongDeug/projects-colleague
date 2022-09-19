@@ -68,3 +68,9 @@
 2022/09/17	13:33:45	POST	undefined	/refresh
 2022/09/17	13:35:03	POST	undefined	/auth
 2022/09/17	13:35:08	GET	undefined	/refresh
+2022/09/19	11:56:57	POST	undefined	/register
+2022/09/19	11:57:15	GET	undefined	/auth
+2022/09/19	11:57:19	POST	undefined	/auth
+2022/09/19	11:57:58	POST	undefined	/auth
+2022/09/19	11:58:21	POST	undefined	/auth
+2022/09/19	11:58:49	GET	undefined	/refresh
