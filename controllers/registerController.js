@@ -1,11 +1,10 @@
 const User = require('../model/User');
 const bcrypt = require('bcryptjs');
-const { fi } = require('date-fns/locale');
 
 const handleNewUser = async (req, res) => {
     const data = {
-        user: req.body.user,
-        pwd: req.body.pwd,
+        username: req.body.username,
+        password: req.body.password,
         dateOfBirth: req.body.dateOfBirth,
         email: req.body.email,
         pet: req.body.pet,
@@ -23,11 +22,15 @@ const handleNewUser = async (req, res) => {
     const keys = Object.keys(filterdata);
     if (keys.length !== 0) {
         let str = keys.join(" ");
-        return res.status(401).json({ "Message": `${str} are required` });
+        if (keys.length === 1) {
+            return res.status(401).json({ "Message": `${str} is required` });
+        } else {
+            return res.status(401).json({ "Message": `${str} are required` });
+        }
     }
 
     // 중복 체킹
-    const duplicate = await User.findOne({ username: data.user }).exec();
+    const duplicate = await User.findOne({ username: data.username }).exec();
     if (duplicate) {
         return res.sendStatus(409); // conflict
     }
@@ -36,7 +39,7 @@ const handleNewUser = async (req, res) => {
         // password 암호화
         const hashedPwd = await new Promise((resolve, reject) => {
             bcrypt.genSalt(10, (err, salt) => {
-                bcrypt.hash(data.pwd, salt, (err, hash) => {
+                bcrypt.hash(data.password, salt, (err, hash) => {
                     if (err) { reject(err); }
                     resolve(hash);
                 });
@@ -45,7 +48,7 @@ const handleNewUser = async (req, res) => {
 
         // DB에 data저장
         const result = await User.create({
-            username: data.user,
+            username: data.username,
             password: hashedPwd,
             dateOfBirth: data.dateOfBirth,
             email: data.email,
@@ -54,7 +57,7 @@ const handleNewUser = async (req, res) => {
         });
         console.log(result);
 
-        res.status(201).json({ "success": `New user ${data.user} created` });
+        res.status(201).json({ "success": `New user ${data.username} created` });
     } catch (err) {
         res.status(500).json({ "message": err.message });
     }

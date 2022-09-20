@@ -29,7 +29,16 @@ const handleRefreshToken = async (req, res) => {
 
             // 새로운 accessToken 생성
             const accessToken = jwt.sign(
-                { "username": foundUser.username },
+                {
+                    "UserInfo": {
+                        "username": foundUser.username,
+                        "password": foundUser.password,
+                        "dateOfBirth": foundUser.dateOfBirth,
+                        "email": foundUser.email,
+                        "pet": foundUser.pet,
+                        "interestKeywords": foundUser.interestKeywords
+                    }
+                },
                 process.env.ACCESS_TOKEN_SECRET,
                 { expiresIn: '60s' }
             );

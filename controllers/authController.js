@@ -3,27 +3,35 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const handleLogin = async (req, res) => {
+    console.log(req.body.username);
     // front 에서 user, pwd 데이터 받아오기 
-    const { user, pwd } = req.body;
-    if (!user || !pwd) {
+    const { username, password } = req.body;
+    if (!username || !password) {
         return res.status(400).json({ 'message': 'Username and Password are required' });
     }
 
     // DB 확인
-    const foundUser = await User.findOne({ username: user }).exec();
+    const foundUser = await User.findOne({ username: username}).exec();
     if (!foundUser) {
         return res.sendStatus(401);
     }
 
     // 데이터베이스에 있는 비밀번호와 사용자 입력 비밀번호 체킹
-    const match = await bcrypt.compare(pwd, foundUser.password);
+    const match = await bcrypt.compare(password, foundUser.password);
     if (match) {
 
         // accessToken 생성
         const accessToken = jwt.sign(
             // 1. 넣을 정보
             {
-                "username": foundUser.username
+                "UserInfo": {
+                    "username": foundUser.username,
+                    "password": foundUser.password,
+                    "dateOfBirth": foundUser.dateOfBirth,
+                    "email": foundUser.email,
+                    "pet": foundUser.pet,
+                    "interestKeywords": foundUser.interestKeywords
+                }
             },
 
             // 2. .env 파일, accessToken을 만들기 위해 처음 필요한 또다른 암호 코드
@@ -43,7 +51,7 @@ const handleLogin = async (req, res) => {
         // refreshToken DB에 저장
         foundUser.refreshToken = refreshToken;
         await foundUser.save();
-        
+
         // refreshToken front-end cookie에 저장. 그래야 DB랑 cookie랑 비교 가능.
         res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // httpOnly는 javascript로 접근 불가능.
         res.json({ accessToken });

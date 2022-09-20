@@ -13,7 +13,13 @@ const verifyJWT = (req, res, next) => {
             if(err) return res.sendStatus(403) // invalid token
 
             // decoded 해서 req에 원하는 값 넣어서 나중에 사용 가능.
-            req.user = decoded.username; 
+            req.username = decoded.UserInfo.username; 
+            req.password = decoded.UserInfo.password;
+            req.dateOfBirth = decoded.UserInfo.dateOfBirth;
+            req.email = decoded.UserInfo.email;
+            req.pet = decoded.UserInfo.pet;
+            req.interestKeywords = decoded.UserInfo.interestKeywords
+
             next();
         }
     )

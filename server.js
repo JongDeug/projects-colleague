@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
+const path = require('path');
 const { reqLogger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
 const verfiyJWT = require('./middleware/verifyJWT');
@@ -22,12 +23,18 @@ app.use(cors(corsOptions));
 // custom middleware
 app.use(reqLogger);
 
+// serve static files
+app.use('/', express.static(path.join(__dirname, '/public')));
 
 // routes
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '/views', 'index.html'));
+});
 app.use('/register', require('./routes/register'));
 app.use('/auth', require('./routes/auth'));
 app.use('/refresh', require('./routes/refresh'));
 app.use(verfiyJWT);
+
 // 여기부터 회원 api 작성 ...  
 
 // custom middleware, errorHandler
