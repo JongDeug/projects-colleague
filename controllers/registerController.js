@@ -2,21 +2,33 @@ const User = require('../model/User');
 const bcrypt = require('bcryptjs');
 
 const handleNewUser = async (req, res) => {
-    const data = {
-        username: req.body.username,
-        password: req.body.password,
-        dateOfBirth: req.body.dateOfBirth,
-        email: req.body.email,
-        pet: req.body.pet,
-        interestKeywords: req.body.interestKeywords
-    };
+    const data = new User.DTO(); 
+    data.setUsername = req.body.username;
+    data.setPassword = req.body.password;
+    data.setDateOfBirth = req.body.dateOfBirth;
+    data.setEmail = req.body.email;
+    data.setPet = req.body.pet;
+    data.setInterestKeywords = req.body.interestKeywords;
+    // const data = {
+    //     username: req.body.username,
+    //     password: req.body.password,
+    //     dateOfBirth: req.body.dateOfBirth,
+    //     email: req.body.email,
+    //     pet: req.body.pet,
+    //     interestKeywords: req.body.interestKeywords
+    // };
     let filterdata = {};
 
     // filterdata(내용이 없는 데이터 걸러내기)
     for (const key in data) {
         const value = data[key];
-        if (!value) { filterdata[key] = value; }
+        if (!value) { 
+    
+        }
     }
+
+    // 1.DTO에 뭔가 넣어서 확인하거나 
+    // 2.여기서 함수로 정리해서 확인하면 될듯. 이거 짜놓으면 ㄱㅊ을듯
 
     // Message 생성 후 종료
     const keys = Object.keys(filterdata);
