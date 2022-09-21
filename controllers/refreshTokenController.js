@@ -10,7 +10,7 @@ const handleRefreshToken = async (req, res) => {
 
     const refreshToken = cookies.jwt;
     // DB 와 비교
-    const foundUser = await User.findOne({ refreshToken: refreshToken }).exec();
+    const foundUser = await User.DB.findOne({ refreshToken: refreshToken }).exec();
     if (!foundUser) {
         return res.sendStatus(403); // Forbidden
     }

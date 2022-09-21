@@ -3,21 +3,23 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const handleLogin = async (req, res) => {
-    console.log(req.body.username);
+    const data = new User.DTO();
+    data.setUsername = req.body.username;
+    data.setPassword = req.body.password;
+
     // front 에서 user, pwd 데이터 받아오기 
-    const { username, password } = req.body;
-    if (!username || !password) {
+    if (!data.getUsername || !data.getPassword) {
         return res.status(400).json({ 'message': 'Username and Password are required' });
     }
 
     // DB 확인
-    const foundUser = await User.findOne({ username: username}).exec();
+    const foundUser = await User.DB.findOne({ username: data.getUsername}).exec();
     if (!foundUser) {
         return res.sendStatus(401);
     }
 
     // 데이터베이스에 있는 비밀번호와 사용자 입력 비밀번호 체킹
-    const match = await bcrypt.compare(password, foundUser.password);
+    const match = await bcrypt.compare(data.getPassword, foundUser.password);
     if (match) {
 
         // accessToken 생성

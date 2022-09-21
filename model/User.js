@@ -76,24 +76,41 @@ class DTO {
     }
 
     isEmpty = () => {
-        let array;
-        check(this.#username, "username");
-        check(this.#password, "password");
-        check(this.#dateOfBirth, "dateOfBirth");
-        check(this.#email, "email");
-        check(this.#pet, "pet");
-        check(this.#interestKeywords, "interestKeywords");
+        let array = [];
+        if (checkNull(this.#username, "username")) {
+            array.push("username");
+        }
+        if (checkNull(this.#password, "password")) {
+            array.push("password");
+        }
+        if (checkNull(this.#dateOfBirth, "dateOfBirth")) {
+            array.push("dateOfBirth");
+        }
+        if (checkNull(this.#email, "email")) {
+            array.push("email");
+        }
+        if (checkNull(this.#pet, "pet")) {
+            array.push("pet");
+        }
+        if (checkNull(this.#interestKeywords, "interestKeywords")) {
+            array.push("interestKeywords");
+        }
+
+        if (array.length === 0) {
+            return false;
+        } else {
+            return array.join(" ");
+        }
     }
 }
 
-const check = (value, str) => {
-    if(!value){
-        return str;
+const checkNull = (value) => {
+    if (!value) {
+        return true;
     } else {
-        return "";
+        return false;
     }
-    // join같이 써서 합치면 될듯 concat
 }
 
 const DB = mongoose.model('User', userSchema);
-module.exports = { DB, DTO}
+module.exports = { DB, DTO }
