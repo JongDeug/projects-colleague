@@ -1,4 +1,4 @@
-const User = require('../model/User');
+const User = require('../../model/User');
 const bcrypt = require('bcryptjs');
 
 const handleNewUser = async (req, res) => {
@@ -10,7 +10,7 @@ const handleNewUser = async (req, res) => {
     data.setPet = req.body.pet;
     data.setInterestKeywords = req.body.interestKeywords;
 
-    const requiredData = data.isEmpty();
+    const requiredData = User.DTO.isEmpty(data);
     if(requiredData){
         return res.status(400).json({"Message": `${requiredData} 가 필요합니다.`});
     }
@@ -45,7 +45,7 @@ const handleNewUser = async (req, res) => {
 
         res.status(201).json({ "success": `New user ${data.getUsername} created` });
     } catch (err) {
-        res.status(500).json({ "message": err.message });
+        res.status(500).json({ "messagegggg": err.message });
     }
 }
 

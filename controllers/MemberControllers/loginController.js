@@ -1,4 +1,4 @@
-const User = require('../model/User');
+const User = require('../../model/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -13,7 +13,7 @@ const handleLogin = async (req, res) => {
     }
 
     // DB 확인
-    const foundUser = await User.DB.findOne({ username: data.getUsername}).exec();
+    const foundUser = await User.DB.findOne({ username: data.getUsername }).exec();
     if (!foundUser) {
         return res.sendStatus(401);
     }
@@ -56,7 +56,11 @@ const handleLogin = async (req, res) => {
 
         // refreshToken front-end cookie에 저장. 그래야 DB랑 cookie랑 비교 가능.
         res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // httpOnly는 javascript로 접근 불가능.
-        res.json({ accessToken });
+        const redirect =
+            'member/complete';
+        res.json({ accessToken, redirect });
+        // req.session.accessToken = accessToken; // req는 다음으로 리다이렉팅 되면 전혀다른 값이구먼.
+
     }
     else {
         res.sendStatus(401);

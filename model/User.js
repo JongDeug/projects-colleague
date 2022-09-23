@@ -75,24 +75,24 @@ class DTO {
         this.#interestKeywords = value;
     }
 
-    isEmpty = () => {
+    static isEmpty = (data) => {
         let array = [];
-        if (checkNull(this.#username, "username")) {
+        if (data.checkNull(data.getUsername)) {
             array.push("username");
         }
-        if (checkNull(this.#password, "password")) {
+        if (data.checkNull(data.getPassword)) {
             array.push("password");
         }
-        if (checkNull(this.#dateOfBirth, "dateOfBirth")) {
+        if (data.checkNull(data.getDateOfBirth)) {
             array.push("dateOfBirth");
         }
-        if (checkNull(this.#email, "email")) {
+        if (data.checkNull(data.getEmail)) {
             array.push("email");
         }
-        if (checkNull(this.#pet, "pet")) {
+        if (data.checkNull(data.getPet)) {
             array.push("pet");
         }
-        if (checkNull(this.#interestKeywords, "interestKeywords")) {
+        if (data.checkNull(data.getInterestKeywords)) {
             array.push("interestKeywords");
         }
 
@@ -102,13 +102,13 @@ class DTO {
             return array.join(" ");
         }
     }
-}
 
-const checkNull = (value) => {
-    if (!value) {
-        return true;
-    } else {
-        return false;
+    checkNull = (value) => {
+        if (!value) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
