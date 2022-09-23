@@ -33,6 +33,7 @@ app.get('/', (req, res) => {
 app.use('/register', require('./routes/register'));
 app.use('/auth', require('./routes/auth'));
 app.use('/refresh', require('./routes/refresh'));
+app.use('/logout', require('./routes/logout'));
 app.use(verfiyJWT);
 
 // 여기부터 회원 api 작성 ...  

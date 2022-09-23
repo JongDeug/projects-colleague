@@ -12,7 +12,7 @@ const handleNewUser = async (req, res) => {
 
     const requiredData = data.isEmpty();
     if(requiredData){
-        return res.status(401).json({"Message": `${requiredData} 가 필요합니다.`});
+        return res.status(400).json({"Message": `${requiredData} 가 필요합니다.`});
     }
 
     // 중복 체킹
