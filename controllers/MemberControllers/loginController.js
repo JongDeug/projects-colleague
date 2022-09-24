@@ -1,8 +1,13 @@
 const User = require('../../model/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 
-const handleLogin = async (req, res) => {
+const get = (req, res) => {
+    res.sendFile(path.join(__dirname, '..', '..', '/views', 'login.html')); // login page
+}
+
+const post = async (req, res) => {
     const data = new User.DTO();
     data.setUsername = req.body.username;
     data.setPassword = req.body.password;
@@ -56,15 +61,15 @@ const handleLogin = async (req, res) => {
 
         // refreshToken front-end cookie에 저장. 그래야 DB랑 cookie랑 비교 가능.
         res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // httpOnly는 javascript로 접근 불가능.
-        const redirect =
-            'member/complete';
-        res.json({ accessToken, redirect });
-        // req.session.accessToken = accessToken; // req는 다음으로 리다이렉팅 되면 전혀다른 값이구먼.
 
+
+        // redirect를 index 페이지로 
+        const redirect = '/'; //login 성공 시 redirect를 "/" (root)로 하라.
+        res.json({ accessToken, redirect });
     }
     else {
         res.sendStatus(401);
     }
 }
 
-module.exports = { handleLogin };
+module.exports = { post, get };

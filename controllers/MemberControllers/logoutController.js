@@ -1,6 +1,7 @@
 const User = require('../../model/User');
+const path = require('path');
 
-const handleLogout = async (req, res) => {
+const get = async (req, res) => {
     const cookies = req.cookies;
     if (!cookies?.jwt) { // !cookies && !cookies.jwt
         return res.sendStatus(204); // No content
@@ -20,7 +21,9 @@ const handleLogout = async (req, res) => {
     console.log(result);
     // jwt(refreshToken) client에서 지우기
     res.clearCookie('jwt', { httpOnly: true });
-    res.sendStatus(204);
+
+    const redirect = '/';
+    res.status(204).json({redirect});
 }
 
-module.exports = { handleLogout }
+module.exports = { get }

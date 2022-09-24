@@ -4,10 +4,20 @@ const registerController = require('./MemberControllers/registerController');
 const refreshTokenController = require('./MemberControllers/refreshTokenController')
 
 const MemberController = {
-    login : loginController.handleLogin, //post
-    logout : logoutController.handleLogout,
-    register : registerController.handleNewUser,
-    refreshToken : refreshTokenController.handleRefreshToken
+    register: {
+        get: registerController.get,
+        post: registerController.post
+    },
+    login: {
+        post: loginController.post,
+        get: loginController.get
+    },
+    logout: {
+        get: logoutController.get,
+    },
+    refreshToken: {
+        get: refreshTokenController.get
+    }
 }
 
 

@@ -1,7 +1,12 @@
 const User = require('../../model/User');
 const bcrypt = require('bcryptjs');
+const path = require('path');
 
-const handleNewUser = async (req, res) => {
+const get = (req, res) => {
+    res.sendFile(path.join(__dirname, '..', '..', '/views', 'register.html'));
+}
+
+const post = async (req, res) => {
     const data = new User.DTO(); 
     data.setUsername = req.body.username;
     data.setPassword = req.body.password;
@@ -43,10 +48,12 @@ const handleNewUser = async (req, res) => {
         });
         console.log(result);
 
-        res.status(201).json({ "success": `New user ${data.getUsername} created` });
+        //redirect를 login 페이지로 
+        const redirect = '/member/login';
+        res.status(201).json({ "success": `New user ${data.getUsername} created`, redirect });
     } catch (err) {
-        res.status(500).json({ "messagegggg": err.message });
+        res.status(500).json({ "message": err.message });
     }
 }
 
-module.exports = { handleNewUser };
+module.exports = { post, get };

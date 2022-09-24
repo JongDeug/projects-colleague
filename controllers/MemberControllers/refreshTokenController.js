@@ -1,7 +1,7 @@
 const User = require('../../model/User');
 const jwt = require('jsonwebtoken');
 
-const handleRefreshToken = async (req, res) => {
+const get = async (req, res) => {
     // 쿠키에서 refreshToken 가져오기
     const cookies = req.cookies;
     if (!cookies?.jwt) { // -> !cookies && !cookies.jwt
@@ -47,4 +47,4 @@ const handleRefreshToken = async (req, res) => {
     );
 }
 
-module.exports = { handleRefreshToken };
+module.exports = { get };
