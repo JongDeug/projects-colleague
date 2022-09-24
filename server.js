@@ -7,7 +7,6 @@ const errorHandler = require('./middleware/errorHandler');
 const verfiyJWT = require('./middleware/verifyJWT');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-// const session = require('express-session');
 const corsOptions = require('./config/corsOptions');
 const { default: mongoose } = require('mongoose');
 const connectDB = require('./config/dbConn');
