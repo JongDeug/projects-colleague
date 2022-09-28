@@ -24,4 +24,35 @@ router.get('/logout', memberController.logout.get);
  */
 router.get('/refresh', memberController.refreshToken.get);
 
+/**
+ * leavId
+ */
+router.get('/leaveId', memberController.leaveId.get);
+router.delete('/leaveId', memberController.leaveId.delete);
+
+/**
+ * changePwd
+ */
+// router.get
+// router.put // put은 데이터를 다 보내야된다네
+
+/**
+ * changeInfo
+ */
+// router.get
+// router.put
+
+/**
+ * findId
+ */
+// router.get
+// router.post
+
+/**
+ * findPwd
+ */
+// router.get
+// router.post
+
+
 module.exports = router;

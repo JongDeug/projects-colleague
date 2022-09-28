@@ -1,7 +1,7 @@
 const User = require('../../model/User');
 const path = require('path');
 
-const get = async (req, res) => {
+const getMethod = async (req, res) => {
     const cookies = req.cookies;
     if (!cookies?.jwt) { // !cookies && !cookies.jwt
         return res.sendStatus(204); // No content
@@ -26,4 +26,4 @@ const get = async (req, res) => {
     res.status(204).json({redirect});
 }
 
-module.exports = { get }
+module.exports = { getMethod }

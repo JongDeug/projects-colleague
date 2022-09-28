@@ -3,22 +3,22 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 
-const get = (req, res) => {
+const getMethod = (req, res) => {
     res.sendFile(path.join(__dirname, '..', '..', '/views', 'login.html')); // login page
 }
 
-const post = async (req, res) => {
+const postMethod = async (req, res) => {
     const data = new User.DTO();
-    data.setUsername = req.body.username;
+    data.setUserId = req.body.userId;
     data.setPassword = req.body.password;
 
     // front 에서 user, pwd 데이터 받아오기 
-    if (!data.getUsername || !data.getPassword) {
-        return res.status(400).json({ 'message': 'Username and Password are required' });
+    if (!data.getUserId || !data.getPassword) {
+        return res.status(400).json({ 'message': 'UserId and Password are required' });
     }
 
     // DB 확인
-    const foundUser = await User.DB.findOne({ username: data.getUsername }).exec();
+    const foundUser = await User.DB.findOne({ userId: data.getUserId }).exec();
     if (!foundUser) {
         return res.sendStatus(401);
     }
@@ -32,7 +32,7 @@ const post = async (req, res) => {
             // 1. 넣을 정보
             {
                 "UserInfo": {
-                    "username": foundUser.username,
+                    "userId": foundUser.userId,
                     "password": foundUser.password,
                     "dateOfBirth": foundUser.dateOfBirth,
                     "email": foundUser.email,
@@ -50,7 +50,7 @@ const post = async (req, res) => {
 
         // refreshToken 생성
         const refreshToken = jwt.sign(
-            { "username": foundUser.username },
+            { "userId": foundUser.userId },
             process.env.REFRESH_TOKEN_SECRET,
             { expiresIn: '1d' }
         )
@@ -63,13 +63,15 @@ const post = async (req, res) => {
         res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // httpOnly는 javascript로 접근 불가능.
 
 
-        // redirect를 index 페이지로 
-        const redirect = '/'; //login 성공 시 redirect를 "/" (root)로 하라.
-        res.json({ accessToken, redirect });
+        const responseData = {
+            accessToken : accessToken,
+            redirect : '/' 
+        }
+        res.json({ responseData });
     }
     else {
         res.sendStatus(401);
     }
 }
 
-module.exports = { post, get };
+module.exports = { postMethod, getMethod };

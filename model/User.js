@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const userSchema = new schema({
-    username: {
+    userId: {
         type: String,
         required: true
     },
@@ -18,10 +18,6 @@ const userSchema = new schema({
         type: String,
         required: true
     },
-    pet: {
-        type: String,
-        required: true // 미정
-    },
     interestKeywords: {
         type: String,
         required: true
@@ -30,15 +26,14 @@ const userSchema = new schema({
 });
 
 class DTO {
-    #username;
+    #userId;
     #password;
     #dateOfBirth;
     #email;
-    #pet;
     #interestKeywords;
 
-    get getUsername() {
-        return this.#username;
+    get getUserId() {
+        return this.#userId;
     }
     get getPassword() {
         return this.#password;
@@ -49,15 +44,12 @@ class DTO {
     get getEmail() {
         return this.#email;
     }
-    get getPet() {
-        return this.#pet;
-    }
     get getInterestKeywords() {
         return this.#interestKeywords;
     }
 
-    set setUsername(value) {
-        this.#username = value;
+    set setUserId(value) {
+        this.#userId= value;
     }
     set setPassword(value) {
         this.#password = value;
@@ -68,17 +60,14 @@ class DTO {
     set setEmail(value) {
         this.#email = value;
     }
-    set setPet(value) {
-        this.#pet = value;
-    }
     set setInterestKeywords(value) {
         this.#interestKeywords = value;
     }
 
     static isEmpty = (data) => {
         let array = [];
-        if (data.checkNull(data.getUsername)) {
-            array.push("username");
+        if (data.checkNull(data.getUserId)) {
+            array.push("userId");
         }
         if (data.checkNull(data.getPassword)) {
             array.push("password");
@@ -88,9 +77,6 @@ class DTO {
         }
         if (data.checkNull(data.getEmail)) {
             array.push("email");
-        }
-        if (data.checkNull(data.getPet)) {
-            array.push("pet");
         }
         if (data.checkNull(data.getInterestKeywords)) {
             array.push("interestKeywords");

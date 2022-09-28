@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
 
 const verifyJWT = (req, res, next) => {
-    // const authHeader = req.headers.authorization || req.headers.Authorization;
-    const authHeader = req.session.accessToken;
-    // console.log("?" + authHeader);
+    const authHeader = req.headers.authorization || req.headers.Authorization;
+    // const authHeader = req.session.accessToken;
+    console.log(`auth : ${authHeader}`);
     if(!authHeader?.startsWith('Bearer ')) return res.sendStatus(401);
 
     const token = authHeader.split(' ')[1];
@@ -15,11 +15,10 @@ const verifyJWT = (req, res, next) => {
             if(err) return res.sendStatus(403) // invalid token
 
             // decoded 해서 req에 원하는 값 넣어서 나중에 사용 가능.
-            req.username = decoded.UserInfo.username; 
+            req.userId = decoded.UserInfo.userId; 
             req.password = decoded.UserInfo.password;
             req.dateOfBirth = decoded.UserInfo.dateOfBirth;
             req.email = decoded.UserInfo.email;
-            req.pet = decoded.UserInfo.pet;
             req.interestKeywords = decoded.UserInfo.interestKeywords
 
             next();

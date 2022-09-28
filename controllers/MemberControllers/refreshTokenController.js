@@ -1,7 +1,7 @@
 const User = require('../../model/User');
 const jwt = require('jsonwebtoken');
 
-const get = async (req, res) => {
+const getMethod = async (req, res) => {
     // 쿠키에서 refreshToken 가져오기
     const cookies = req.cookies;
     if (!cookies?.jwt) { // -> !cookies && !cookies.jwt
@@ -23,7 +23,7 @@ const get = async (req, res) => {
 
         (err, decoded) => {
             // checking
-            if (err || foundUser.username != decoded.username) {
+            if (err || foundUser.userId != decoded.userId) {
                 return res.sendStatus(403);
             }
 
@@ -31,7 +31,7 @@ const get = async (req, res) => {
             const accessToken = jwt.sign(
                 {
                     "UserInfo": {
-                        "username": foundUser.username,
+                        "userId": foundUser.userId,
                         "password": foundUser.password,
                         "dateOfBirth": foundUser.dateOfBirth,
                         "email": foundUser.email,
@@ -47,4 +47,4 @@ const get = async (req, res) => {
     );
 }
 
-module.exports = { get };
+module.exports = { getMethod };

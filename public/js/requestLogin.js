@@ -3,7 +3,7 @@ function requestLogin() {
         url: '/member/login', // http:localhost:3500/member/login
         method: 'post',
         data: {
-            username: "환환",
+            userId: "학동",
             password: "1234"
         }
     });
@@ -13,14 +13,14 @@ let accessToken;
 
 const loginBtn = document.querySelector('#btn');
 loginBtn.addEventListener('click', () => {
+    // res.data 값들 저장 -> session에 저장하든지 알아서 
     requestLogin().then((res) => {
-        console.log(res.data);
-        console.log(res.data.accessToken);
-        console.log(res.data.redirect);
-        // res.data 값들 저장
-        accessToken = res.data.accessToken;
-        return res.data.redirect;
-    }).then((res)=> {
+        accessToken = res.data.responseData.accessToken;
+        sessionStorage.setItem('accessToken', accessToken);
+        console.log(res.data.responseData.redirect);
+        console.log(res.data.responseData.accessToken);
+        return res.data.responseData.redirect;
+    }).then((res) => {
         window.location = `${res}`;
     }).catch((err) => {
         if (err.response) {
@@ -29,9 +29,4 @@ loginBtn.addEventListener('click', () => {
             console.log(err.response.header);
         }
     });
-})
-
-
-//         headers: {
-//             Authorization: `Bearer ${token}`
-//         }
+});

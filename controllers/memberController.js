@@ -2,21 +2,26 @@ const loginController = require('./MemberControllers/loginController');
 const logoutController = require('./MemberControllers/logoutController');
 const registerController = require('./MemberControllers/registerController');
 const refreshTokenController = require('./MemberControllers/refreshTokenController')
+const leaveIdController = require('./MemberControllers/leaveIdController');
 
 const MemberController = {
     register: {
-        get: registerController.get,
-        post: registerController.post
+        get: registerController.getMethod,
+        post: registerController.postMethod
     },
     login: {
-        post: loginController.post,
-        get: loginController.get
+        post: loginController.postMethod,
+        get: loginController.getMethod
     },
     logout: {
-        get: logoutController.get,
+        get: logoutController.getMethod,
     },
     refreshToken: {
-        get: refreshTokenController.get
+        get: refreshTokenController.getMethod
+    },
+    leaveId: {
+        get: leaveIdController.getMethod,
+        delete: leaveIdController.deleteMethod
     }
 }
 

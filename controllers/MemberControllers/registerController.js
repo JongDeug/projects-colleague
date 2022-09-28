@@ -2,17 +2,16 @@ const User = require('../../model/User');
 const bcrypt = require('bcryptjs');
 const path = require('path');
 
-const get = (req, res) => {
+const getMethod = (req, res) => {
     res.sendFile(path.join(__dirname, '..', '..', '/views', 'register.html'));
 }
 
-const post = async (req, res) => {
+const postMethod = async (req, res) => {
     const data = new User.DTO(); 
-    data.setUsername = req.body.username;
+    data.setUserId = req.body.userId;
     data.setPassword = req.body.password;
     data.setDateOfBirth = req.body.dateOfBirth;
     data.setEmail = req.body.email;
-    data.setPet = req.body.pet;
     data.setInterestKeywords = req.body.interestKeywords;
 
     const requiredData = User.DTO.isEmpty(data);
@@ -21,7 +20,7 @@ const post = async (req, res) => {
     }
 
     // 중복 체킹
-    const duplicate = await User.DB.findOne({ username: data.getUsername }).exec();
+    const duplicate = await User.DB.findOne({ userId: data.getUserId }).exec();
     if (duplicate) {
         return res.sendStatus(409); // conflict
     }
@@ -39,21 +38,20 @@ const post = async (req, res) => {
 
         // DB에 data저장
         const result = await User.DB.create({
-            username: data.getUsername,
+            userId: data.getUserId,
             password: hashedPwd,
             dateOfBirth: data.getDateOfBirth,
             email: data.getEmail,
-            pet: data.getPet,
             interestKeywords: data.getInterestKeywords
         });
         console.log(result);
 
         //redirect를 login 페이지로 
-        const redirect = '/member/login';
-        res.status(201).json({ "success": `New user ${data.getUsername} created`, redirect });
+        const redirect = '/member/verifyPre/login';
+        res.status(201).json({ "success": `New user ${data.getUserId} created`, redirect });
     } catch (err) {
         res.status(500).json({ "message": err.message });
     }
 }
 
-module.exports = { post, get };
+module.exports = { postMethod, getMethod };

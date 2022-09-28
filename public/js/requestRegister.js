@@ -3,7 +3,7 @@ function requestRegister() {
         url: '/member/register',
         method: 'post',
         data: {
-            username: "종종환dfsdhks",
+            userId: "학동",
             password: "1234",
             dateOfBirth: "2019-12-03",
             email: "dfsdf",
@@ -16,8 +16,8 @@ function requestRegister() {
 const registerBtn = document.querySelector('#btn');
 registerBtn.addEventListener('click', () => {
     requestRegister().then((res) => {
-        console.log(res.data);
-        console.log(res.data.redirect);
+        console.log(res.data.responseData);
+        console.log(res.data.responseData.redirect);
         return res.data.redirect;
     }).then((res) => {
         window.location = `${res}`;
