@@ -1,18 +1,26 @@
 const express = require('express');
+const MemberController = require('../controllers/memberController');
 const router = express.Router();
 const memberController = require('../controllers/memberController');
+const verifyJWT = require('../middleware/verifyJWT');
 
 /**
  * /register
  */
-router.get('/register', memberController.register.get);
-router.post('/register', memberController.register.post);
+router.route('/register')
+    .get(memberController.register.get)
+    .post(memberController.register.post);
+// router.get('/register', memberController.register.get);
+// router.post('/register', memberController.register.post);
 
 /**
  * /login
  */
-router.get('/login', memberController.login.get);
-router.post('/login', memberController.login.post);
+router.route('/login')
+    .get(memberController.login.get)
+    .post(memberController.login.post)
+// router.get('/login', memberController.login.get);
+// router.post('/login', memberController.login.post);
 
 /**
  * /logout
@@ -27,8 +35,11 @@ router.get('/refresh', memberController.refreshToken.get);
 /**
  * leavId
  */
-router.get('/leaveId', memberController.leaveId.get);
-router.delete('/leaveId', memberController.leaveId.delete);
+router.route('/leaveId')
+    .get(memberController.leaveId.get)
+    .delete(verifyJWT, memberController.leaveId.delete);
+// router.get('/leaveId', memberController.leaveId.get);
+// router.delete('/leaveId', memberController.leaveId.delete);
 
 /**
  * changePwd

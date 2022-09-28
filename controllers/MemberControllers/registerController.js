@@ -47,8 +47,11 @@ const postMethod = async (req, res) => {
         console.log(result);
 
         //redirect를 login 페이지로 
-        const redirect = '/member/verifyPre/login';
-        res.status(201).json({ "success": `New user ${data.getUserId} created`, redirect });
+        const responseData = {
+            message : `New user ${data.getUserId} created`,
+            redirect : '/member/login'
+        }
+        res.status(201).json({responseData});
     } catch (err) {
         res.status(500).json({ "message": err.message });
     }

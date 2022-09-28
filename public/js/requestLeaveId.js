@@ -4,7 +4,7 @@ function requestLeaveId() {
     console.log(token);
     return axios({
         url: '/member/leaveId', // url로 직접이동하는게 아님
-        method: 'get',
+        method: 'delete',
         headers: {
             Authorization: `Bearer ${token}`
         },
@@ -13,14 +13,13 @@ function requestLeaveId() {
         }
     });
 }
-requestLeaveId();
 
 const leaveIdBtn = document.querySelector('#btn');
 leaveIdBtn.addEventListener('click', () => {
     requestLeaveId().then((res) => {
         console.log(res.data.responseData.redirect);
         console.log(res.data.responseData.message);
-        return res.data.redirect;
+        return res.data.responseData.redirect;
     }).then((res) => {
         window.location = `${res}`;
     }).catch((err) => {

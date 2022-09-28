@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const verifyJWT = (req, res, next) => {
     const authHeader = req.headers.authorization || req.headers.Authorization;
     // const authHeader = req.session.accessToken;
-    console.log(`auth : ${authHeader}`);
+    console.log(authHeader);
     if(!authHeader?.startsWith('Bearer ')) return res.sendStatus(401);
 
     const token = authHeader.split(' ')[1];
@@ -21,6 +21,7 @@ const verifyJWT = (req, res, next) => {
             req.email = decoded.UserInfo.email;
             req.interestKeywords = decoded.UserInfo.interestKeywords
 
+            // console.log('잘들어갔음');
             next();
         }
     )

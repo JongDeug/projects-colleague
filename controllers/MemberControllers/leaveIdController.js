@@ -10,7 +10,7 @@ const getMethod = (req, res) => {
 const deleteMethod = async (req, res) => {
     const userId = req.userId;
     const pwd = req.body.password;
-    console.log(userId);
+    console.log(typeof userId);
     // body 비밀번호 유무 체킹
     if (!pwd) {
         res.status(400).json({ 'message': 'Password is required' });
@@ -22,10 +22,11 @@ const deleteMethod = async (req, res) => {
     }
 
     // body 비밀번호 체킹
+    console.log('여기??');
     const match = await bcrypt.compare(pwd, foundUser.password);
     if (match) {
         //DB 삭제
-        const result = foundUser.deleteOne({ userId: userId }).exec();
+        const result = await User.DB.deleteOne({userId : userId});
         console.log(result);
         const responseData = {
             message: 'delete complete',

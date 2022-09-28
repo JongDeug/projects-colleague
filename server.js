@@ -29,7 +29,7 @@ app.use('/', express.static(path.join(__dirname, '/public')));
 // routes
 app.use('/', require('./routes/root'));
 app.use('/member', require('./routes/member'));
-app.use(verfiyJWT);
+// app.use(verfiyJWT);
 // app.use('/member/verifyNext', require('./routes/memberVerifyNext'));
 // 여기부터 회원 api 작성 ...  
 
