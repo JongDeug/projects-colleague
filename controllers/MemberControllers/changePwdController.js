@@ -14,7 +14,7 @@ const putMethod = async (req, res) => {
     const getPassword_change = req.body.password_change;
 
     if (!getPassword_exist || !getPassword_change) {
-        return res.status(400).json({ "message": "기존 비밀번호 및 변경 비밀번호를 입력하지 않으셨습니다." });
+        return res.status(400).json({ 'message': 'There is missing data' });
     }
 
     const foundUser = await Member.findOne({ userId: getUserId }).exec();

@@ -8,7 +8,7 @@ const putMethod = async (req, res, next) => {
 
     if (getWhich === 'checkPwd') {
         if (!getPassword) {
-            return res.status(401).json({ 'message': '입력해라,,' });
+            return res.status(401).json({ 'message': 'There is missing data' });
         }
 
         const foundUser = await Member.findOne({ userId: getUserId }).exec();

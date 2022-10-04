@@ -14,8 +14,8 @@ const postMethod = async (req, res) => {
     const getEmail = req.body.email;
     const getInterestKeywords = req.body.interestKeywords;
 
-    if(!getUserId || !getPassword | !getUserName | !getDateOfBirth | !getEmail | !getInterestKeywords){
-        return res.status(400).json({"Message": `데이터 빠져먹음`});
+    if (!getUserId || !getPassword | !getUserName | !getDateOfBirth | !getEmail | !getInterestKeywords) {
+        return res.status(400).json({ 'message': 'There is missing data' });
     }
 
     // 중복 체킹
@@ -48,10 +48,10 @@ const postMethod = async (req, res) => {
 
         //redirect를 login 페이지로 
         const responseData = {
-            message : `New user ${getUserId} created`,
-            redirect : '/member/login'
+            message: `New user ${getUserId} created`,
+            redirect: '/member/login'
         }
-        res.status(200).json({responseData});
+        res.status(200).json({ responseData });
     } catch (err) {
         res.status(500).json({ "message": err.message });
     }

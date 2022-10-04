@@ -14,7 +14,7 @@ const deleteMethod = async (req, res) => {
 
     // body 비밀번호 유무 체킹
     if (!getPassword) {
-        return res.status(400).json({ 'message': 'Password is required' });
+        return res.status(400).json({ 'message': 'There is missing data' });
     }
 
     const foundUser = await Member.findOne({ userId: getUserId }).exec();

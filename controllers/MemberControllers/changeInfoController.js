@@ -12,7 +12,7 @@ const putMethod = async (req, res) => {
     const getInterestKeywords = req.body.interestKeywords;
 
     if(!getDateOfBirth || !getEmail || !getInterestKeywords){
-        return res.sendStatus(401).json({"message" : "값을 좀 넣어봐"});
+        return res.sendStatus(401).json({'message' : 'There is missing data.'});
     }
 
     const foundUser = await Member.findOne({userId : getUserId}).exec();

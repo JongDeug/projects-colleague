@@ -13,7 +13,7 @@ const postMethod = async (req, res) => {
 
     // front 에서 user, pwd 데이터 받아오기 
     if (!getUserId || !getPassword) {
-        return res.status(400).json({ 'message': 'UserId and Password are required' });
+        return res.status(400).json({ 'message': 'There is missing data' });
     }
 
     // DB 확인
