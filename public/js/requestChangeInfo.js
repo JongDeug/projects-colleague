@@ -16,11 +16,6 @@ async function arrangeData() {
     let input_interestKeywords = document.querySelector('#interestKeywords');
 
     await getInfo(token).then((res) => {
-        console.log(res.data.responseData.userId);
-        console.log(res.data.responseData.dateOfBirth);
-        console.log(res.data.responseData.email);
-        console.log(res.data.responseData.interestKeywords);
-
         input_userId.value = res.data.responseData.userId;
         input_dateOfBirth.value = res.data.responseData.dateOfBirth;
         input_email.value = res.data.responseData.email;
@@ -34,6 +29,45 @@ async function arrangeData() {
     });
 }
 
+function requestCheckPwd(token, password) {
+    return axios({
+        url: '/member/changeInfo',
+        method: 'put',
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+        data: {
+            which: 'checkPwd',
+            password: password
+        }
+    });
+}
+
+const checkBtn = document.querySelector('#checkBtn');
+
+checkBtn.addEventListener('click', () => {
+    const token = sessionStorage.getItem('accessToken');
+    const password = document.querySelector('#password').value;
+
+    requestCheckPwd(token, password).then((res) => {
+        const result = res.data.responseData.result;
+        const redirect = res.data.responseData.redirect;
+        if (result === 1) {
+            const changeInfoDiv = document.querySelector('#changeInfo');
+            const checkPwdDiv = document.querySelector('#checkPwd');
+
+            changeInfoDiv.style.display = 'block';
+            checkPwdDiv.style.display = 'none';
+
+            arrangeData();
+        }
+    }).catch((err) => {
+        if (err) {
+            console.log(err);
+        }
+    });
+})
+
 function requestChangeInfo(token, dateOfBirth, email, interestKeywords) {
     return axios({
         url: '/member/changeInfo',
@@ -42,6 +76,7 @@ function requestChangeInfo(token, dateOfBirth, email, interestKeywords) {
             Authorization: `Bearer ${token}`
         },
         data: {
+            which: 'changeInfo',
             dateOfBirth: dateOfBirth,
             email: email,
             interestKeywords: interestKeywords
@@ -49,18 +84,15 @@ function requestChangeInfo(token, dateOfBirth, email, interestKeywords) {
     });
 }
 
-arrangeData();
+const changeBtn = document.querySelector('#changeBtn');
 
-const btn = document.querySelector('#btn');
-
-btn.addEventListener('click', () => {
+changeBtn.addEventListener('click', () => {
     const token = sessionStorage.getItem('accessToken');
     const dateOfBirth = document.querySelector('#dateOfBirth').value;
     const email = document.querySelector('#email').value;
     const interestKeywords = document.querySelector('#interestKeywords').value;
 
     requestChangeInfo(token, dateOfBirth, email, interestKeywords).then((res) => {
-
         return res.data.responseData.redirect;
     }).then((res) => {
         window.location = `${res}`;

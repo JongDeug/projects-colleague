@@ -35,7 +35,6 @@ const memberController = {
         put: changeInfoController.putMethod
     },
     checkPwd: {
-        get: checkPwdController.getMethod,
         put: checkPwdController.putMethod
     }
 }

@@ -50,7 +50,7 @@ router.route('/changePwd')
  */
 router.route('/changeInfo')
     .get(memberController.changeInfo.get)
-    .put(verifyJWT, memberController.changeInfo.put);
+    .put(verifyJWT, [memberController.checkPwd.put, memberController.changeInfo.put]);
 // router.get
 // router.put
 
