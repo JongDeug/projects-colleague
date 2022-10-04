@@ -1,5 +1,4 @@
 const express = require('express');
-const MemberController = require('../controllers/memberController');
 const router = express.Router();
 const memberController = require('../controllers/memberController');
 const verifyJWT = require('../middleware/verifyJWT');
@@ -38,20 +37,28 @@ router.get('/refresh', memberController.refreshToken.get);
 router.route('/leaveId')
     .get(memberController.leaveId.get)
     .delete(verifyJWT, memberController.leaveId.delete);
-// router.get('/leaveId', memberController.leaveId.get);
-// router.delete('/leaveId', memberController.leaveId.delete);
 
 /**
  * changePwd
  */
-// router.get
-// router.put // put은 데이터를 다 보내야된다네
+router.route('/changePwd')
+    .get(memberController.changePwd.get)
+    .put(verifyJWT, memberController.changePwd.put);
 
 /**
  * changeInfo
  */
+router.route('/changeInfo')
+    .get(memberController.changeInfo.get)
+    .put(verifyJWT, memberController.changeInfo.put);
 // router.get
 // router.put
+
+/**
+ * checkPwd
+ */
+// router.route('/checkPwd')
+    // .get(member)
 
 /**
  * findId

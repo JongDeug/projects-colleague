@@ -42,7 +42,7 @@ const getMethod = async (req, res) => {
                 process.env.ACCESS_TOKEN_SECRET,
                 { expiresIn: '60s' }
             );
-            res.json({ accessToken });
+            res.status(200).json({ accessToken });
         }
     );
 }

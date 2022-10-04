@@ -4,7 +4,7 @@ const path = require('path');
 const getMethod = async (req, res) => {
     const cookies = req.cookies;
     if (!cookies?.jwt) { // !cookies && !cookies.jwt
-        return res.sendStatus(204); // No content
+        return res.sendStatus(200); // No content
     }
     const refreshToken = cookies.jwt;
 
@@ -12,7 +12,7 @@ const getMethod = async (req, res) => {
 
     if (!foundUser) {
         res.clearCookie('jwt', { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
-        return res.sendStatus(204);
+        return res.sendStatus(200);
     }
 
     // refreshToken db에서 지우기
@@ -23,7 +23,7 @@ const getMethod = async (req, res) => {
     res.clearCookie('jwt', { httpOnly: true });
 
     const redirect = '/';
-    res.status(204).json({redirect});
+    res.status(200).json({redirect});
 }
 
 module.exports = { getMethod }

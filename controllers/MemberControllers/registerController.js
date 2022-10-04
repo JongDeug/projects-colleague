@@ -51,7 +51,7 @@ const postMethod = async (req, res) => {
             message : `New user ${data.getUserId} created`,
             redirect : '/member/login'
         }
-        res.status(201).json({responseData});
+        res.status(200).json({responseData});
     } catch (err) {
         res.status(500).json({ "message": err.message });
     }

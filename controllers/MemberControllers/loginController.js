@@ -67,7 +67,7 @@ const postMethod = async (req, res) => {
             accessToken : accessToken,
             redirect : '/' 
         }
-        res.json({ responseData });
+        res.status(200).json({ responseData });
     }
     else {
         res.sendStatus(401);

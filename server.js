@@ -4,7 +4,7 @@ const app = express();
 const path = require('path');
 const { reqLogger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
-const verfiyJWT = require('./middleware/verifyJWT');
+const verifyJWT = require('./middleware/verifyJWT');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
@@ -29,12 +29,8 @@ app.use('/', express.static(path.join(__dirname, '/public')));
 // routes
 app.use('/', require('./routes/root'));
 app.use('/member', require('./routes/member'));
-// app.use(verfiyJWT);
-// app.use('/member/verifyNext', require('./routes/memberVerifyNext'));
-// 여기부터 회원 api 작성 ...  
-
-// 내가 볼 때 client 라우팅할 때 verifyJWT해야될 것 같은데,, 
-// 아니면 하나하나씩 다 넣어야할듯?
+app.use(verifyJWT);
+app.use('/api', require('./routes/api/getInfo'));
 
 
 // middleware

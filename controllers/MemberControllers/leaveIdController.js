@@ -9,11 +9,11 @@ const getMethod = (req, res) => {
 // body 
 const deleteMethod = async (req, res) => {
     const userId = req.userId;
-    const pwd = req.body.password;
-    console.log(typeof userId);
+    const password = req.body.password;
+
     // body 비밀번호 유무 체킹
-    if (!pwd) {
-        res.status(400).json({ 'message': 'Password is required' });
+    if (!password) {
+        return res.status(400).json({ 'message': 'Password is required' });
     }
 
     const foundUser = await User.DB.findOne({ userId: userId }).exec();
@@ -22,17 +22,19 @@ const deleteMethod = async (req, res) => {
     }
 
     // body 비밀번호 체킹
-    console.log('여기??');
-    const match = await bcrypt.compare(pwd, foundUser.password);
+    const match = await bcrypt.compare(password, foundUser.password);
     if (match) {
         //DB 삭제
-        const result = await User.DB.deleteOne({userId : userId});
+        const result = await User.DB.deleteOne({ userId: userId });
         console.log(result);
         const responseData = {
             message: 'delete complete',
             redirect: '/'
         }
-        res.status(200).json({responseData});
+        res.status(200).json({ responseData });
+    }
+    else {
+        res.sendStatus(401);
     }
 }
 

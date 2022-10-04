@@ -1,31 +1,37 @@
-function requestRegister() {
+function requestRegister(userId, password, dateOfBirth, email, interestKeywords) {
     return axios({
         url: '/member/register',
         method: 'post',
         data: {
-            userId: "김종수",
-            password: "1234",
-            dateOfBirth: "2019-12-03",
-            email: "dfsdf",
-            pet: "dog",
-            interestKeywords: "sdfsdf"
+            userId: userId,
+            password: password,
+            dateOfBirth: dateOfBirth,
+            email: email,
+            interestKeywords: interestKeywords
         }
     });
 }
 
 const registerBtn = document.querySelector('#btn');
+
 registerBtn.addEventListener('click', () => {
-    requestRegister().then((res) => {
-        console.log(res.data.responseData);
-        console.log(res.data.responseData.redirect);
+    const userId = document.querySelector('#userId').value;
+    const password = document.querySelector('#password').value;
+    const dateOfBirth = document.querySelector('#dateOfBirth').value;
+    const email = document.querySelector('#email').value;
+    const interestKeywords = document.querySelector('#interestKeywords').value;
+
+    requestRegister(userId, password, dateOfBirth, email, interestKeywords).then((res) => {
+        // console.log(res.data.responseData);
+        // console.log(res.data.responseData.redirect);
         return res.data.responseData.redirect;
     }).then((res) => {
-            window.location = `${res}`;
+        window.location = `${res}`;
     }).catch((err) => {
-            if (err.response) {
-                console.log(err.response.data);
-                console.log(err.response.status);
-                console.log(err.response.header);
-            }
-        });
+        if (err.response) {
+            console.log(err.response.data);
+            console.log(err.response.status);
+            console.log(err.response.header);
+        }
+    });
 })
