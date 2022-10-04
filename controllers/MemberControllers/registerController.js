@@ -1,4 +1,4 @@
-const User = require('../../model/User');
+const Member = require('../../model/Member');
 const bcrypt = require('bcryptjs');
 const path = require('path');
 
@@ -7,20 +7,19 @@ const getMethod = (req, res) => {
 }
 
 const postMethod = async (req, res) => {
-    const data = new User.DTO(); 
-    data.setUserId = req.body.userId;
-    data.setPassword = req.body.password;
-    data.setDateOfBirth = req.body.dateOfBirth;
-    data.setEmail = req.body.email;
-    data.setInterestKeywords = req.body.interestKeywords;
+    const getUserId = req.body.userId;
+    const getPassword = req.body.password;
+    const getUserName = req.body.userName;
+    const getDateOfBirth = req.body.dateOfBirth;
+    const getEmail = req.body.email;
+    const getInterestKeywords = req.body.interestKeywords;
 
-    const requiredData = User.DTO.isEmpty(data);
-    if(requiredData){
-        return res.status(400).json({"Message": `${requiredData} 가 필요합니다.`});
+    if(!getUserId || !getPassword | !getUserName | !getDateOfBirth | !getEmail | !getInterestKeywords){
+        return res.status(400).json({"Message": `데이터 빠져먹음`});
     }
 
     // 중복 체킹
-    const duplicate = await User.DB.findOne({ userId: data.getUserId }).exec();
+    const duplicate = await Member.findOne({ userId: getUserId }).exec();
     if (duplicate) {
         return res.sendStatus(409); // conflict
     }
@@ -29,7 +28,7 @@ const postMethod = async (req, res) => {
         // password 암호화
         const hashedPwd = await new Promise((resolve, reject) => {
             bcrypt.genSalt(10, (err, salt) => {
-                bcrypt.hash(data.getPassword, salt, (err, hash) => {
+                bcrypt.hash(getPassword, salt, (err, hash) => {
                     if (err) { reject(err); }
                     resolve(hash);
                 });
@@ -37,18 +36,19 @@ const postMethod = async (req, res) => {
         });
 
         // DB에 data저장
-        const result = await User.DB.create({
-            userId: data.getUserId,
+        const result = await Member.create({
+            userId: getUserId,
             password: hashedPwd,
-            dateOfBirth: data.getDateOfBirth,
-            email: data.getEmail,
-            interestKeywords: data.getInterestKeywords
+            userName: getUserName,
+            dateOfBirth: getDateOfBirth,
+            email: getEmail,
+            interestKeywords: getInterestKeywords
         });
         console.log(result);
 
         //redirect를 login 페이지로 
         const responseData = {
-            message : `New user ${data.getUserId} created`,
+            message : `New user ${getUserId} created`,
             redirect : '/member/login'
         }
         res.status(200).json({responseData});

@@ -6,6 +6,7 @@ const leaveIdController = require('./MemberControllers/leaveIdController');
 const changePwdController = require('./MemberControllers/changePwdController');
 const changeInfoController = require('./MemberControllers/changeInfoController');
 const checkPwdController = require('./MemberControllers/checkPwdController');
+const findIdController = require('./MemberControllers/findIdController');
 
 const memberController = {
     register: {
@@ -36,6 +37,10 @@ const memberController = {
     },
     checkPwd: {
         put: checkPwdController.putMethod
+    },
+    findId: {
+        get: findIdController.getMethod,
+        post: findIdController.postMethod
     }
 }
 

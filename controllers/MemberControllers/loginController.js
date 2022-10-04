@@ -1,4 +1,4 @@
-const User = require('../../model/User');
+const Member = require('../../model/Member');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const path = require('path');
@@ -8,23 +8,22 @@ const getMethod = (req, res) => {
 }
 
 const postMethod = async (req, res) => {
-    const data = new User.DTO();
-    data.setUserId = req.body.userId;
-    data.setPassword = req.body.password;
+    const getUserId = req.body.userId;
+    const getPassword = req.body.password;
 
     // front 에서 user, pwd 데이터 받아오기 
-    if (!data.getUserId || !data.getPassword) {
+    if (!getUserId || !getPassword) {
         return res.status(400).json({ 'message': 'UserId and Password are required' });
     }
 
     // DB 확인
-    const foundUser = await User.DB.findOne({ userId: data.getUserId }).exec();
+    const foundUser = await Member.findOne({ userId: getUserId }).exec();
     if (!foundUser) {
         return res.sendStatus(401);
     }
 
     // 데이터베이스에 있는 비밀번호와 사용자 입력 비밀번호 체킹
-    const match = await bcrypt.compare(data.getPassword, foundUser.password);
+    const match = await bcrypt.compare(getPassword, foundUser.password);
     if (match) {
 
         // accessToken 생성
@@ -34,6 +33,7 @@ const postMethod = async (req, res) => {
                 "UserInfo": {
                     "userId": foundUser.userId,
                     "password": foundUser.password,
+                    "userName": foundUser.userName,
                     "dateOfBirth": foundUser.dateOfBirth,
                     "email": foundUser.email,
                     "pet": foundUser.pet,

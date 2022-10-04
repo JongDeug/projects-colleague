@@ -1,14 +1,13 @@
-const User = require('../../model/User');
-const path = require('path');
+const Member = require('../../model/Member');
 
 const getMethod = async (req, res) => {
-    const cookies = req.cookies;
-    if (!cookies?.jwt) { // !cookies && !cookies.jwt
+    const getCookies = req.cookies;
+    if (!getCookies?.jwt) { // !cookies && !cookies.jwt
         return res.sendStatus(200); // No content
     }
-    const refreshToken = cookies.jwt;
+    const getRefreshToken = getCookies.jwt;
 
-    const foundUser = await User.DB.findOne({ refreshToken: refreshToken }).exec();
+    const foundUser = await Member.findOne({ refreshToken: getRefreshToken }).exec();
 
     if (!foundUser) {
         res.clearCookie('jwt', { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });

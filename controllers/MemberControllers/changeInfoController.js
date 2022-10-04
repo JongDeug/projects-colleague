@@ -1,4 +1,4 @@
-const User = require('../../model/User');
+const Member = require('../../model/Member');
 const path = require('path');
 
 const getMethod = (req, res) => {
@@ -6,23 +6,23 @@ const getMethod = (req, res) => {
 }
 
 const putMethod = async (req, res) => {
-    const userId = req.userId;
-    const dateOfBirth = req.body.dateOfBirth;
-    const email = req.body.email;
-    const interestKeywords = req.body.interestKeywords;
+    const getUserId = req.userId;
+    const getDateOfBirth = req.body.dateOfBirth;
+    const getEmail = req.body.email;
+    const getInterestKeywords = req.body.interestKeywords;
 
-    if(!dateOfBirth || !email || !interestKeywords){
+    if(!getDateOfBirth || !getEmail || !getInterestKeywords){
         return res.sendStatus(401).json({"message" : "값을 좀 넣어봐"});
     }
 
-    const foundUser = await User.DB.findOne({userId : userId}).exec();
+    const foundUser = await Member.findOne({userId : getUserId}).exec();
     if(!foundUser){
         return res.sendStatus(401);
     }
 
-    foundUser.dateOfBirth = dateOfBirth;
-    foundUser.email = email;
-    foundUser.interestKeywords = interestKeywords;
+    foundUser.dateOfBirth = getDateOfBirth;
+    foundUser.email = getEmail;
+    foundUser.interestKeywords = getInterestKeywords;
     await foundUser.save();
 
     const responseData = {

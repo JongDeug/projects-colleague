@@ -1,4 +1,4 @@
-const User = require('../../model/User');
+const Member = require('../../model/Member');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 
@@ -9,26 +9,26 @@ const getMethod = (req, res) => {
 const putMethod = async (req, res) => {
 
     // 유저 인증
-    const userId = req.userId;
-    const password_exist = req.body.password_exist;
-    const password_change = req.body.password_change;
+    const getUserId = req.userId;
+    const getPassword_exist = req.body.password_exist;
+    const getPassword_change = req.body.password_change;
 
-    if (!password_exist || !password_change) {
+    if (!getPassword_exist || !getPassword_change) {
         return res.status(400).json({ "message": "기존 비밀번호 및 변경 비밀번호를 입력하지 않으셨습니다." });
     }
 
-    const foundUser = await User.DB.findOne({ userId: userId }).exec();
+    const foundUser = await Member.findOne({ userId: getUserId }).exec();
     if (!foundUser) {
         return res.sendStatus(401);
     }
 
     // 기존 비밀번호 확인 
     // 비번 바꾸기, DB에도 바꾸기
-    const match = await bcrypt.compare(password_exist, foundUser.password);
+    const match = await bcrypt.compare(getPassword_exist, foundUser.password);
     if (match) {
         const hashedPwd = await new Promise((resolve, reject) => {
             bcrypt.genSalt(10, (err, salt) => {
-                bcrypt.hash(password_change, salt, (err, hash) => {
+                bcrypt.hash(getPassword_change, salt, (err, hash) => {
                     if (err) { reject(err); }
                     resolve(hash);
                 });

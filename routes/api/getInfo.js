@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../../model/User');
+const Member = require('../../model/Member');
 
 router.get('/getInfo', async (req, res) => {
     const userId = req.userId;
 
-    const foundUser = await User.DB.findOne({ userId: userId });
+    const foundUser = await Member.findOne({ userId: userId });
     if (!foundUser) {
         return res.sendStatus(401);
     }

@@ -9,8 +9,6 @@ const verifyJWT = require('../middleware/verifyJWT');
 router.route('/register')
     .get(memberController.register.get)
     .post(memberController.register.post);
-// router.get('/register', memberController.register.get);
-// router.post('/register', memberController.register.post);
 
 /**
  * /login
@@ -18,8 +16,6 @@ router.route('/register')
 router.route('/login')
     .get(memberController.login.get)
     .post(memberController.login.post)
-// router.get('/login', memberController.login.get);
-// router.post('/login', memberController.login.post);
 
 /**
  * /logout
@@ -51,20 +47,14 @@ router.route('/changePwd')
 router.route('/changeInfo')
     .get(memberController.changeInfo.get)
     .put(verifyJWT, [memberController.checkPwd.put, memberController.changeInfo.put]);
-// router.get
-// router.put
 
-/**
- * checkPwd
- */
-// router.route('/checkPwd')
-    // .get(member)
 
 /**
  * findId
  */
-// router.get
-// router.post
+router.route('/findId')
+    .get(memberController.findId.get)
+    .post(memberController.findId.post)
 
 /**
  * findPwd

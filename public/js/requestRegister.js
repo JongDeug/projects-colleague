@@ -1,10 +1,11 @@
-function requestRegister(userId, password, dateOfBirth, email, interestKeywords) {
+function requestRegister(userId, password, userName, dateOfBirth, email, interestKeywords) {
     return axios({
         url: '/member/register',
         method: 'post',
         data: {
             userId: userId,
             password: password,
+            userName: userName,
             dateOfBirth: dateOfBirth,
             email: email,
             interestKeywords: interestKeywords
@@ -17,11 +18,12 @@ const registerBtn = document.querySelector('#btn');
 registerBtn.addEventListener('click', () => {
     const userId = document.querySelector('#userId').value;
     const password = document.querySelector('#password').value;
+    const userName = document.querySelector('#userName').value;
     const dateOfBirth = document.querySelector('#dateOfBirth').value;
     const email = document.querySelector('#email').value;
     const interestKeywords = document.querySelector('#interestKeywords').value;
 
-    requestRegister(userId, password, dateOfBirth, email, interestKeywords).then((res) => {
+    requestRegister(userId, password, userName, dateOfBirth, email, interestKeywords).then((res) => {
         // console.log(res.data.responseData);
         // console.log(res.data.responseData.redirect);
         return res.data.responseData.redirect;

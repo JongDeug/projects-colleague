@@ -1,23 +1,22 @@
-const User = require('../../model/User');
-const path = require('path');
+const Member = require('../../model/Member');
 const bcrypt = require('bcryptjs');
 
 const putMethod = async (req, res, next) => {
-    const userId = req.userId;
-    const password = req.body.password;
-    const which = req.body.which;
+    const getUserId = req.userId;
+    const getPassword = req.body.password;
+    const getWhich = req.body.which;
 
-    if (which === 'checkPwd') {
-        if (!password) {
+    if (getWhich === 'checkPwd') {
+        if (!getPassword) {
             return res.status(401).json({ 'message': '입력해라,,' });
         }
 
-        const foundUser = await User.DB.findOne({ userId: userId }).exec();
+        const foundUser = await Member.findOne({ userId: getUserId }).exec();
         if (!foundUser) {
             return res.sendStatus(401);
         }
 
-        const match = await bcrypt.compare(password, foundUser.password);
+        const match = await bcrypt.compare(getPassword, foundUser.password);
         if (match) {
             const responseData = {
                 redirect: '/member/changeInfo',
@@ -29,7 +28,7 @@ const putMethod = async (req, res, next) => {
             res.sendStatus(401);
         }
     }
-    else if(which === 'changeInfo'){
+    else if(getWhich === 'changeInfo'){
         next();
     }
 }

@@ -1,6 +1,7 @@
+const Member = require('../../model/Member');
 const path = require('path');
 const bcrypt = require('bcryptjs');
-const User = require('../../model/User');
+
 
 const getMethod = (req, res) => {
     res.sendFile(path.join(__dirname, '..', '..', '/views', 'leaveId.html'));
@@ -8,24 +9,24 @@ const getMethod = (req, res) => {
 
 // body 
 const deleteMethod = async (req, res) => {
-    const userId = req.userId;
-    const password = req.body.password;
+    const getUserId = req.userId;
+    const getPassword = req.body.password;
 
     // body 비밀번호 유무 체킹
-    if (!password) {
+    if (!getPassword) {
         return res.status(400).json({ 'message': 'Password is required' });
     }
 
-    const foundUser = await User.DB.findOne({ userId: userId }).exec();
+    const foundUser = await Member.findOne({ userId: getUserId }).exec();
     if (!foundUser) {
         return res.sendStatus(401);
     }
 
     // body 비밀번호 체킹
-    const match = await bcrypt.compare(password, foundUser.password);
+    const match = await bcrypt.compare(getPassword, foundUser.password);
     if (match) {
         //DB 삭제
-        const result = await User.DB.deleteOne({ userId: userId });
+        const result = await Member.deleteOne({ userId: getUserId });
         console.log(result);
         const responseData = {
             message: 'delete complete',
