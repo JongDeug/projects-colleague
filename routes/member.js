@@ -59,6 +59,9 @@ router.route('/findId')
 /**
  * findPwd
  */
+router.route('/findPwd')
+    .get(memberController.findPwd.get)
+    .post(memberController.findPwd.post)
 // router.get
 // router.post
 
