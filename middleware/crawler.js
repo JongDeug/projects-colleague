@@ -89,6 +89,7 @@ const getData = async (sourceNumber, link) => {
 
 const crawler = async () => {
   const result = await News.deleteMany();
+  console.log(result);
   let linkList = [];
   linkList = await getLink(0);
   linkList.forEach((item) => getData(0, item));
