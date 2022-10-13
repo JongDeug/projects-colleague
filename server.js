@@ -15,7 +15,7 @@ const { nextDay } = require("date-fns");
 const PORT = 3500;
 
 connectDB();
-crawler();
+// crawler();
 
 // middleware
 app.use(express.urlencoded({ extended: false })); // true일 경우 qs 라이브러리 사용

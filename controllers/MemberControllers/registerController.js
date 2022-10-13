@@ -6,7 +6,7 @@ const getMethod = (req, res) => {
     res.sendFile(path.join(__dirname, '..', '..', '/views', 'register.html'));
 }
 
-const postMethod = async (req, res) => {
+const postMethod = async (req, res, next) => {
     const getUserId = req.body.userId;
     const getPassword = req.body.password;
     const getUserName = req.body.userName;
@@ -18,19 +18,19 @@ const postMethod = async (req, res) => {
         return res.status(400).json({ 'message': 'There is missing data' });
     }
 
-    // 중복 체킹
-    const duplicate = await Member.findOne({ userId: getUserId }).exec();
-    if (duplicate) {
-        return res.sendStatus(409); // conflict
-    }
-
-    // 6~16자리 영문, 숫자, 특수문자 조합
-    const regex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,16}/;
-    if (!regex.test(getPassword)) {
-        return res.status(400).json({ 'message': "Password aren't strong enough" });
-    }
-
     try {
+        // 중복 체킹
+        const duplicate = await Member.findOne({ userId: getUserId }).exec();
+        if (duplicate) {
+            return res.sendStatus(409); // conflict
+        }
+
+        // 6~16자리 영문, 숫자, 특수문자 조합
+        const regex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,16}/;
+        if (!regex.test(getPassword)) {
+            return res.status(400).json({ 'message': "Password aren't strong enough" });
+        }
+
         // password 암호화
         const hashedPwd = await new Promise((resolve, reject) => {
             bcrypt.genSalt(10, (err, salt) => {
@@ -59,7 +59,7 @@ const postMethod = async (req, res) => {
         }
         res.status(200).json({ responseData });
     } catch (err) {
-        res.status(500).json({ "message": err.message });
+        next(err);
     }
 }
 

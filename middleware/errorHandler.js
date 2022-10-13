@@ -15,6 +15,7 @@ const { errLogger } = require('./logEvents');
 const errorHandler = (err, req, res, next) => {
     const message = `${err.name}: ${err.message}`;
     errLogger(message, 'errLog.txt');
+    console.log(err);
 
     // 방법 1. next 호출하지 않고 response
     res.status(500).send({

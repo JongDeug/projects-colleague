@@ -135,3 +135,6 @@
 2022/09/27	15:31:17	TypeError: Cannot read properties of undefined (reading 'accessToken')
 2022/09/27	15:31:28	TypeError: Cannot read properties of undefined (reading 'accessToken')
 2022/09/27	15:31:32	TypeError: Cannot read properties of undefined (reading 'accessToken')
+2022/10/13	18:48:03	TypeError: res.status(...).js is not a function
+2022/10/13	18:51:24	TypeError: res.status(...).js is not a function
+2022/10/13	18:53:25	TypeError: res.status(...).js is not a function

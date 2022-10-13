@@ -6,7 +6,7 @@ const getMethod = (req, res) => {
 }
 
 // verifyJWT 하고 들어옴
-const postMethod = async (req, res) => {
+const postMethod = async (req, res, next) => {
     // 값 받기 
     const getUserId = "pinpoint19";
     const getPostTitle = req.body.postTitle;
@@ -29,13 +29,12 @@ const postMethod = async (req, res) => {
 
         const responseData = {
             redirect: '/',
-            message: 'good'
+            message: 'request complete'
         }
         res.status(200).json({ responseData });
     } catch (err) {
-        res.status(500).json({ 'message': err });
+        next(err);
     }
-
 }
 
 
