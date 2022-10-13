@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/JongDeug/web-community-project#readme",
   "dependencies": {
+    "axios": "^1.1.2",
     "bcryptjs": "^2.4.3",
+    "cheerio": "^1.0.0-rc.12",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "date-fns": "^2.29.2",

@@ -24,6 +24,12 @@ const postMethod = async (req, res) => {
         return res.sendStatus(409); // conflict
     }
 
+    // 6~16자리 영문, 숫자, 특수문자 조합
+    const regex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,16}/;
+    if (!regex.test(getPassword)) {
+        return res.status(400).json({ 'message': "Password aren't strong enough" });
+    }
+
     try {
         // password 암호화
         const hashedPwd = await new Promise((resolve, reject) => {

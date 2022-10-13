@@ -26,6 +26,12 @@ const putMethod = async (req, res) => {
     // 비번 바꾸기, DB에도 바꾸기
     const match = await bcrypt.compare(getPassword_exist, foundUser.password);
     if (match) {
+        // 6~16자리 영문, 숫자, 특수문자 조합
+        const regex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,16}/;
+        if (!regex.test(getPassword_change)) {
+            return res.status(400).json({ 'message': "Password aren't strong enough" });
+        }
+
         const hashedPwd = await new Promise((resolve, reject) => {
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(getPassword_change, salt, (err, hash) => {
