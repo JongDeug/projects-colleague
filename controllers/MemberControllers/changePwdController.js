@@ -7,7 +7,6 @@ const getMethod = (req, res) => {
 }
 
 const putMethod = async (req, res) => {
-
     // 유저 인증
     const getUserId = req.userId;
     const getPassword_exist = req.body.password_exist;

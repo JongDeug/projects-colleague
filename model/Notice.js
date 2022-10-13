@@ -17,6 +17,8 @@ const userSchema = new schema({
     required: true,
     //ref: "Comment",
   },
+}, {
+  versionKey: false
 });
 
 module.exports = mongoose.model("Notice", userSchema);

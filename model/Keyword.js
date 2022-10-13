@@ -6,6 +6,8 @@ const userSchema = new schema({
     type: String,
     required: false,
   },
+}, {
+  versionKey:false
 });
 
 module.exports = mongoose.model("Keyword", userSchema);

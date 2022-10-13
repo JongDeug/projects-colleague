@@ -5,12 +5,12 @@ const verifyJWT = require("../middleware/verifyJWT");
 
 router
   .route("/newsList")
-  .get(newsController.newsList.get)
-  .post(newsController.newsList.post);
+  .get(newsController.readNewsList.get)
+  .post(newsController.readNewsList.post);
 
 router
   .route("/newsArticle")
-  .get(newsController.newsArticle.get)
-  .post(newsController.newsArticle.post);
+  .get(newsController.readNewsArticle.get)
+  .post(newsController.readNewsArticle.post);
 
 module.exports = router;

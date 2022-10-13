@@ -1,14 +1,14 @@
-const newsListController = require("./NewsControllers/newsListController");
-const newsArticleController = require("./NewsControllers/newsArticleController");
+const readNewsListController = require("./NewsControllers/readNewsListController");
+const readNewsArticleController = require("./NewsControllers/readNewsArticleController");
 
 const newsController = {
-    newsList: {
-        get: newsListController.getMethod,
-        post: newsListController.postMethod,
+    readNewsList: {
+        get: readNewsListController.getMethod,
+        post: readNewsListController.postMethod,
     },
-    newsArticle: {
-        get: newsArticleController.getMethod,
-        post: newsArticleController.postMethod,
+    readNewsArticle: {
+        get: readNewsArticleController.getMethod,
+        post: readNewsArticleController.postMethod,
     },
 };
 

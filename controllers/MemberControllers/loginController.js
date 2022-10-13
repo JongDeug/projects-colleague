@@ -32,12 +32,12 @@ const postMethod = async (req, res) => {
             {
                 "UserInfo": {
                     "userId": foundUser.userId,
-                    "password": foundUser.password,
+                    // "password": foundUser.password,
                     "userName": foundUser.userName,
-                    "dateOfBirth": foundUser.dateOfBirth,
-                    "email": foundUser.email,
-                    "pet": foundUser.pet,
-                    "interestKeywords": foundUser.interestKeywords
+                    // "dateOfBirth": foundUser.dateOfBirth,
+                    // "email": foundUser.email,
+                    // "pet": foundUser.pet,
+                    // "interestKeywords": foundUser.interestKeywords
                 }
             },
 

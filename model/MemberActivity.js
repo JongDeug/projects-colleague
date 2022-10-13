@@ -22,6 +22,8 @@ const userSchema = new schema({
     required: false,
     //ref: "Post",
   },
+}, {
+  versionKey:false
 });
 
 module.exports = mongoose.model("MemberActivity", userSchema);

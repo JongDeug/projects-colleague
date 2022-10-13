@@ -28,6 +28,8 @@ const userSchema = new schema({
     type: String,
     required: true,
   },
+}, {
+  versionKey: false
 });
 
 module.exports = mongoose.model("AttachedFile", userSchema);

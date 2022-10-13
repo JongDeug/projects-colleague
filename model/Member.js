@@ -27,6 +27,8 @@ const userSchema = new schema({
     required: true,
   },
   refreshToken: String,
+}, {
+  versionKey: false
 });
 
 module.exports = mongoose.model("Member", userSchema);
