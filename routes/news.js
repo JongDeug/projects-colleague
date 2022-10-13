@@ -1,16 +1,13 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const newsController = require("../controllers/newsController");
-const verifyJWT = require("../middleware/verifyJWT");
+const path = require('path');
 
-router
-  .route("/newsList")
-  .get(newsController.readNewsList.get)
-  .post(newsController.readNewsList.post);
+router.get('/newsList', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', '/views', 'newsList.html'));
+})   
 
-router
-  .route("/newsArticle")
-  .get(newsController.readNewsArticle.get)
-  .post(newsController.readNewsArticle.post);
+router.get('/newsArticleDetail', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', '/views', 'newsArticle.html'));
+})
 
 module.exports = router;

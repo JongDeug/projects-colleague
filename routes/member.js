@@ -1,69 +1,29 @@
 const express = require('express');
 const router = express.Router();
-const memberController = require('../controllers/memberController');
-const verifyJWT = require('../middleware/verifyJWT');
+const path = require('path');
 
-/**
- * /register
- */
-router.route('/register')
-    .get(memberController.register.get)
-    .post(memberController.register.post);
+router.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', '/views', 'register.html'));
+})
 
-/**
- * /login
- */
-router.route('/login')
-    .get(memberController.login.get)
-    .post(memberController.login.post)
+router.get('/leaveId', (req, res)=>{
+    res.sendFile(path.join(__dirname, '..', '/views', 'leaveId.html'));
+})
 
-/**
- * /logout
- */
-router.get('/logout', memberController.logout.get);
+router.get('/changePwd', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', '/views', 'changePwd.html'));
+})
 
-/**
- * /refresh
- */
-router.get('/refresh', memberController.refreshToken.get);
+router.get('/changeInfo', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', '/views', 'changeInfo.html'));
+})
 
-/**
- * leavId
- */
-router.route('/leaveId')
-    .get(memberController.leaveId.get)
-    .delete(verifyJWT, memberController.leaveId.delete);
+router.get('/findId', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', '/views', 'findId.html'));
+})
 
-/**
- * changePwd
- */
-router.route('/changePwd')
-    .get(memberController.changePwd.get)
-    .put(verifyJWT, memberController.changePwd.put);
-
-/**
- * changeInfo
- */
-router.route('/changeInfo')
-    .get(memberController.changeInfo.get)
-    .put(verifyJWT, [memberController.checkPwd.put, memberController.changeInfo.put]);
-
-
-/**
- * findId
- */
-router.route('/findId')
-    .get(memberController.findId.get)
-    .post(memberController.findId.post)
-
-/**
- * findPwd
- */
-router.route('/findPwd')
-    .get(memberController.findPwd.get)
-    .post(memberController.findPwd.post)
-// router.get
-// router.post
-
+router.get('/findPwd', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', '/views', 'findPwd.html'));
+})
 
 module.exports = router;

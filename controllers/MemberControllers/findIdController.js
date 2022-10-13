@@ -1,10 +1,5 @@
 const Member = require('../../model/Member');
 const transporter = require('../../config/nodemailerOptions');
-const path = require('path');
-
-const getMethod = (req, res) => {
-    res.sendFile(path.join(__dirname, '..', '..', '/views', 'findId.html'));
-}
 
 const postMethod = async (req, res, next) => {
     const getUserName = req.body.userName;
@@ -45,6 +40,4 @@ const postMethod = async (req, res, next) => {
     }
 }
 
-
-
-module.exports = { getMethod, postMethod }
+module.exports = { postMethod }

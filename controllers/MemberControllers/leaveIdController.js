@@ -1,13 +1,6 @@
 const Member = require('../../model/Member');
-const path = require('path');
 const bcrypt = require('bcryptjs');
 
-
-const getMethod = (req, res) => {
-    res.sendFile(path.join(__dirname, '..', '..', '/views', 'leaveId.html'));
-}
-
-// body 
 const deleteMethod = async (req, res, next) => {
     const getUserId = req.userId;
     const getPassword = req.body.password;
@@ -45,4 +38,4 @@ const deleteMethod = async (req, res, next) => {
 }
 
 
-module.exports = { getMethod, deleteMethod };
+module.exports = { deleteMethod };

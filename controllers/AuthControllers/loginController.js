@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 
 const getMethod = (req, res) => {
-    res.sendFile(path.join(__dirname, '..', '..', '/views', 'login.html')); // login page
+    res.sendFile(path.join(__dirname, '..', '..', '/views', 'login.html'));
 }
 
 const postMethod = async (req, res, next) => {
@@ -73,4 +73,4 @@ const postMethod = async (req, res, next) => {
 
 }
 
-module.exports = { postMethod, getMethod };
+module.exports = { getMethod, postMethod };

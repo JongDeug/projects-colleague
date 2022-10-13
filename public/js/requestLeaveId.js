@@ -1,6 +1,6 @@
 function requestLeaveId(token, password) {
     return axios({
-        url: '/member/leaveId', // url로 직접이동하는게 아님
+        url: '/api/member/leaveId', // url로 직접이동하는게 아님
         method: 'delete',
         headers: {
             Authorization: `Bearer ${token}`

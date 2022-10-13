@@ -1,14 +1,8 @@
 const Post = require('../../model/Post');
-const path = require('path');
 
-const getMethod = (req, res) => {
-
-}
-
-// verifyJWT 하고 들어옴
 const postMethod = async (req, res, next) => {
     // 값 받기 
-    const getUserId = "pinpoint19";
+    const getUserId = req.userId;
     const getPostTitle = req.body.postTitle;
     const getPostContent = req.body.postContent;
     const getKeywords = req.body.keywords;
@@ -38,4 +32,4 @@ const postMethod = async (req, res, next) => {
 }
 
 
-module.exports = { getMethod, postMethod }
+module.exports = { postMethod }

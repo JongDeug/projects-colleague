@@ -1,6 +1,6 @@
 function requestLogin(userId, password) {
     return axios({
-        url: '/member/login', // http:localhost:3500/member/login
+        url: '/auth/login', // http:localhost:3500/member/login
         method: 'post',
         data: {
             userId: userId,

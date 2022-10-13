@@ -1,6 +1,6 @@
 function requestFindId(userName, dateOfBirth, email) {
     return axios({
-        url: '/member/findId',
+        url: '/api/member/findId',
         method: 'post',
         data: {
             userName: userName,

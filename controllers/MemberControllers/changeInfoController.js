@@ -1,8 +1,24 @@
 const Member = require('../../model/Member');
-const path = require('path');
 
-const getMethod = (req, res) => {
-    res.sendFile(path.join(__dirname, '..', '..', '/views', 'changeInfo.html'));
+const getMethod = async (req, res, next) => {
+    const userId = req.userId;
+
+    try {
+        const foundUser = await Member.findOne({ userId: userId });
+        if (!foundUser) {
+            return res.sendStatus(401);
+        }
+
+        const responseData = {
+            userId: foundUser.userId,
+            dateOfBirth: foundUser.dateOfBirth,
+            email: foundUser.email,
+            interestKeywords: foundUser.interestKeywords
+        }
+        res.status(200).json({ responseData });
+    } catch (err) {
+        next(err);
+    }
 }
 
 const putMethod = async (req, res, next) => {
@@ -27,7 +43,7 @@ const putMethod = async (req, res, next) => {
         await foundUser.save();
 
         const responseData = {
-            redirect: '/member/changeInfo',
+            redirect: '/api/member/changeInfo',
             message: 'request complete'
         }
         res.status(200).json({ responseData });

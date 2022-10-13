@@ -1,6 +1,6 @@
 function getInfo(token) {
     return axios({
-        url: '/api/getInfo',
+        url: '/api/member/changeInfo',
         method: 'get',
         headers: {
             Authorization: `Bearer ${token}`
@@ -31,7 +31,7 @@ async function arrangeData() {
 
 function requestCheckPwd(token, password) {
     return axios({
-        url: '/member/changeInfo',
+        url: '/api/member/changeInfo',
         method: 'put',
         headers: {
             Authorization: `Bearer ${token}`

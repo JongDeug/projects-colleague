@@ -1,10 +1,5 @@
 const Member = require('../../model/Member');
-const path = require('path');
 const bcrypt = require('bcryptjs');
-
-const getMethod = (req, res) => {
-    res.sendFile(path.join(__dirname, '..', '..', '/views', 'changePwd.html'));
-}
 
 const putMethod = async (req, res, next) => {
     // 유저 인증
@@ -61,4 +56,4 @@ const putMethod = async (req, res, next) => {
     }
 }
 
-module.exports = { getMethod, putMethod }
+module.exports = { putMethod }

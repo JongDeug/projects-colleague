@@ -138,3 +138,5 @@
 2022/10/13	18:48:03	TypeError: res.status(...).js is not a function
 2022/10/13	18:51:24	TypeError: res.status(...).js is not a function
 2022/10/13	18:53:25	TypeError: res.status(...).js is not a function
+2022/10/13	22:41:49	ReferenceError: path is not defined
+2022/10/13	22:45:35	Error: ENOENT: no such file or directory, stat '/mnt/c/Users/pinpo/.vscode/Node.js/web-community-project/controllers/views/login.html'

@@ -1,6 +1,6 @@
 function requestFindPwd(userId, email) {
     return axios({
-        url: '/member/findPwd',
+        url: '/api/member/findPwd',
         method: 'post',
         data: {
             userId: userId,

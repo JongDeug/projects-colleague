@@ -1,6 +1,6 @@
 function changePwd(token, password_exist, password_change) {
     return axios({
-        url: '/member/changePwd', // url로 직접이동하는게 아님
+        url: '/api/member/changePwd', // url로 직접이동하는게 아님
         method: 'put',
         headers: {
             Authorization: `Bearer ${token}`

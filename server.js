@@ -14,7 +14,7 @@ const crawler = require("./middleware/crawler");
 const PORT = 3500;
 
 connectDB();
-crawler(); // 주기랑 다시 설정해야함.
+// crawler(); // 주기랑 다시 설정해야함.
 
 // middleware
 app.use(express.urlencoded({ extended: false })); // true일 경우 qs 라이브러리 사용
@@ -28,11 +28,14 @@ app.use("/", express.static(path.join(__dirname, "/public")));
 
 // routes
 app.use("/", require("./routes/root"));
+app.use("/auth", require('./routes/auth'));
 app.use("/member", require("./routes/member"));
 app.use("/news", require("./routes/news"));
 app.use("/board", require('./routes/board'));
 app.use(verifyJWT);
-app.use("/api", require("./routes/api/getInfo"));
+app.use("/api/member", require("./routes/api/memberAPI"));
+app.use("/api/board", require("./routes/api/boardAPI"));
+
 
 // middleware
 app.use(errorHandler);
