@@ -27,12 +27,11 @@ app.use(reqLogger);
 app.use("/", express.static(path.join(__dirname, "/public")));
 
 // routes
+// HTML
 app.use("/", require("./routes/root"));
-app.use("/auth", require('./routes/auth'));
-app.use("/member", require("./routes/member"));
-app.use("/news", require("./routes/news"));
-app.use("/board", require('./routes/board'));
+app.use("/auth", require('./routes/auth')); // auth는 html 표시와, api 둘다 가지고 있음.
 app.use(verifyJWT);
+// API
 app.use("/api/member", require("./routes/api/memberAPI"));
 app.use("/api/board", require("./routes/api/boardAPI"));
 
