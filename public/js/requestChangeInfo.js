@@ -29,48 +29,49 @@ async function arrangeData() {
     });
 }
 
-function requestCheckPwd(token, password) {
-    return axios({
-        url: '/api/member/changeInfo',
-        method: 'put',
-        headers: {
-            Authorization: `Bearer ${token}`
-        },
-        data: {
-            which: 'checkPwd',
-            password: password
-        }
-    });
-}
+arrangeData();
+// function requestCheckPwd(token, password) {
+//     return axios({
+//         url: '/api/member/changeInfo',
+//         method: 'put',
+//         headers: {
+//             Authorization: `Bearer ${token}`
+//         },
+//         data: {
+//             which: 'checkPwd',
+//             password: password
+//         }
+//     });
+// }
 
-const checkBtn = document.querySelector('#checkBtn');
+// const checkBtn = document.querySelector('#checkBtn');
 
-checkBtn.addEventListener('click', () => {
-    const token = sessionStorage.getItem('accessToken');
-    const password = document.querySelector('#password').value;
+// checkBtn.addEventListener('click', () => {
+//     const token = sessionStorage.getItem('accessToken');
+//     const password = document.querySelector('#password').value;
 
-    requestCheckPwd(token, password).then((res) => {
-        const result = res.data.responseData.result;
-        const redirect = res.data.responseData.redirect;
-        if (result === 1) {
-            const changeInfoDiv = document.querySelector('#changeInfo');
-            const checkPwdDiv = document.querySelector('#checkPwd');
+//     requestCheckPwd(token, password).then((res) => {
+//         const result = res.data.responseData.result;
+//         const redirect = res.data.responseData.redirect;
+//         if (result === 1) {
+//             const changeInfoDiv = document.querySelector('#changeInfo');
+//             const checkPwdDiv = document.querySelector('#checkPwd');
 
-            changeInfoDiv.style.display = 'block';
-            checkPwdDiv.style.display = 'none';
+//             changeInfoDiv.style.display = 'block';
+//             checkPwdDiv.style.display = 'none';
 
-            arrangeData();
-        }
-    }).catch((err) => {
-        if (err) {
-            console.log(err);
-        }
-    });
-})
+//             arrangeData();
+//         }
+//     }).catch((err) => {
+//         if (err) {
+//             console.log(err);
+//         }
+//     });
+// })
 
 function requestChangeInfo(token, dateOfBirth, email, interestKeywords) {
     return axios({
-        url: '/member/changeInfo',
+        url: '/api/member/changeInfo',
         method: 'put',
         headers: {
             Authorization: `Bearer ${token}`

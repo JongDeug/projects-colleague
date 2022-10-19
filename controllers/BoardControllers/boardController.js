@@ -1,5 +1,9 @@
 const Post = require('../../model/Post');
 
+const getMethod = (req, res, next) => {
+
+}
+
 const postMethod = async (req, res, next) => {
     // 값 받기 
     const getUserId = req.userId;
@@ -31,5 +35,12 @@ const postMethod = async (req, res, next) => {
     }
 }
 
+const putMethod = (req, res, next) => {
 
-module.exports = { postMethod }
+}
+
+const deleteMethod = (req, res, next) => {
+
+}
+
+module.exports = { getMethod, postMethod, putMethod, deleteMethod }

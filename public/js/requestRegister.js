@@ -1,6 +1,6 @@
 function requestRegister(userId, password, userName, dateOfBirth, email, interestKeywords) {
     return axios({
-        url: '/api/member/register',
+        url: '/auth/register',
         method: 'post',
         data: {
             userId: userId,

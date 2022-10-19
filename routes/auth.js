@@ -9,6 +9,7 @@ router.route('/register')
     .post(registerController.postMethod);
 
 router.route('/login')
+    .get(loginController.getMethod)
     .post(loginController.postMethod);
 
 router.route('/logout')

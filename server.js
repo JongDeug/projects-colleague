@@ -24,10 +24,16 @@ app.use(cors(corsOptions));
 app.use(reqLogger);
 
 // serve static files
-// app.use("/", express.static(path.join(__dirname, "/public")));
+// <test>
+app.use("/", express.static(path.join(__dirname, "/public")));
+// <real>
 app.use("/", express.static(path.join(__dirname, "React/build/")));
 
-// client-side redering (React에 전적으로 라우팅을 넘김)
+// <test>
+// app.use('/', require('./routes/root_test'));
+
+
+// <real> client-side redering (React에 전적으로 라우팅을 넘김) 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'React/build/index.html'));
 });
