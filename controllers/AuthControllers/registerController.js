@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 
 const postMethod = async (req, res, next) => {
     const getUserId = req.body.userId;
+    console.log(getUserId);
+    console.log(typeof getUserId);
     const getPassword = req.body.password;
     const getUserName = req.body.userName;
     const getDateOfBirth = req.body.dateOfBirth;
@@ -50,7 +52,7 @@ const postMethod = async (req, res, next) => {
         //redirect를 login 페이지로 
         const responseData = {
             message: `New user ${getUserId} created`,
-            redirect: '/member/login'
+            redirect: '/'
         }
         res.status(200).json({ responseData });
     } catch (err) {

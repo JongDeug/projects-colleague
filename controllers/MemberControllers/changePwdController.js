@@ -44,7 +44,7 @@ const putMethod = async (req, res, next) => {
 
             const responseData = {
                 redirect: '/',
-                result: true
+                message: 'changePwd put request complete'
             }
             res.status(200).json({ responseData });
         }

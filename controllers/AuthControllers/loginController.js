@@ -3,9 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 
-const getMethod = (req, res) => {
-    res.sendFile(path.join(__dirname, '..', '..', '/views', 'login.html'));
-}
 
 const postMethod = async (req, res, next) => {
     const getUserId = req.body.userId;
@@ -73,4 +70,4 @@ const postMethod = async (req, res, next) => {
 
 }
 
-module.exports = { getMethod, postMethod };
+module.exports = { postMethod };

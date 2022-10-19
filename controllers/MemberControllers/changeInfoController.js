@@ -13,7 +13,8 @@ const getMethod = async (req, res, next) => {
             userId: foundUser.userId,
             dateOfBirth: foundUser.dateOfBirth,
             email: foundUser.email,
-            interestKeywords: foundUser.interestKeywords
+            interestKeywords: foundUser.interestKeywords,
+            messgae: 'changeInfo get request complete'
         }
         res.status(200).json({ responseData });
     } catch (err) {
@@ -43,8 +44,8 @@ const putMethod = async (req, res, next) => {
         await foundUser.save();
 
         const responseData = {
-            redirect: '/api/member/changeInfo',
-            message: 'request complete'
+            redirect: '/',
+            message: 'changeInfo put request complete'
         }
         res.status(200).json({ responseData });
     } catch (err) {

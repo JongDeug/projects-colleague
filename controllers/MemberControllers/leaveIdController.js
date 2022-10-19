@@ -23,8 +23,8 @@ const deleteMethod = async (req, res, next) => {
             const result = await Member.deleteOne({ userId: getUserId });
             console.log(result);
             const responseData = {
-                message: 'delete complete',
-                redirect: '/'
+                redirect: '/',
+                message: 'leaveId delete request complete'
             }
             res.status(200).json({ responseData });
         }

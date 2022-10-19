@@ -33,6 +33,7 @@ const postMethod = async (req, res, next) => {
         });
         const responseData = {
             redirect: '/',
+            message: 'findId post request complete'
         }
         res.status(200).json({ responseData });
     } catch (err) {

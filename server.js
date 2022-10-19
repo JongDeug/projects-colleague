@@ -24,14 +24,15 @@ app.use(cors(corsOptions));
 app.use(reqLogger);
 
 // serve static files
-app.use("/", express.static(path.join(__dirname, "/public")));
+// app.use("/", express.static(path.join(__dirname, "/public")));
+app.use("/", express.static(path.join(__dirname, "React/build/")));
 
-// routes
-// HTML
-app.use("/", require("./routes/root"));
-app.use("/auth", require('./routes/auth')); // auth는 html 표시와, api 둘다 가지고 있음.
+// client-side redering (React에 전적으로 라우팅을 넘김)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'React/build/index.html'));
+});
+app.use("/auth", require('./routes/auth')); 
 app.use(verifyJWT);
-// API
 app.use("/api/member", require("./routes/api/memberAPI"));
 app.use("/api/board", require("./routes/api/boardAPI"));
 
@@ -43,3 +44,5 @@ mongoose.connection.once("open", () => {
   console.log("Connected to MongoDB");
   app.listen(PORT, () => console.log(`Server running on ${PORT} port`));
 });
+
+

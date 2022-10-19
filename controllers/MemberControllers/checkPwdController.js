@@ -20,7 +20,7 @@ const putMethod = async (req, res, next) => {
             const match = await bcrypt.compare(getPassword, foundUser.password);
             if (match) {
                 const responseData = {
-                    redirect: '/member/changeInfo',
+                    redirect: '/',
                     result: 1
                 }
                 res.status(200).json({ responseData });
