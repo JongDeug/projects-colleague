@@ -3,23 +3,27 @@ const bcrypt = require('bcryptjs');
 
 const postMethod = async (req, res, next) => {
     const getUserId = req.body.userId;
-    console.log(getUserId);
-    console.log(typeof getUserId);
     const getPassword = req.body.password;
     const getUserName = req.body.userName;
     const getDateOfBirth = req.body.dateOfBirth;
     const getEmail = req.body.email;
     const getInterestKeywords = req.body.interestKeywords;
 
-    if (!getUserId || !getPassword | !getUserName | !getDateOfBirth | !getEmail | !getInterestKeywords) {
+    if (!getUserId || !getPassword || !getUserName || !getDateOfBirth || !getEmail || !getInterestKeywords) {
         return res.status(400).json({ 'message': 'There is missing data' });
     }
 
     try {
-        // 중복 체킹
-        const duplicate = await Member.findOne({ userId: getUserId }).exec();
-        if (duplicate) {
-            return res.sendStatus(409); // conflict
+        // 중복 체킹, id랑 email 중복 체킹
+        const duplicateId = await Member.findOne({ userId: getUserId }).exec();
+        const duplicateEmail = await Member.findOne({ email: getEmail }).exec();
+
+        if (duplicateId) {
+            return res.status(409).json({"message" : "duplicate id"}) // conflict
+        }
+
+        if (duplicateEmail){
+            return res.status(409).json({"message" : "duplicate email"}); // conflict
         }
 
         // 6~16자리 영문, 숫자, 특수문자 조합

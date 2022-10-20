@@ -41,7 +41,7 @@ const postMethod = async (req, res, next) => {
                 process.env.ACCESS_TOKEN_SECRET,
 
                 // 3. 시간
-                { expiresIn: '60s' }
+                { expiresIn: '1h' }
             );
 
             // refreshToken 생성

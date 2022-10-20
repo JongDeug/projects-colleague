@@ -25,16 +25,12 @@ app.use(reqLogger);
 
 // serve static files
 // <test>
-app.use("/", express.static(path.join(__dirname, "/public")));
-// <real>
+// app.use("/", express.static(path.join(__dirname, "/public")));
 app.use("/", express.static(path.join(__dirname, "React/build/")));
 
-// <test>
+// route
 // app.use('/', require('./routes/root_test'));
-
-
-// <real> client-side redering (React에 전적으로 라우팅을 넘김) 
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'React/build/index.html'));
 });
 app.use("/auth", require('./routes/auth')); 
@@ -42,13 +38,16 @@ app.use(verifyJWT);
 app.use("/api/member", require("./routes/api/memberAPI"));
 app.use("/api/board", require("./routes/api/boardAPI"));
 
-
 // middleware
 app.use(errorHandler);
 
+// db connect, server connect
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDB");
   app.listen(PORT, () => console.log(`Server running on ${PORT} port`));
 });
 
-
+// client-side redering (Server에서 설정한 url외에 전적으로 React에 라우팅을 넘김)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'React/build/index.html'));
+});

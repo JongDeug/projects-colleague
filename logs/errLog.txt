@@ -145,3 +145,5 @@
 2022/10/19	17:49:58	CastError: Cast to string failed for value "{ id: '김종호' }" (type Object) at path "userId" for model "Member"
 2022/10/19	18:08:46	Error: ENOENT: no such file or directory, stat '/mnt/c/Users/pinpo/.vscode/Node.js/web-community-project/routes/React/build/index.html'
 2022/10/19	18:09:00	Error: ENOENT: no such file or directory, stat '/mnt/c/Users/pinpo/.vscode/Node.js/web-community-project/routes/React/build/index.html'
+2022/10/20	21:15:27	Error: ENOENT: no such file or directory, stat '/mnt/c/Users/pinpo/.vscode/Node.js/web-community-project/React/build/index.html'
+2022/10/20	22:31:42	Error: Cannot set headers after they are sent to the client

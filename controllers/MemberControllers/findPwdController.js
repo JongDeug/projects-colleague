@@ -12,7 +12,7 @@ const postMethod = async (req, res, next) => {
     }
 
     try {
-        const foundUser = await Member.findOne({ userId: getUserId, email: getEmail }).exec();
+        const foundUser = await Member.findOne({ userId: getUserId }).exec();
         if (!foundUser) {
             return res.sendStatus(401);
         }
