@@ -5,7 +5,8 @@ const boardController = require('../../controllers/BoardControllers/boardControl
 /**
  * create, read, update, delete [board]
  */
-router.route('/board')
+router.route('/crud')
+    // 여기 get은 전체 리스트 가져오기.
     .get(boardController.getMethod)
     .post(boardController.postMethod)
     .put(boardController.putMethod)
