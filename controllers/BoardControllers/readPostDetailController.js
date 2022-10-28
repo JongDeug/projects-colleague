@@ -7,6 +7,11 @@ const getMethod = async (req, res, next) => {
 
         // DB에서 읽어오는데 Post, Comment 둘다 읽어와야함.
         const result = await Post.findById(getPostId).exec();
+
+        // 조회수 up
+        result.hit += 1;
+        await result.save();
+        
         console.log(result);
 
         const responseData = responseDataForm(null, "readPostDetail get request complete", result);

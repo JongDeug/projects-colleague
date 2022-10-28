@@ -26,7 +26,7 @@ const userSchema = new schema({
   },
   hit: {
     type: Number,
-    // required: true,
+    default: 0
   },
   likeHit: {
     type: Number,
