@@ -43,10 +43,6 @@ const putMethod = async (req, res, next) => {
             foundUser.password = hashedPwd;
             await foundUser.save();
 
-            // const responseData = {
-            //     redirect: "/",
-            //     message: "changePwd put request complete"
-            // }
             const responseData = responseDataForm("/", "changePwd put request complete", result);
             res.status(200).json({ responseData });
         }

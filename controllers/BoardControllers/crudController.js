@@ -1,10 +1,14 @@
 const Post = require("../../model/Post");
 const responseDataForm = require("../../config/responseDataForm");
 
+// 할 것
+//권한 주기, 작성자 확인
+//게시판 상세 조회하기
+
 const getMethod = async (req, res, next) => {
     try {
         const result = await Post.find({});
-        const responseData = responseDataForm("미정", "board get request complete", result);
+        const responseData = responseDataForm(null, "board get request complete", result);
         res.status(200).json({ responseData });
     } catch (err) {
         next(err);

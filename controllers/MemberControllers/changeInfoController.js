@@ -45,11 +45,6 @@ const putMethod = async (req, res, next) => {
         foundUser.interestKeywords = getInterestKeywords;
         await foundUser.save();
 
-        // const responseData = {
-        //     redirect: "/",
-        //     message: "changeInfo put request complete"
-        // }
-
         const responseData = responseDataForm("/", "changeInfo put request complete", null);
         res.status(200).json({ responseData });
     } catch (err) {
