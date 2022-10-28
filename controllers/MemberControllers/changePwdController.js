@@ -1,5 +1,6 @@
-const Member = require('../../model/Member');
-const bcrypt = require('bcryptjs');
+const Member = require("../../model/Member");
+const bcrypt = require("bcryptjs");
+const responseDataForm = require("../../config/responseDataForm");
 
 const putMethod = async (req, res, next) => {
     // 유저 인증
@@ -8,7 +9,7 @@ const putMethod = async (req, res, next) => {
     const getPassword_change = req.body.password_change;
 
     if (!getPassword_exist || !getPassword_change) {
-        return res.status(400).json({ 'message': 'There is missing data' });
+        return res.status(400).json({ "message": "There is missing data" });
     }
 
     try {
@@ -24,7 +25,7 @@ const putMethod = async (req, res, next) => {
             // 6~16자리 영문, 숫자, 특수문자 조합
             const regex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,16}/;
             if (!regex.test(getPassword_change)) {
-                return res.status(400).json({ 'message': "Password aren't strong enough" });
+                return res.status(400).json({ "message": "Password aren't strong enough" });
             }
 
             const hashedPwd = await new Promise((resolve, reject) => {
@@ -42,10 +43,11 @@ const putMethod = async (req, res, next) => {
             foundUser.password = hashedPwd;
             await foundUser.save();
 
-            const responseData = {
-                redirect: '/',
-                message: 'changePwd put request complete'
-            }
+            // const responseData = {
+            //     redirect: "/",
+            //     message: "changePwd put request complete"
+            // }
+            const responseData = responseDataForm("/", "changePwd put request complete", result);
             res.status(200).json({ responseData });
         }
         else {

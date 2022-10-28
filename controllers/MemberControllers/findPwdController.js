@@ -1,14 +1,15 @@
-const Member = require('../../model/Member');
-const transporter = require('../../config/nodemailerOptions');
-const crypto = require('crypto');
-const bcrypt = require('bcryptjs');
+const Member = require("../../model/Member");
+const transporter = require("../../config/nodemailerOptions");
+const crypto = require("crypto");
+const bcrypt = require("bcryptjs");
+const responseDataForm = require("../../config/responseDataForm");
 
 const postMethod = async (req, res, next) => {
     const getUserId = req.body.userId;
     const getEmail = req.body.email;
 
     if (!getUserId || !getEmail) {
-        return res.status(400).json({ 'message': 'There is missing data' });
+        return res.status(400).json({ "message": "There is missing data" });
     }
 
     try {
@@ -18,7 +19,7 @@ const postMethod = async (req, res, next) => {
         }
 
         // DB 랜덤 비번으로 변경하기
-        const randomPassword = crypto.randomBytes(8).toString('hex');
+        const randomPassword = crypto.randomBytes(8).toString("hex");
         console.log(randomPassword);
 
         const hashedPwd = await new Promise((resolve, reject) => {
@@ -45,16 +46,13 @@ const postMethod = async (req, res, next) => {
         }, (err, info) => {
             if (err) {
                 console.log(err);
-                return res.status(400).json({ 'message': 'Unable to send email' });
+                return res.status(400).json({ "message": "Unable to send email" });
             } else {
-                console.log('Successfully Send Email: %s', info.response);
+                console.log("Successfully Send Email: %s", info.response);
             }
         });
 
-        const responseData = {
-            redirect: '/',
-            message: 'findPwd post request complete'
-        }
+        const responseData = responseDataForm("/", "findPwd post request complete", null)
         res.status(200).json({ responseData });
     } catch (err) {
         next(err);

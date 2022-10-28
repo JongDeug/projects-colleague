@@ -1,5 +1,6 @@
-const Member = require('../../model/Member');
-const bcrypt = require('bcryptjs');
+const Member = require("../../model/Member");
+const bcrypt = require("bcryptjs");
+const responseDataForm = require("../../config/responseDataForm");
 
 const postMethod = async (req, res, next) => {
     const getUserId = req.body.userId;
@@ -10,7 +11,7 @@ const postMethod = async (req, res, next) => {
     const getInterestKeywords = req.body.interestKeywords;
 
     if (!getUserId || !getPassword || !getUserName || !getDateOfBirth || !getEmail || !getInterestKeywords) {
-        return res.status(400).json({ 'message': 'There is missing data' });
+        return res.status(400).json({ "message": "There is missing data" });
     }
 
     try {
@@ -29,7 +30,7 @@ const postMethod = async (req, res, next) => {
         // 6~16자리 영문, 숫자, 특수문자 조합
         const regex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,16}/;
         if (!regex.test(getPassword)) {
-            return res.status(400).json({ 'message': "Password aren't strong enough" });
+            return res.status(400).json({ "message": "Password aren't strong enough" });
         }
 
         // password 암호화
@@ -53,11 +54,7 @@ const postMethod = async (req, res, next) => {
         });
         console.log(result);
 
-        //redirect를 login 페이지로 
-        const responseData = {
-            message: `New user ${getUserId} created`,
-            redirect: '/'
-        }
+        const responseData = responseDataForm("/", `New user ${getUserId} created`, null)
         res.status(200).json({ responseData });
     } catch (err) {
         next(err);

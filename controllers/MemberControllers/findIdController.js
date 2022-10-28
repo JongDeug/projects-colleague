@@ -1,5 +1,6 @@
 const Member = require('../../model/Member');
 const transporter = require('../../config/nodemailerOptions');
+const responseDataForm = require("../../config/responseDataForm");
 
 const postMethod = async (req, res, next) => {
     const getUserName = req.body.userName;
@@ -32,13 +33,11 @@ const postMethod = async (req, res, next) => {
                     console.log('Successfully Send Email: %s', info.response);
                 }
             });
-            const responseData = {
-                redirect: '/',
-                message: 'findId post request complete'
-            }
-            res.status(200).json({ responseData });
+
+            const responseData = responseDataForm("/", "findId post request complete", null);
+                res.status(200).json({ responseData });
         } else {
-            res.status(401).json({"message" : "입력하신 회원 정보에 맞는 아이디를 찾을 수 없습니다."});
+            res.status(401).json({ "message": "입력하신 회원 정보에 맞는 아이디를 찾을 수 없습니다." });
         }
 
     } catch (err) {

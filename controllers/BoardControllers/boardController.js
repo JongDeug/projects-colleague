@@ -1,8 +1,14 @@
-const Post = require('../../model/Post');
-
+const Post = require("../../model/Post");
+const responseDataForm = require("../../config/responseDataForm");
 
 const getMethod = async (req, res, next) => {
-
+    try {
+        const result = await Post.find({});
+        const responseData = responseDataForm("미정", "board get request complete", result);
+        res.status(200).json({ responseData });
+    } catch (err) {
+        next(err);
+    }
 }
 
 const postMethod = async (req, res, next) => {
@@ -13,8 +19,9 @@ const postMethod = async (req, res, next) => {
     const getKeywords = req.body.keywords;
 
     if (!getPostTitle || !getPostContent || !getKeywords) {
-        return res.status(400).json({ 'message': 'There is missing data' });
+        return res.status(400).json({ "message": "There is missing data" });
     }
+
     // comment는 따로 commentcontroller에서 만들고 postid 받아와서 따로 관리함. 
     // DB에 저장 
     try {
@@ -26,11 +33,7 @@ const postMethod = async (req, res, next) => {
         });
         console.log(`result : ${result}`);
 
-        const responseData = {
-            redirect: '/',
-            message: 'request complete',
-            result: result,
-        }
+        const responseData = responseDataForm("/", "board post request complete", result);
         res.status(200).json({ responseData });
     } catch (err) {
         next(err);
@@ -46,14 +49,14 @@ const putMethod = async (req, res, next) => {
     const getKeywords = req.body.keywords;
 
     if (!getPostId || !getPostTitle || !getPostContent || !getKeywords) {
-        return res.status(400).json({ 'message': 'There is missing data' });
+        return res.status(400).json({ "message": "There is missing data" });
     }
 
     try {
         // 게시물 찾고 
-        const foundPost = await Post.findOne({ _id: getPostId }).exec();
+        const foundPost = await Post.findById(getPostId).exec();
 
-        // admin user 권한 추가하기 전 대충 만든 code
+        // 작성자 확인하기
         if (foundPost.userId === getUserId) {
 
             // 수정
@@ -62,15 +65,13 @@ const putMethod = async (req, res, next) => {
             foundPost.keywords = getKeywords;
 
             // 작성 일자에서 수정한 시간으로 바꿀까?
-            await foundPost.save();
+            const result = await foundPost.save();
+            console.log(result);
 
-            const responseData = {
-                redirect: '/',
-                message: 'board put request complete'
-            }
+            const responseData = responseDataForm("/", "board put request complete", result);
             res.status(200).json({ responseData });
         } else {
-            res.status(401).json({ message: '권한 없음' });
+            res.status(401).json({ message: "권한 없음" });
         }
 
     } catch (err) {
@@ -78,8 +79,33 @@ const putMethod = async (req, res, next) => {
     }
 }
 
-const deleteMethod = (req, res, next) => {
+const deleteMethod = async (req, res, next) => {
+    // 값 받기
+    const getUserId = req.userId;
+    const getPostId = req.body.postId;
 
+    if (!getPostId) {
+        return res.status(400).json({ "message": "There is missing data" });
+    }
+
+    try {
+        const foundPost = await Post.findById(getPostId).exec();
+
+        // 작성자 확인
+        if (foundPost.userId === getUserId) {
+            // 삭제
+            const result = await Post.deleteOne({ _id: getPostId });
+            console.log(result);
+
+            const responseData = responseDataForm("/", "board delete request complete", null);
+            res.status(200).json({ responseData });
+        }
+        else {
+            res.status(401).json({ "message": "권한 없음" });
+        }
+    } catch (err) {
+        next(err);
+    }
 }
 
 module.exports = { getMethod, postMethod, putMethod, deleteMethod }

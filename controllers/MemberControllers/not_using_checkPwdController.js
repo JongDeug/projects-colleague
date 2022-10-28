@@ -1,5 +1,5 @@
-const Member = require('../../model/Member');
-const bcrypt = require('bcryptjs');
+const Member = require("../../model/Member");
+const bcrypt = require("bcryptjs");
 
 const putMethod = async (req, res, next) => {
     const getUserId = req.userId;
@@ -7,9 +7,9 @@ const putMethod = async (req, res, next) => {
     const getWhich = req.body.which;
 
     try {
-        if (getWhich === 'checkPwd') {
+        if (getWhich === "checkPwd") {
             if (!getPassword) {
-                return res.status(401).json({ 'message': 'There is missing data' });
+                return res.status(401).json({ "message": "There is missing data" });
             }
 
             const foundUser = await Member.findOne({ userId: getUserId }).exec();
@@ -20,7 +20,7 @@ const putMethod = async (req, res, next) => {
             const match = await bcrypt.compare(getPassword, foundUser.password);
             if (match) {
                 const responseData = {
-                    redirect: '/',
+                    redirect: "/",
                     result: 1
                 }
                 res.status(200).json({ responseData });
@@ -29,7 +29,7 @@ const putMethod = async (req, res, next) => {
                 res.sendStatus(401);
             }
         }
-        else if (getWhich === 'changeInfo') {
+        else if (getWhich === "changeInfo") {
             next();
         }
     } catch (err) {

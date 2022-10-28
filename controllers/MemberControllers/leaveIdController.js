@@ -1,5 +1,6 @@
-const Member = require('../../model/Member');
-const bcrypt = require('bcryptjs');
+const Member = require("../../model/Member");
+const bcrypt = require("bcryptjs");
+const responseDataForm = require("../../config/responseDataForm");
 
 const deleteMethod = async (req, res, next) => {
     const getUserId = req.userId;
@@ -7,7 +8,7 @@ const deleteMethod = async (req, res, next) => {
 
     // body 비밀번호 유무 체킹
     if (!getPassword) {
-        return res.status(400).json({ 'message': 'There is missing data' });
+        return res.status(400).json({ "message": "There is missing data" });
     }
 
     try {
@@ -22,10 +23,8 @@ const deleteMethod = async (req, res, next) => {
             //DB 삭제
             const result = await Member.deleteOne({ userId: getUserId });
             console.log(result);
-            const responseData = {
-                redirect: '/',
-                message: 'leaveId delete request complete'
-            }
+
+            const responseData = responseDataForm("/", "leaveId delete request complete");
             res.status(200).json({ responseData });
         }
         else {

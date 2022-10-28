@@ -1,4 +1,5 @@
-const Member = require('../../model/Member');
+const Member = require("../../model/Member");
+const responseDataForm = require("../../config/responseDataForm");
 
 const getMethod = async (req, res, next) => {
     const userId = req.userId;
@@ -9,13 +10,14 @@ const getMethod = async (req, res, next) => {
             return res.sendStatus(401);
         }
 
-        const responseData = {
+        const result = {
             userId: foundUser.userId,
             dateOfBirth: foundUser.dateOfBirth,
             email: foundUser.email,
             interestKeywords: foundUser.interestKeywords,
-            messgae: 'changeInfo get request complete'
         }
+        
+        const responseData = responseDataForm(null, "changeInfo get request complete", result);
         res.status(200).json({ responseData });
     } catch (err) {
         next(err);
@@ -29,7 +31,7 @@ const putMethod = async (req, res, next) => {
     const getInterestKeywords = req.body.interestKeywords;
 
     if (!getDateOfBirth || !getEmail || !getInterestKeywords) {
-        return res.sendStatus(401).json({ 'message': 'There is missing data.' });
+        return res.sendStatus(401).json({ "message": "There is missing data." });
     }
 
     try {
@@ -43,10 +45,12 @@ const putMethod = async (req, res, next) => {
         foundUser.interestKeywords = getInterestKeywords;
         await foundUser.save();
 
-        const responseData = {
-            redirect: '/',
-            message: 'changeInfo put request complete'
-        }
+        // const responseData = {
+        //     redirect: "/",
+        //     message: "changeInfo put request complete"
+        // }
+
+        const responseData = responseDataForm("/", "changeInfo put request complete", null);
         res.status(200).json({ responseData });
     } catch (err) {
         next(err);

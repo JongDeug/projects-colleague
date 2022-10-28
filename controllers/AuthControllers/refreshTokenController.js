@@ -1,5 +1,6 @@
-const Member = require('../../model/Member');
-const jwt = require('jsonwebtoken');
+const Member = require("../../model/Member");
+const jwt = require("jsonwebtoken");
+const responseDataForm = require("../../config/responseDataForm");
 
 const getMethod = async (req, res, next) => {
     // 쿠키에서 refreshToken 가져오기
@@ -42,9 +43,13 @@ const getMethod = async (req, res, next) => {
                         }
                     },
                     process.env.ACCESS_TOKEN_SECRET,
-                    { expiresIn: '60s' }
+                    { expiresIn: "60s" }
                 );
-                res.status(200).json({ accessToken });
+
+                const result = {};
+                result.accessToken = accessToken;
+                const responseData = responseDataForm("/", "logout get request complete", result);
+                res.status(200).json({ responseData });
             }
         );
     } catch (err) {

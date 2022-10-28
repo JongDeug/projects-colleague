@@ -1,10 +1,11 @@
-const Member = require('../../model/Member');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const path = require('path');
+const Member = require("../../model/Member");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const path = require("path");
+const responseDataForm = require("../../config/responseDataForm");
 
 const getMethod = (req, res) => {
-    res.sendFile(path.join(__dirname, '..', '..', '/views', 'login.html'));
+    res.sendFile(path.join(__dirname, "..", "..", "/views", "login.html"));
 }
 
 
@@ -14,7 +15,7 @@ const postMethod = async (req, res, next) => {
 
     // front 에서 user, pwd 데이터 받아오기 
     if (!getUserId || !getPassword) {
-        return res.status(400).json({ 'message': 'There is missing data' });
+        return res.status(400).json({ "message": "There is missing data" });
     }
 
     try {
@@ -41,14 +42,14 @@ const postMethod = async (req, res, next) => {
                 process.env.ACCESS_TOKEN_SECRET,
 
                 // 3. 시간
-                { expiresIn: '1h' }
+                { expiresIn: "1h" }
             );
 
             // refreshToken 생성
             const refreshToken = jwt.sign(
                 { "userId": foundUser.userId },
                 process.env.REFRESH_TOKEN_SECRET,
-                { expiresIn: '1d' }
+                { expiresIn: "1d" }
             )
 
             // refreshToken DB에 저장
@@ -56,13 +57,13 @@ const postMethod = async (req, res, next) => {
             await foundUser.save();
 
             // refreshToken front-end cookie에 저장. 그래야 DB랑 cookie랑 비교 가능.
-            res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // httpOnly는 javascript로 접근 불가능.
+            res.cookie("jwt", refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // httpOnly는 javascript로 접근 불가능.
 
 
-            const responseData = {
-                accessToken: accessToken,
-                redirect: '/'
-            }
+            const result = {};
+            result.accessToken = accessToken;
+            const responseData = responseDataForm("/", "login post request complete", result);
+
             res.status(200).json({ responseData });
         }
         else {
