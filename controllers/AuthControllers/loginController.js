@@ -28,14 +28,15 @@ const postMethod = async (req, res, next) => {
         // 데이터베이스에 있는 비밀번호와 사용자 입력 비밀번호 체킹
         const match = await bcrypt.compare(getPassword, foundUser.password);
         if (match) {
-
+            const roles = Object.values(foundUser.roles);
             // accessToken 생성
             const accessToken = jwt.sign(
                 // 1. 넣을 정보
                 {
                     "UserInfo": {
                         "userId": foundUser.userId,
-                    }
+                        "roles": roles
+                    },
                 },
 
                 // 2. .env 파일, accessToken을 만들기 위해 처음 필요한 또다른 암호 코드

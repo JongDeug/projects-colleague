@@ -60,9 +60,8 @@ const putMethod = async (req, res, next) => {
         // 게시물 찾고 
         const foundPost = await Post.findById(getPostId).exec();
 
-        // 작성자 확인하기
-        if (foundPost.userId === getUserId) {
-
+        // 작성자, 권한 확인하기
+        if (foundPost.userId === getUserId || req.allowed) {
             // 수정
             foundPost.postTitle = getPostTitle;
             foundPost.postContent = getPostContent;
@@ -95,8 +94,8 @@ const deleteMethod = async (req, res, next) => {
     try {
         const foundPost = await Post.findById(getPostId).exec();
 
-        // 작성자 확인
-        if (foundPost.userId === getUserId) {
+        // 작성자, 권한 확인
+        if (foundPost.userId === getUserId || req.allowed) {
             // 삭제
             const result = await Post.deleteOne({ _id: getPostId });
             console.log(result);

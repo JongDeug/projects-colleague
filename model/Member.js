@@ -27,6 +27,14 @@ const userSchema = new schema({
     required: true,
   },
   refreshToken: String,
+  roles: {
+    Admin: Number,
+    Editor: Number,
+    User: {
+      type: Number,
+      default: 1250,
+    }
+  },
 }, {
   versionKey: false
 });

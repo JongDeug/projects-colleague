@@ -15,6 +15,7 @@ const verifyJWT = (req, res, next) => {
 
             // decoded 해서 req에 원하는 값 넣어서 나중에 사용 가능.
             req.userId = decoded.UserInfo.userId; 
+            req.roles = decoded.UserInfo.roles;
             next();
         }
     )
