@@ -7,10 +7,6 @@ const userSchema = new schema({
     type: String,
     required: true,
   },
-  // postId: {
-  //   type: Number,
-  //   required: true,
-  // },
   postTitle: {
     type: String,
     required: true,
@@ -29,7 +25,7 @@ const userSchema = new schema({
     default: 0
   },
   likeHit: {
-    type: Number,
+    type: [String],
     // required: false,
   },
   keywords: {

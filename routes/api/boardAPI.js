@@ -4,7 +4,7 @@ const verifyRoles = require("../../middleware/verifyRoles");
 const ROLES_LIST = require("../../config/roles_list");
 const crudController = require("../../controllers/BoardControllers/crudController");
 const readPostDetailController = require("../../controllers/BoardControllers/readPostDetailController");
-
+const likeHitController = require("../../controllers/BoardControllers/likeHitController");
 /**
  * create, read, update, delete [board]
  */
@@ -17,6 +17,8 @@ router.route('/crud')
 router.route('/:postId')
     .get(readPostDetailController.getMethod);
 
+router.route('/like/:postId')
+    .get(likeHitController.getMethod);
     
 // 현수가 작성할 곳
 /**
