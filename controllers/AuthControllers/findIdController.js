@@ -35,7 +35,7 @@ const postMethod = async (req, res, next) => {
             });
 
             const responseData = responseDataForm("/login", "findId post request complete", null);
-                res.status(200).json({ responseData });
+            res.status(200).json({ responseData });
         } else {
             res.status(401).json({ "message": "입력하신 회원 정보에 맞는 아이디를 찾을 수 없습니다." });
         }

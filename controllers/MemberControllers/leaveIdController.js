@@ -23,6 +23,9 @@ const deleteMethod = async (req, res, next) => {
             //DB 삭제
             const result = await Member.deleteOne({ userId: getUserId });
             console.log(result);
+            
+            // jwt(refreshToken) client에서 지우기
+            res.clearCookie("jwt", { httpOnly: true });
 
             const responseData = responseDataForm("/", "leaveId delete request complete");
             res.status(200).json({ responseData });

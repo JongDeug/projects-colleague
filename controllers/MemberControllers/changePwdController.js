@@ -15,7 +15,7 @@ const putMethod = async (req, res, next) => {
     try {
         const foundUser = await Member.findOne({ userId: getUserId }).exec();
         if (!foundUser) {
-            return res.sendStatus(401);
+            return res.status(401).json({"message": "fuck"});
         }
 
         // 기존 비밀번호 확인 
@@ -43,7 +43,7 @@ const putMethod = async (req, res, next) => {
             foundUser.password = hashedPwd;
             await foundUser.save();
 
-            const responseData = responseDataForm("/updatemem", "changePwd put request complete", result);
+            const responseData = responseDataForm("/updatemem", "changePwd put request complete", null);
             res.status(200).json({ responseData });
         }
         else {

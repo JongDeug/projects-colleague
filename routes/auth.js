@@ -4,6 +4,8 @@ const registerController = require('../controllers/AuthControllers/registerContr
 const loginController = require('../controllers/AuthControllers/loginController');
 const logoutController = require('../controllers/AuthControllers/logoutController');
 const refreshTokenController = require('../controllers/AuthControllers/refreshTokenController')
+const findIdController = require('../controllers/AuthControllers/findIdController');
+const findPwdController = require('../controllers/AuthControllers/findPwdController');
 
 router.route('/register')
     .post(registerController.postMethod);
@@ -18,6 +20,10 @@ router.route('/logout')
 router.route('/refresh')
     .get(refreshTokenController.getMethod);
 
+router.route('/findId')
+    .post(findIdController.postMethod)
 
+router.route('/findPwd')
+    .post(findPwdController.postMethod)
 
 module.exports = router;

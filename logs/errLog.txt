@@ -156,3 +156,5 @@
 2022/10/31	21:16:17	ReferenceError: postId is not defined
 2022/10/31	21:16:49	ReferenceError: postId is not defined
 2022/10/31	21:19:45	ReferenceError: postId is not defined
+2022/10/31	23:19:42	ReferenceError: result is not defined
+2022/10/31	23:54:12	Error: ENOENT: no such file or directory, stat '/mnt/c/Users/pinpo/.vscode/Node.js/web-community-project/React/build/index.html'

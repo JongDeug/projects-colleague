@@ -3,7 +3,6 @@ const responseDataForm = require("../../config/responseDataForm");
 
 const getMethod = async (req, res, next) => {
     const userId = req.userId;
-    console.log(userId);
     try {
         const foundUser = await Member.findOne({ userId: userId });
         if (!foundUser) {
