@@ -100,7 +100,7 @@ const deleteMethod = async (req, res, next) => {
             const result = await Post.deleteOne({ _id: getPostId });
             console.log(result);
 
-            const responseData = responseDataForm(`/post/${foundPost._id}`, "board delete request complete", null);
+            const responseData = responseDataForm(`/board/all`, "board delete request complete", null);
             res.status(200).json({ responseData });
         }
         else {

@@ -1,4 +1,5 @@
 const Member = require("../../model/Member");
+const Post = require("../../model/Post")
 const bcrypt = require("bcryptjs");
 const responseDataForm = require("../../config/responseDataForm");
 
@@ -21,8 +22,11 @@ const deleteMethod = async (req, res, next) => {
         const match = await bcrypt.compare(getPassword, foundUser.password);
         if (match) {
             //DB 삭제
-            const result = await Member.deleteOne({ userId: getUserId });
-            console.log(result);
+            const resultMember = await Member.deleteOne({ userId: getUserId });
+            console.log(resultMember);
+
+            const resultPost = await Post.deleteMany({userId: getUserId});
+            console.log(resultPost);
             
             // jwt(refreshToken) client에서 지우기
             res.clearCookie("jwt", { httpOnly: true });
