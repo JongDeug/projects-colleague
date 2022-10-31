@@ -33,10 +33,14 @@ app.use("/", express.static(path.join(__dirname, "React/build/")));
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'React/build/index.html'));
 });
+
+
+
 app.use("/auth", require('./routes/auth')); 
 app.use(verifyJWT);
 app.use("/api/member", require("./routes/api/memberAPI"));
 app.use("/api/board", require("./routes/api/boardAPI"));
+
 
 // middleware
 app.use(errorHandler);
