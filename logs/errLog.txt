@@ -150,3 +150,5 @@
 2022/10/28	16:32:37	TypeError: res.stauts is not a function
 2022/10/31	12:08:24	ValidationError: Comment validation failed: postId: Cast to Number failed for value "635f3bed323a8db1b7fa3d8c" (type string) at path "postId"
 2022/10/31	12:25:35	ReferenceError: _ is not defined
+2022/10/31	19:43:54	ReferenceError: baseUrl is not defined
+2022/10/31	19:46:59	ValidationError: Post validation failed: userId: Path `userId` is required.
