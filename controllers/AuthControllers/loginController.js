@@ -63,6 +63,7 @@ const postMethod = async (req, res, next) => {
 
             const result = {};
             result.accessToken = accessToken;
+            console.log(result);
             const responseData = responseDataForm("/", "login post request complete", result);
 
             res.status(200).json({ responseData });

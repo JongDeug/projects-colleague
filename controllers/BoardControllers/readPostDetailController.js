@@ -1,22 +1,33 @@
 const Post = require("../../model/Post");
+const Comment = require("../../model/Comment");
 const responseDataForm = require("../../config/responseDataForm");
+// const _ = require("lodash");
 
 const getMethod = async (req, res, next) => {
+    const getUserId = req.userId;
     const getPostId = req.params.postId;
     if (!getPostId) {
         return res.status(400).json({ "message": "There is missing data" });
     }
     
     try {
-
         // DB에서 읽어오는데 Post, Comment 둘다 읽어와야함.
-        const result = await Post.findById(getPostId).exec();
+        const foundPost = await Post.findById(getPostId).exec();
+        const foundComments = await Comment.find({postId : getPostId}).exec();
 
         // 조회수 up
-        result.hit += 1;
-        await result.save();
+        foundPost.hit += 1;
 
-        console.log(result);
+        const resultPost = await foundPost.save();
+        const result = resultPost.toObject();
+        result.comments = foundComments;
+
+        // likeHit 유무 확인 코드
+        if(result.likeHit.includes(getUserId)){
+            result.likeHitBool = true;
+        }else {
+            result.likeHitBool = false;
+        }
 
         const responseData = responseDataForm(null, "readPostDetail get request complete", result);
         res.status(200).json({ responseData });

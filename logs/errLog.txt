@@ -148,3 +148,5 @@
 2022/10/20	21:15:27	Error: ENOENT: no such file or directory, stat '/mnt/c/Users/pinpo/.vscode/Node.js/web-community-project/React/build/index.html'
 2022/10/20	22:31:42	Error: Cannot set headers after they are sent to the client
 2022/10/28	16:32:37	TypeError: res.stauts is not a function
+2022/10/31	12:08:24	ValidationError: Comment validation failed: postId: Cast to Number failed for value "635f3bed323a8db1b7fa3d8c" (type string) at path "postId"
+2022/10/31	12:25:35	ReferenceError: _ is not defined

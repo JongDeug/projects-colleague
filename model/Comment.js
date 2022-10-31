@@ -5,14 +5,14 @@ const getDateTime = require('../middleware/timezone');
 
 const userSchema = new schema({
   postId: {
-    type: Number,
+    type: String,
     required: true,
     //ref: "Post",
   },
-  commentId: {
-    type: Number,
-    required: true,
-  },
+  // commentId: {
+  //   type: Number,
+  //   required: true,
+  // },
   userId: {
     type: String,
     required: true,

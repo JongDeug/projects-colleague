@@ -15,8 +15,12 @@ const getMethod = async (req, res, next) => {
         const result = await Post.findById(getPostId).exec();
 
         // likeHit 배열에 userId 넣기
+        // likeHit에 userId가 없으면 추가
         if (!result.likeHit.includes(getUserId)) {
             result.likeHit.push(getUserId);
+            result.save();
+        } else { // userId가 있으면 없에기.
+            result.likeHit = result.likeHit.filter((user) => user !== getUserId);
             result.save();
         }
 
