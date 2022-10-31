@@ -24,7 +24,7 @@ const getMethod = async (req, res, next) => {
             result.save();
         }
 
-        const responseData = responseDataForm("/", "likeHit get request complete", result);
+        const responseData = responseDataForm(null, "likeHit get request complete", result);
         res.status(200).json({ responseData });
 
         // 프론트 단에서는 result를 확인하고 true인지 false인지 확인하고 싶다면 readPost에서 result.LikeHit을 계산하면됨.

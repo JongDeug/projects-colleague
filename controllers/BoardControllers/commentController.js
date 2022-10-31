@@ -46,7 +46,7 @@ const postMethod = async (req, res, next) => {
         // };
 
         // result 보내줘야함.
-        const responseData = responseDataForm("/", "comment post request complete", result);
+        const responseData = responseDataForm(`/post/${postId}`, "comment post request complete", result);
         res.status(200).json({ responseData });
     } catch (err) {
         next(err);
@@ -78,7 +78,7 @@ const putMethod = async (req, res, next) => {
             const result = await foundComment.save();
             console.log(`result : ${result}`);
 
-            const responseData = responseDataForm("/", "comment put request complete", result);
+            const responseData = responseDataForm(`/post/${result.postId}`, "comment put request complete", result);
             res.status(200).json({ responseData });
         } else {
             res.status(200).json({ "message": "권한 없음" });
@@ -105,7 +105,7 @@ const deleteMethod = async (req, res, next) => {
             const result = await Comment.deleteOne({ _id : commentId });
             console.log(result);
 
-            const responseData = responseDataForm("/", "comment delete request complete", null);
+            const responseData = responseDataForm(`/post/${result.postId}`, "comment delete request complete", null);
             res.status(200).json({ responseData });
         } else {
             res.status(200).json({ "message": "권한 없음" });

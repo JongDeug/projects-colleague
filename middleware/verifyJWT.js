@@ -7,7 +7,6 @@ const verifyJWT = (req, res, next) => {
     if (authHeader?.startsWith('Bearer ')) {
         token = authHeader.split(' ')[1];
     }
-    // return res.status(401).json({ 'message': 'fail verify' });
 
     const url = req.url;
     if (url.split('/')[1] === 'api') {
@@ -27,9 +26,6 @@ const verifyJWT = (req, res, next) => {
     } else {
         next();
     }
-
-
-
 }
 
 module.exports = verifyJWT;

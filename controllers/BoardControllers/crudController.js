@@ -37,7 +37,7 @@ const postMethod = async (req, res, next) => {
         });
         console.log(`result : ${result}`);
 
-        const responseData = responseDataForm("/", "board post request complete", result);
+        const responseData = responseDataForm(`/post/${result._id}`, "board post request complete", result);
         res.status(200).json({ responseData });
     } catch (err) {
         next(err);
@@ -71,7 +71,7 @@ const putMethod = async (req, res, next) => {
             const result = await foundPost.save();
             console.log(result);
 
-            const responseData = responseDataForm("/", "board put request complete", result);
+            const responseData = responseDataForm(`/post/${result._id}`, "board put request complete", result);
             res.status(200).json({ responseData });
         } else {
             res.status(401).json({ message: "권한 없음" });
@@ -100,7 +100,7 @@ const deleteMethod = async (req, res, next) => {
             const result = await Post.deleteOne({ _id: getPostId });
             console.log(result);
 
-            const responseData = responseDataForm("/", "board delete request complete", null);
+            const responseData = responseDataForm(`/post/${foundPost._id}`, "board delete request complete", null);
             res.status(200).json({ responseData });
         }
         else {

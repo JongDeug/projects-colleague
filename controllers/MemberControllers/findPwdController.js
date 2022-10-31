@@ -52,7 +52,7 @@ const postMethod = async (req, res, next) => {
             }
         });
 
-        const responseData = responseDataForm("/", "findPwd post request complete", null)
+        const responseData = responseDataForm("/login", "findPwd post request complete", null)
         res.status(200).json({ responseData });
     } catch (err) {
         next(err);

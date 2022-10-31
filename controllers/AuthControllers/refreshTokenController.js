@@ -48,7 +48,7 @@ const getMethod = async (req, res, next) => {
 
                 const result = {};
                 result.accessToken = accessToken;
-                const responseData = responseDataForm("/", "logout get request complete", result);
+                const responseData = responseDataForm(null, "logout get request complete", result);
                 res.status(200).json({ responseData });
             }
         );

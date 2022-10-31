@@ -152,3 +152,7 @@
 2022/10/31	12:25:35	ReferenceError: _ is not defined
 2022/10/31	19:43:54	ReferenceError: baseUrl is not defined
 2022/10/31	19:46:59	ValidationError: Post validation failed: userId: Path `userId` is required.
+2022/10/31	21:14:26	ReferenceError: postId is not defined
+2022/10/31	21:16:17	ReferenceError: postId is not defined
+2022/10/31	21:16:49	ReferenceError: postId is not defined
+2022/10/31	21:19:45	ReferenceError: postId is not defined

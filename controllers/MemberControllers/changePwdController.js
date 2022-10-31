@@ -43,7 +43,7 @@ const putMethod = async (req, res, next) => {
             foundUser.password = hashedPwd;
             await foundUser.save();
 
-            const responseData = responseDataForm("/", "changePwd put request complete", result);
+            const responseData = responseDataForm("/updatemem", "changePwd put request complete", result);
             res.status(200).json({ responseData });
         }
         else {

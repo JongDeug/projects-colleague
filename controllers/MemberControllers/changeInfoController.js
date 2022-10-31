@@ -45,7 +45,7 @@ const putMethod = async (req, res, next) => {
         foundUser.interestKeywords = getInterestKeywords;
         await foundUser.save();
 
-        const responseData = responseDataForm("/", "changeInfo put request complete", null);
+        const responseData = responseDataForm("/updatemem", "changeInfo put request complete", null);
         res.status(200).json({ responseData });
     } catch (err) {
         next(err);
