@@ -17,15 +17,18 @@ const postMethod = async (req, res, next) => {
         const foundPost = await Post.findById(getPostId).exec();
         const foundComments = await Comment.find({ postId: getPostId }).exec();
 
+        // 조회수 up
         if (getHitControl === "put") {
             foundPost.hit -= 1;
         } else {
             foundPost.hit += 1;
         }
-        // 조회수 up
 
         const resultPost = await foundPost.save();
         const result = resultPost.toObject();
+
+        // host 이름(비교 하려고, 수정, 삭제), 댓글들 주기
+        result.host = getUserId;
         result.comments = foundComments;
 
         // likeHit 유무 확인 코드

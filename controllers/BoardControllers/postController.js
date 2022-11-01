@@ -1,4 +1,5 @@
 const Post = require("../../model/Post");
+const Comment = require("../../model/Comment");
 const responseDataForm = require("../../config/responseDataForm");
 
 
@@ -92,9 +93,12 @@ const deleteMethod = async (req, res, next) => {
 
         // 작성자, 권한 확인
         if (foundPost.userId === getUserId || req.allowed) {
+
             // 삭제
-            const result = await Post.deleteOne({ _id: getPostId });
-            console.log(result);
+            const postResult = await Post.deleteOne({ _id: getPostId });
+            console.log(postResult);
+            const commentResults = await Comment.deleteMany({ postId: getPostId });
+            console.log(commentResults);
 
             const responseData = responseDataForm(`/board/all`, "board delete request complete", null);
             res.status(200).json({ responseData });

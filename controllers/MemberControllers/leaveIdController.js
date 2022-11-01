@@ -22,7 +22,18 @@ const deleteMethod = async (req, res, next) => {
         // body 비밀번호 체킹
         const match = await bcrypt.compare(getPassword, foundUser.password);
         if (match) {
-            //DB 삭제
+            // 자신의 포스트들 찾기
+            Post.find({ userId: getUserId }, function (err, docs) {
+                if(err){
+                    return res.status(401).json({"message" : "내 포스트를 찾을 수 없음"});
+                }
+                docs.forEach(async (doc) => {
+                    // 자신의 포스트에 댓글들 싹 삭제
+                    const deleteComment = await Comment.deleteMany({ postId: doc._id });
+                    console.log("deleteComment : %s", deleteComment);
+                });
+            });
+
             const resultMember = await Member.deleteOne({ userId: getUserId });
             console.log(resultMember);
             const resultPost = await Post.deleteMany({ userId: getUserId });

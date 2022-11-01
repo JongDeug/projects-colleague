@@ -6,6 +6,7 @@ const postController = require("../../controllers/BoardControllers/postControlle
 const postDetailController = require("../../controllers/BoardControllers/postDetailController");
 const commentController = require("../../controllers/BoardControllers/commentController");
 const likeHitController = require("../../controllers/BoardControllers/likeHitController");
+const searchPostController = require("../../controllers/BoardControllers/searchPostController");
 
 router.route('/crud')
     .get(postController.getMethod)
@@ -23,6 +24,9 @@ router.route('/comment/crud')
     .post(commentController.postMethod)
     .put(commentController.putMethod)
     .delete(commentController.deleteMethod);
+
+router.route('/search')
+    .post(searchPostController)
     
 
 
