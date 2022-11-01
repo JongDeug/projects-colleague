@@ -6,7 +6,7 @@ const getMethod = async (req, res, next) => {
     // 쿠키에서 refreshToken 가져오기
     const getCookies = req.cookies;
     if (!getCookies?.jwt) { // -> !cookies && !cookies.jwt
-        return res.sendStatus(401);
+        return res.status(200).json({ "message": "쿠키에 refreshToken이 존재하지 않음" });
     }
     const getRefreshToken = getCookies.jwt;
 
@@ -14,7 +14,7 @@ const getMethod = async (req, res, next) => {
         // DB 와 비교
         const foundUser = await Member.findOne({ refreshToken: getRefreshToken }).exec();
         if (!foundUser) {
-            return res.sendStatus(403); // Forbidden
+            return res.status(403).json({ "message": "권한 없음 Forbidden" });
         }
 
         jwt.verify(
@@ -26,7 +26,7 @@ const getMethod = async (req, res, next) => {
             (err, decoded) => {
                 // checking
                 if (err || foundUser.userId != decoded.userId) {
-                    return res.sendStatus(403);
+                    return res.status(403).json({ "message": "권한 없음 Forbidden" });
                 }
 
                 // 새로운 accessToken 생성

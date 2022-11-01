@@ -11,7 +11,7 @@ const postMethod = async (req, res, next) => {
     const getInterestKeywords = req.body.interestKeywords;
 
     if (!getUserId || !getPassword || !getUserName || !getDateOfBirth || !getEmail || !getInterestKeywords) {
-        return res.status(400).json({ "message": "There is missing data" });
+        return res.status(400).json({ "message": "빠뜨린 입력 존재" });
     }
 
     try {
@@ -20,17 +20,17 @@ const postMethod = async (req, res, next) => {
         const duplicateEmail = await Member.findOne({ email: getEmail }).exec();
 
         if (duplicateId) {
-            return res.status(409).json({"message" : "duplicate id"}) // conflict
+            return res.status(409).json({ "message": "아이디 중복" }) // conflict
         }
 
-        if (duplicateEmail){
-            return res.status(409).json({"message" : "duplicate email"}); // conflict
+        if (duplicateEmail) {
+            return res.status(409).json({ "message": "이메일 중복" }); // conflict
         }
 
         // 6~16자리 영문, 숫자, 특수문자 조합
         const regex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,16}/;
         if (!regex.test(getPassword)) {
-            return res.status(400).json({ "message": "Password aren't strong enough" });
+            return res.status(400).json({ "message": "패스워드(6-16) 영문, 숫자, 특수문자 조합이 아님" });
         }
 
         // password 암호화
@@ -54,7 +54,7 @@ const postMethod = async (req, res, next) => {
         });
         console.log(result);
 
-        const responseData = responseDataForm("/", `New user ${getUserId} created`, null)
+        const responseData = responseDataForm("/login", `New user ${getUserId} created`, null)
         res.status(200).json({ responseData });
     } catch (err) {
         next(err);

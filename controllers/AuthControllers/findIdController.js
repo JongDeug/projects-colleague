@@ -1,5 +1,5 @@
-const Member = require('../../model/Member');
-const transporter = require('../../config/nodemailerOptions');
+const Member = require("../../model/Member");
+const transporter = require("../../config/nodemailerOptions");
 const responseDataForm = require("../../config/responseDataForm");
 
 const postMethod = async (req, res, next) => {
@@ -8,7 +8,7 @@ const postMethod = async (req, res, next) => {
     const getEmail = req.body.email;
 
     if (!getUserName || !getDateOfBirth || !getEmail) {
-        return res.status(400).json({ 'message': 'There is missing data' });
+        return res.status(400).json({ "message": "빠뜨린 입력 존재" });
     }
 
     try {
@@ -28,16 +28,16 @@ const postMethod = async (req, res, next) => {
             }, (err, info) => {
                 if (err) {
                     console.log(err);
-                    return res.status(400).json({ 'message': 'Unable to send email' });
+                    return res.status(400).json({ "message": "이메일 전송 오류" });
                 } else {
-                    console.log('Successfully Send Email: %s', info.response);
+                    console.log("Successfully Send Email: %s", info.response);
                 }
             });
 
             const responseData = responseDataForm("/login", "findId post request complete", null);
             res.status(200).json({ responseData });
         } else {
-            res.status(401).json({ "message": "입력하신 회원 정보에 맞는 아이디를 찾을 수 없습니다." });
+            res.status(401).json({ "message": "회원정보에 맞는 아이디를 찾을 수 없음" });
         }
 
     } catch (err) {

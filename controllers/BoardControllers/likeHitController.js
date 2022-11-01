@@ -7,7 +7,7 @@ const getMethod = async (req, res, next) => {
     const getPostId = req.params.postId;
 
     if (!getPostId) {
-        return res.status(400).json({ "message": "There is missing data" });
+        return res.status(400).json({ "message": "빠뜨린 입력 존재" });
     }
 
     try {
@@ -27,8 +27,6 @@ const getMethod = async (req, res, next) => {
         const responseData = responseDataForm(null, "likeHit get request complete", result);
         res.status(200).json({ responseData });
 
-        // 프론트 단에서는 result를 확인하고 true인지 false인지 확인하고 싶다면 readPost에서 result.LikeHit을 계산하면됨.
-        // 아니다 내가 계산해서 줘야되네
     } catch (err) {
         next(err);
     }

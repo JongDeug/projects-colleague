@@ -163,3 +163,4 @@
 2022/11/1	03:05:03	TypeError: Cannot read properties of null (reading 'hit')
 2022/11/1	03:07:20	TypeError: Cannot read properties of null (reading 'hit')
 2022/11/1	12:10:23	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Post"
+2022/11/2	02:41:25	ReferenceError: cosnole is not defined

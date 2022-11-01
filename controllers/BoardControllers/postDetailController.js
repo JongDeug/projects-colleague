@@ -9,7 +9,7 @@ const postMethod = async (req, res, next) => {
     const getHitControl = req.body.hitControl;
 
     if (!getPostId || !getHitControl) {
-        return res.status(400).json({ "message": "There is missing data" });
+        return res.status(400).json({ "message": "빠뜨린 입력 존재" });
     }
 
     try {
@@ -17,7 +17,7 @@ const postMethod = async (req, res, next) => {
         const foundPost = await Post.findById(getPostId).exec();
         const foundComments = await Comment.find({ postId: getPostId }).exec();
 
-        if (getHitControl === 'put') {
+        if (getHitControl === "put") {
             foundPost.hit -= 1;
         } else {
             foundPost.hit += 1;

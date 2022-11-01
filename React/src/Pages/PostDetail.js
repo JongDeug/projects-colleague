@@ -65,7 +65,7 @@ function PostDetail() {
   }
 
   useEffect(() => {
-    requestGetDetail(_id, "get");
+    requestGetDetail(_id, "post");
   }, []);
 
   function requestDelete() {

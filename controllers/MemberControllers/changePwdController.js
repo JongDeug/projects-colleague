@@ -9,13 +9,13 @@ const putMethod = async (req, res, next) => {
     const getPassword_change = req.body.password_change;
 
     if (!getPassword_exist || !getPassword_change) {
-        return res.status(400).json({ "message": "There is missing data" });
+        return res.status(400).json({ "message": "빠뜨린 입력 존재" });
     }
 
     try {
         const foundUser = await Member.findOne({ userId: getUserId }).exec();
         if (!foundUser) {
-            return res.status(401).json({"message": "fuck"});
+            return res.status(401).json({"message": "회원을 찾을 수 없음"});
         }
 
         // 기존 비밀번호 확인 
@@ -25,7 +25,7 @@ const putMethod = async (req, res, next) => {
             // 6~16자리 영문, 숫자, 특수문자 조합
             const regex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,16}/;
             if (!regex.test(getPassword_change)) {
-                return res.status(400).json({ "message": "Password aren't strong enough" });
+                return res.status(400).json({ "message": "패스워드(6-16) 영문, 숫자, 특수문자 조합이 아님" });
             }
 
             const hashedPwd = await new Promise((resolve, reject) => {
@@ -38,7 +38,7 @@ const putMethod = async (req, res, next) => {
             });
 
             if (!hashedPwd) {
-                return res.sendStatus(401);
+                return res.status(401).json({"message" : "패스워드 해시 오류"});
             }
             foundUser.password = hashedPwd;
             await foundUser.save();
@@ -47,7 +47,7 @@ const putMethod = async (req, res, next) => {
             res.status(200).json({ responseData });
         }
         else {
-            res.sendStatus(401);
+            res.status(401).json({"message" : "비밀번호 불일치"});
         }
     } catch (err) {
         next(err);

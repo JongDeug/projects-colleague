@@ -96,6 +96,7 @@ function UpdateMember() {
             id="userId"
             defaultValue={userId}
             onChange={onIdHandler}
+            disabled
           />
         </Form.Group>
 
