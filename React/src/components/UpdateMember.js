@@ -115,6 +115,7 @@ function UpdateMember() {
             id="dateOfBirth"
             defaultValue={dateOfBirth}
             onChange={onBirthHandler}
+            disabled
           />
         </Form.Group>
 
