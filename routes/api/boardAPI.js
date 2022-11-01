@@ -26,7 +26,7 @@ router.route('/comment/crud')
     .delete(commentController.deleteMethod);
 
 router.route('/search')
-    .post(searchPostController)
+    .post(searchPostController.postMethod);
     
 
 
