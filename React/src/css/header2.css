@@ -1,0 +1,72 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@media screen and (max-width: 980px) {
+    .nav-icon {
+        margin-left: 0px;
+    }
+}
+
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+.logo_header{
+    width: 150px;
+    margin-left: 100px;
+    display: flex;
+}
+
+.no_login{
+    display: flex;
+}
+
+#collasible-nav-dropdown{
+    text-align:center;
+    margin: 0 30px;
+    font-size: 3.5vh;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.nav-icon{
+    margin-left: 120px;
+}
+
+.me-auto.navbar-nav{
+    margin-right: 0px;
+}
+
+@media screen and (max-width: 993px) {
+    .nav-icon {
+        margin: auto;
+        display: flex;
+    }
+
+    .logo_header {
+        margin-left: 10px;
+        display: flex;
+    }
+}
+.li_menu{
+    list-style-type:none;
+}
+.link_menu{
+    text-decoration: none;
+    color: aliceblue;
+}
+.link_menu:hover{
+    text-decoration: none;
+    color: rgb(92, 92, 92);
+}
+.header-join-btn,
+.header-login-btn {
+    text-decoration: none;
+    margin: 5px;
+    white-space: nowrap;
+}

@@ -1,0 +1,38 @@
+.postDetailButtons {
+    display: inline-flex;
+    justify-content: flex-end !important;
+    margin-bottom: 120px;
+    width: auto;
+}
+
+.row.ri{
+    word-break: break-all;
+    margin: 1em;;
+}
+
+div.group{
+    width: 900px;
+}
+
+.btn-success.udPostDetailButtons,
+.btn-danger.udPostDetailButtons
+{
+    margin-right: 20px !important;
+
+}
+
+.posDtCancelBtn{
+    background-color:rgb(64, 152, 228);
+    color:white;
+    
+}
+
+.posDtDeleteBtn{
+    background-color: rgb(210, 94, 94);
+        color: white;
+}
+
+.btn-close{
+    display: flex;
+    justify-self: right;
+}

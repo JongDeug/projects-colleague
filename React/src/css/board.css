@@ -1,0 +1,125 @@
+*{
+    margin: auto;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Pretendard-Regular';
+}
+main{
+    width:800px;
+}
+
+h2{
+    margin: 30px 0px 30px;
+    text-align: center;
+}
+
+.head{
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.table-bordered>:not(caption)>*>*{
+    border-width: 0 0;
+}
+
+/*목록*/
+.content{
+    text-align: center;
+}
+.content.post_title{
+    text-align: left;
+}
+.post_id{
+    width: 5%;
+}
+.post_title{
+}
+.post_writer{
+    width: 10%;
+}
+.post_date{
+    width:12%;
+    font-size: 0.8em;
+}
+.post_date.head{
+    font-size: 1em;
+}
+
+.post_hit{
+    width: 7%;
+}
+.post_likehit{
+    width: 7%;
+}
+.post_link{
+    text-decoration: none;
+    color:black;
+}
+
+/* 작성 버튼 */
+.float-right{
+}
+/* .btn-success,
+.btn-success:focus,
+.btn-success:active {
+    color: #fff;
+    background-color: #59c294;
+    border: #59c294;
+    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+        7px 7px 20px 0px rgba(0, 0, 0, .1),
+        4px 4px 5px 0px rgba(0, 0, 0, .1);
+    transition: all 0.3s ease;
+    display: flex;
+    margin:0 10px;
+    justify-content: right;
+} */
+.create_btn,
+.create_btn:focus,
+.create_btn:active{
+    display: flex;
+    justify-content: flex-end;
+    margin: 0px 0px 0px auto;
+    background-color: #59c294;
+}
+.btn-success:hover {
+    color: #fff;
+}
+
+/* paging */
+.nav{
+    justify-content: center;
+    width: 800px;
+    margin-bottom: 20px;
+    
+}
+.btn-primary{
+}
+.paging_button,
+.paging_button:focus,
+.paging_button:active{
+    display: flex;
+    margin:0 10px;
+    justify-content: center;
+    list-style: none;
+    background-color: #59c294;
+}
+.paging_button:disabled{
+    background-color: #8cd4b4;
+}
+
+.create_btn:hover,
+.paging_button:hover{
+    
+    background-color: #19ba74;
+}
+
+/* 검색 */
+.input-group{
+    justify-content: flex-end;
+}
+.serach_input{
+    border: solid 1px gray;
+    border-radius: 6px;
+    padding: 5px;
+    width: 30%;
+}
