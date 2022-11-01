@@ -1,9 +1,6 @@
 const Post = require("../../model/Post");
 const responseDataForm = require("../../config/responseDataForm");
 
-// 할 것
-//권한 주기, 작성자 확인
-//게시판 상세 조회하기
 
 const getMethod = async (req, res, next) => {
     try {
@@ -23,10 +20,9 @@ const postMethod = async (req, res, next) => {
     const getKeywords = req.body.keywords;
 
     if (!getPostTitle || !getPostContent || !getKeywords) {
-        return res.status(400).json({ "message": "There is missing data" });
+        return res.status(400).json({ "message": "빠뜨린 입력 존재" });
     }
 
-    // comment는 따로 commentcontroller에서 만들고 postid 받아와서 따로 관리함. 
     // DB에 저장 
     try {
         const result = await Post.create({
@@ -53,7 +49,7 @@ const putMethod = async (req, res, next) => {
     const getKeywords = req.body.keywords;
 
     if (!getPostId || !getPostTitle || !getPostContent || !getKeywords) {
-        return res.status(400).json({ "message": "There is missing data" });
+        return res.status(400).json({ "message": "빠뜨린 입력 존재" });
     }
 
     try {
@@ -88,7 +84,7 @@ const deleteMethod = async (req, res, next) => {
     const getPostId = req.body.postId;
 
     if (!getPostId) {
-        return res.status(400).json({ "message": "There is missing data" });
+        return res.status(400).json({ "message": "빠뜨린 입력 존재" });
     }
 
     try {

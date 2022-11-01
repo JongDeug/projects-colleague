@@ -15,14 +15,14 @@ const postMethod = async (req, res, next) => {
 
     // front 에서 user, pwd 데이터 받아오기 
     if (!getUserId || !getPassword) {
-        return res.status(400).json({ "message": "There is missing data" });
+        return res.status(400).json({ "message": "빠뜨린 입력 존재" });
     }
 
     try {
         // DB 확인
         const foundUser = await Member.findOne({ userId: getUserId }).exec();
         if (!foundUser) {
-            return res.sendStatus(401);
+            return res.status(401).json({ "message": "회원 정보를 찾을 수 없음" })
         }
 
         // 데이터베이스에 있는 비밀번호와 사용자 입력 비밀번호 체킹
@@ -69,7 +69,7 @@ const postMethod = async (req, res, next) => {
             res.status(200).json({ responseData });
         }
         else {
-            res.sendStatus(401);
+            res.status(401).json({ "message": "아이디 혹은 비밀번호 불일치" });
         }
     } catch (err) {
         next(err);
@@ -78,4 +78,4 @@ const postMethod = async (req, res, next) => {
 }
 
 // module.exports = { postMethod };
-module.exports = { getMethod, postMethod};
+module.exports = { getMethod, postMethod };

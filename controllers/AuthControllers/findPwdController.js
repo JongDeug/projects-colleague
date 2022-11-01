@@ -9,7 +9,7 @@ const postMethod = async (req, res, next) => {
     const getEmail = req.body.email;
 
     if (!getUserId || !getEmail) {
-        return res.status(400).json({ "message": "There is missing data" });
+        return res.status(400).json({ "message": "빠뜨린 입력 존재" });
     }
 
     try {
@@ -46,7 +46,7 @@ const postMethod = async (req, res, next) => {
         }, (err, info) => {
             if (err) {
                 console.log(err);
-                return res.status(400).json({ "message": "Unable to send email" });
+                return res.status(400).json({ "message": "이메일 전송 오류" });
             } else {
                 console.log("Successfully Send Email: %s", info.response);
             }

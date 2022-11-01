@@ -2,21 +2,19 @@ const express = require('express');
 const router = express.Router();
 const verifyRoles = require("../../middleware/verifyRoles");
 const ROLES_LIST = require("../../config/roles_list");
-const crudController = require("../../controllers/BoardControllers/crudController");
-const readPostDetailController = require("../../controllers/BoardControllers/readPostDetailController");
+const postController = require("../../controllers/BoardControllers/postController");
+const postDetailController = require("../../controllers/BoardControllers/postDetailController");
 const commentController = require("../../controllers/BoardControllers/commentController");
 const likeHitController = require("../../controllers/BoardControllers/likeHitController");
-/**
- * create, read, update, delete [board]
- */
+
 router.route('/crud')
-    .get(crudController.getMethod)
-    .post(crudController.postMethod)
-    .put(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor),crudController.putMethod)
-    .delete(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor),crudController.deleteMethod);
+    .get(postController.getMethod)
+    .post(postController.postMethod)
+    .put(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor),postController.putMethod)
+    .delete(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor),postController.deleteMethod);
 
 router.route('/:postId')
-    .post(readPostDetailController.postMethod);
+    .post(postDetailController.postMethod);
 
 router.route('/like/:postId')
     .get(likeHitController.getMethod);
@@ -26,21 +24,6 @@ router.route('/comment/crud')
     .put(commentController.putMethod)
     .delete(commentController.deleteMethod);
     
-// 현수가 작성할 곳
-/**
- * createComment
- */
 
-/**
- * readComment
- */
-
-/**
- * updateComment
- */
-
-/**
- * deleteComment
- */
 
 module.exports = router;
