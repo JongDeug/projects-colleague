@@ -16,7 +16,7 @@ router.route('/crud')
     .delete(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor),crudController.deleteMethod);
 
 router.route('/:postId')
-    .get(readPostDetailController.getMethod);
+    .post(readPostDetailController.postMethod);
 
 router.route('/like/:postId')
     .get(likeHitController.getMethod);
