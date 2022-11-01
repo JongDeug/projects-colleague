@@ -105,7 +105,7 @@ const deleteMethod = async (req, res, next) => {
             const result = await Comment.deleteOne({ _id : commentId });
             console.log(result);
 
-            const responseData = responseDataForm(`/post/${result.postId}`, "comment delete request complete", null);
+            const responseData = responseDataForm(`/post/${foundComment.postId}`, "comment delete request complete", null);
             res.status(200).json({ responseData });
         } else {
             res.status(200).json({ "message": "권한 없음" });
