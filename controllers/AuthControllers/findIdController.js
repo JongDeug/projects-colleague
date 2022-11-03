@@ -10,7 +10,7 @@ const postMethod = async (req, res, next) => {
     if (!getUserName || !getDateOfBirth || !getEmail) {
         return res.status(400).json({ "message": "빠뜨린 입력 존재" });
     }
-
+    
     try {
         const foundUser = await Member.findOne({ email: getEmail }).exec();
         if (!foundUser) {
