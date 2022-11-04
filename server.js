@@ -40,6 +40,7 @@ app.use("/auth", require('./routes/auth'));
 app.use(verifyJWT);
 app.use("/api/member", require("./routes/api/memberAPI"));
 app.use("/api/board", require("./routes/api/boardAPI"));
+app.use("/aip/memberActivity", require("./routes/api/memberActivityAPI"));
 
 
 // middleware
