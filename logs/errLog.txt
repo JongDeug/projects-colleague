@@ -168,3 +168,12 @@
 2022/11/10	14:36:08	TypeError: Cannot read properties of null (reading 'hit')
 2022/11/10	14:37:04	TypeError: Cannot read properties of null (reading 'hit')
 2022/11/10	14:51:35	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Post"
+2022/11/10	15:42:43	CastError: Cast to ObjectId failed for value "like" (type string) at path "_id" for model "Post"
+2022/11/10	16:03:00	TypeError: Cannot read properties of undefined (reading 'getIndexes')
+2022/11/10	16:03:10	TypeError: Post.getIndexes is not a function
+2022/11/10	16:10:42	ReferenceError: Order is not defined
+2022/11/10	16:10:56	TypeError: Post.getIndexes is not a function
+2022/11/10	16:11:49	TypeError: Post.getIndexes is not a function
+2022/11/10	16:38:34	TypeError: Post.getIndexes is not a function
+2022/11/10	16:56:10	ReferenceError: Command is not defined
+2022/11/10	16:56:15	ReferenceError: Command is not defined

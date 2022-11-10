@@ -2,7 +2,6 @@ const Post = require("../../model/Post");
 const responseDataForm = require("../../config/responseDataForm");
 
 const postMethod = async (req, res, next) => {
-    const getUserId = req.userId;
     const getWhatToSearch = req.body.whatToSearch; // 검색 내용
     const getWhereToSearch = req.body.whereToSearch; // 제목, 내용, 제목 + 내용
 
@@ -12,21 +11,20 @@ const postMethod = async (req, res, next) => {
 
     try {
         let options = [];
-        if(getWhereToSearch === "제목"){
-            options = [{postTitle: new RegExp(getWhatToSearch)}];
-        } else if(getWhereToSearch === "내용"){
-            options = [{postContent: new RegExp(getWhatToSearch)}];
-        } else if(getWhereToSearch === "제목+내용"){
+        if (getWhereToSearch === "제목") {
+            options = [{ postTitle: new RegExp(getWhatToSearch) }];
+        } else if (getWhereToSearch === "내용") {
+            options = [{ postContent: new RegExp(getWhatToSearch) }];
+        } else if (getWhereToSearch === "제목+내용") {
             options = [
-                {postContent: new RegExp(getWhatToSearch)},
-                {postTitle: new RegExp(getWhatToSearch)}
+                { postContent: new RegExp(getWhatToSearch) },
+                { postTitle: new RegExp(getWhatToSearch) }
             ];
         }
-        const result = await Post.find({$or: options});
-        // console.log(result);
+        const result = await Post.find({ $or: options });
 
         const responseData = responseDataForm("/board/all", "searchPost post request complete", result);
-        res.status(200).json({responseData});
+        res.status(200).json({ responseData });
     } catch (err) {
         next(err);
     }

@@ -2,7 +2,6 @@ const Comment = require("../../model/Comment");
 const responseDataForm = require("../../config/responseDataForm");
 
 const postMethod = async (req, res, next) => {
-    // const userId = req.body.userId;  
     const userId = req.userId;
     const contents = req.body.contents;
     const postId = req.body.postId;
@@ -12,15 +11,23 @@ const postMethod = async (req, res, next) => {
     }
 
     try {
-        const result = await Comment.create({
-            userId: userId,
-            postId: postId,
-            contents: contents,
-        });
-        console.log(`result : ${result}`);
+        const foundComments = await Comment.find({ contents: contents });
+        const duplicate = foundComments.map((comment) => comment.userId === userId && comment.postId === postId)
+            .find((element) => element === true);
 
-        const responseData = responseDataForm(`/post/${postId}`, "comment post request complete", result);
-        res.status(200).json({ responseData });
+        if (!duplicate) {
+            const result = await Comment.create({
+                userId: userId,
+                postId: postId,
+                contents: contents,
+            });
+            console.log(`result : ${result}`);
+
+            const responseData = responseDataForm(`/post/${postId}`, "comment post request complete", result);
+            res.status(200).json({ responseData });
+        } else {
+            res.status(409).json({ "message": "중복된 댓글" });
+        }
     } catch (err) {
         next(err);
     }
