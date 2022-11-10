@@ -1,4 +1,5 @@
 const Post = require("../../model/Post");
+const responseDataForm = require("../../config/responseDataForm");
 
 const postMethod = async (req, res, next) => {
     const getUserId = req.userId;
@@ -10,22 +11,22 @@ const postMethod = async (req, res, next) => {
     }
 
     try {
-        const foundPosts = await Post.find({postTitle: new RegExp(getWhatToSearch)});
-        console.log(foundPosts);
-        res.status(200).json({"message" : "good"});
-        // switch (getWhatToSearch) {
-        //     case "제목":
-        //         // foundPosts.filter((post) => )
-        //         break;
+        let options = [];
+        if(getWhereToSearch === "제목"){
+            options = [{postTitle: new RegExp(getWhatToSearch)}];
+        } else if(getWhereToSearch === "내용"){
+            options = [{postContent: new RegExp(getWhatToSearch)}];
+        } else if(getWhereToSearch === "제목+내용"){
+            options = [
+                {postContent: new RegExp(getWhatToSearch)},
+                {postTitle: new RegExp(getWhatToSearch)}
+            ];
+        }
+        const result = await Post.find({$or: options});
+        // console.log(result);
 
-        //     case "내용":
-        //         break;
-
-        //     case "제목+내용":
-        //         break;
-        //     default:
-        //         foundPost = null;
-        // }
+        const responseData = responseDataForm("/board/all", "searchPost post request complete", result);
+        res.status(200).json({responseData});
     } catch (err) {
         next(err);
     }

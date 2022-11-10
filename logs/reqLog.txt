@@ -8856,3 +8856,6 @@
 2022/11/10	14:52:16	GET	undefined	/api/board/crud
 2022/11/10	14:52:21	GET	undefined	/api/board/636197e7b005cff9fa108575/get
 2022/11/10	14:52:23	GET	undefined	/api/board/crud
+2022/11/10	15:14:38	POST	http://localhost:3500	/api/board/search
+2022/11/10	15:26:41	POST	http://localhost:3500	/api/board/search
+2022/11/10	15:26:52	POST	http://localhost:3500	/api/board/search
