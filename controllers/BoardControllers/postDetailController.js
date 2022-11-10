@@ -3,12 +3,12 @@ const Comment = require("../../model/Comment");
 const responseDataForm = require("../../config/responseDataForm");
 // const _ = require("lodash");
 
-const postMethod = async (req, res, next) => {
+const getMethod = async (req, res, next) => {
     const getUserId = req.userId;
     const getPostId = req.params.postId;
-    const getHitControl = req.body.hitControl;
+    const getMethod = req.params.method;
 
-    if (!getPostId || !getHitControl) {
+    if (!getPostId || !getMethod) {
         return res.status(400).json({ "message": "빠뜨린 입력 존재" });
     }
 
@@ -18,7 +18,7 @@ const postMethod = async (req, res, next) => {
         const foundComments = await Comment.find({ postId: getPostId }).exec();
 
         // 조회수 up
-        if (getHitControl === "put") {
+    if (getMethod === "put") {
             foundPost.hit -= 1;
         } else {
             foundPost.hit += 1;
@@ -45,4 +45,4 @@ const postMethod = async (req, res, next) => {
     }
 }
 
-module.exports = { postMethod };
+module.exports = { getMethod };

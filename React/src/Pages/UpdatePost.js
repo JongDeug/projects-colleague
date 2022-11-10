@@ -38,17 +38,14 @@ function UpdatePost() {
     setKeywords(event.currentTarget.value);
   }
 
-  async function requestGetDetail(postId, hitControl) {
+  async function requestGetDetail(postId, method) {
     const token = sessionStorage.getItem("accessToken");
     return axios({
-      url: `/api/board/${postId}`,
-      method: "post",
+      url: `/api/board/${postId}/${method}`,
+      method: "get",
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      data: {
-        hitControl: hitControl
-      }
     })
       .then((res) => {
         setTitle(res.data.responseData.result.postTitle);

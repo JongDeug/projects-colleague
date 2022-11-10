@@ -8,15 +8,18 @@ const commentController = require("../../controllers/BoardControllers/commentCon
 const likeHitController = require("../../controllers/BoardControllers/likeHitController");
 const searchPostController = require("../../controllers/BoardControllers/searchPostController");
 
+    
 router.route('/crud')
     .get(postController.getMethod)
     .post(postController.postMethod)
     .put(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor),postController.putMethod)
     .delete(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor),postController.deleteMethod);
 
-router.route('/:postId')
-    .post(postDetailController.postMethod);
+// search route를 밑으로 내려버리면 /search가 postId로 들어가면서 오류 발생시킴.
+router.route('/:postId/:method')
+    .get(postDetailController.getMethod);
 
+    
 router.route('/like/:postId')
     .get(likeHitController.getMethod);
 
@@ -27,7 +30,6 @@ router.route('/comment/crud')
 
 router.route('/search')
     .post(searchPostController.postMethod);
-    
 
 
 module.exports = router;

@@ -31,18 +31,15 @@ function PostDetail() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  function requestGetDetail(_id, hitControl) {
+  function requestGetDetail(_id, method) {
     const token = sessionStorage.getItem("accessToken");
     set_id(_id);
     return axios({
-      url: `/api/board/${_id}`,
-      method: "post",
+      url: `/api/board/${_id}/${method}`,
+      method: "get",
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      data: {
-        hitControl: hitControl,
-      }
     })
       .then((res) => {
         // setPostId(res.data.responseData.result._id);//추가
@@ -65,7 +62,7 @@ function PostDetail() {
   }
 
   useEffect(() => {
-    requestGetDetail(_id, "post");
+    requestGetDetail(_id, "get");
   }, []);
 
   function requestDelete() {
