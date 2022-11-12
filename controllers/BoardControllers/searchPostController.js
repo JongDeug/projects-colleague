@@ -1,5 +1,14 @@
-const Post = require("../../model/Post");
 const responseDataForm = require("../../config/responseDataForm");
+let Post;
+let Comment;
+
+const setPost = (post) => {
+    Post = post;
+}
+
+const setComment = (comment) => {
+    Comment = comment;
+}
 
 const postMethod = async (req, res, next) => {
     const getWhatToSearch = req.body.whatToSearch; // 검색 내용
@@ -21,7 +30,7 @@ const postMethod = async (req, res, next) => {
                 { postTitle: new RegExp(getWhatToSearch) }
             ];
         }
-        const result = await Post.find({ $or: options });
+        const result = await Post.find({ $or: options }).exec();
 
         const responseData = responseDataForm("/board/all", "searchPost post request complete", result);
         res.status(200).json({ responseData });
@@ -30,4 +39,4 @@ const postMethod = async (req, res, next) => {
     }
 }
 
-module.exports = { postMethod }
+module.exports = { postMethod, setPost, setComment }

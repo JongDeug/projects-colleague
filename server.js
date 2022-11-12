@@ -39,7 +39,10 @@ app.get('/', (req, res) => {
 app.use("/auth", require('./routes/auth')); 
 app.use(verifyJWT);
 app.use("/api/member", require("./routes/api/memberAPI"));
-app.use("/api/board", require("./routes/api/boardAPI"));
+app.use("/api/boardAnything", require("./routes/api/boardAnythingAPI"));
+app.use("/api/boardInformation", require("./routes/api/boardInformationAPI"));
+app.use("/api/boardQuestion", require("./routes/api/boardQuestionAPI"));
+app.use("/api/boardBoast", require("./routes/api/boardBoastAPI"));
 app.use("/api/memberActivity", require("./routes/api/memberActivityAPI"));
 
 

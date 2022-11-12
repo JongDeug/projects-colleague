@@ -1,6 +1,12 @@
 const Member = require("../../model/Member");
-const Post = require("../../model/Post");
-const Comment = require("../../model/Comment");
+const PostAnything = require("../../model/PostAnything");
+const PostBoast = require("../../model/PostBoast");
+const PostInformation = require("../../model/PostInformation");
+const PostQuestion = require("../../model/PostQuestion");
+const CommentAnything = require("../../model/CommentAnything");
+const CommentBoast = require("../../model/CommentBoast");
+const CommentInformation = require("../../model/CommentInformation");
+const CommentQuestion = require("../../model/CommentQuestion");
 const bcrypt = require("bcryptjs");
 const responseDataForm = require("../../config/responseDataForm");
 
@@ -36,10 +42,22 @@ const deleteMethod = async (req, res, next) => {
 
             const resultMember = await Member.deleteOne({ userId: getUserId });
             console.log(resultMember);
-            const resultPost = await Post.deleteMany({ userId: getUserId });
-            console.log(resultPost);
-            const resultComment = await Comment.deleteMany({ userId: getUserId });
-            console.log(resultComment);
+            const resultPostAnything = await PostAnything.deleteMany({ userId: getUserId });
+            const resultPostBoast = await PostBoast.deleteMany({ userId: getUserId });
+            const resultPostInformation = await PostInformation.deleteMany({ userId: getUserId });
+            const resultPostQuestion = await PostQuestion.deleteMany({ userId: getUserId });
+            console.log(resultPostAnything);
+            console.log(resultPostBoast);
+            console.log(resultPostInformation);
+            console.log(resultPostQuestion);
+            const resultCommentAnything = await CommentAnything.deleteMany({ userId: getUserId });
+            const resultCommentBoast = await CommentBoast.deleteMany({ userId: getUserId });
+            const resultCommentInformation = await CommentInformation.deleteMany({ userId: getUserId });
+            const resultCommentQuestion = await CommentQuestion.deleteMany({ userId: getUserId });
+            console.log(resultCommentAnything);
+            console.log(resultCommentBoast);
+            console.log(resultCommentInformation);
+            console.log(resultCommentQuestion);
 
             // jwt(refreshToken) client에서 지우기
             res.clearCookie("jwt", { httpOnly: true });

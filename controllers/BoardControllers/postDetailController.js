@@ -1,7 +1,15 @@
-const Post = require("../../model/Post");
-const Comment = require("../../model/Comment");
 const responseDataForm = require("../../config/responseDataForm");
 // const _ = require("lodash");
+let Post;
+let Comment;
+
+const setPost = (post) => {
+    Post = post;
+}
+
+const setComment = (comment) => {
+    Comment = comment;
+}
 
 const getMethod = async (req, res, next) => {
     const getUserId = req.userId;
@@ -45,4 +53,4 @@ const getMethod = async (req, res, next) => {
     }
 }
 
-module.exports = { getMethod };
+module.exports = { getMethod, setPost, setComment };

@@ -1,4 +1,3 @@
-const { getDate } = require("date-fns");
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 const getDateTime = require('../middleware/timezone');
@@ -9,10 +8,10 @@ const userSchema = new schema({
     required: true,
     //ref: "Post",
   },
-  // commentId: {
-  //   type: Number,
-  //   required: true,
-  // },
+  commentType:{
+    type: String,
+    default: "질문 게시판"
+  },
   userId: {
     type: String,
     required: true,
@@ -31,4 +30,4 @@ const userSchema = new schema({
   versionKey: false
 });
 
-module.exports = mongoose.model("Comment", userSchema);
+module.exports = mongoose.model("CommentQuestion", userSchema);

@@ -1,5 +1,16 @@
-const Post = require("../../model/Post");
 const responseDataForm = require("../../config/responseDataForm");
+let Post;
+let Comment;
+
+const setPost = (post) => {
+    Post = post;
+}
+
+const setComment = (comment) => {
+    Comment = comment;
+}
+
+
 
 
 const getMethod = async (req, res, next) => {
@@ -32,4 +43,4 @@ const getMethod = async (req, res, next) => {
     }
 }
 
-module.exports = { getMethod };
+module.exports = { getMethod, setPost, setComment };
