@@ -20,10 +20,6 @@ const userSchema = new schema({
     // required: true,
     default: getDateTime()
   },
-  postType: {
-    type: String,
-    default: "자유 게시판"
-  },
   hit: {
     type: Number,
     default: 0
@@ -36,7 +32,7 @@ const userSchema = new schema({
     type: String,
     required: true,
   },
-  attachedFile: {
+  attachedFile:{
     type: [String],
   }
 }, {
@@ -44,5 +40,5 @@ const userSchema = new schema({
 });
 
 // 개념은 아직 잘 이해가 가지 않지만 일단 인덱싱하면 빨라짐. 
-userSchema.index({ likeHit: 1 });
-module.exports = mongoose.model("PostAnything", userSchema);
+userSchema.index({likeHit : 1});
+module.exports = mongoose.model("Post", userSchema);

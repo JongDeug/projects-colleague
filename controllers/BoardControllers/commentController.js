@@ -2,6 +2,10 @@ const responseDataForm = require("../../config/responseDataForm");
 let Post;
 let Comment;
 
+// 임시
+Post = require('../../model/Post');
+Comment = require('../../model/Comment');
+
 const setPost = (post) => {
     Post = post;
 }
@@ -79,7 +83,6 @@ const deleteMethod = async (req, res, next) => {
     }
 
     try {
-
         const foundComment = await Comment.findById(commentId).exec();
 
         if (foundComment.userId === userId) {

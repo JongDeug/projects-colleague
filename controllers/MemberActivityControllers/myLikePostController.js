@@ -1,8 +1,8 @@
+const responseDataForm = require("../../config/responseDataForm");
 const PostAnything = require("../../model/PostAnything");
 const PostBoast = require("../../model/PostBoast");
 const PostInformation= require("../../model/PostInformation");
 const PostQuestion = require("../../model/PostQuestion");
-const responseDataForm = require("../../config/responseDataForm");
 
 const getMethod = async (req, res, next) => {
     const getUserId = req.userId;

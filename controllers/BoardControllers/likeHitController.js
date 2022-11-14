@@ -2,6 +2,10 @@ const responseDataForm = require("../../config/responseDataForm");
 let Post;
 let Comment;
 
+// 임시
+Post = require('../../model/Post');
+Comment = require('../../model/Comment');
+
 const setPost = (post) => {
     Post = post;
 }
@@ -9,9 +13,6 @@ const setPost = (post) => {
 const setComment = (comment) => {
     Comment = comment;
 }
-
-
-
 
 const getMethod = async (req, res, next) => {
     const getUserId = req.userId;

@@ -10,6 +10,9 @@ const CommentQuestion = require("../../model/CommentQuestion");
 const bcrypt = require("bcryptjs");
 const responseDataForm = require("../../config/responseDataForm");
 
+const Post = [PostAnything, PostBoast, PostInformation, PostQuestion];
+const Comment = [CommentAnything, CommentBoast, CommentInformation, CommentQuestion];
+
 const deleteMethod = async (req, res, next) => {
     const getUserId = req.userId;
     const getPassword = req.body.password;
@@ -28,36 +31,31 @@ const deleteMethod = async (req, res, next) => {
         // body 비밀번호 체킹
         const match = await bcrypt.compare(getPassword, foundUser.password);
         if (match) {
-            // 자신의 포스트들 찾기
-            Post.find({ userId: getUserId }, function (err, docs) {
-                if(err){
-                    return res.status(401).json({"message" : "내 포스트를 찾을 수 없음"});
-                }
-                docs.forEach(async (doc) => {
-                    // 자신의 포스트에 댓글들 싹 삭제
-                    const deleteComment = await Comment.deleteMany({ postId: doc._id });
-                    console.log("deleteComment : %s", deleteComment);
+            Post.map((db, index) => {
+                db.find({ userId: getUserId }, function (err, docs) {
+                    if (err) {
+                        return res.status(401).json({ "message": "내 포스트를 찾을 수 없음" });
+                    }
+                    docs.forEach(async (doc) => {
+                        // 자신의 포스트에 댓글들 싹 삭제
+                        const deleteComment = await Comment[index].deleteMany({ postId: doc._id });
+                        console.log("deleteComment : %s", deleteComment);
+                    });
                 });
-            });
+            })
+            // 자신의 포스트들 찾기
 
+            
             const resultMember = await Member.deleteOne({ userId: getUserId });
             console.log(resultMember);
-            const resultPostAnything = await PostAnything.deleteMany({ userId: getUserId });
-            const resultPostBoast = await PostBoast.deleteMany({ userId: getUserId });
-            const resultPostInformation = await PostInformation.deleteMany({ userId: getUserId });
-            const resultPostQuestion = await PostQuestion.deleteMany({ userId: getUserId });
-            console.log(resultPostAnything);
-            console.log(resultPostBoast);
-            console.log(resultPostInformation);
-            console.log(resultPostQuestion);
-            const resultCommentAnything = await CommentAnything.deleteMany({ userId: getUserId });
-            const resultCommentBoast = await CommentBoast.deleteMany({ userId: getUserId });
-            const resultCommentInformation = await CommentInformation.deleteMany({ userId: getUserId });
-            const resultCommentQuestion = await CommentQuestion.deleteMany({ userId: getUserId });
-            console.log(resultCommentAnything);
-            console.log(resultCommentBoast);
-            console.log(resultCommentInformation);
-            console.log(resultCommentQuestion);
+            Post.map(async (db)=> {
+                const result = await db.deleteMany({userId: getUserId});
+                console.log(result);
+            });
+            Comment.map(async (db)=> {
+                const result = await db.deleteMany({userId: getUserId});
+                console.log(result);
+            });
 
             // jwt(refreshToken) client에서 지우기
             res.clearCookie("jwt", { httpOnly: true });

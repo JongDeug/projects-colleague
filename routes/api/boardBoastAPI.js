@@ -10,26 +10,27 @@ const searchPostController = require("../../controllers/BoardControllers/searchP
 const post = require('../../model/PostBoast');
 const comment = require('../../model/CommentBoast');
 const setDB = require('../../middleware/setDB');
+const upload = require('../../middleware/upload');
 
 router.route('/crud')
     .get(setDB(postController, post, comment), postController.getMethod)
-    .post(setDB(postController, post, comment), postController.postMethod)
-    .put(setDB(postController, post, comment), verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.putMethod)
+    .post(setDB(postController, post, comment), upload.array('attachedFile'), postController.postMethod)
+    .put(setDB(postController, post, comment), upload.array('attachedFile'), verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.putMethod)
     .delete(setDB(postController, post, comment), verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.deleteMethod);
 
 router.route('/comment/crud')
-    .post(setDB(commentController, post, comment),commentController.postMethod)
-    .put(setDB(commentController, post, comment),commentController.putMethod)
-    .delete(setDB(commentController, post, comment),commentController.deleteMethod);
+    .post(setDB(commentController, post, comment), commentController.postMethod)
+    .put(setDB(commentController, post, comment), commentController.putMethod)
+    .delete(setDB(commentController, post, comment), commentController.deleteMethod);
 
 router.route('/search')
-    .post(setDB(searchPostController, post, comment),searchPostController.postMethod);
+    .post(setDB(searchPostController, post, comment), searchPostController.postMethod);
 
 router.route('/like/:postId')
-    .get(setDB(likeHitController, post, comment),likeHitController.getMethod);
+    .get(setDB(likeHitController, post, comment), likeHitController.getMethod);
 
 // search route를 밑으로 내려버리면 /search가 postId로 들어가면서 오류 발생시킴.
 router.route('/:postId/:method')
-    .get(setDB(postDetailController, post, comment),postDetailController.getMethod);
+    .get(setDB(postDetailController, post, comment), postDetailController.getMethod);
 
 module.exports = router;

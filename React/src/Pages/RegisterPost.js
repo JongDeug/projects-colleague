@@ -8,6 +8,9 @@ function RegisterPost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [keywords, setKeywords] = useState("");
+  const frm = new FormData();
+  // 리액트 뭐가 ㅣㅇㅆ나본데
+  const [attachedFile, setAttachedFile] = useState("");
 
   const onTitleHandler = (event) => {
     setTitle(event.currentTarget.value);
@@ -21,25 +24,36 @@ function RegisterPost() {
     setKeywords(event.currentTarget.value);
   };
 
-  function requestPost() {
+  const onAttachedFileHandler = (event) => {
+    const {files} = event.currentTarget;
+    setAttachedFile(files);
+  };
+
+  async function requestPost() {
     const token = sessionStorage.getItem("accessToken");
-    return axios({
+
+    frm.append('postTitle', JSON.stringify(title));
+    frm.append('postContent', JSON.stringify(content));
+    frm.append('keywords', JSON.stringify(keywords));
+
+    Array.from(attachedFile).forEach(file => {
+      frm.append('attachedFile', file);
+    });
+    
+    return await axios({
       url: "/api/board/crud",
       method: "post",
       headers: {
+        'Content-Type': `multipart/form-data`,
         Authorization: `Bearer ${token}`,
       },
-      data: {
-        postTitle: title,
-        postContent: content,
-        keywords: keywords,
-      },
+      data: frm,
     })
       .then((res) => {
         console.log(res.data.responseData.result["_id"]);
         const postId = res.data.responseData.result["_id"];
         return res.data.responseData.redirect;
-      }).then((res)=>{
+      }).then((res) => {
         window.location = `${res}`;
       })
       .catch((err) => {
@@ -80,17 +94,20 @@ function RegisterPost() {
               ></textarea>
             </div>
 
-            {/* <div className="form-group">
+
+            <div className="form-group">
               <label for="attachedFile" className="form-label">
                 첨부파일
               </label>
               <input
                 type="file"
                 id="attachedfile"
+                name="attachedFile"
                 className="form-control"
                 multiple
+                onChange={onAttachedFileHandler}
               ></input>
-            </div> */}
+            </div>
 
             <div className="form-group">
               <label for="keyword" className="form-label">
@@ -103,20 +120,22 @@ function RegisterPost() {
                 onChange={onKeywordsHandler}
               ></input>
             </div>
+
             <div class="form-group mt-5 ">
               <button
                 // type="submit"
-                type='button'
+                type="button"
                 className="btn btn-success"
                 onClick={requestPost}
+              // onSubmit={requestPost}
               >
                 등록
               </button>
             </div>
           </form>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
 

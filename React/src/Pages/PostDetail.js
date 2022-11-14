@@ -21,11 +21,11 @@ function PostDetail() {
   const [hit, setHit] = useState("");
   const [likeHit, setLikeHit] = useState("");
   const [keywords, setKeywords] = useState("");
-  const [attatchedFile, setAttatchedFile] = useState("");
+  const [attachedFile, setAttatchedFile] = useState("");
   const [show, setShow] = useState(false);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState('');
-  
+
 
 
   const handleClose = () => setShow(false);
@@ -49,8 +49,10 @@ function PostDetail() {
         setPostUserId(res.data.responseData.result.userId);
         setLikeHit(res.data.responseData.result.setLikeHit);
         setKeywords(res.data.responseData.result.keywords);
-        // setAttatchedFile(res.data.responseData.result.attatchedFile);
+        setAttatchedFile(res.data.responseData.result.attachedFile);
         setComments(res.data.responseData.result.comments);
+        console.log(res.data.responseData.result.attachedFile)
+        console.log(typeof res.data.responseData.result.attachedFile)
       })
       .catch((err) => {
         if (err) {
@@ -93,47 +95,60 @@ function PostDetail() {
   }
   const onCommentHandler = (event) => {
     setComment(event.currentTarget.value);
-};
+  };
 
-function PrintComments(){
+  function PrintComments() {
     const list = [];
 
-    comments&&comments.map((comments)=>{
-        list.push(
-            <Comment
-              comment={comments}
-            />
-        )
+    comments && comments.map((comments) => {
+      list.push(
+        <Comment
+          comment={comments}
+        />
+      )
     });
     return list;
-}
-  function requestCommentPost(){
+  }
+  function requestCommentPost() {
     const token = sessionStorage.getItem("accessToken");
 
     return axios({
-        url: "/api/board/comment/crud",
-        method:'post',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-        data: {
-            postId : _id,
-            contents : comment,
-        }
-    }).then((res)=>{
-        console.log(res.data.responseData.result);
-        return res.data.responseData.redirect;
-    }).then((res)=>{
-        window.location = `${res}`;
-    }).catch((err)=>{
-        if (err) {
-            console.log(err.response.data);
-            console.log(err.response.status);
-            console.log(err.response.header);
-        }
+      url: "/api/board/comment/crud",
+      method: 'post',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        postId: _id,
+        contents: comment,
+      }
+    }).then((res) => {
+      console.log(res.data.responseData.result);
+      return res.data.responseData.redirect;
+    }).then((res) => {
+      window.location = `${res}`;
+    }).catch((err) => {
+      if (err) {
+        console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.header);
+      }
     });
-}
+  }
   // const { like, like_exist, like_num } = this.state;
+
+  const printImage = () => {
+    const arr = [];
+    console.log(attachedFile);
+    attachedFile && attachedFile.map((value) => {
+      arr.push(
+        <section className="mb-5">
+          <img src={`http://localhost:3500/${value}`}></img>
+        </section>
+      )
+    });
+    return arr;
+  }
 
   return (
     <>
@@ -165,6 +180,10 @@ function PrintComments(){
               <section className="mb-5">
                 <p className="fs-5 mb-4">{postContent}</p>
               </section>
+              
+              {/* 여기 고친거 */}
+              {printImage()}
+
             </article>
 
             <div className="btn-wrap">
@@ -181,8 +200,8 @@ function PrintComments(){
                   <Link to={{ pathname: `/updatepost/${_id}`, state: _id }}>
                     <Button
                       className="btn-success udPostDetailButtons"
-                      // type="submit"
-                      // onClick={requestChangePost}}
+                    // type="submit"
+                    // onClick={requestChangePost}}
                     >
                       수정
                     </Button>
@@ -229,22 +248,22 @@ function PrintComments(){
               </p>
             </div>
             <div className='comment_area'>
-            <div className='commentslist'>
-            <PrintComments></PrintComments>
-            
-            </div>
-            <div className='input_comment'>
+              <div className='commentslist'>
+                <PrintComments></PrintComments>
+
+              </div>
+              <div className='input_comment'>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                    <Form.Control placeholder='댓글 작성' as="textarea" rows={3} className='comment_form' onChange={onCommentHandler}/>
-                    <Button 
-                        variant="outline-secondary" 
-                        className='write_button'
-                        onClick={requestCommentPost}
-                    >작성</Button>
+                  <Form.Control placeholder='댓글 작성' as="textarea" rows={3} className='comment_form' onChange={onCommentHandler} />
+                  <Button
+                    variant="outline-secondary"
+                    className='write_button'
+                    onClick={requestCommentPost}
+                  >작성</Button>
                 </Form.Group>
-        
+
+              </div>
             </div>
-        </div>
           </Form.Group>
 
           <div />

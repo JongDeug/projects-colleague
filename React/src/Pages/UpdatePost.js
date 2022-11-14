@@ -13,8 +13,8 @@ function UpdatePost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [keywords, setKeywords] = useState("");
-  const [attatchedFile, setAttatchedFile] = useState("");
-
+  const [attachedFile, setAttachedFile] = useState("");
+  const frm = new FormData();
 
   // function requestlist(){
   //   console.log(params.postId);
@@ -38,6 +38,11 @@ function UpdatePost() {
     setKeywords(event.currentTarget.value);
   }
 
+  const onAttachedFileHandler = (event) => {
+    const { files } = event.currentTarget;
+    setAttachedFile(files);
+  };
+
   async function requestGetDetail(postId, method) {
     const token = sessionStorage.getItem("accessToken");
     return axios({
@@ -51,7 +56,7 @@ function UpdatePost() {
         setTitle(res.data.responseData.result.postTitle);
         setContent(res.data.responseData.result.postContent);
         setKeywords(res.data.responseData.result.keywords);
-        // setAttatchedFile(res.data.responseData.result.attatchedFile);
+        setAttachedFile(res.data.responseData.result.attachedFile);
       })
       .catch((err) => {
         if (err) {
@@ -66,20 +71,25 @@ function UpdatePost() {
     requestGetDetail(postId, "put");
   }, [params]);
 
-  function requestPut() {
+  async function requestPut() {
     const token = sessionStorage.getItem("accessToken");
-    axios({
+    frm.append('postId', JSON.stringify(postId));
+    frm.append('postTitle', JSON.stringify(title));
+    frm.append('postContent', JSON.stringify(content));
+    frm.append('keywords', JSON.stringify(keywords));
+
+    Array.from(attachedFile).forEach(file => {
+      frm.append('attachedFile', file);
+    });
+
+    return await axios({
       url: "/api/board/crud",
       method: "put",
       headers: {
+        'Content-Type': `multipart/form-data`,
         Authorization: `Bearer ${token}`,
       },
-      data: {
-        postId: postId,
-        postTitle: title,
-        postContent: content,
-        keywords: keywords,
-      },
+      data: frm,
     }).then((res) => {
       console.log(res.data.responseData);
       return res.data.responseData.redirect;
@@ -126,8 +136,10 @@ function UpdatePost() {
               <input
                 type="file"
                 id="attachedfile"
+                name="attachedFile"
                 className="form-control"
                 multiple
+                onChange={onAttachedFileHandler}
               ></input>
             </div>
 
