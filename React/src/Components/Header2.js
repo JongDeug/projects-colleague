@@ -48,10 +48,10 @@ function Header2() {
                 <NavDropdown.Item href="/board/info">
                   정보공유 게시판
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/board/questions">
+                <NavDropdown.Item href="/board/question">
                   질문 게시판
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/board/mypet">
+                <NavDropdown.Item href="/board/boast">
                   자랑 게시판
                 </NavDropdown.Item>
               </NavDropdown>
@@ -68,13 +68,13 @@ function Header2() {
               </NavDropdown>
 
               <NavDropdown title="나의 활동" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="/mypage/post">
+                <NavDropdown.Item href="/myact/post">
                   작성한 게시글 조회
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/mypage/comment">
+                <NavDropdown.Item href="/myact/comment">
                   작성한 댓글 조회
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/mypage/likedpost">
+                <NavDropdown.Item href="/myact/like">
                   좋아요 한 게시글 조회
                 </NavDropdown.Item>
               </NavDropdown>
@@ -97,8 +97,8 @@ function Header2() {
               </Nav.Link>}
               {!isLogin&&
                 <div className='no_login'>
-                  <div><Link to='/login'>로그인</Link></div>
-                  <div><Link to='/register'>회원가입</Link></div>
+                  <div><Link to='/login' className='header-login-btn'>로그인</Link></div>
+                  <div><Link to='/register' className='header-join-btn'>회원가입</Link></div>
                 </div>
               }
             </Nav>

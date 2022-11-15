@@ -2,16 +2,17 @@ import axios from 'axios';
 import React, {useEffect, useState } from "react";
 import { Button, Form, FormControl, InputGroup } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import '../../css/comment.css';
 import { commentList } from '../../Data';
+import '../../css/like.css';
 
-function Comment (comment) {
+function Comment (comment, currentUser) {
     const [userId, setUserId] = useState(comment.comment.userId);
     const [contents, setContents] = useState(comment.comment.contents);
     const [commentTime, setcommentTime] = useState(comment.comment.commentTime);
     const [onUpdate, setOnUpdate] = useState(false);
     const [commentId, setCommentId] = useState(comment.comment._id);    
     const [postId, setPostId] = useState(comment.comment.postId);
+    const [isUser, setIsUser] = useState(currentUser===userId);
 
     function requestCommentPut(){
         const token = sessionStorage.getItem("accessToken");
@@ -91,10 +92,10 @@ function Comment (comment) {
                     onUpdate?
                     <input type='button' value='작성' className='cmtbtn comment_write' onClick={()=>{EndUpdating();  requestCommentPut();}}></input>
                     :
-                    <span>
+                    (isUser&&<span>
                     <input type='button' value='수정' className='cmtbtn comment_update' onClick={isUpdating}></input>
                     <input type='button' value='삭제' className='cmtbtn comment_delete' onClick={requestCommentDelete}></input>
-                    </span>
+                    </span>)
                 }
             </div>
         </div>

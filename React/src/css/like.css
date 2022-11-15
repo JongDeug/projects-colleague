@@ -1,0 +1,10 @@
+.likeBtn {
+    background: transparent;
+    border: none;
+    outline: none;
+    /* color: grey; */
+}
+
+.likeBtn :hover {
+    cursor: pointer;
+}

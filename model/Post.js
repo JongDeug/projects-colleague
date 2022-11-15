@@ -31,10 +31,14 @@ const userSchema = new schema({
   keywords: {
     type: String,
     required: true,
-    ref: "Keyword",
   },
+  attachedFile:{
+    type: [String],
+  }
 }, {
   versionKey: false
 });
 
+// 개념은 아직 잘 이해가 가지 않지만 일단 인덱싱하면 빨라짐. 
+userSchema.index({likeHit : 1});
 module.exports = mongoose.model("Post", userSchema);

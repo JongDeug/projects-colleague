@@ -27,6 +27,7 @@ app.use(reqLogger);
 // <test>
 // app.use("/", express.static(path.join(__dirname, "/public")));
 app.use("/", express.static(path.join(__dirname, "React/build/")));
+app.use("/", express.static(path.join(__dirname, "uploads")));
 
 // route
 // app.use('/', require('./routes/root_test'));
@@ -34,13 +35,24 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'React/build/index.html'));
 });
 
+// 이미지
+app.get('/uploads/:img', (req, res) => {
+    const img = req.params.img;
+    console.log(img);
+    res.sendFile(path.join(__dirname, `uploads/${img}`));
+})
 
 
-app.use("/auth", require('./routes/auth')); 
+app.use("/auth", require('./routes/auth'));
 app.use(verifyJWT);
 app.use("/api/member", require("./routes/api/memberAPI"));
-app.use("/api/board", require("./routes/api/boardAPI"));
-app.use("/aip/memberActivity", require("./routes/api/memberActivityAPI"));
+app.use("/api/boardAnything", require("./routes/api/boardAnythingAPI"));
+app.use("/api/boardInformation", require("./routes/api/boardInformationAPI"));
+app.use("/api/boardQuestion", require("./routes/api/boardQuestionAPI"));
+app.use("/api/boardBoast", require("./routes/api/boardBoastAPI"));
+app.use("/api/popularityPosts", require("./routes/api/popularityPostsAPI"));
+app.use("/api/recommendPosts", require("./routes/api/recommendPostsAPI"));
+app.use("/api/memberActivity", require("./routes/api/memberActivityAPI"));
 
 
 // middleware
@@ -48,8 +60,8 @@ app.use(errorHandler);
 
 // db connect, server connect
 mongoose.connection.once("open", () => {
-  console.log("Connected to MongoDB");
-  app.listen(PORT, () => console.log(`Server running on ${PORT} port`));
+    console.log("Connected to MongoDB");
+    app.listen(PORT, () => console.log(`Server running on ${PORT} port`));
 });
 
 // client-side redering (Server에서 설정한 url외에 전적으로 React에 라우팅을 넘김)

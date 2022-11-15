@@ -8,52 +8,66 @@ import Comment from "../Components/Post/Comment";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Modal } from "react-bootstrap";
-import { getPostById } from "../Data";
+import Like from '../Components/Post/Like';
 
 function PostDetail() {
   // const [category, setCategory] = useState("");
   const params = useParams();
   const [_id, set_id] = useState(params.postId);
+  const [postBoard, setPostBoard] = useState(params.postType);
   const [postTitle, setPostTitle] = useState("");
   const [postUserId, setPostUserId] = useState("");
   const [postContent, setPostContent] = useState("");
   const [postTime, setPostTime] = useState("");
   const [hit, setHit] = useState("");
   const [likeHit, setLikeHit] = useState("");
+  const [likeHitBool, setLikeHitBool] = useState();
   const [keywords, setKeywords] = useState("");
-  const [attatchedFile, setAttatchedFile] = useState("");
-  const [show, setShow] = useState(false);
+  const [attachedFile, setAttatchedFile] = useState("");
+  const [show, setShow] = useState(0);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState('');
-  
+  const [currentUser, setCurrentUser] = useState("");
+  const [isUser, setIsUser] = useState(false);
 
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  function requestGetDetail(_id, hitControl) {
+  function requestGetDetail(postBoard,_id, method) {
     const token = sessionStorage.getItem("accessToken");
     set_id(_id);
+    setPostBoard(postBoard);
     return axios({
-      url: `/api/board/${_id}`,
-      method: "post",
+      url: `/api/${postBoard}/${_id}/${method}`,
+      method: "get",
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      data: {
-        hitControl: hitControl,
-      }
     })
       .then((res) => {
         // setPostId(res.data.responseData.result._id);//추가
+        console.log(params);
+        console.log(postBoard);
+        console.log(res.data.responseData.result);
         setPostTitle(res.data.responseData.result.postTitle);
         setPostContent(res.data.responseData.result.postContent);
         setPostTime(res.data.responseData.result.postTime);
         setPostUserId(res.data.responseData.result.userId);
         setLikeHit(res.data.responseData.result.setLikeHit);
+        setLikeHitBool(res.data.responseData.result.likeHitBool);
+        // if(res.data.responseData.result.likeHitBool){
+        //   setLikeHitBool(!true);
+        // }
         setKeywords(res.data.responseData.result.keywords);
-        // setAttatchedFile(res.data.responseData.result.attatchedFile);
+        setAttatchedFile(res.data.responseData.result.attachedFile);
         setComments(res.data.responseData.result.comments);
+        setCurrentUser(res.data.responseData.result.host);
+        setIsUser(res.data.responseData.result.host===res.data.responseData.result.userId);
+        console.log(res.data.responseData.result);
+        console.log(res.data.responseData.result.likeHitBool);
+        console.log(res.data.responseData.result.attachedFile);
+        console.log(typeof res.data.responseData.result.attachedFile);
       })
       .catch((err) => {
         if (err) {
@@ -65,13 +79,13 @@ function PostDetail() {
   }
 
   useEffect(() => {
-    requestGetDetail(_id, "post");
+    requestGetDetail(postBoard,_id, "get");
   }, []);
 
   function requestDelete() {
     const token = sessionStorage.getItem("accessToken");
     return axios({
-      url: "/api/board/crud",
+      url: `/api/${postBoard}/crud`,
       method: "delete",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -96,47 +110,61 @@ function PostDetail() {
   }
   const onCommentHandler = (event) => {
     setComment(event.currentTarget.value);
-};
+  };
 
-function PrintComments(){
+  function PrintComments() {
     const list = [];
 
-    comments&&comments.map((comments)=>{
-        list.push(
-            <Comment
-              comment={comments}
-            />
-        )
+    comments && comments.map((comments) => {
+      list.push(
+        <Comment
+          comment={comments}
+          currentUser={currentUser}
+        />
+      )
     });
     return list;
-}
-  function requestCommentPost(){
+  }
+  function requestCommentPost() {
     const token = sessionStorage.getItem("accessToken");
 
     return axios({
-        url: "/api/board/comment/crud",
-        method:'post',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-        data: {
-            postId : _id,
-            contents : comment,
-        }
-    }).then((res)=>{
-        console.log(res.data.responseData.result);
-        return res.data.responseData.redirect;
-    }).then((res)=>{
-        window.location = `${res}`;
-    }).catch((err)=>{
-        if (err) {
-            console.log(err.response.data);
-            console.log(err.response.status);
-            console.log(err.response.header);
-        }
+      url: `/api/${postBoard}/comment/crud`,
+      method: 'post',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        postId: _id,
+        contents: comment,
+      }
+    }).then((res) => {
+      console.log(res.data.responseData.result);
+      return res.data.responseData.redirect;
+    }).then((res) => {
+      window.location = `${res}`;
+    }).catch((err) => {
+      if (err) {
+        console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.header);
+      }
     });
-}
+  }
   // const { like, like_exist, like_num } = this.state;
+
+  const printImage = () => {
+    const arr = [];
+    console.log(attachedFile);
+    attachedFile && attachedFile.map((value) => {
+      arr.push(
+        <section className="mb-5">
+          <img src={`http://localhost:3500/${value}`}></img>
+        </section>
+      )
+    });
+    return arr;
+  }
 
   return (
     <>
@@ -168,24 +196,25 @@ function PrintComments(){
               <section className="mb-5">
                 <p className="fs-5 mb-4">{postContent}</p>
               </section>
+              
+              {/* 여기 고친거 */}
+              {printImage()}
+
             </article>
 
             <div className="btn-wrap">
-              <p className="postDetailButtons mt-4 float-right">
-                {/* <div className="Like">
-                  <img
-                    src={!like_exist ? none_like : like}
-                    onClick={() => this._toggleLike()}
-                  />
-                  <h5> 좋아요 ( {like_num} ) </h5>
-                </div> */}
+              <Like postid={_id} likeHitBool={likeHitBool} setLikeHitBool={setLikeHitBool} likeHit={likeHit} postBoard={postBoard}>
 
+              </Like>
+              {isUser&&
+              <><p className="postDetailButtons mt-4 float-right">
+              
                 <div>
                   <Link to={{ pathname: `/updatepost/${_id}`, state: _id }}>
                     <Button
                       className="btn-success udPostDetailButtons"
-                      // type="submit"
-                      // onClick={requestChangePost}}
+                    // type="submit"
+                    // onClick={requestChangePost}}
                     >
                       수정
                     </Button>
@@ -229,25 +258,26 @@ function PrintComments(){
                     </Button>
                   </Modal.Footer>
                 </Modal>
-              </p>
+              </p></>}
             </div>
+            <br></br>
             <div className='comment_area'>
-            <div className='commentslist'>
-            <PrintComments></PrintComments>
-            
-            </div>
-            <div className='input_comment'>
+              <div className='commentslist'>
+                <PrintComments></PrintComments>
+
+              </div>
+              <div className='input_comment'>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                    <Form.Control placeholder='댓글 작성' as="textarea" rows={3} className='comment_form' onChange={onCommentHandler}/>
-                    <Button 
-                        variant="outline-secondary" 
-                        className='write_button'
-                        onClick={requestCommentPost}
-                    >작성</Button>
+                  <Form.Control placeholder='댓글 작성' as="textarea" rows={3} className='comment_form' onChange={onCommentHandler} />
+                  <Button
+                    variant="outline-secondary"
+                    className='write_button'
+                    onClick={requestCommentPost}
+                  >작성</Button>
                 </Form.Group>
-        
+
+              </div>
             </div>
-        </div>
           </Form.Group>
 
           <div />

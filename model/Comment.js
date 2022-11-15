@@ -1,4 +1,3 @@
-const { getDate } = require("date-fns");
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 const getDateTime = require('../middleware/timezone');
@@ -9,10 +8,6 @@ const userSchema = new schema({
     required: true,
     //ref: "Post",
   },
-  // commentId: {
-  //   type: Number,
-  //   required: true,
-  // },
   userId: {
     type: String,
     required: true,

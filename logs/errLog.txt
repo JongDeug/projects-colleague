@@ -164,5 +164,134 @@
 2022/11/1	03:07:20	TypeError: Cannot read properties of null (reading 'hit')
 2022/11/1	12:10:23	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Post"
 2022/11/2	02:41:25	ReferenceError: cosnole is not defined
+<<<<<<< HEAD
 2022/11/9	23:26:53	Error: ENOENT: no such file or directory, stat '/home/jongdeug/src/Node.js/web-community-project/React/build/index.html'
 2022/11/9	23:26:57	Error: ENOENT: no such file or directory, stat '/home/jongdeug/src/Node.js/web-community-project/React/build/index.html'
+=======
+2022/11/10	13:48:13	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Post"
+2022/11/10	14:36:08	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/10	14:37:04	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/10	14:51:35	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Post"
+2022/11/10	15:42:43	CastError: Cast to ObjectId failed for value "like" (type string) at path "_id" for model "Post"
+2022/11/10	16:03:00	TypeError: Cannot read properties of undefined (reading 'getIndexes')
+2022/11/10	16:03:10	TypeError: Post.getIndexes is not a function
+2022/11/10	16:10:42	ReferenceError: Order is not defined
+2022/11/10	16:10:56	TypeError: Post.getIndexes is not a function
+2022/11/10	16:11:49	TypeError: Post.getIndexes is not a function
+2022/11/10	16:38:34	TypeError: Post.getIndexes is not a function
+2022/11/10	16:56:10	ReferenceError: Command is not defined
+2022/11/10	16:56:15	ReferenceError: Command is not defined
+2022/11/13	01:27:25	TypeError: Cannot read properties of undefined (reading 'find')
+2022/11/13	01:27:29	TypeError: Cannot read properties of undefined (reading 'find')
+2022/11/13	02:39:13	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:39:13	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:40:17	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:40:41	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:40:54	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:42:45	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:43:58	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:45:26	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:46:26	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:46:43	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:47:33	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:47:33	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:47:33	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:47:46	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:49:42	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:53:44	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:57:18	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:57:57	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:58:15	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	02:58:22	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	03:01:08	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	03:02:09	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	03:02:29	ValidationError: Post validation failed: postTitle: Path `postTitle` is required., keywords: Path `keywords` is required.
+2022/11/13	06:21:55	Error: ENOENT: no such file or directory, stat '/home/jongdeug/src/Javascript/Node.js/web-community-project/uploads/index.html'
+2022/11/13	08:30:59	TypeError: Cannot read properties of undefined (reading 'map')
+2022/11/13	08:31:59	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/13	08:32:57	TypeError: Callback must be a function. Received undefined
+2022/11/13	08:35:56	TypeError: Callback must be a function. Received undefined
+2022/11/13	08:36:36	TypeError: Callback must be a function. Received undefined
+2022/11/13	08:37:27	TypeError: Callback must be a function. Received undefined
+2022/11/13	08:43:37	TypeError: Callback must be a function. Received undefined
+2022/11/15	15:09:04	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:10:51	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:12:37	CastError: Cast to ObjectId failed for value "1" (type string) at path "_id" for model "Post"
+2022/11/15	15:13:14	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:15:40	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:18:11	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:21:05	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:22:12	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:22:36	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:23:28	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:25:27	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:25:53	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:26:06	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:26:13	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:26:30	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:27:10	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:27:37	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:29:19	TypeError: Cannot read properties of null (reading 'likeHit')
+2022/11/15	15:29:20	TypeError: Cannot read properties of null (reading 'likeHit')
+2022/11/15	15:29:21	TypeError: Cannot read properties of null (reading 'likeHit')
+2022/11/15	15:31:48	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	15:44:29	MongoServerError: $and/$or/$nor must be a nonempty array
+2022/11/15	15:44:30	MongoServerError: $and/$or/$nor must be a nonempty array
+2022/11/15	15:49:11	MongoServerError: $and/$or/$nor must be a nonempty array
+2022/11/15	15:49:24	MongoServerError: $and/$or/$nor must be a nonempty array
+2022/11/15	15:49:25	MongoServerError: $and/$or/$nor must be a nonempty array
+2022/11/15	15:49:26	MongoServerError: $and/$or/$nor must be a nonempty array
+2022/11/15	15:49:27	MongoServerError: $and/$or/$nor must be a nonempty array
+2022/11/15	15:49:28	MongoServerError: $and/$or/$nor must be a nonempty array
+2022/11/15	15:49:29	MongoServerError: $and/$or/$nor must be a nonempty array
+2022/11/15	16:13:49	MongoServerError: $and/$or/$nor must be a nonempty array
+2022/11/15	16:15:46	MongoServerError: $and/$or/$nor must be a nonempty array
+2022/11/15	16:15:49	MongoServerError: $and/$or/$nor must be a nonempty array
+2022/11/15	16:24:53	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	16:45:51	CastError: Cast to ObjectId failed for value "1" (type string) at path "_id" for model "PostInformation"
+2022/11/15	16:45:56	CastError: Cast to ObjectId failed for value "1" (type string) at path "_id" for model "PostInformation"
+2022/11/15	17:02:16	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	17:02:17	TypeError: Cannot read properties of null (reading 'likeHit')
+2022/11/15	17:02:18	TypeError: Cannot read properties of null (reading 'likeHit')
+2022/11/15	17:02:19	TypeError: Cannot read properties of null (reading 'likeHit')
+2022/11/15	17:02:20	TypeError: Cannot read properties of null (reading 'likeHit')
+2022/11/15	17:02:21	TypeError: Cannot read properties of null (reading 'likeHit')
+2022/11/15	17:02:22	TypeError: Cannot read properties of null (reading 'likeHit')
+2022/11/15	17:28:59	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	17:29:43	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	18:09:08	CastError: Cast to ObjectId failed for value "1" (type string) at path "_id" for model "PostInformation"
+2022/11/15	18:09:18	TypeError: Cannot read properties of null (reading 'hit')
+2022/11/15	19:10:58	TypeError: Cannot read properties of undefined (reading 'length')
+2022/11/15	19:13:22	TypeError: Converting circular structure to JSON
+    --> starting at object with constructor 'MongoClient'
+    |     property 's' -> object with constructor 'Object'
+    |     property 'sessionPool' -> object with constructor 'ServerSessionPool'
+    --- property 'client' closes the circle
+2022/11/15	19:14:35	TypeError: Converting circular structure to JSON
+    --> starting at object with constructor 'MongoClient'
+    |     property 's' -> object with constructor 'Object'
+    |     property 'sessionPool' -> object with constructor 'ServerSessionPool'
+    --- property 'client' closes the circle
+2022/11/15	19:15:45	AssertionError: The expression evaluated to a falsy value:
+
+  assert.ok(!isNaN(val))
+
+2022/11/15	19:16:13	AssertionError: The expression evaluated to a falsy value:
+
+  assert.ok(!isNaN(val))
+
+2022/11/15	19:31:09	TypeError: Cannot read properties of undefined (reading 'length')
+2022/11/15	19:31:25	TypeError: Cannot read properties of undefined (reading 'length')
+2022/11/15	19:52:20	AssertionError: The expression evaluated to a falsy value:
+
+  assert.ok(!isNaN(val))
+
+2022/11/15	19:52:25	AssertionError: The expression evaluated to a falsy value:
+
+  assert.ok(!isNaN(val))
+
+2022/11/15	19:53:18	AssertionError: The expression evaluated to a falsy value:
+
+  assert.ok(!isNaN(val))
+
+>>>>>>> 92f1bbd52427f285baf20cdaa8c015443a9b4028
