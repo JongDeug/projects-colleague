@@ -10,7 +10,7 @@ function Pagination ({ total, limit, page, setPage }) {
     return (
         <Nav>
             <Button className='paging_button' onClick={() => setPage(page - 1)} disabled={page === 1}>&lt;</Button>
-            {Array(numPages).fill().map((v,i)=>(
+            {numPages>0&&Array(numPages).fill().map((v,i)=>(
                 <Button 
                     className='paging_button'
                     key={i+1} 

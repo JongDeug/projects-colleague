@@ -11,11 +11,12 @@ const post = require('../../model/PostQuestion');
 const comment = require('../../model/CommentQuestion');
 const setDB = require('../../middleware/setDB');
 const upload = require('../../middleware/upload');
+const redirect = "boardQuestion";
 
 router.route('/crud')
     .get(setDB(postController, post, comment), postController.getMethod)
-    .post(setDB(postController, post, comment), upload.array('attachedFile'), postController.postMethod)
-    .put(setDB(postController, post, comment), upload.array('attachedFile'), verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.putMethod)
+    .post(setDB(postController, post, comment), upload.array('attachedFile'), postController.postMethod(redirect))
+    .put(setDB(postController, post, comment), upload.array('attachedFile'), verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.putMethod(redirect))
     .delete(setDB(postController, post, comment), verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.deleteMethod);
 
 router.route('/comment/crud')

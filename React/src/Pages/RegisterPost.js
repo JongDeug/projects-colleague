@@ -8,9 +8,15 @@ function RegisterPost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [keywords, setKeywords] = useState("");
-  const frm = new FormData();
-  // 리액트 뭐가 ㅣㅇㅆ나본데
+  const [boardOption, setBoardOption] = useState("자유 게시판");
+  const boardOptionList = [
+    "자유 게시판",
+    "정보공유 게시판",
+    "질문 게시판",
+    "자랑 게시판",
+  ];
   const [attachedFile, setAttachedFile] = useState("");
+  const frm = new FormData();
 
   const onTitleHandler = (event) => {
     setTitle(event.currentTarget.value);
@@ -25,13 +31,27 @@ function RegisterPost() {
   };
 
   const onAttachedFileHandler = (event) => {
-    const {files} = event.currentTarget;
+    const { files } = event.currentTarget;
     setAttachedFile(files);
   };
 
-  async function requestPost() {
-    const token = sessionStorage.getItem("accessToken");
+  function onBoardOption(event) {
+    setBoardOption(event.target.value);
+  }
 
+  function requestPost() {
+    const token = sessionStorage.getItem("accessToken");
+    let route;
+    console.log(boardOption);
+    if(boardOption === "질문 게시판"){
+      route = "boardQuestion";
+    }else if(boardOption === "자유 게시판"){
+      route = "boardAnything";
+    }else if(boardOption === "자랑 게시판"){
+      route = "boardBoast";
+    }else if(boardOption === "정보공유 게시판"){
+      route = "boardInformation"
+    }
     frm.append('postTitle', JSON.stringify(title));
     frm.append('postContent', JSON.stringify(content));
     frm.append('keywords', JSON.stringify(keywords));
@@ -39,21 +59,22 @@ function RegisterPost() {
     Array.from(attachedFile).forEach(file => {
       frm.append('attachedFile', file);
     });
-    
-    return await axios({
-      url: "/api/board/crud",
+
+    return axios({
+      url: `/api/${route}/crud`,
       method: "post",
       headers: {
         'Content-Type': `multipart/form-data`,
         Authorization: `Bearer ${token}`,
       },
-      data: frm,
+      data: frm, 
     })
       .then((res) => {
         console.log(res.data.responseData.result["_id"]);
         const postId = res.data.responseData.result["_id"];
         return res.data.responseData.redirect;
-      }).then((res) => {
+      })
+      .then((res) => {
         window.location = `${res}`;
       })
       .catch((err) => {
@@ -72,6 +93,15 @@ function RegisterPost() {
           <h2 className="text-center mt-5">게시글 작성</h2>
 
           <form>
+            <div className="form-group">
+              <select value={boardOption} onChange={onBoardOption}>
+                {boardOptionList.map((item) => (
+                  <option value={item} key={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="form-group">
               <label for="title">
                 제목 <span className="require"></span>
@@ -93,7 +123,6 @@ function RegisterPost() {
                 onChange={onContentHandler}
               ></textarea>
             </div>
-
 
             <div className="form-group">
               <label for="attachedFile" className="form-label">
@@ -120,22 +149,20 @@ function RegisterPost() {
                 onChange={onKeywordsHandler}
               ></input>
             </div>
-
             <div class="form-group mt-5 ">
               <button
                 // type="submit"
                 type="button"
                 className="btn btn-success"
                 onClick={requestPost}
-              // onSubmit={requestPost}
               >
                 등록
               </button>
             </div>
           </form>
         </div>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 }
 

@@ -112,8 +112,19 @@ h2{
     
     background-color: #19ba74;
 }
+.link_to{
+    text-decoration: none;
+    color: #fff;
+}
 
 /* 검색 */
+.select_search{
+    border: solid 1px gray;
+    border-radius: 6px;
+    width: 80px;
+    font-size: 0.87em;
+    color: gray;
+}
 .input-group{
     justify-content: flex-end;
 }
@@ -121,5 +132,10 @@ h2{
     border: solid 1px gray;
     border-radius: 6px;
     padding: 5px;
-    width: 30%;
+    width: 15%;
+    height: 30px;
+}
+.serach_input + .searchbtn{
+    height: 30px;
+    line-height: 1em;
 }

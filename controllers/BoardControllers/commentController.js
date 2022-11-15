@@ -2,10 +2,6 @@ const responseDataForm = require("../../config/responseDataForm");
 let Post;
 let Comment;
 
-// 임시
-Post = require('../../model/Post');
-Comment = require('../../model/Comment');
-
 const setPost = (post) => {
     Post = post;
 }

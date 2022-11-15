@@ -3,10 +3,6 @@ const responseDataForm = require("../../config/responseDataForm");
 let Post;
 let Comment;
 
-// 임시
-Post = require('../../model/Post');
-Comment = require('../../model/Comment');
-
 const setPost = (post) => {
     Post = post;
 }
@@ -30,7 +26,7 @@ const getMethod = async (req, res, next) => {
         const foundComments = await Comment.find({ postId: getPostId }).exec();
 
         // 조회수 up
-    if (getMethod === "put") {
+        if (getMethod === "put") {
             foundPost.hit -= 1;
         } else {
             foundPost.hit += 1;

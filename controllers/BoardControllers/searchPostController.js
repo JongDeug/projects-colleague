@@ -2,10 +2,6 @@ const responseDataForm = require("../../config/responseDataForm");
 let Post;
 let Comment;
 
-// 임시
-Post = require('../../model/Post');
-Comment = require('../../model/Comment');
-
 const setPost = (post) => {
     Post = post;
 }
@@ -19,7 +15,7 @@ const postMethod = async (req, res, next) => {
     const getWhereToSearch = req.body.whereToSearch; // 제목, 내용, 제목 + 내용
 
     if (!getWhatToSearch || !getWhereToSearch) {
-        return res.status(400).json({ "message": "입력 존재" });
+        return res.status(400).json({ "message": "입력이 존재하지 않음" });
     }
 
     try {
@@ -33,7 +29,12 @@ const postMethod = async (req, res, next) => {
                 { postContent: new RegExp(getWhatToSearch) },
                 { postTitle: new RegExp(getWhatToSearch) }
             ];
-        }
+        } 
+        // else {
+        //     options = [
+        //         {postContent: new RegExp(getWhatToSearch)}
+        //     ]
+        // }
         const result = await Post.find({ $or: options }).exec();
 
         const responseData = responseDataForm("/board/all", "searchPost post request complete", result);

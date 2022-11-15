@@ -32,6 +32,9 @@ const userSchema = new schema({
     type: [String],
     // required: false,
   },
+  likeHitBool: {
+    type: Boolean
+  },
   keywords: {
     type: String,
     required: true,

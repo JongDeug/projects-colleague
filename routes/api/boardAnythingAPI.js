@@ -9,13 +9,14 @@ const likeHitController = require("../../controllers/BoardControllers/likeHitCon
 const searchPostController = require("../../controllers/BoardControllers/searchPostController");
 const post = require('../../model/PostAnything');
 const comment = require('../../model/CommentAnything');
+const redirect = "boardAnything";
 const setDB = require('../../middleware/setDB');
 const upload = require('../../middleware/upload');
 
 router.route('/crud')
     .get(setDB(postController, post, comment), postController.getMethod)
-    .post(setDB(postController, post, comment), upload.array('attachedFile'), postController.postMethod)
-    .put(setDB(postController, post, comment), upload.array('attachedFile'), verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.putMethod)
+    .post(setDB(postController, post, comment), upload.array('attachedFile'), postController.postMethod(redirect))
+    .put(setDB(postController, post, comment), upload.array('attachedFile'), verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.putMethod(redirect))
     .delete(setDB(postController, post, comment), verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.deleteMethod);
 
 router.route('/comment/crud')

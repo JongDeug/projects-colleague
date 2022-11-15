@@ -8,7 +8,7 @@ import Comment from "../Components/Post/Comment";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Modal } from "react-bootstrap";
-import { getPostById } from "../Data";
+import Like from '../Components/Post/Like';
 
 function PostDetail() {
   // const [category, setCategory] = useState("");
@@ -20,22 +20,25 @@ function PostDetail() {
   const [postTime, setPostTime] = useState("");
   const [hit, setHit] = useState("");
   const [likeHit, setLikeHit] = useState("");
+  // 여기
+  const [likeHitBool, setLikeHitBool] = useState();
   const [keywords, setKeywords] = useState("");
   const [attachedFile, setAttatchedFile] = useState("");
   const [show, setShow] = useState(false);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState('');
-
+  const [currentUser, setCurrentUser] = useState("");
+  const [isUser, setIsUser] = useState(false);
 
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  function requestGetDetail(_id, method) {
+  async function requestGetDetail(_id, method) {
     const token = sessionStorage.getItem("accessToken");
     set_id(_id);
-    return axios({
-      url: `/api/board/${_id}/${method}`,
+    return await axios({
+      url: `/api/boardInformation/${_id}/${method}`,
       method: "get",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -48,11 +51,14 @@ function PostDetail() {
         setPostTime(res.data.responseData.result.postTime);
         setPostUserId(res.data.responseData.result.userId);
         setLikeHit(res.data.responseData.result.setLikeHit);
+        // 여기 부분
+        setLikeHitBool(res.data.responseData.result.likeHitBool);
         setKeywords(res.data.responseData.result.keywords);
         setAttatchedFile(res.data.responseData.result.attachedFile);
         setComments(res.data.responseData.result.comments);
-        console.log(res.data.responseData.result.attachedFile)
-        console.log(typeof res.data.responseData.result.attachedFile)
+        setCurrentUser(res.data.responseData.result.host);
+        setIsUser(res.data.responseData.result.host===res.data.responseData.result.userId);
+        return res.data.responseData.result.likeHitBool;
       })
       .catch((err) => {
         if (err) {
@@ -64,13 +70,15 @@ function PostDetail() {
   }
 
   useEffect(() => {
-    requestGetDetail(_id, "get");
-  }, []);
+    requestGetDetail(_id, "get").then((b) => setLikeHitBool(b));
+    console.log(likeHitBool);
+  }, [likeHitBool]);
+
 
   function requestDelete() {
     const token = sessionStorage.getItem("accessToken");
     return axios({
-      url: "/api/board/crud",
+      url: "/api/boardInformation/crud",
       method: "delete",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -104,6 +112,7 @@ function PostDetail() {
       list.push(
         <Comment
           comment={comments}
+          currentUser={currentUser}
         />
       )
     });
@@ -113,7 +122,7 @@ function PostDetail() {
     const token = sessionStorage.getItem("accessToken");
 
     return axios({
-      url: "/api/board/comment/crud",
+      url: "/api/boardInformation/comment/crud",
       method: 'post',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -139,7 +148,6 @@ function PostDetail() {
 
   const printImage = () => {
     const arr = [];
-    console.log(attachedFile);
     attachedFile && attachedFile.map((value) => {
       arr.push(
         <section className="mb-5">
@@ -187,15 +195,12 @@ function PostDetail() {
             </article>
 
             <div className="btn-wrap">
-              <p className="postDetailButtons mt-4 float-right">
-                {/* <div className="Like">
-                  <img
-                    src={!like_exist ? none_like : like}
-                    onClick={() => this._toggleLike()}
-                  />
-                  <h5> 좋아요 ( {like_num} ) </h5>
-                </div> */}
+              <Like postid={_id} likeHitBool={likeHitBool} setLikeHitBool={setLikeHitBool} likeHit={likeHit}>
 
+              </Like>
+              {isUser&&
+              <><p className="postDetailButtons mt-4 float-right">
+              
                 <div>
                   <Link to={{ pathname: `/updatepost/${_id}`, state: _id }}>
                     <Button
@@ -245,8 +250,9 @@ function PostDetail() {
                     </Button>
                   </Modal.Footer>
                 </Modal>
-              </p>
+              </p></>}
             </div>
+            <br></br>
             <div className='comment_area'>
               <div className='commentslist'>
                 <PrintComments></PrintComments>

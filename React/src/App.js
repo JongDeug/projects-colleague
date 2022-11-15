@@ -17,6 +17,13 @@ import PostDetail from './Pages/PostDetail';
 import RegisterPost from './Pages/RegisterPost';
 import UpdatePost from './Pages/UpdatePost';
 import Logout from './Pages/Logout';
+import BoardFree from './Pages/BoardAnything';
+import BoardBoast from './Pages/BoardBoast';
+import BoardInfo from './Pages/BoardInfo';
+import BoardQues from './Pages/BoardQues';
+import MyPostPage from './Pages/MyPostPage';
+import MyCommentPage from './Pages/MyCommentPage';
+import MyLikePage from './Pages/MyLikePage';
 
 function App() {
   return (
@@ -32,12 +39,18 @@ function App() {
         <Route path="/findpassword" element={<FindPwPage />}></Route>
         <Route path="/changepassword" element={<ChangePwPage />}></Route>
         <Route path="/leaveid" element={<LeaveIdPage />}></Route>
-        <Route path="/board/all" element={<Board />}></Route>
+        <Route path="/board/free" element={<BoardFree />}></Route>
+        <Route path="/board/boast" element={<BoardBoast />}></Route>
+        <Route path="/board/info" element={<BoardInfo />}></Route>
+        <Route path="/board/question" element={<BoardQues />}></Route>
         <Route path='/comments' element={<Comments />}></Route>
         <Route path='/post' element={<PostDetail />}></Route>
         <Route path='/post/:postId' element={<PostDetail />}></Route>
         <Route path='/writepost' element={<RegisterPost />}></Route>
         <Route path='/updatepost/:postId' element={<UpdatePost />}></Route>
+        <Route path='/myact/post' element={<MyPostPage />}></Route>
+        <Route path='/myact/like' element={<MyLikePage />}></Route>
+        <Route path='/myact/comment' element={<MyCommentPage />}></Route>
       </Routes>
     </>
   );
