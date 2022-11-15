@@ -3,22 +3,22 @@ const PostAnything = require("../../model/PostAnything");
 const PostBoast = require("../../model/PostBoast");
 const PostInformation = require("../../model/PostInformation");
 const PostQuestion = require("../../model/PostQuestion");
-const Post = [PostAnything, PostBoast, PostInformation, PostQuestion];
 
 const getMethod = async (req, res, next) => {
 
     try {
-        // const resultAnything = await PostAnything.find({ $where : s});
-        const resultBoast = await PostBoast.find({ likeHit : {'$size' : { '$gte': 1}}});
-        const resultInformation = await PostInformation.find({ likeHit : {'$size' : { '$gte': 1}}});
-        const resultQuestion = await PostQuestion.find({ likeHit : {'$size' : { '$gte': 1}}});
+        // 좋아요 ? 개 이상 선택.
+        const resultAnything = await PostAnything.find({$where : 'this.likeHit.length>0'}).sort({$sort:{size:1}})
+        // const resultBoast = await PostBoast.find({$where : 'this.likeHit.length>0'});
+        // const resultInformation = await PostInformation.find({$where : 'this.likeHit.length>0'});
+        // const resultQuestion = await PostQuestion.find({$where : 'this.likeHit.length>0'});
 
-        const result = {
-            "anything" : resultAnything,
-            "boast": resultBoast,
-            "information": resultInformation,
-            "question": resultQuestion,
-        }
+        // const result = {
+        //     "anything" : resultAnything,
+        //     "boast": resultBoast,
+        //     "information": resultInformation,
+        //     "question": resultQuestion,
+        // }
 
         const responseData = responseDataForm(null, "popularity get request complete", result);
         res.status(200).json({responseData});

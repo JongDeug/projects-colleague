@@ -276,3 +276,17 @@
 
   assert.ok(!isNaN(val))
 
+2022/11/15	19:31:09	TypeError: Cannot read properties of undefined (reading 'length')
+2022/11/15	19:31:25	TypeError: Cannot read properties of undefined (reading 'length')
+2022/11/15	19:52:20	AssertionError: The expression evaluated to a falsy value:
+
+  assert.ok(!isNaN(val))
+
+2022/11/15	19:52:25	AssertionError: The expression evaluated to a falsy value:
+
+  assert.ok(!isNaN(val))
+
+2022/11/15	19:53:18	AssertionError: The expression evaluated to a falsy value:
+
+  assert.ok(!isNaN(val))
+

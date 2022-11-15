@@ -28,11 +28,24 @@ function MyLikePage () {
                 Authorization: `Bearer ${token}`
             },
         }).then((res)=>{
-            setPosts(res.data.responseData.result.anything,
-                res.data.responseData.result.boast,
-                res.data.responseData.result.information,
-                res.data.responseData.result.question,
-                );
+            let list = [];
+            res.data.responseData.result.anything&&res.data.responseData.result.anything.map((post)=>{
+                list.push(post);
+                console.log(post);
+            })
+            res.data.responseData.result.boast&&res.data.responseData.result.boast.map((post)=>{
+                list.push(post);
+                console.log(post);
+            })
+            res.data.responseData.result.information&&res.data.responseData.result.information.map((post)=>{
+                list.push(post);
+                console.log(post);
+            })
+            res.data.responseData.result.question&&res.data.responseData.result.question.map((post)=>{
+                list.push(post);
+                console.log(post);
+            })
+            setPosts(list);
             console.log(res.data.responseData.result);
             console.log(posts);
         }).catch((err)=>{

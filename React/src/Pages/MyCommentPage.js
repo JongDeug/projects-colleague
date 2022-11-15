@@ -18,7 +18,7 @@ function MyCommentPage () {
     const offset = (page - 1) * limit;
 
     useEffect(()=>{
-        // requestGet();
+        requestGet();
         console.log(posts);
     }, []);
 
@@ -31,9 +31,25 @@ function MyCommentPage () {
                 Authorization: `Bearer ${token}`
             },
         }).then((res)=>{
-            setPosts(res.data.responseData.result);
             console.log(res.data.responseData.result);
-            console.log(posts);
+            let list = [];
+            res.data.responseData.result.anything&&res.data.responseData.result.anything.map((post)=>{
+                list.push(post);
+                console.log(post);
+            })
+            res.data.responseData.result.boast&&res.data.responseData.result.boast.map((post)=>{
+                list.push(post);
+                console.log(post);
+            })
+            res.data.responseData.result.information&&res.data.responseData.result.information.map((post)=>{
+                list.push(post);
+                console.log(post);
+            })
+            res.data.responseData.result.question&&res.data.responseData.result.question.map((post)=>{
+                list.push(post);
+                console.log(post);
+            })
+            setPosts(list);
         }).catch((err)=>{
             if(err.response){
                 console.log(err.response.data);
@@ -50,7 +66,7 @@ function MyCommentPage () {
         } 
         const list = [];
         posts&&Array.from(posts).slice(startNum,posts.length-offset).reverse().map((posts) => {
-            list.push(<PostWithComment post={posts} comment={comments}></PostWithComment>)
+            list.push(<PostWithComment postid={posts.postId} posttype={posts.commentType} comment={posts.contents}></PostWithComment>)
         })
         return list;
     };
@@ -70,7 +86,7 @@ function MyCommentPage () {
                     </tr>
                 </thead>
                 <tbody>
-                    <PostWithComment></PostWithComment>
+                    <ShowContents></ShowContents>
                     {/* <ShowContents></ShowContents> */}
                 </tbody>
         </Table>

@@ -9,21 +9,19 @@ function Like(props) {
   const [isLiked, setIsLiked] = useState(props.likeHitBool);
   const [postid, setPostid] = useState(props.postid);
 
-  useEffect(()=>{
-    setIsLiked(props.likeHitBool);
-    console.log(props.likeHitBool);
-    console.log(isLiked);
-  },[isLiked]);
   const likeBtnStyle = {
     likeBtn: {
       color: isLiked ? "red" : "grey",
     },
   };
+  useEffect(()=>{
+    setIsLiked(props.likeHitBool);
+  })
 
   function requestLike(){
     const token = sessionStorage.getItem("accessToken");
     return axios({
-      url: `/api/boardInformation/like/${postid}`,
+      url: `/api/${props.postBoard}/like/${postid}`,
       method: "get",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -31,6 +29,8 @@ function Like(props) {
     })
       .then((res) => {
         console.log(res.data.responseData.result);
+        setIsLiked(res.data.responseData.result.likeHitBool);
+        props.setLikeHitBool(res.data.responseData.result.likeHitBool);
         console.log(postid);
         return res.data.responseData.result;
       })
@@ -53,7 +53,7 @@ function Like(props) {
     <div>
       <GoHeart
         style={likeBtnStyle.likeBtn}
-        onClick={()=>{onChangeState(); requestLike();}}
+        onClick={()=>{ requestLike();}}
         size={36}
         className="likeBtn"
       ></GoHeart>

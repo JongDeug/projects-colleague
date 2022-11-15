@@ -28,11 +28,25 @@ function MyPostPage () {
                 Authorization: `Bearer ${token}`
             },
         }).then((res)=>{
-            setPosts(res.data.responseData.result.anything,
-                res.data.responseData.result.boast,
-                res.data.responseData.result.information,
-                res.data.responseData.result.question,
-                );
+            let list = [];
+            res.data.responseData.result.anything&&res.data.responseData.result.anything.map((post)=>{
+                list.push(post);
+                console.log(post);
+            })
+            res.data.responseData.result.boast&&res.data.responseData.result.boast.map((post)=>{
+                list.push(post);
+                console.log(post);
+            })
+            res.data.responseData.result.information&&res.data.responseData.result.information.map((post)=>{
+                list.push(post);
+                console.log(post);
+            })
+            res.data.responseData.result.question&&res.data.responseData.result.question.map((post)=>{
+                list.push(post);
+                console.log(post);
+            })
+            setPosts(list);
+
             console.log(res.data.responseData.result);
             console.log(posts);
         }).catch((err)=>{
@@ -49,6 +63,7 @@ function MyPostPage () {
         if (posts.length-(limit+offset)>=0){
             startNum = posts.length-(limit+offset);
         } 
+        console.log(posts);
         const list = [];
         posts&&Array.from(posts).slice(startNum,posts.length-offset).reverse().map((posts) => {
             list.push(<BodyContents post={posts}></BodyContents>)

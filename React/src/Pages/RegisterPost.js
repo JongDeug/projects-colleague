@@ -11,7 +11,7 @@ function RegisterPost() {
   const [boardOption, setBoardOption] = useState("자유 게시판");
   const boardOptionList = [
     "자유 게시판",
-    "정보공유 게시판",
+    "정보 공유 게시판",
     "질문 게시판",
     "자랑 게시판",
   ];
@@ -49,7 +49,7 @@ function RegisterPost() {
       route = "boardAnything";
     }else if(boardOption === "자랑 게시판"){
       route = "boardBoast";
-    }else if(boardOption === "정보공유 게시판"){
+    }else if(boardOption === "정보 공유 게시판"){
       route = "boardInformation"
     }
     frm.append('postTitle', JSON.stringify(title));

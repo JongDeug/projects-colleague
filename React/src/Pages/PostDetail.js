@@ -14,17 +14,17 @@ function PostDetail() {
   // const [category, setCategory] = useState("");
   const params = useParams();
   const [_id, set_id] = useState(params.postId);
+  const [postBoard, setPostBoard] = useState(params.postType);
   const [postTitle, setPostTitle] = useState("");
   const [postUserId, setPostUserId] = useState("");
   const [postContent, setPostContent] = useState("");
   const [postTime, setPostTime] = useState("");
   const [hit, setHit] = useState("");
   const [likeHit, setLikeHit] = useState("");
-  // 여기
   const [likeHitBool, setLikeHitBool] = useState();
   const [keywords, setKeywords] = useState("");
   const [attachedFile, setAttatchedFile] = useState("");
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(0);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState('');
   const [currentUser, setCurrentUser] = useState("");
@@ -34,11 +34,12 @@ function PostDetail() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  async function requestGetDetail(_id, method) {
+  function requestGetDetail(postBoard,_id, method) {
     const token = sessionStorage.getItem("accessToken");
     set_id(_id);
-    return await axios({
-      url: `/api/boardInformation/${_id}/${method}`,
+    setPostBoard(postBoard);
+    return axios({
+      url: `/api/${postBoard}/${_id}/${method}`,
       method: "get",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -46,19 +47,27 @@ function PostDetail() {
     })
       .then((res) => {
         // setPostId(res.data.responseData.result._id);//추가
+        console.log(params);
+        console.log(postBoard);
+        console.log(res.data.responseData.result);
         setPostTitle(res.data.responseData.result.postTitle);
         setPostContent(res.data.responseData.result.postContent);
         setPostTime(res.data.responseData.result.postTime);
         setPostUserId(res.data.responseData.result.userId);
         setLikeHit(res.data.responseData.result.setLikeHit);
-        // 여기 부분
         setLikeHitBool(res.data.responseData.result.likeHitBool);
+        // if(res.data.responseData.result.likeHitBool){
+        //   setLikeHitBool(!true);
+        // }
         setKeywords(res.data.responseData.result.keywords);
         setAttatchedFile(res.data.responseData.result.attachedFile);
         setComments(res.data.responseData.result.comments);
         setCurrentUser(res.data.responseData.result.host);
         setIsUser(res.data.responseData.result.host===res.data.responseData.result.userId);
-        return res.data.responseData.result.likeHitBool;
+        console.log(res.data.responseData.result);
+        console.log(res.data.responseData.result.likeHitBool);
+        console.log(res.data.responseData.result.attachedFile);
+        console.log(typeof res.data.responseData.result.attachedFile);
       })
       .catch((err) => {
         if (err) {
@@ -70,15 +79,13 @@ function PostDetail() {
   }
 
   useEffect(() => {
-    requestGetDetail(_id, "get").then((b) => setLikeHitBool(b));
-    console.log(likeHitBool);
-  }, [likeHitBool]);
-
+    requestGetDetail(postBoard,_id, "get");
+  }, []);
 
   function requestDelete() {
     const token = sessionStorage.getItem("accessToken");
     return axios({
-      url: "/api/boardInformation/crud",
+      url: `/api/${postBoard}/crud`,
       method: "delete",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -122,7 +129,7 @@ function PostDetail() {
     const token = sessionStorage.getItem("accessToken");
 
     return axios({
-      url: "/api/boardInformation/comment/crud",
+      url: `/api/${postBoard}/comment/crud`,
       method: 'post',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -148,6 +155,7 @@ function PostDetail() {
 
   const printImage = () => {
     const arr = [];
+    console.log(attachedFile);
     attachedFile && attachedFile.map((value) => {
       arr.push(
         <section className="mb-5">
@@ -195,7 +203,7 @@ function PostDetail() {
             </article>
 
             <div className="btn-wrap">
-              <Like postid={_id} likeHitBool={likeHitBool} setLikeHitBool={setLikeHitBool} likeHit={likeHit}>
+              <Like postid={_id} likeHitBool={likeHitBool} setLikeHitBool={setLikeHitBool} likeHit={likeHit} postBoard={postBoard}>
 
               </Like>
               {isUser&&

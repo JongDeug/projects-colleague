@@ -44,8 +44,8 @@ function App() {
         <Route path="/board/info" element={<BoardInfo />}></Route>
         <Route path="/board/question" element={<BoardQues />}></Route>
         <Route path='/comments' element={<Comments />}></Route>
-        <Route path='/post' element={<PostDetail />}></Route>
-        <Route path='/post/:postId' element={<PostDetail />}></Route>
+        {/* <Route path='/post' element={<PostDetail />}></Route> */}
+        <Route path='/post/:postType/:postId' element={<PostDetail />}></Route>
         <Route path='/writepost' element={<RegisterPost />}></Route>
         <Route path='/updatepost/:postId' element={<UpdatePost />}></Route>
         <Route path='/myact/post' element={<MyPostPage />}></Route>

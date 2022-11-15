@@ -10,11 +10,23 @@ function BodyContents(props) {
     const [postDate, setPostDate] = useState(props.post.postTime);
     const [postHit, setPostHit] = useState(props.post.hit);
     const [postLikehit, setPostLikehit] = useState(props.post.postLikehit);
+    const [postType, setPostType]= useState(props.post.postType);
+
+    var postBoard;
+    if(postType === "질문 게시판"){
+        postBoard = "boardQuestion";
+    }else if(postType === "자유 게시판"){
+        postBoard = "boardAnything";
+    }else if(postType === "자랑 게시판"){
+        postBoard = "boardBoast";
+    }else if(postType === "정보 공유 게시판"){
+        postBoard = "boardInformation";
+    }
 
     return (
         <tr>
             {/* <th className='content post_id'>{postId}</th> */}
-            <th className='content post_title'><Link to={{pathname:`/post/${postId}`, state:postId}} className='post_link'>{postTitle}</Link></th>
+            <th className='content post_title'><Link to={{pathname:`/post/${postBoard}/${postId}`, state:{postBoard:postBoard, postId:postId}}} className='post_link'>{postTitle}</Link></th>
             <th className='content post_writer'>{postUserId}</th>
             <th className='content post_date'>{postDate}</th>
             <th className='content post_hit'>{postHit}</th>
