@@ -1,16 +1,6 @@
 const responseDataForm = require("../../config/responseDataForm");
-let Post;
-let Comment;
 
-const setPost = (post) => {
-    Post = post;
-}
-
-const setComment = (comment) => {
-    Comment = comment;
-}
-
-const postMethod = (redirect) => {
+const postMethod = (Comment, PostType) => {
     return async (req, res, next) => {
         const userId = req.userId;
         const contents = req.body.contents;
@@ -33,7 +23,7 @@ const postMethod = (redirect) => {
                 });
                 console.log(`result : ${result}`);
 
-                const responseData = responseDataForm(`/post/${redirect}/${postId}`, "comment post request complete", result);
+                const responseData = responseDataForm(`/post/${PostType}/${postId}`, "comment post request complete", result);
                 res.status(200).json({ responseData });
             } else {
                 res.status(409).json({ "message": "중복된 댓글" });
@@ -44,8 +34,7 @@ const postMethod = (redirect) => {
     };
 }
 
-
-const putMethod = (redirect) => {
+const putMethod = (Comment, PostType) => {
     return async (req, res, next) => {
         const userId = req.userId;
         const contents = req.body.contents;
@@ -64,7 +53,7 @@ const putMethod = (redirect) => {
                 const result = await foundComment.save();
                 console.log(`result : ${result}`);
 
-                const responseData = responseDataForm(`/post/${redirect}/${result.postId}`, "comment put request complete", result);
+                const responseData = responseDataForm(`/post/${PostType}/${result.postId}`, "comment put request complete", result);
                 res.status(200).json({ responseData });
             } else {
                 res.status(400).json({ "message": "권한 없음" });
@@ -75,8 +64,7 @@ const putMethod = (redirect) => {
     };
 }
 
-
-const deleteMethod = (redirect) => {
+const deleteMethod = (Comment, PostType) => {
     return async (req, res, next) => {
         const userId = req.userId;
         const commentId = req.body.commentId;
@@ -84,15 +72,16 @@ const deleteMethod = (redirect) => {
         if (!commentId) {
             return res.status(400).json({ "message": "빠뜨린 입력 존재" });
         }
-
         try {
+
             const foundComment = await Comment.findById(commentId).exec();
 
-            if (foundComment.userId === userId) {
+            // 작성자, 권한 확인
+            if (foundComment.userId === userId || req.allowed) {
                 const result = await Comment.deleteOne({ _id: commentId });
                 console.log(result);
 
-                const responseData = responseDataForm(`/post/${redirect}/${foundComment.postId}`, "comment delete request complete", null);
+                const responseData = responseDataForm(`/post/${PostType}/${foundComment.postId}`, "comment delete request complete", null);
                 res.status(200).json({ responseData });
             } else {
                 res.status(400).json({ "message": "권한 없음" });
@@ -102,7 +91,6 @@ const deleteMethod = (redirect) => {
             next(err);
         }
     };
-
 }
 
-module.exports = { postMethod, putMethod, deleteMethod, setComment, setPost };
+module.exports = { postMethod, putMethod, deleteMethod };

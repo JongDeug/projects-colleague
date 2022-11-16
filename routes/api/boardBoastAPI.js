@@ -7,31 +7,30 @@ const postDetailController = require("../../controllers/BoardControllers/postDet
 const commentController = require("../../controllers/BoardControllers/commentController");
 const likeHitController = require("../../controllers/BoardControllers/likeHitController");
 const searchPostController = require("../../controllers/BoardControllers/searchPostController");
-const post = require('../../model/PostBoast');
-const comment = require('../../model/CommentBoast');
-const setDB = require('../../middleware/setDB');
+const Post = require('../../model/PostBoast');
+const PostType = "boardBoastAPI";
+const Comment = require('../../model/CommentBoast');
 const upload = require('../../middleware/upload');
-const redirect = "boardBoastAPI";
 
 router.route('/crud')
-    .get(setDB(postController, post, comment), postController.getMethod)
-    .post(setDB(postController, post, comment), upload.array('attachedFile'), postController.postMethod(redirect))
-    .put(setDB(postController, post, comment), upload.array('attachedFile'), verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.putMethod(redirect))
-    .delete(setDB(postController, post, comment), verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.deleteMethod);
+    .get(postController.getMethod(Post))
+    .post(upload.array('attachedFile'), postController.postMethod(Post, PostType))
+    .put(upload.array('attachedFile'), postController.putMethod(Post, PostType))
+    .delete(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.deleteMethod(Post, Comment));
 
 router.route('/comment/crud')
-    .post(setDB(commentController, post, comment), commentController.postMethod)
-    .put(setDB(commentController, post, comment), commentController.putMethod)
-    .delete(setDB(commentController, post, comment), commentController.deleteMethod);
+    .post(commentController.postMethod(Comment, PostType))
+    .put(commentController.putMethod(Comment, PostType))
+    .delete(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), commentController.deleteMethod(Comment, PostType));
 
 router.route('/search')
-    .post(setDB(searchPostController, post, comment), searchPostController.postMethod);
+    .post(searchPostController.postMethod(Post));
 
 router.route('/like/:postId')
-    .get(setDB(likeHitController, post, comment), likeHitController.getMethod);
+    .get(likeHitController.getMethod(Post));
 
 // search route를 밑으로 내려버리면 /search가 postId로 들어가면서 오류 발생시킴.
 router.route('/:postId/:method')
-    .get(setDB(postDetailController, post, comment), postDetailController.getMethod);
+    .get(postDetailController.getMethod(Post, Comment));
 
 module.exports = router;
