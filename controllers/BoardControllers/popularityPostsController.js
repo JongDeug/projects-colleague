@@ -7,18 +7,18 @@ const PostQuestion = require("../../model/PostQuestion");
 const getMethod = async (req, res, next) => {
 
     try {
-        // 좋아요 ? 개 이상 선택.
-        const resultAnything = await PostAnything.find({$where : 'this.likeHit.length>0'}).sort({$sort:{size:1}})
-        // const resultBoast = await PostBoast.find({$where : 'this.likeHit.length>0'});
-        // const resultInformation = await PostInformation.find({$where : 'this.likeHit.length>0'});
-        // const resultQuestion = await PostQuestion.find({$where : 'this.likeHit.length>0'});
+        // 좋아요 수가 ?개보다 같거나 큼, 내림차순으로 정렬, limit 2개
+        const resultAnything = await PostAnything.aggregate().addFields({"likeHitLength":{"$size" : "$likeHit"}}).match({"likeHitLength" : {"$gte" : 1}}).sort({"likeHitLength": -1}).limit(2);
+        const resultBoast = await PostBoast.aggregate().addFields({"likeHitLength":{"$size" : "$likeHit"}}).match({"likeHitLength" : {"$gte" : 1}}).sort({"likeHitLength": -1}).limit(2);
+        const resultInformation = await PostInformation.aggregate().addFields({"likeHitLength":{"$size" : "$likeHit"}}).match({"likeHitLength" : {"$gte" : 1}}).sort({"likeHitLength": -1}).limit(2);
+        const resultQuestion = await PostQuestion.aggregate().addFields({"likeHitLength":{"$size" : "$likeHit"}}).match({"likeHitLength" : {"$gte" : 1}}).sort({"likeHitLength": -1}).limit(2);
 
-        // const result = {
-        //     "anything" : resultAnything,
-        //     "boast": resultBoast,
-        //     "information": resultInformation,
-        //     "question": resultQuestion,
-        // }
+        const result = {
+            "anything" : resultAnything,
+            "boast": resultBoast,
+            "information": resultInformation,
+            "question": resultQuestion,
+        }
 
         const responseData = responseDataForm(null, "popularity get request complete", result);
         res.status(200).json({responseData});
