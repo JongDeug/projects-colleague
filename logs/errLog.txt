@@ -302,3 +302,4 @@
 2022/11/16	13:29:44	TypeError: PostAnything.find(...).sort(...).pretty is not a function
 2022/11/16	13:42:18	MongoServerError: $size needs a number
 2022/11/16	13:43:58	MongoServerError: unknown top level operator: $length. If you have a field name that starts with a '$' symbol, consider using $getField or $setField.
+2022/11/16	14:54:19	TypeError: Cannot read properties of null (reading 'hit')

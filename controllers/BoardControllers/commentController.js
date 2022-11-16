@@ -76,7 +76,8 @@ const deleteMethod = (Comment, PostType) => {
         try {
             const foundComment = await Comment.findById(commentId).exec();
 
-            if (foundComment.userId === userId) {
+            // 작성자, 권한 확인
+            if (foundComment.userId === userId || req.allowed) {
                 const result = await Comment.deleteOne({ _id: commentId });
                 console.log(result);
 

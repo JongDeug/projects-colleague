@@ -15,13 +15,13 @@ const upload = require('../../middleware/upload');
 router.route('/crud')
     .get(postController.getMethod(Post))
     .post(upload.array('attachedFile'), postController.postMethod(Post, PostType))
-    .put(upload.array('attachedFile'), verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.putMethod(Post, PostType))
+    .put(upload.array('attachedFile'), postController.putMethod(Post, PostType))
     .delete(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.deleteMethod(Post, Comment));
 
 router.route('/comment/crud')
     .post(commentController.postMethod(Comment, PostType))
     .put(commentController.putMethod(Comment, PostType))
-    .delete(commentController.deleteMethod(Comment, PostType));
+    .delete(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), commentController.deleteMethod(Comment, PostType));
 
 router.route('/search')
     .post(searchPostController.postMethod(Post));
