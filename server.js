@@ -42,7 +42,14 @@ app.get('/uploads/:img', (req, res) => {
     res.sendFile(path.join(__dirname, `uploads/${img}`));
 })
 
+// 로그인 무
+app.use("/boardAnything", require("./routes/boardAnything"));
+app.use("/boardInformation", require("./routes/boardInformation"));
+app.use("/boardQuestion", require("./routes/boardQuestion"));
+app.use("/boardBoast", require("./routes/boardBoast"));
+app.use("/popularityPosts", require("./routes/popularityPosts"));
 
+// 로그인 유
 app.use("/auth", require('./routes/auth'));
 app.use(verifyJWT);
 app.use("/api/member", require("./routes/api/memberAPI"));
@@ -53,7 +60,6 @@ app.use("/api/boardInformation", require("./routes/api/boardInformationAPI"));
 app.use("/api/boardQuestion", require("./routes/api/boardQuestionAPI"));
 app.use("/api/boardBoast", require("./routes/api/boardBoastAPI"));
 
-app.use("/api/popularityPosts", require("./routes/api/popularityPostsAPI"));
 app.use("/api/recommendPosts", require("./routes/api/recommendPostsAPI"));
 
 

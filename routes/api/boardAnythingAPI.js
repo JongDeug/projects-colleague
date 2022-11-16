@@ -12,25 +12,25 @@ const PostType = "boardAnything";
 const Comment = require('../../model/CommentAnything');
 const upload = require('../../middleware/upload');
 
-router.route('/crud')
-    .get(postController.getMethod(Post))
+router.route('/manage')
+    // .get(postController.getMethod(Post))
     .post(upload.array('attachedFile'), postController.postMethod(Post, PostType))
     .put(upload.array('attachedFile'), postController.putMethod(Post, PostType))
     .delete(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.deleteMethod(Post, Comment));
 
-router.route('/comment/crud')
+router.route('/comment/manage')
     .post(commentController.postMethod(Comment, PostType))
     .put(commentController.putMethod(Comment, PostType))
     .delete(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), commentController.deleteMethod(Comment, PostType));
 
-router.route('/search')
-    .post(searchPostController.postMethod(Post));
+// router.route('/search')
+    // .post(searchPostController.postMethod(Post));
 
 router.route('/like/:postId')
     .get(likeHitController.getMethod(Post));
 
 // search route를 밑으로 내려버리면 /search가 postId로 들어가면서 오류 발생시킴.
-router.route('/:postId/:method')
-    .get(postDetailController.getMethod(Post, Comment));
+// router.route('/:postId/:method')
+    // .get(postDetailController.getMethod(Post, Comment));
 
 module.exports = router;
