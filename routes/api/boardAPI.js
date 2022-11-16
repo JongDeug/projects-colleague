@@ -7,7 +7,6 @@ const postDetailController = require("../../controllers/BoardControllers/postDet
 const commentController = require("../../controllers/BoardControllers/commentController");
 const likeHitController = require("../../controllers/BoardControllers/likeHitController");
 const searchPostController = require("../../controllers/BoardControllers/searchPostController");
-
 const upload = require('../../middleware/upload');
 
 

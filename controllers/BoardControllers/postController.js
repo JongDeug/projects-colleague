@@ -1,29 +1,20 @@
 const responseDataForm = require("../../config/responseDataForm");
 const fs = require('fs');
-const path = require('path');
 
-let Post;
-let Comment;
-
-const setPost = (post) => {
-    Post = post;
-}
-
-const setComment = (comment) => {
-    Comment = comment;
-}
-
-const getMethod = async (req, res, next) => {
-    try {
-        const result = await Post.find({});
-        const responseData = responseDataForm(null, "board get request complete", result);
-        res.status(200).json({ responseData });
-    } catch (err) {
-        next(err);
+const getMethod = (Post) => {
+    return async (req, res, next) => {
+        try {
+            const result = await Post.find({});
+            const responseData = responseDataForm(null, "board get request complete", result);
+            res.status(200).json({ responseData });
+        } catch (err) {
+            next(err);
+        }
     }
 }
 
-const postMethod = (redirect) => {
+
+const postMethod = (Post, PostType) => {
     return async (req, res, next) => {
         // 값 받기 
         console.log(req.files);
@@ -48,7 +39,7 @@ const postMethod = (redirect) => {
             });
             console.log(`result : ${result}`);
 
-            const responseData = responseDataForm(`/post/${redirect}/${result._id}`, "board post request complete", result);
+            const responseData = responseDataForm(`/post/${PostType}/${result._id}`, "board post request complete", result);
             res.status(200).json({ responseData });
         } catch (err) {
             next(err);
@@ -57,7 +48,7 @@ const postMethod = (redirect) => {
 }
 
 
-const putMethod = (redirect) => {
+const putMethod = (Post, PostType) => {
     return async (req, res, next) => {
         // 값 받기
         const getUserId = req.userId;
@@ -88,7 +79,7 @@ const putMethod = (redirect) => {
                 const result = await foundPost.save();
                 console.log(result);
 
-                const responseData = responseDataForm(`/post/${redirect}/${result._id}`, "board put request complete", result);
+                const responseData = responseDataForm(`/post/${PostType}/${result._id}`, "board put request complete", result);
                 res.status(200).json({ responseData });
             } else {
                 res.status(401).json({ message: "권한 없음" });
@@ -101,44 +92,47 @@ const putMethod = (redirect) => {
 }
 
 
-const deleteMethod = async (req, res, next) => {
-    // 값 받기
-    const getUserId = req.userId;
-    const getPostId = req.body.postId;
+const deleteMethod = (Post, Comment) => {
+    return async (req, res, next) => {
+        // 값 받기
+        const getUserId = req.userId;
+        const getPostId = req.body.postId;
 
-    if (!getPostId) {
-        return res.status(400).json({ "message": "빠뜨린 입력 존재" });
-    }
-
-    try {
-        const foundPost = await Post.findById(getPostId).exec();
-
-        // 작성자, 권한 확인
-        if (foundPost.userId === getUserId || req.allowed) {
-
-            // upload 파일 지우기
-            foundPost.attachedFile.map((name) => {
-                console.log(name);
-                fs.unlink(`${name}`, (err) => {
-                    console.log(err);
-                });
-            })
-
-            // 삭제
-            const postResult = await Post.deleteOne({ _id: getPostId });
-            console.log(postResult);
-            const commentResults = await Comment.deleteMany({ postId: getPostId });
-            console.log(commentResults);
-
-            const responseData = responseDataForm(`/board/all`, "board delete request complete", null);
-            res.status(200).json({ responseData });
+        if (!getPostId) {
+            return res.status(400).json({ "message": "빠뜨린 입력 존재" });
         }
-        else {
-            res.status(401).json({ "message": "권한 없음" });
+
+        try {
+            const foundPost = await Post.findById(getPostId).exec();
+
+            // 작성자, 권한 확인
+            if (foundPost.userId === getUserId || req.allowed) {
+
+                // upload 파일 지우기
+                foundPost.attachedFile.map((name) => {
+                    console.log(name);
+                    fs.unlink(`${name}`, (err) => {
+                        console.log(err);
+                    });
+                })
+
+                // 삭제
+                const postResult = await Post.deleteOne({ _id: getPostId });
+                console.log(postResult);
+                const commentResults = await Comment.deleteMany({ postId: getPostId });
+                console.log(commentResults);
+
+                const responseData = responseDataForm(`/board/all`, "board delete request complete", null);
+                res.status(200).json({ responseData });
+            }
+            else {
+                res.status(401).json({ "message": "권한 없음" });
+            }
+        } catch (err) {
+            next(err);
         }
-    } catch (err) {
-        next(err);
     }
 }
 
-module.exports = { getMethod, postMethod, putMethod, deleteMethod, setPost, setComment }
+
+module.exports = { getMethod, postMethod, putMethod, deleteMethod}
