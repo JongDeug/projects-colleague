@@ -27,7 +27,11 @@ const getMethod = (Post, Comment) => {
             const result = resultPost.toObject();
 
             // host 이름(비교 하려고, 수정, 삭제), 댓글들 주기
-            result.host = getUserId;
+            if (!getUserId) {
+                result.host = "Non-Member";
+            } else {
+                result.host = getUserId;
+            }
             result.comments = foundComments;
 
             // likeHit 유무 확인 코드

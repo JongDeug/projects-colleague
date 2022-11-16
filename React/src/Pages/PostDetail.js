@@ -39,7 +39,7 @@ function PostDetail() {
     set_id(_id);
     setPostBoard(postBoard);
     return axios({
-      url: `/api/${postBoard}/${_id}/${method}`,
+      url: `/${postBoard}/${_id}/${method}`,
       method: "get",
       headers: {
         Authorization: `Bearer ${token}`,

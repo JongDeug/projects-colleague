@@ -46,7 +46,7 @@ function UpdatePost() {
   async function requestGetDetail(postId, method) {
     const token = sessionStorage.getItem("accessToken");
     return axios({
-      url: `/api/board/${postId}/${method}`,
+      url: `/boardAnything/${postId}/${method}`,
       method: "get",
       headers: {
         Authorization: `Bearer ${token}`,
