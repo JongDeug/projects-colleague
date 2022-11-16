@@ -20,9 +20,9 @@ router.route('/crud')
     .delete(setDB(postController, post, comment), verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.deleteMethod);
 
 router.route('/comment/crud')
-    .post(setDB(commentController, post, comment), commentController.postMethod)
-    .put(setDB(commentController, post, comment), commentController.putMethod)
-    .delete(setDB(commentController, post, comment), commentController.deleteMethod);
+    .post(setDB(commentController, post, comment), commentController.postMethod(redirect))
+    .put(setDB(commentController, post, comment), commentController.putMethod(redirect))
+    .delete(setDB(commentController, post, comment), commentController.deleteMethod(redirect));
 
 router.route('/search')
     .post(setDB(searchPostController, post, comment), searchPostController.postMethod);

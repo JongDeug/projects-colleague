@@ -11,7 +11,14 @@ const corsOptions = require("./config/corsOptions");
 const { default: mongoose } = require("mongoose");
 const connectDB = require("./config/dbConn");
 const crawler = require("./middleware/crawler");
+const fs = require("fs");
 const PORT = 3500;
+
+
+// uploads 파일 생성
+if (!fs.existsSync("uploads")) {
+    fs.mkdirSync("uploads");
+}
 
 connectDB();
 // crawler(); // 주기랑 다시 설정해야함.
