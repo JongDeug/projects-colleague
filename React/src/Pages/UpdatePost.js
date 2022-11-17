@@ -46,7 +46,11 @@ function UpdatePost() {
 
   async function requestGetDetail(postId, method) {
     return axios({
+<<<<<<< HEAD
       url: `/${postBoard}/${postId}/${method}`,
+=======
+      url: `/boardAnything/${postId}/${method}`,
+>>>>>>> afcf3bff2a3c0a5b0f86befd451a1fff28aa2a7f
       method: "get",
     })
       .then((res) => {

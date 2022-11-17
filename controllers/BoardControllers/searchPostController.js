@@ -23,11 +23,7 @@ const postMethod = (Post) => {
             } else {
                 options = [{}];
             }
-            // else {
-            //     options = [
-            //         {postContent: new RegExp(getWhatToSearch)}
-            //     ]
-            // }
+
             const result = await Post.find({ $or: options }).exec();
 
             const responseData = responseDataForm("/board/all", "searchPost post request complete", result);
