@@ -8,6 +8,7 @@ import axios from 'axios';
 function Like(props) {
   const [isLiked, setIsLiked] = useState(props.likeHitBool);
   const [postid, setPostid] = useState(props.postid);
+  const [likeHit, setLikeHit] = useState(props.likeHit);
 
   const likeBtnStyle = {
     likeBtn: {
@@ -15,7 +16,10 @@ function Like(props) {
     },
   };
   useEffect(()=>{
+    console.log(props);
+    console.log(likeHit);
     setIsLiked(props.likeHitBool);
+    setLikeHit(props.likeHit);
   })
 
   function requestLike(){
@@ -31,6 +35,8 @@ function Like(props) {
         console.log(res.data.responseData.result);
         setIsLiked(res.data.responseData.result.likeHitBool);
         props.setLikeHitBool(res.data.responseData.result.likeHitBool);
+        setLikeHit(res.data.responseData.result.likeHit);
+        props.setLikeHit(res.data.responseData.result.likeHit);
         console.log(postid);
         return res.data.responseData.result;
       })
@@ -57,7 +63,7 @@ function Like(props) {
         size={36}
         className="likeBtn"
       ></GoHeart>
-      <span>{props.likeHit}</span>
+      <span>{likeHit.length}</span>
     </div>
   );
 }

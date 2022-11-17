@@ -9,8 +9,11 @@ function BodyContents(props) {
     const [postUserId, setPostUserId] = useState(props.post.userId);
     const [postDate, setPostDate] = useState(props.post.postTime);
     const [postHit, setPostHit] = useState(props.post.hit);
-    const [postLikehit, setPostLikehit] = useState(props.post.postLikehit);
+    const [postLikehit, setPostLikehit] = useState(props.post.likeHit);
     const [postType, setPostType]= useState(props.post.postType);
+
+    console.log(props.post);
+    console.log(props.likeHit);
 
     var postBoard;
     if(postType === "질문 게시판"){
@@ -30,7 +33,7 @@ function BodyContents(props) {
             <th className='content post_writer'>{postUserId}</th>
             <th className='content post_date'>{postDate}</th>
             <th className='content post_hit'>{postHit}</th>
-            <th className='content post_likehit'>{postLikehit}</th>
+            <th className='content post_likehit'>{postLikehit.length}</th>
         </tr>
     )
 }

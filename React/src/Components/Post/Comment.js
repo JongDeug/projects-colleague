@@ -1,24 +1,33 @@
 import axios from 'axios';
 import React, {useEffect, useState } from "react";
 import { Button, Form, FormControl, InputGroup } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
-import { commentList } from '../../Data';
-import '../../css/like.css';
+import '../../css/comment.css';
 
-function Comment (comment, currentUser) {
-    const [userId, setUserId] = useState(comment.comment.userId);
-    const [contents, setContents] = useState(comment.comment.contents);
-    const [commentTime, setcommentTime] = useState(comment.comment.commentTime);
+function Comment (props) {
+    const [userId, setUserId] = useState(props.comment.userId);
+    const [contents, setContents] = useState(props.comment.contents);
+    const [commentTime, setcommentTime] = useState(props.comment.commentTime);
     const [onUpdate, setOnUpdate] = useState(false);
-    const [commentId, setCommentId] = useState(comment.comment._id);    
-    const [postId, setPostId] = useState(comment.comment.postId);
-    const [isUser, setIsUser] = useState(currentUser===userId);
-
+    const [commentId, setCommentId] = useState(props.comment._id);    
+    const [postId, setPostId] = useState(props.comment.postId);
+    const [commentType,setCommentType] = useState(props.comment.commentType);
+    const [isUser, setIsUser] = useState(props.currentUser===userId);
+    console.log(props);
+    var postBoard;
+    if(commentType === "질문 게시판"){
+        postBoard = "boardQuestion";
+    }else if(commentType === "자유 게시판"){
+        postBoard = "boardAnything";
+    }else if(commentType === "자랑 게시판"){
+        postBoard = "boardBoast";
+    }else if(commentType === "정보 공유 게시판"){
+        postBoard = "boardInformation";
+    }
     function requestCommentPut(){
         const token = sessionStorage.getItem("accessToken");
     
         return axios({
-            url: "/api/board/comment/crud",
+            url: `/api/${postBoard}/comment/manage`,
             method:'put',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -33,8 +42,6 @@ function Comment (comment, currentUser) {
             window.location = `${res}`;
         }).catch((err)=>{
             if (err) {
-                console.log(commentId);
-                console.log(contents);
                 console.log(err.response.data);
                 console.log(err.response.status);
                 console.log(err.response.header);
@@ -43,9 +50,9 @@ function Comment (comment, currentUser) {
     }
     function requestCommentDelete(){
         const token = sessionStorage.getItem("accessToken");
-        setPostId(`${comment.comment.postId}`);
+        setPostId(`${props.comment.postId}`);
         return axios({
-            url: '/api/board/comment/crud',
+            url: `/api/${postBoard}/comment/manage`,
             method: 'delete',
             headers: {
                 Authorization: `Bearer ${token}`
@@ -92,7 +99,8 @@ function Comment (comment, currentUser) {
                     onUpdate?
                     <input type='button' value='작성' className='cmtbtn comment_write' onClick={()=>{EndUpdating();  requestCommentPut();}}></input>
                     :
-                    (isUser&&<span>
+                    (
+                    isUser&&<span>
                     <input type='button' value='수정' className='cmtbtn comment_update' onClick={isUpdating}></input>
                     <input type='button' value='삭제' className='cmtbtn comment_delete' onClick={requestCommentDelete}></input>
                     </span>)
@@ -102,108 +110,5 @@ function Comment (comment, currentUser) {
     )
 }
 
-// function Comments(props) {
-//     const [postId,setPostId] = useState(props._id);
-//     const [userId,setUserId] = useState();
-//     const [comment, setComment] = useState('');
-//     const [commentlist, setCommentlist] = useState(props.comments);
-//     const commentarr = [];
-
-
-//     // useEffect(()=>{
-//     //     // setCommentlist(props.comments);
-//     //     for(var i=0; i<props.comments.length; i++){
-//     //         commentarr.push(props.comments[i]);
-//     //     }
-//     //     console.log(props.comments[0]);
-//     //     console.log(commentlist)
-//     //     console.log(commentarr);
-//     //     console.log("commentlist");
-//     //     // setPostId(props._id);
-//     //     console.log(postId);
-//     // },[]);
-
-//     const onCommentHandler = (event) => {
-//         setComment(event.currentTarget.value);
-//     };
-
-//     function PrintComments(){
-//         const list = [];
-
-//         commentarr&&commentarr.map((list,i)=>{
-//             list.push(
-//                 <Comment
-//                     comment={list}
-//                     key={i}
-//                 />
-//             )
-//         });
-
-//         return list;
-//     }
-
-//     function requestCommentPost(){
-//         const token = sessionStorage.getItem("accessToken");
-
-//         return axios({
-//             url: "/api/board/comment/crud",
-//             method:'post',
-//             headers: {
-//                 Authorization: `Bearer ${token}`,
-//             },
-//             data: {
-//                 postId : postId,
-//                 contents : comment,
-//             }
-//         }).then((res)=>{
-//             console.log(res.data.responseData.result);
-//             return res.data.responseData.redirect;
-//         }).then((res)=>{
-//             window.location = `${res}`;
-//         }).catch((err)=>{
-//             if (err) {
-//                 console.log(err.response.data);
-//                 console.log(err.response.status);
-//                 console.log(err.response.header);
-//             }
-//         });
-//     }
-
-
-//     return (
-//         <>
-//         <div className='comment_area'>
-//             <div className='commentslist'>
-//                 {/* {commentlist&&commentlist.map((list,i)=>{
-//                     return(
-//                         <Comment
-//                             userId={list.userId}
-//                             contents={list.contents}
-//                             commentTime={list.commentTime}
-//                             key={i}
-//                         />
-//                     )
-//                 })
-//             } */}
-//             <PrintComments></PrintComments>
-            
-//             </div>
-//             <div className='input_comment'>
-//                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-//                     <Form.Control placeholder='댓글 작성' as="textarea" rows={3} className='comment_form' onChange={onCommentHandler}/>
-//                     <Button 
-//                         variant="outline-secondary" 
-//                         className='write_button'
-//                         onClick={requestCommentPost}
-//                     >작성</Button>
-//                 </Form.Group>
-        
-//             </div>
-//         </div>
-        
-        
-//         </>
-//     )
-// }
 
 export default Comment;

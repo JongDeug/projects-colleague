@@ -47,7 +47,7 @@ function App() {
         {/* <Route path='/post' element={<PostDetail />}></Route> */}
         <Route path='/post/:postType/:postId' element={<PostDetail />}></Route>
         <Route path='/writepost' element={<RegisterPost />}></Route>
-        <Route path='/updatepost/:postId' element={<UpdatePost />}></Route>
+        <Route path='/updatepost/:postType/:postId' element={<UpdatePost />}></Route>
         <Route path='/myact/post' element={<MyPostPage />}></Route>
         <Route path='/myact/like' element={<MyLikePage />}></Route>
         <Route path='/myact/comment' element={<MyCommentPage />}></Route>

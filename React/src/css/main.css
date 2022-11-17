@@ -1,6 +1,6 @@
 
 *{
-    margin: auto;
+    margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
@@ -15,7 +15,8 @@
     display: block;
 }
 .posts_main{
-    width: 1000px;
+    width: 800px;
+    margin: auto;
 }
 .main_tap{
     display: block;

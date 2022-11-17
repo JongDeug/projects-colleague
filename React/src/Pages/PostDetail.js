@@ -20,7 +20,7 @@ function PostDetail() {
   const [postContent, setPostContent] = useState("");
   const [postTime, setPostTime] = useState("");
   const [hit, setHit] = useState("");
-  const [likeHit, setLikeHit] = useState("");
+  const [likeHit, setLikeHit] = useState([]);
   const [likeHitBool, setLikeHitBool] = useState();
   const [keywords, setKeywords] = useState("");
   const [attachedFile, setAttatchedFile] = useState("");
@@ -39,33 +39,25 @@ function PostDetail() {
     set_id(_id);
     setPostBoard(postBoard);
     return axios({
-      url: `/api/${postBoard}/${_id}/${method}`,
+      url: `/${postBoard}/${_id}/${method}`,
       method: "get",
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => {
-        // setPostId(res.data.responseData.result._id);//추가
-        console.log(params);
-        console.log(postBoard);
-        console.log(res.data.responseData.result);
         setPostTitle(res.data.responseData.result.postTitle);
         setPostContent(res.data.responseData.result.postContent);
         setPostTime(res.data.responseData.result.postTime);
         setPostUserId(res.data.responseData.result.userId);
-        setLikeHit(res.data.responseData.result.setLikeHit);
+        setLikeHit(res.data.responseData.result.likeHit);
         setLikeHitBool(res.data.responseData.result.likeHitBool);
-        // if(res.data.responseData.result.likeHitBool){
-        //   setLikeHitBool(!true);
-        // }
         setKeywords(res.data.responseData.result.keywords);
         setAttatchedFile(res.data.responseData.result.attachedFile);
         setComments(res.data.responseData.result.comments);
         setCurrentUser(res.data.responseData.result.host);
         setIsUser(res.data.responseData.result.host===res.data.responseData.result.userId);
-        console.log(res.data.responseData.result);
-        console.log(res.data.responseData.result.likeHitBool);
+        console.log(res.data.responseData.result.likeHit)
         console.log(res.data.responseData.result.attachedFile);
         console.log(typeof res.data.responseData.result.attachedFile);
       })
@@ -85,7 +77,7 @@ function PostDetail() {
   function requestDelete() {
     const token = sessionStorage.getItem("accessToken");
     return axios({
-      url: `/api/${postBoard}/crud`,
+      url: `/api/${postBoard}/manage`,
       method: "delete",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -129,7 +121,7 @@ function PostDetail() {
     const token = sessionStorage.getItem("accessToken");
 
     return axios({
-      url: `/api/${postBoard}/comment/crud`,
+      url: `/api/${postBoard}/comment/manage`,
       method: 'post',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -203,14 +195,14 @@ function PostDetail() {
             </article>
 
             <div className="btn-wrap">
-              <Like postid={_id} likeHitBool={likeHitBool} setLikeHitBool={setLikeHitBool} likeHit={likeHit} postBoard={postBoard}>
+              <Like postid={_id} likeHitBool={likeHitBool} setLikeHitBool={setLikeHitBool} likeHit={likeHit} setLikeHit={setLikeHit} postBoard={postBoard}>
 
               </Like>
               {isUser&&
               <><p className="postDetailButtons mt-4 float-right">
               
                 <div>
-                  <Link to={{ pathname: `/updatepost/${_id}`, state: _id }}>
+                  <Link to={{ pathname: `/updatepost/${postBoard}/${_id}`, state:{postBoard:postBoard, postId:_id }}}>
                     <Button
                       className="btn-success udPostDetailButtons"
                     // type="submit"

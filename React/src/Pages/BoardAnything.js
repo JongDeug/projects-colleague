@@ -21,13 +21,9 @@ function BoardFree () {
     const offset = (page - 1) * limit;
     
     function requestGet() {
-        const token = sessionStorage.getItem("accessToken");
         return axios({
-            url:"/api/boardAnything/crud",
+            url:"/boardAnything/read",
             method:"get",
-            headers:{
-                Authorization: `Bearer ${token}`
-            },
         }).then((res)=>{
             setPosts(res.data.responseData.result);
             console.log(res.data.responseData.result);
@@ -42,13 +38,9 @@ function BoardFree () {
     }
 
     function requestSearch() {
-        const token = sessionStorage.getItem("accessToken");
         return axios({
-            url:"/api/boardAnything/search",
+            url:"/boardAnything/search",
             method:"post",
-            headers:{
-                Authorization: `Bearer ${token}`
-            },
             data:{
                 whatToSearch:searchWord,
                 whereToSearch:searchOption,

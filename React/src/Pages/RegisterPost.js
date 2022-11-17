@@ -61,7 +61,7 @@ function RegisterPost() {
     });
 
     return axios({
-      url: `/api/${route}/crud`,
+      url: `/api/${route}/manage`,
       method: "post",
       headers: {
         'Content-Type': `multipart/form-data`,
@@ -89,7 +89,7 @@ function RegisterPost() {
   return (
     <div className="container mb-5">
       <div className="row">
-        <div className="col-md-8 col-md-offset-2">
+        <div className="col-md-8 col-md-offset-2 setcenter">
           <h2 className="text-center mt-5">게시글 작성</h2>
 
           <form>

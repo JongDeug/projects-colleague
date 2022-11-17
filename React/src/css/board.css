@@ -1,11 +1,19 @@
 *{
-    margin: auto;
+    margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Pretendard-Regular';
 }
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}
 main{
     width:800px;
+    margin: auto;
 }
 
 h2{
@@ -89,7 +97,7 @@ h2{
 .nav{
     justify-content: center;
     width: 800px;
-    margin-bottom: 20px;
+    margin: auto auto 20px auto;
     
 }
 .btn-primary{

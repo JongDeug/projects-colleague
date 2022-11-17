@@ -8,12 +8,13 @@ import { getPostById } from '../Data';
 function UpdatePost() {
   const params = useParams();
   const [postId, setPostId] = useState(params.postId);
+  const [postBoard, setPostBoard] = useState(params.postType);
   const [post, setPost] = useState([]);
   const [postContent, setPostContent] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [keywords, setKeywords] = useState("");
-  const [attachedFile, setAttachedFile] = useState("");
+  const [attachedFile, setAttachedFile] = useState([]);
   const frm = new FormData();
 
   // function requestlist(){
@@ -44,13 +45,9 @@ function UpdatePost() {
   };
 
   async function requestGetDetail(postId, method) {
-    const token = sessionStorage.getItem("accessToken");
     return axios({
-      url: `/api/board/${postId}/${method}`,
+      url: `/${postBoard}/${postId}/${method}`,
       method: "get",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     })
       .then((res) => {
         setTitle(res.data.responseData.result.postTitle);
@@ -83,7 +80,7 @@ function UpdatePost() {
     });
 
     return await axios({
-      url: "/api/board/crud",
+      url: `/api/${postBoard}/manage`,
       method: "put",
       headers: {
         'Content-Type': `multipart/form-data`,
@@ -138,6 +135,7 @@ function UpdatePost() {
                 id="attachedfile"
                 name="attachedFile"
                 className="form-control"
+                defaultValue={attachedFile}
                 multiple
                 onChange={onAttachedFileHandler}
               ></input>

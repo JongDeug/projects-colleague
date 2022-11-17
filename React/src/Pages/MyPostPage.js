@@ -6,17 +6,17 @@ import BodyContents from '../Components/Board/BoardBody';
 import Pagination from '../Components/Board/Pagination';
 import { Link } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
-import { Button, Form, InputGroup } from 'react-bootstrap';
 
 function MyPostPage () {
     const [posts, setPosts] = useState([]);
+    const [postsAll, setPostsAll] = useState({});
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     const offset = (page - 1) * limit;
 
     useEffect(()=>{
         requestGet();
-        console.log(posts);
+        console.log(postsAll);
     }, []);
 
     function requestGet() {
@@ -46,6 +46,7 @@ function MyPostPage () {
                 console.log(post);
             })
             setPosts(list);
+            setPostsAll(res.data.responseData.result);
 
             console.log(res.data.responseData.result);
             console.log(posts);
