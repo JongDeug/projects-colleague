@@ -4,8 +4,8 @@ const postController = require("../controllers/BoardControllers/postController")
 const searchPostController = require("../controllers/BoardControllers/searchPostController");
 const postDetailController = require("../controllers/BoardControllers/postDetailController");
 const verifyJWTWirter = require("../middleware/verifyJWTWirter");
-const Post = require('../model/PostInformation');
-const Comment = require('../model/CommentInformation');
+const Post = require('../model/PostQuestion');
+const Comment = require('../model/CommentQuestion');
 
 router.get("/read", postController.getMethod(Post));
 router.post("/search", searchPostController.postMethod(Post));
