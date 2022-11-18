@@ -14,7 +14,7 @@ router.route('/manage')
     // .get(postController.getMethod(Post))
     .post(upload.array('attachedFile'), postController.postMethod(Post, PostType))
     .put(upload.array('attachedFile'), postController.putMethod(Post, PostType))
-    .delete(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.deleteMethod(Post, Comment));
+    .delete(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.deleteMethod(Post, Comment, PostType));
 
 router.route('/comment/manage')
     .post(commentController.postMethod(Comment, PostType))

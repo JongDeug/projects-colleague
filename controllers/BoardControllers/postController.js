@@ -92,7 +92,7 @@ const putMethod = (Post, PostType) => {
 }
 
 
-const deleteMethod = (Post, Comment) => {
+const deleteMethod = (Post, Comment, PostType) => {
     return async (req, res, next) => {
         // 값 받기
         const getUserId = req.userId;
@@ -121,8 +121,18 @@ const deleteMethod = (Post, Comment) => {
                 console.log(postResult);
                 const commentResults = await Comment.deleteMany({ postId: getPostId });
                 console.log(commentResults);
-
-                const responseData = responseDataForm(`/board/all`, "board delete request complete", null);
+                
+                let redirect;
+                if(PostType === "boardInformation"){
+                    redirect = "/board/info";
+                }else if(PostType === "boardAnything"){
+                    redirect = "/board/free";
+                }else if(PostType === "boardQuestion"){
+                    redirect = "/board/question";
+                }else if(PostType === "boardBoast"){
+                    redirect = "/board/boast";
+                }
+                const responseData = responseDataForm(redirect, "board delete request complete", null);
                 res.status(200).json({ responseData });
             }
             else {
