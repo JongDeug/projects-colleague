@@ -12,6 +12,8 @@ const verifyJWTWriter = (req, res, next) => {
         token, // accessToken
         process.env.ACCESS_TOKEN_SECRET, // .env 파일, accessToken 확인을 위해 맨처음 만든 암호 코드
         (err, decoded) => {
+
+            // 일부러 error 발생 시킴.
             if (err) {
                 req.userId = null;
                 // return이 없으면 밑 코드 실행 -> UserInfo가 뭔지 모름.
