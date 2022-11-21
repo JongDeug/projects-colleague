@@ -23,7 +23,7 @@ const userSchema = new schema({
     required: true,
   },
   interestKeywords: {
-    type: String,
+    type: [String],
     required: true,
   },
   refreshToken: String,

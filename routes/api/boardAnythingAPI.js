@@ -5,6 +5,7 @@ const ROLES_LIST = require("../../config/roles_list");
 const postController = require("../../controllers/BoardControllers/postController");
 const commentController = require("../../controllers/BoardControllers/commentController");
 const likeHitController = require("../../controllers/BoardControllers/likeHitController");
+const recommendPostsController = require("../../controllers/BoardControllers/recommendPostsController");
 const Post = require('../../model/PostAnything');
 const PostType = "boardAnything";
 const Comment = require('../../model/CommentAnything');
@@ -26,6 +27,9 @@ router.route('/comment/manage')
 
 router.route('/like/:postId')
     .get(likeHitController.getMethod(Post));
+
+router.route('/recommend')
+    .get(recommendPostsController.getMethod);
 
 // search route를 밑으로 내려버리면 /search가 postId로 들어가면서 오류 발생시킴.
 // router.route('/:postId/:method')

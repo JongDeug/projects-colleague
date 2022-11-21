@@ -36,7 +36,7 @@ const userSchema = new schema({
     type: Boolean
   },
   keywords: {
-    type: String,
+    type: [String],
     required: true,
   },
   attachedFile: {
