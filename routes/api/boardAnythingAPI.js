@@ -28,8 +28,6 @@ router.route('/comment/manage')
 router.route('/like/:postId')
     .get(likeHitController.getMethod(Post));
 
-router.route('/recommend')
-    .get(recommendPostsController.getMethod);
 
 // search route를 밑으로 내려버리면 /search가 postId로 들어가면서 오류 발생시킴.
 // router.route('/:postId/:method')

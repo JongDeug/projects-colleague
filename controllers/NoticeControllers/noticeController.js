@@ -11,7 +11,7 @@ const getMethod = async (req, res, next) => {
     let result = [];
     try {
         // 내가 작성한 post 찾기 
-        for (const key in Post) {
+        for (const key in DB.Post) {
             resultPost[key] = await DB.Post[key].find({ userId: getUserId }).exec();
         }
 
@@ -38,17 +38,17 @@ const getMethod = async (req, res, next) => {
         }
 
         // Notice를 다 찾았으니 Commend에서 몇 가지 정보를 들고와서 합쳐서 return 
-        for(const notice of resultNotice){
+        for (const notice of resultNotice) {
             const postType = notice.postType;
             let foundComment;
 
-            if(postType === "boardAnything"){
+            if (postType === "boardAnything") {
                 foundComment = await DB.Comment["anything"].findById(notice.commentId).exec();
-            }else if(postType == "boardInformation"){
+            } else if (postType == "boardInformation") {
                 foundComment = await DB.Comment["information"].findById(notice.commentId).exec();
-            }else if(postType == "boardQuestion"){
+            } else if (postType == "boardQuestion") {
                 foundComment = await DB.Comment["question"].findById(notice.commentId).exec();
-            }else if(postType === "boardBoast"){
+            } else if (postType === "boardBoast") {
                 foundComment = await DB.Comment["boast"].findById(notice.commentId).exec();
             }
 
@@ -68,5 +68,21 @@ const getMethod = async (req, res, next) => {
     }
 }
 
+const deleteMethod = async (req, res, next) => {
+    const getNoticeId = req.body.noticeId;
+    try {
+        if(!getNoticeId){
+            return res.status(400).json({message: "빠뜨린 입력 존재"});
+        }
+        const deleteNotice = await Notice.findByIdAndDelete(getNoticeId);
+        console.log(deleteNotice);
+        
+        const responseData = responseDataForm(null, "notice delete request complete", null);
+        res.status(200).json({responseData});
+    } catch (err) {
+        next(err);
+    }
+}
 
-module.exports = { getMethod }
+
+module.exports = { getMethod, deleteMethod }
