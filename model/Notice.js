@@ -5,17 +5,18 @@ const userSchema = new schema({
   userId: {
     type: String,
     required: true,
-    //ref: "Member",
   },
   postId: {
-    type: Number,
+    type: String,
     required: true,
-    //ref: "Post",
+  },
+  postType: {
+    type: String,
+    required: true
   },
   commentId: {
-    type: Number,
+    type: String,
     required: true,
-    //ref: "Comment",
   },
 }, {
   versionKey: false
