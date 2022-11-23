@@ -1,12 +1,7 @@
 const Member = require("../../model/Member");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const path = require("path");
 const responseDataForm = require("../../config/responseDataForm");
-
-const getMethod = (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "..", "/views", "login.html"));
-}
 
 
 const postMethod = async (req, res, next) => {
@@ -63,7 +58,7 @@ const postMethod = async (req, res, next) => {
 
             const result = {};
             result.accessToken = accessToken;
-            console.log(result);
+            result.host = getUserId;
             const responseData = responseDataForm("/", "login post request complete", result);
 
             res.status(200).json({ responseData });
@@ -77,5 +72,4 @@ const postMethod = async (req, res, next) => {
 
 }
 
-// module.exports = { postMethod };
-module.exports = { getMethod, postMethod };
+module.exports = { postMethod };

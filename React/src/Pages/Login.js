@@ -37,6 +37,8 @@ export default function Login() {
     })
       .then((res) => {
         const accessToken = res.data.responseData.result.accessToken;
+        const host = res.data.responseData.result.host;
+        sessionStorage.setItem("host", host);
         sessionStorage.setItem("accessToken", accessToken);
         return res.data.responseData.redirect;
       })

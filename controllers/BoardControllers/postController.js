@@ -122,6 +122,7 @@ const deleteMethod = (Post, Comment, PostType) => {
                 const commentResults = await Comment.deleteMany({ postId: getPostId });
                 console.log(commentResults);
                 
+                // 종류에 따라 redirect 선택
                 let redirect;
                 if(PostType === "boardInformation"){
                     redirect = "/board/info";

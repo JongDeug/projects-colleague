@@ -1,19 +1,7 @@
 const responseDataForm = require("../../config/responseDataForm");
+const DB = require("../../config/dbTemplate");
 const Notice = require("../../model/Notice");
-const PostAnything = require("../../model/PostAnything");
-const PostBoast = require("../../model/PostBoast");
-const PostInformation = require("../../model/PostInformation");
-const PostQuestion = require("../../model/PostQuestion");
-const Post = {
-    "anything": PostAnything,
-    "boast": PostBoast,
-    "information": PostInformation,
-    "question": PostQuestion
-}
-const CommentAnything = require("../../model/CommentAnything");
-const CommentBoast = require("../../model/CommentBoast");
-const CommentInformation = require("../../model/CommentInformation");
-const CommentQuestion = require("../../model/CommentQuestion");
+
 
 const getMethod = async (req, res, next) => {
     const getUserId = req.userId;
@@ -24,7 +12,7 @@ const getMethod = async (req, res, next) => {
     try {
         // 내가 작성한 post 찾기 
         for (const key in Post) {
-            resultPost[key] = await Post[key].find({ userId: getUserId }).exec();
+            resultPost[key] = await DB.Post[key].find({ userId: getUserId }).exec();
         }
 
         // postId만 뽑기
@@ -55,13 +43,13 @@ const getMethod = async (req, res, next) => {
             let foundComment;
 
             if(postType === "boardAnything"){
-                foundComment = await CommentAnything.findById(notice.commentId).exec();
+                foundComment = await DB.Comment["anything"].findById(notice.commentId).exec();
             }else if(postType == "boardInformation"){
-                foundComment = await CommentInformation.findById(notice.commentId).exec();
+                foundComment = await DB.Comment["information"].findById(notice.commentId).exec();
             }else if(postType == "boardQuestion"){
-                foundComment = await CommentQuestion.findById(notice.commentId).exec();
+                foundComment = await DB.Comment["question"].findById(notice.commentId).exec();
             }else if(postType === "boardBoast"){
-                foundComment = await CommentBoast.findById(notice.commentId).exec();
+                foundComment = await DB.Comment["boast"].findById(notice.commentId).exec();
             }
 
             const combineNoticeWithComment = notice.toObject(); // 변환!

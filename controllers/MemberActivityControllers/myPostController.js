@@ -1,22 +1,13 @@
 const responseDataForm = require("../../config/responseDataForm");
-const PostAnything = require("../../model/PostAnything");
-const PostBoast = require("../../model/PostBoast");
-const PostInformation= require("../../model/PostInformation");
-const PostQuestion = require("../../model/PostQuestion");
+const DB = require("../../config/dbTemplate");
 
 const getMethod = async (req, res, next) => {
   const getUserId = req.userId;
+  const result = {};
   try {
-    const resultAnything = await PostAnything.find({ userId: getUserId });
-    const resultBoast = await PostBoast.find({ userId: getUserId });
-    const resultInformation = await PostInformation.find({ userId: getUserId });
-    const resultQuestion = await PostQuestion.find({ userId: getUserId });
 
-    const result = {
-        "anything": resultAnything,
-        "boast": resultBoast,
-        "information": resultInformation,
-        "question": resultQuestion
+    for (const key in DB.Post) {
+      result[key] = await DB.Post[key].find({ userId: getUserId });
     }
 
     const responseData = responseDataForm(
@@ -24,7 +15,7 @@ const getMethod = async (req, res, next) => {
       "board get request complete",
       result
     );
-    
+
     res.status(200).json({ responseData });
   } catch (err) {
     next(err);

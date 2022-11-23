@@ -7,6 +7,7 @@ const CommentAnything = require("../../model/CommentAnything");
 const CommentBoast = require("../../model/CommentBoast");
 const CommentInformation = require("../../model/CommentInformation");
 const CommentQuestion = require("../../model/CommentQuestion");
+const DB = require("../../config/dbTemplate");
 const bcrypt = require("bcryptjs");
 const responseDataForm = require("../../config/responseDataForm");
 
@@ -31,31 +32,53 @@ const deleteMethod = async (req, res, next) => {
         // body 비밀번호 체킹
         const match = await bcrypt.compare(getPassword, foundUser.password);
         if (match) {
-            Post.map((db, index) => {
-                db.find({ userId: getUserId }, function (err, docs) {
-                    if (err) {
-                        return res.status(401).json({ "message": "내 포스트를 찾을 수 없음" });
-                    }
-                    docs.forEach(async (doc) => {
-                        // 자신의 포스트에 댓글들 싹 삭제
-                        const deleteComment = await Comment[index].deleteMany({ postId: doc._id });
-                        console.log("deleteComment : %s", deleteComment);
-                    });
-                });
-            })
+            
+            
+            for(const key in DB.Post){
+                // 자신의 post 찾기
+                const foundPost = await DB.Post[key].find({userId : getUserId});
+                
+                for(const post of foundPost){
+                    // postId를 통해 내 포스터의 모든 댓글 삭제
+                    const deleteComment = await DB.Comment[key].deleteMany({postId : post._id});
+                    console.log(deleteComment);
+                }
+            }
+
+
+
+            // Post.map((db, index) => {
+            //     db.find({ userId: getUserId }, function (err, docs) {
+            //         if (err) {
+            //             return res.status(401).json({ "message": "내 포스트를 찾을 수 없음" });
+            //         }
+            //         docs.forEach(async (doc) => {
+            //             // 자신의 포스트에 댓글들 싹 삭제
+            //             const deleteComment = await Comment[index].deleteMany({ postId: doc._id });
+            //             console.log("deleteComment : %s", deleteComment);
+            //         });
+            //     });
+            // })
             // 자신의 포스트들 찾기
 
             
             const resultMember = await Member.deleteOne({ userId: getUserId });
             console.log(resultMember);
-            Post.map(async (db)=> {
-                const result = await db.deleteMany({userId: getUserId});
-                console.log(result);
-            });
-            Comment.map(async (db)=> {
-                const result = await db.deleteMany({userId: getUserId});
-                console.log(result);
-            });
+
+            for(const key in DB.Post){
+                const resultPost = await DB.Post[key].deleteMany({userId: getUserId});
+                const resultComment = await DB.Comment[key].deleteMany({userId : getUserId});
+                console.log(resultPost);
+                console.log(resultComment);
+            }
+            // Post.map(async (db)=> {
+            //     const result = await db.deleteMany({userId: getUserId});
+            //     console.log(result);
+            // });
+            // Comment.map(async (db)=> {
+            //     const result = await db.deleteMany({userId: getUserId});
+            //     console.log(result);
+            // });
 
             // jwt(refreshToken) client에서 지우기
             res.clearCookie("jwt", { httpOnly: true });

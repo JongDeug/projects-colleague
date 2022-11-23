@@ -1,24 +1,15 @@
 const responseDataForm = require("../../config/responseDataForm");
-const CommentAnything = require("../../model/CommentAnything");
-const CommentBoast = require("../../model/CommentBoast");
-const CommentInformation= require("../../model/CommentInformation");
-const CommentQuestion = require("../../model/CommentQuestion");
+const DB = require("../../config/dbTemplate");
 
 const getMethod = async (req, res, next) => {
   const getUserId = req.userId;
+  const result = {};
   try {
-    const resultAnything = await CommentAnything.find({ userId: getUserId });
-    const resultBoast = await CommentBoast.find({ userId: getUserId });
-    const resultInformation = await CommentInformation.find({ userId: getUserId });
-    const resultQuestion = await CommentQuestion.find({ userId: getUserId });
-    
-    const result = {
-        "anything" : resultAnything,
-        "boast" : resultBoast,
-        "information" : resultInformation,
-        "question" : resultQuestion
+
+    for (const key in DB.Comment) {
+      result[key] = await DB.Comment[key].find({ userId: getUserId });
     }
-    
+
     const responseData = responseDataForm(
       null,
       "board get request complete",

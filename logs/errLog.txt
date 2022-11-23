@@ -320,3 +320,5 @@
 2022/11/24	02:35:19	ReferenceError: result is not defined
 2022/11/24	02:42:34	ReferenceError: result is not defined
 2022/11/24	02:55:34	ReferenceError: result is not defined
+2022/11/24	03:50:40	TypeError: Cannot read properties of undefined (reading 'find')
+2022/11/24	03:50:42	TypeError: Cannot read properties of undefined (reading 'find')
