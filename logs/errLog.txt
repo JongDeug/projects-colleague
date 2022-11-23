@@ -317,3 +317,6 @@
 2022/11/23	15:05:17	ReferenceError: _id is not defined
 2022/11/23	15:06:59	ValidationError: Notice validation failed: postId: Cast to Number failed for value "63736b24cd2c82672b47fc43" (type string) at path "postId", commentId: Cast to Number failed for value "new ObjectId("637db8833b77729039532ba6")" (type ObjectId) at path "commentId"
 2022/11/23	15:08:47	ValidationError: Notice validation failed: postId: Cast to Number failed for value "63736b24cd2c82672b47fc43" (type string) at path "postId"
+2022/11/24	02:35:19	ReferenceError: result is not defined
+2022/11/24	02:42:34	ReferenceError: result is not defined
+2022/11/24	02:55:34	ReferenceError: result is not defined
