@@ -13,6 +13,7 @@ const postMethod = (Comment, PostType) => {
 
         try {
             const foundComments = await Comment.find({ contents: contents });
+            // 나와 같은 내용물을 입력한 Comment를 찾고, postId와 userId가 같다면 duplicate임.
             const duplicate = foundComments.map((comment) => comment.userId === userId && comment.postId === postId)
                 .find((element) => element === true);
 

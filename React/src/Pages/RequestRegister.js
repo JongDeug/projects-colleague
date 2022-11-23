@@ -1,30 +1,30 @@
-import React, {Component} from 'react';
-import'../css/member.css';
+import React, { Component } from 'react';
+import '../css/member.css';
 import Error from '../Components/ErrorMessage';
-import {useState, useEffect, useCallback} from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 
-function RequestRegister () {
+function RequestRegister() {
     const [id, setId] = useState("");
     const [pw, setPw] = useState("");
-    const [pw_check, setPwCheck ] = useState("");
+    const [pw_check, setPwCheck] = useState("");
     const [name, setName] = useState("");
-    const [birth, setBirth]= useState("");
+    const [birth, setBirth] = useState("");
     const [email, setEmail] = useState("");
     const [keyword, setKeyword] = useState("");
     const [isEqual, setIsEqual] = useState(true);
 
     const onIdHandler = (event) => {
         setId(event.currentTarget.value);
-        console.log({id});
+        console.log({ id });
     };
 
     const onPwHandler = (event) => {
         const pw = document.querySelector('#pw').value;
         const pw_check = document.querySelector('#pw_check').value;
         setPw(event.currentTarget.value);
-        if(pw===pw_check){
+        if (pw === pw_check) {
             setIsEqual(true);
             console.log(pw);
             console.log(pw_check);
@@ -40,7 +40,7 @@ function RequestRegister () {
         const pw = document.querySelector('#pw').value;
         const pw_check = document.querySelector('#pw_check').value;
         setPwCheck(event.currentTarget.value);
-        if(pw===pw_check){
+        if (pw === pw_check) {
             setIsEqual(true);
             console.log(pw);
             console.log(pw_check);
@@ -72,9 +72,9 @@ function RequestRegister () {
         const email = document.getElementById("email");
 
         axios({
-            method:"POST",
+            method: "POST",
             url: "/auth/register",
-            data:{
+            data: {
                 userId: id,
                 password: pw,
                 userName: name,
@@ -83,22 +83,30 @@ function RequestRegister () {
                 interestKeywords: keyword
             }
         })
-        .then(res=>{
-            return res.data.responseData.redirect;
-        })
-        .then((res)=>{
-            window.location = `${res}`;
-        })
-        .catch(function (err) {
-            if (err.response) {
-                console.log(err.response.data);
-                console.log(err.response.status);
-                console.log(err.response.header);
-            }
-        });
+            .then(res => {
+                return res.data.responseData.redirect;
+            })
+            .then((res) => {
+                window.location = `${res}`;
+            })
+            .catch(function (err) {
+                if (err.response) {
+                    console.log(err.response.data);
+                    console.log(err.response.status);
+                    console.log(err.response.header);
+
+                    const notification = new Notification("세모반 알림", {
+                        icon: 'http://localhost:3500/semobanlogo_3.png',
+                        body: `${err.response.data.message}`
+                    })
+
+                    setTimeout(notification.close.bind(notification), 3000);
+
+                }
+            });
     }
 
-    return(
+    return (
         <div className='input_page'>
             <h2>회원가입</h2>
             <div className='input'>
@@ -111,7 +119,7 @@ function RequestRegister () {
                     <span className='input_area'><input type="password" id="pw" className='write form-control' onChange={onPwHandler} value={pw}></input></span>
                 </div>
                 <div className='input_content'>
-                    <div className='input_what'><label for="pw_check" className='form-label'>비밀번호 확인</label></div>  
+                    <div className='input_what'><label for="pw_check" className='form-label'>비밀번호 확인</label></div>
                     <span className='input_area'><input type="password" id="pw_check" className='write form-control' onChange={onPwCheckHandler} value={pw_check}></input></span>
                     <Error className='error_text' visibility={!isEqual}><span>비밀번호가 일치하지 않습니다.</span></Error>
                 </div>
@@ -131,7 +139,7 @@ function RequestRegister () {
                     <div className='input_what'><label for="keyword" className='form-label'>관심키워드</label></div>
                     <span className='input_area'><input type="text" id="keyword" className='write form-control' onChange={onKeywordHandler}></input></span>
                 </div>
-                
+
                 <input type='button' id="button" value="회원가입" class="btn btn-success" onClick={requestRegister}></input>
             </div>
         </div>

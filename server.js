@@ -33,8 +33,8 @@ app.use(reqLogger);
 // serve static files
 // <test>
 // app.use("/", express.static(path.join(__dirname, "/public")));
-app.use("/", express.static(path.join(__dirname, "React/build/")));
-app.use("/", express.static(path.join(__dirname, "uploads")));
+app.use("/", express.static(path.join(__dirname, "React/build/"))); // /~.png
+app.use("/", express.static(path.join(__dirname, "uploads"))); // uploads/~.png
 
 // route
 // app.use('/', require('./routes/root_test'));
