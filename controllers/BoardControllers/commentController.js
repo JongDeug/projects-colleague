@@ -1,4 +1,5 @@
 const responseDataForm = require("../../config/responseDataForm");
+const Notice = require("../../model/Notice");
 
 const postMethod = (Comment, PostType) => {
     return async (req, res, next) => {
@@ -16,12 +17,23 @@ const postMethod = (Comment, PostType) => {
                 .find((element) => element === true);
 
             if (!duplicate) {
+                // comment 생성
                 const result = await Comment.create({
                     userId: userId,
                     postId: postId,
                     contents: contents,
                 });
                 console.log(`result : ${result}`);
+                
+
+                // 댓글 작성이 완료되면 Notice 생성
+                const notice = await Notice.create({
+                    userId: userId,
+                    postId : postId,
+                    postType : PostType,
+                    commentId : result._id
+                })
+                console.log(`notice : ${notice}`);
 
                 const responseData = responseDataForm(`/post/${PostType}/${postId}`, "comment post request complete", result);
                 res.status(200).json({ responseData });

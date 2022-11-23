@@ -11,6 +11,7 @@ const Post = {
     "question"  : PostQuestion
 }
 
+// 랜덤으로 추천
 const getMethod = async (req, res, next) => {
     const getUserId = req.userId;
     try{
@@ -21,8 +22,9 @@ const getMethod = async (req, res, next) => {
         const result = {};
 
         for(const key in Post){
-            // likeHit이 아님 수정. , 제일 많이 포함되는 걸로 뽑아보기.
-            result[key] = await Post[key].find({likeHit : {$in : keywords}}).limit(3);
+            // likeHit이 아님 수정.
+            // keyword가 포함된 것들 중 랜덤하게 3개 찾기
+            result[key] = await Post[key].aggregate([{$match : {likeHit : {$in : keywords}}}, {$sample : {size : 3}}]);
         }
 
         const responseData = responseDataForm("/", "recommentPosts get request complete", result);
