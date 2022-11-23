@@ -21,7 +21,7 @@ const getMethod = async (req, res, next) => {
         const result = {};
 
         for(const key in Post){
-            // likeHit이 아님 수정.
+            // likeHit이 아님 수정. , 제일 많이 포함되는 걸로 뽑아보기.
             result[key] = await Post[key].find({likeHit : {$in : keywords}}).limit(3);
         }
 
