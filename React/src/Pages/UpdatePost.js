@@ -3,7 +3,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import "../css/registerPost.css";
 import { useParams } from 'react-router-dom';
-import { getPostById } from '../Data';
+import Tags from '../Components/Post/TagsInput';
+import Error from "../Components/ErrorMessage";
 
 function UpdatePost() {
   const params = useParams();
@@ -13,9 +14,12 @@ function UpdatePost() {
   const [postContent, setPostContent] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [keywords, setKeywords] = useState("");
+  const [keywords, setKeywords] = useState([]);
   const [attachedFile, setAttachedFile] = useState([]);
   const frm = new FormData();
+
+  const [isValidTitle, setIsValidTitle] = useState(false);
+  const [isValidContent, setIsValidContent] = useState(false);
 
   // function requestlist(){
   //   console.log(params.postId);
@@ -42,6 +46,28 @@ function UpdatePost() {
   const onAttachedFileHandler = (event) => {
     const { files } = event.currentTarget;
     setAttachedFile(files);
+  };
+
+  const onTitleValidCheck = (event) => {
+    const checkTitle = event.currentTarget.value;
+    if (checkTitle === "") {
+      setIsValidTitle(true);
+      console.log(checkTitle);
+    } else {
+      setIsValidTitle(false);
+      console.log(checkTitle);
+    }
+  };
+
+  const onContentValidCheck = (event) => {
+    const checkContent = event.currentTarget.value;
+    if (checkContent === "") {
+      setIsValidContent(true);
+      console.log(checkContent);
+    } else {
+      setIsValidContent(false);
+      console.log(checkContent);
+    }
   };
 
   async function requestGetDetail(postId, method) {
@@ -112,7 +138,17 @@ function UpdatePost() {
               <label for="title">
                 제목 <span className="require"></span>
               </label>
-              <input type="text" className="form-control" id="title" defaultValue={title} onChange={onTitleHandler} />
+              <input
+                type="text"
+                className="form-control"
+                id="title"
+                defaultValue={title}
+                onChange={onTitleHandler}
+                onBlur={onTitleValidCheck}
+              />
+              <Error className="error_text" visibility={isValidTitle}>
+                <span>제목을 입력해주세요.</span>
+              </Error>
             </div>
 
             <div className="form-group">
@@ -123,7 +159,11 @@ function UpdatePost() {
                 name="content"
                 defaultValue={content}
                 onChange={onContentHandler}
+                onBlur={onContentValidCheck}
               ></textarea>
+              <Error className="error_text" visibility={isValidContent}>
+                <span>내용을 입력해주세요.</span>
+              </Error>
             </div>
 
             <div className="form-group">
@@ -145,13 +185,14 @@ function UpdatePost() {
               <label for="keyword" className="form-label">
                 키워드
               </label>
-              <input
+              <Tags keywords={keywords} setKeywords={setKeywords}></Tags>
+              {/* <input
                 type="text"
                 id="keyword"
                 className="form-control"
                 defaultValue={keywords}
                 onChange={onKeywordHandler}
-              ></input>
+              ></input> */}
             </div>
             <div class="form-group mt-5 ">
               <button type="button" className="btn btn-success" onClick={requestPut}>

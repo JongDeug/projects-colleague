@@ -8,6 +8,7 @@ import '../css/board.css';
 import { Button, InputGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import {BiSearch} from 'react-icons/bi'
+import Sidebar from '../Components/Sidebar';
 
 
 function BoardFree () {
@@ -72,42 +73,6 @@ function BoardFree () {
     function Search(){
         requestSearch();
     }
-    // function SearchTitle(){
-    //     const list = [];
-    //     console.log(searchWord);
-    //     posts.map((posts) => {
-    //         if(posts.postTitle.includes(searchWord)){
-    //             list.push(posts);
-    //         }
-    //     })
-    //     setPosts(list);
-    //     console.log(list);
-    //     ShowContents();
-    // }
-    // function SearchContent(){
-    //     const list = [];
-    //     console.log(searchWord);
-    //     posts.map((posts) => {
-    //         if(posts.postContent.includes(searchWord)){
-    //             list.push(posts);
-    //         }
-    //     })
-    //     setPosts(list);
-    //     console.log(list);
-    //     ShowContents();
-    // }
-    // function SearchTitleAndCon(){
-    //     const list = [];
-    //     console.log(searchWord);
-    //     posts.map((posts) => {
-    //         if(posts.postTitle.includes(searchWord)||posts.postContent.includes(searchWord)){
-    //             list.push(posts);
-    //         }
-    //     })
-    //     setPosts(list);
-    //     console.log(list);
-    //     ShowContents();
-    // }
 
     function SearchEnter(event){
         if (event.key==='Enter'){
@@ -130,10 +95,11 @@ function BoardFree () {
 
     
     return (
-        <>
+        <div className='all_content'>
         <h2>자유 게시판</h2>
 
         <div className='to_flex'>
+            <Sidebar></Sidebar>
             <main>
             <InputGroup className="mb-3">
                 <select
@@ -168,7 +134,7 @@ function BoardFree () {
         </div>
         
         <Pagination total={posts.length} limit={limit} page={page} setPage={setPage}></Pagination>
-        </>
+        </div>
     );
 }
 

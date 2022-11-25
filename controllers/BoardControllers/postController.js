@@ -1,10 +1,20 @@
 const responseDataForm = require("../../config/responseDataForm");
 const fs = require('fs');
 
-const getMethod = (Post) => {
+const getMethod = (Post, Comment) => {
     return async (req, res, next) => {
         try {
-            const result = await Post.find({});
+            const resultPost = await Post.find({});
+            const result = [];
+
+            for (let post of resultPost) {
+                // postId로 Comment의 개수 구하기
+                const commentCount = await Comment.find({ postId: post._id }).count();
+                // Document를 Object로 변환
+                post = post.toObject();
+                post.commentCount = commentCount;
+                result.push(post);
+            }
             const responseData = responseDataForm(null, "board get request complete", result);
             res.status(200).json({ responseData });
         } catch (err) {
@@ -30,11 +40,31 @@ const postMethod = (Post, PostType) => {
 
         // DB에 저장 
         try {
+            // keyword # 제거
+            const getNewKeywords = getKeywords.map((keyword) => {
+                let strArray = [];
+                if (keyword.indexOf('#') !== -1) {
+                    for (const one of keyword) {
+                        if (one !== '#') strArray.push(one);
+                    }
+                } else {
+                    strArray.push(keyword);
+                }
+                return strArray.join('');
+            });
+
+            // 다시 # 태그 붙이기
+            const hashTag = '#';
+            getNewKeywords.forEach((keyword, index) => {
+                getNewKeywords[index] = hashTag.concat(keyword);
+            })
+
+
             const result = await Post.create({
                 userId: getUserId,
                 postTitle: getPostTitle,
                 postContent: getPostContent,
-                keywords: getKeywords,
+                keywords: getNewKeywords,
                 attachedFile: getAttachedFile
             });
             console.log(`result : ${result}`);
@@ -121,16 +151,16 @@ const deleteMethod = (Post, Comment, PostType) => {
                 console.log(postResult);
                 const commentResults = await Comment.deleteMany({ postId: getPostId });
                 console.log(commentResults);
-                
+
                 // 종류에 따라 redirect 선택
                 let redirect;
-                if(PostType === "boardInformation"){
+                if (PostType === "boardInformation") {
                     redirect = "/board/info";
-                }else if(PostType === "boardAnything"){
+                } else if (PostType === "boardAnything") {
                     redirect = "/board/free";
-                }else if(PostType === "boardQuestion"){
+                } else if (PostType === "boardQuestion") {
                     redirect = "/board/question";
-                }else if(PostType === "boardBoast"){
+                } else if (PostType === "boardBoast") {
                     redirect = "/board/boast";
                 }
                 const responseData = responseDataForm(redirect, "board delete request complete", null);
@@ -146,4 +176,4 @@ const deleteMethod = (Post, Comment, PostType) => {
 }
 
 
-module.exports = { getMethod, postMethod, putMethod, deleteMethod}
+module.exports = { getMethod, postMethod, putMethod, deleteMethod }

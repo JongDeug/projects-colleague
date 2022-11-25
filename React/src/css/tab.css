@@ -1,0 +1,19 @@
+.tabmenu {
+    background-color: #dcdcdc;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    align-items: center;
+    list-style: none;
+}
+
+.submenu {
+    width:100% auto;
+    padding: 15px 10px;
+    cursor: pointer;
+}
+
+.focused {
+    /* border: solid 0.5px gray; */
+}

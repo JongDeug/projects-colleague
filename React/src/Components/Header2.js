@@ -1,4 +1,4 @@
-import Container from "react-bootstrap/Container";
+import { Container, Row, Col } from "react-bootstrap";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
@@ -29,62 +29,162 @@ function Header2() {
   }, []);
 
   return (
-    <Navbar collapseOnSelect expand="lg mt-3" variant="light">
-      <Container className="nav-cont">
-        <Link to='/'><img src={logo} href="/main" className="logo_header"></img></Link>
+    // <Navbar collapseOnSelect expand="lg mt-3" variant="light" sticy="top" >
+    //   <Container className="nav-cont">
+    //     {/* <Link to='/'><img src={logo} href="/main" className="logo_header"></img></Link> */}
 
+    //     <Navbar.Brand href="/main">
+    //       <img
+    //         src={logo}
+    //         width="100"
+    //         height="100"
+    //         className="d-inline-block align-top"
+    //       />
+    //     </Navbar.Brand>
+    //     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+    //     <Navbar.Collapse id="responsive-navbar-nav">
+    //       <Nav className="mr-auto">
+    //         <NavDropdown
+    //           title="게시판"
+    //           id="basic-nav-dropdown"
+    //         >
+    //           <NavDropdown.Item href="/board/free">
+    //             자유 게시판
+    //           </NavDropdown.Item>
+    //           <NavDropdown.Item href="/board/boast">
+    //             자랑 게시판
+    //           </NavDropdown.Item>
+    //           <NavDropdown.Item href="/board/info">
+    //             정보공유 게시판
+    //           </NavDropdown.Item>
+    //           <NavDropdown.Item href="/board/question">
+    //             질문 게시판
+    //           </NavDropdown.Item>
+    //         </NavDropdown>
+
+    //         <NavDropdown
+    //           title="뉴스"
+    //           className="nav_dropdown"
+    //           id="collasible-nav-dropdown"
+    //         >
+    //           <NavDropdown.Item href="/news/video">영상 뉴스</NavDropdown.Item>
+    //           <NavDropdown.Item href="/news/article">
+    //             기사 뉴스
+    //           </NavDropdown.Item>
+    //         </NavDropdown>
+
+    //         <NavDropdown title="나의 활동" id="collasible-nav-dropdown"
+    //           className="justify-content-end"
+    //         >
+    //           <NavDropdown.Item href="/myact/post">
+    //             작성한 게시글 조회
+    //           </NavDropdown.Item>
+    //           <NavDropdown.Item href="/myact/comment">
+    //             작성한 댓글 조회
+    //           </NavDropdown.Item>
+    //           <NavDropdown.Item href="/myact/like">
+    //             좋아요 한 게시글 조회
+    //           </NavDropdown.Item>
+    //         </NavDropdown>
+    //       </Nav>
+
+    //       <Nav className="nav-icon">
+    //         <Nav.Link>
+    //           <AiFillBell size={24}></AiFillBell>
+    //         </Nav.Link>
+    //         {isLogin && <Nav.Link>
+    //           <div className='icon member dropdown'>
+    //             <BsFillPersonFill size={24} onClick={e => setIsClicked(!isClicked)}></BsFillPersonFill>
+    //             <Dropdown visibility={isClicked}>
+    //               <ul className='boardmenu icon_content'>
+    //                 <li className='li_menu'><Link to='/updatemem' className='link_menu'>회원정보 수정</Link></li>
+    //                 <li className='li_menu'><Link to='/logout' className='link_menu'>로그아웃</Link></li>
+    //               </ul>
+    //             </Dropdown>
+    //           </div>
+    //         </Nav.Link>}
+    //         {
+    //           isLogin && <Nav.Link>
+    //             <span>안녕하세요 {sessionStorage.getItem("host")} 회원님!</span>
+    //           </Nav.Link>
+    //         }
+    //         {!isLogin &&
+    //           <div className='no_login'>
+    //             <div><Link to='/login' className='header-login-btn'>로그인</Link></div>
+    //             <div><Link to='/register' className='header-join-btn'>회원가입</Link></div>
+    //           </div>
+    //         }
+    //       </Nav>
+    //     </Navbar.Collapse>
+    //   </Container>
+    // </Navbar>
+    <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
+      <Container>
+
+        <Navbar.Brand href="/main">
+          <img
+            src={logo}
+            width="50"
+            height="50"
+          />
+          세모반
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav>
-              <NavDropdown
-                title="게시판"
-                className="nav_dropdown"
-                id="collasible-nav-dropdown"
-              >
-                <NavDropdown.Item href="/board/free">
-                  자유 게시판
-                </NavDropdown.Item>
-                <NavDropdown.Item href="/board/info">
-                  정보공유 게시판
-                </NavDropdown.Item>
-                <NavDropdown.Item href="/board/question">
-                  질문 게시판
-                </NavDropdown.Item>
-                <NavDropdown.Item href="/board/boast">
-                  자랑 게시판
-                </NavDropdown.Item>
-              </NavDropdown>
+            <NavDropdown
+              title="게시판"
+              id="basic-nav-dropdown"
+            >
+              <NavDropdown.Item href="/board/free">
+                자유 게시판
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/board/boast">
+                자랑 게시판
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/board/info">
+                정보공유 게시판
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/board/question">
+                질문 게시판
+              </NavDropdown.Item>
+            </NavDropdown>
 
-              <NavDropdown
-                title="뉴스"
-                className="nav_dropdown"
-                id="collasible-nav-dropdown"
-              >
-                <NavDropdown.Item href="/news/video">영상 뉴스</NavDropdown.Item>
-                <NavDropdown.Item href="/news/article">
-                  기사 뉴스
-                </NavDropdown.Item>
-              </NavDropdown>
+            <NavDropdown
+              title="뉴스"
+              className="nav_dropdown"
+              id="collasible-nav-dropdown"
+            >
+              <NavDropdown.Item href="/news/video">영상 뉴스</NavDropdown.Item>
+              <NavDropdown.Item href="/news/article">
+                기사 뉴스
+              </NavDropdown.Item>
+            </NavDropdown>
 
-              <NavDropdown title="나의 활동" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="/myact/post">
-                  작성한 게시글 조회
-                </NavDropdown.Item>
-                <NavDropdown.Item href="/myact/comment">
-                  작성한 댓글 조회
-                </NavDropdown.Item>
-                <NavDropdown.Item href="/myact/like">
-                  좋아요 한 게시글 조회
-                </NavDropdown.Item>
-              </NavDropdown>
-            </Nav>
+            <NavDropdown title="나의 활동" id="collasible-nav-dropdown"
+              className="justify-content-end"
+            >
+              <NavDropdown.Item href="/myact/post">
+                작성한 게시글 조회
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/myact/comment">
+                작성한 댓글 조회
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/myact/like">
+                좋아요 한 게시글 조회
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
 
-            <Nav className="nav-icon">
-              <Nav.Link>
-                <AiFillBell size={24}></AiFillBell>
-              </Nav.Link>
-              {isLogin && <Nav.Link>
+          <Nav className="nav-icon">
+            <Row className="container-fluid">
+              <Col>
+                <Nav.Link>
+                  <AiFillBell size={24}></AiFillBell>
+                </Nav.Link>
+              </Col>
+
+              {isLogin && <Col><Nav.Link>
                 <div className='icon member dropdown'>
                   <BsFillPersonFill size={24} onClick={e => setIsClicked(!isClicked)}></BsFillPersonFill>
                   <Dropdown visibility={isClicked}>
@@ -94,20 +194,23 @@ function Header2() {
                     </ul>
                   </Dropdown>
                 </div>
-              </Nav.Link>}
+              </Nav.Link></Col>
+              }
               {
-                isLogin && <Nav.Link>
+                isLogin && <Col><Nav.Link>
                   <span>안녕하세요 {sessionStorage.getItem("host")} 회원님!</span>
                 </Nav.Link>
+                </Col>
               }
-
               {!isLogin &&
                 <div className='no_login'>
-                  <div><Link to='/login' className='header-login-btn'>로그인</Link></div>
-                  <div><Link to='/register' className='header-join-btn'>회원가입</Link></div>
+                  <Col>
+                    <Link to='/login' className='header-login-btn'>로그인</Link>
+                  </Col>
+                  <Link to='/register' className='header-join-btn'>회원가입</Link>
                 </div>
               }
-            </Nav>
+            </Row>
           </Nav>
         </Navbar.Collapse>
       </Container>

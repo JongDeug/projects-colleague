@@ -1,5 +1,6 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Error from "../Components/ErrorMessage";
 import "../css/updateMember.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -11,6 +12,17 @@ function UpdateMember() {
   const [email, setEmail] = useState("");
   const [interestKeywords, setKeywords] = useState("");
   const token = sessionStorage.getItem("accessToken");
+
+  const [isValidEmail, setIsValidEmail] = useState(false);
+
+  const onEmailValidCheck = (event) => {
+    const checkEmail = event.currentTarget.value;
+    if (checkEmail === "") {
+      setIsValidEmail(true);
+    } else {
+      setIsValidEmail(false);
+    }
+  };
 
   //DB받아오기
   useEffect(() => {
@@ -116,7 +128,11 @@ function UpdateMember() {
             type="email"
             defaultValue={email}
             onChange={onEmailHandler}
+            onBlur={onEmailValidCheck}
           />
+          <Error className="error_text" visibility={isValidEmail}>
+            <span>이메일을 입력해주세요.</span>
+          </Error>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">

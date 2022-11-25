@@ -46,9 +46,30 @@ const putMethod = async (req, res, next) => {
             return res.status(401).json({"message" : "이메일 중복"});
         }
 
+
+        // keyword # 빼기
+        const getNewInterestKeywords = getInterestKeywords.map((keyword) => {
+            let strArray = [];
+            if (keyword.indexOf('#') !== -1) {
+                for (const one of keyword) {
+                    if (one !== '#') strArray.push(one);
+                }
+            } else {
+                strArray.push(keyword);
+            }
+            return strArray.join('');
+        });
+
+
+        const hashTag = '#';
+        // 다시 # 붙이기 
+        getNewInterestKeywords.forEach((keyword, index) => {
+            getNewInterestKeywords[index] = hashTag.concat(keyword);
+        })
+
         foundUser.dateOfBirth = getDateOfBirth;
         foundUser.email = getEmail;
-        foundUser.interestKeywords = getInterestKeywords;
+        foundUser.interestKeywords = getNewInterestKeywords;
         await foundUser.save();
 
         const responseData = responseDataForm("/updatemem", "changeInfo put request complete", null);

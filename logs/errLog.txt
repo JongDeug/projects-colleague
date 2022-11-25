@@ -326,3 +326,6 @@
 2022/11/24	05:56:32	Error: ENOENT: no such file or directory, stat '/home/jongdeug/src/Javascript/Node.js/web-community-project/uploads/Capture001_1668516681784'
 2022/11/24	06:20:06	ReferenceError: Post is not defined
 2022/11/24	06:31:39	ReferenceError: result is not defined
+2022/11/25	09:15:10	Error: ENOENT: no such file or directory, stat '/home/jongdeug/src/Javascript/Node.js/web-community-project/React/build/index.html'
+2022/11/25	09:24:32	TypeError: Post.find(...).toObject is not a function
+2022/11/25	09:26:33	TypeError: Assignment to constant variable.

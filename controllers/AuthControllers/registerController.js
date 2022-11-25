@@ -43,6 +43,27 @@ const postMethod = async (req, res, next) => {
             });
         });
 
+        // keyword # 빼기
+        const getNewInterestKeywords = getInterestKeywords.map((keyword) => {
+            let strArray = [];
+            if (keyword.indexOf('#') !== -1) {
+                for (const one of keyword) {
+                    if (one !== '#') strArray.push(one);
+                }
+            } else {
+                strArray.push(keyword);
+            }
+            return strArray.join('');
+        });
+
+
+        const hashTag = '#';
+        // 다시 # 붙이기 
+        getNewInterestKeywords.forEach((keyword, index) => {
+            getNewInterestKeywords[index] = hashTag.concat(keyword);
+        })
+
+
         // DB에 data저장
         const result = await Member.create({
             userId: getUserId,
@@ -50,7 +71,7 @@ const postMethod = async (req, res, next) => {
             userName: getUserName,
             dateOfBirth: getDateOfBirth,
             email: getEmail,
-            interestKeywords: getInterestKeywords
+            interestKeywords: getNewInterestKeywords 
         });
         console.log(result);
 

@@ -7,7 +7,7 @@ const verifyJWTWirter = require("../middleware/verifyJWTWirter");
 const Post = require('../model/PostAnything');
 const Comment = require('../model/CommentAnything');
 
-router.get("/read", postController.getMethod(Post));
+router.get("/read", postController.getMethod(Post, Comment));
 router.post("/search", searchPostController.postMethod(Post));
 router.get("/:postId/:method", verifyJWTWirter, postDetailController.getMethod(Post, Comment));
 

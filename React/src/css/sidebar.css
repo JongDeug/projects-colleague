@@ -1,0 +1,23 @@
+/*사이드바*/
+ul.category_area {
+    /* margin: auto 0; */
+    font-size: larger;
+    flex-basis: max-content;
+    padding: 0;
+    padding-right: 10px;
+    flex-grow: 0;
+    margin: 20% 1% auto 0;
+    min-width: max-content;
+
+}
+li{
+    list-style: none;
+}
+li.category_content {
+    margin-bottom: 10px;
+}
+
+.side_link{
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.899);
+}

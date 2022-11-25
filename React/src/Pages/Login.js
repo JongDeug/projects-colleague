@@ -7,11 +7,14 @@ import { Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Warning from "../Components/ModalWarning";
+import Error from "../Components/ErrorMessage";
 
 export default function Login() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
+  const [isValidId, setIsValidId] = useState(false);
+  const [isValidPw, setIsValidPw] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -20,13 +23,42 @@ export default function Login() {
   function onIdHandler(event) {
     setId(event.currentTarget.value);
   }
+
+  const onIdValidCheck = (event) => {
+    const checkId = event.currentTarget.value;
+    if (checkId === "") {
+      setIsValidId(true);
+      console.log(checkId);
+    } else {
+      setIsValidId(false);
+      console.log(checkId);
+    }
+  };
+
   //password에 입력한 비밀번호 저장
   function onPasswordHandler(event) {
     setPassword(event.currentTarget.value);
   }
+  const onPwValidCheck = (event) => {
+    const checkPw = event.currentTarget.value;
+    if (checkPw === "") {
+      setIsValidPw(true);
+    } else {
+      setIsValidPw(false);
+    }
+  };
+
+  function LoginEnter(event){
+    if (event.key==='Enter'){
+        Login();
+    }
+  }
+  function Login(){
+    requestLogin();
+  }
 
   //로그인 요청
-  function requestLogin(event) {
+  function requestLogin() {
     axios({
       url: "/auth/login",
       method: "post",
@@ -51,10 +83,10 @@ export default function Login() {
           console.log(err.response.status);
           console.log(err.response.header);
           if (err.response.status === 401) {
+            console.log(err.response.status);
             handleShow();
+            console.log(show);
           }
-
-
         }
       });
   }
@@ -65,7 +97,17 @@ export default function Login() {
         <h3 className="loginTitle">로그인</h3>
         <Form.Group size="lg" controlId="id" className="mb-4">
           <Form.Label className="mb-2">아이디</Form.Label>
-          <Form.Control autoFocus type="id" value={id} onChange={onIdHandler} />
+          <Form.Control
+            autoFocus
+            type="id"
+            id="id"
+            value={id}
+            onChange={onIdHandler}
+            onBlur={onIdValidCheck}
+          />
+          <Error className="error_text" visibility={isValidId}>
+            <span>아이디를 입력해주세요.</span>
+          </Error>
         </Form.Group>
         <Form.Group size="lg" controlId="password" className="mb-5">
           <Form.Label className="mb-2">비밀번호</Form.Label>
@@ -73,7 +115,12 @@ export default function Login() {
             type="password"
             value={password}
             onChange={onPasswordHandler}
+            onKeyPress={LoginEnter}
+            onBlur={onPwValidCheck}
           />
+          <Error className="error_text" visibility={isValidPw}>
+            <span>비밀번호를 입력해주세요.</span>
+          </Error>
         </Form.Group>
 
         <Button
@@ -84,13 +131,13 @@ export default function Login() {
         >
           로그인
         </Button>
-        <Warning
+        {/* <Warning
           show={show}
           setShow={setShow}
           title={"회원정보 오류"}
           body={"아이디 또는 비밀번호가 틀립니다."}
           handleClose={handleClose}
-        ></Warning>
+        ></Warning> */}
 
         <div className="d-flex flex-row justify-content-around mb-4 findBtn">
           <Link to="/findid" className="findIdBtn">

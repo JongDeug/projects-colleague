@@ -24,6 +24,7 @@ import BoardQues from './Pages/BoardQues';
 import MyPostPage from './Pages/MyPostPage';
 import MyCommentPage from './Pages/MyCommentPage';
 import MyLikePage from './Pages/MyLikePage';
+import NewsArticleList from './Pages/NewsArticleList';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
         <Route path='/myact/post' element={<MyPostPage />}></Route>
         <Route path='/myact/like' element={<MyLikePage />}></Route>
         <Route path='/myact/comment' element={<MyCommentPage />}></Route>
+        <Route path='/news/article' element={<NewsArticleList />}></Route>
       </Routes>
     </>
   );

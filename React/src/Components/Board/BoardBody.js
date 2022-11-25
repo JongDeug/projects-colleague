@@ -29,7 +29,11 @@ function BodyContents(props) {
     return (
         <tr>
             {/* <th className='content post_id'>{postId}</th> */}
-            <th className='content post_title'><Link to={{pathname:`/post/${postBoard}/${postId}`, state:{postBoard:postBoard, postId:postId}}} className='post_link'>{postTitle}</Link></th>
+            <th className='content post_title'>
+                <Link to={{pathname:`/post/${postBoard}/${postId}`, state:{postBoard:postBoard, postId:postId}}} className='post_link'>
+                    <div>{postTitle}</div>
+                </Link>
+            </th>
             <th className='content post_writer'>{postUserId}</th>
             <th className='content post_date'>{postDate}</th>
             <th className='content post_hit'>{postHit}</th>

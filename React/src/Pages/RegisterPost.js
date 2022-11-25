@@ -2,12 +2,14 @@ import React from "react";
 import axios from "axios";
 import { useState } from "react";
 import "../css/registerPost.css";
+import Tags from '../Components/Post/TagsInput';
+import Error from "../Components/ErrorMessage";
 
 function RegisterPost() {
   // const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [keywords, setKeywords] = useState("");
+  const [keywords, setKeywords] = useState([]);
   const [boardOption, setBoardOption] = useState("자유 게시판");
   const boardOptionList = [
     "자유 게시판",
@@ -16,6 +18,9 @@ function RegisterPost() {
     "자랑 게시판",
   ];
   const [attachedFile, setAttachedFile] = useState("");
+  const [isValidTitle, setIsValidTitle] = useState(false);
+  const [isValidContent, setIsValidContent] = useState(false);
+
   const frm = new FormData();
 
   const onTitleHandler = (event) => {
@@ -38,6 +43,28 @@ function RegisterPost() {
   function onBoardOption(event) {
     setBoardOption(event.target.value);
   }
+
+  const onTitleValidCheck = (event) => {
+    const checkTitle = event.currentTarget.value;
+    if (checkTitle === "") {
+      setIsValidTitle(true);
+      console.log(checkTitle);
+    } else {
+      setIsValidTitle(false);
+      console.log(checkTitle);
+    }
+  };
+
+  const onContentValidCheck = (event) => {
+    const checkContent = event.currentTarget.value;
+    if (checkContent === "") {
+      setIsValidContent(true);
+      console.log(checkContent);
+    } else {
+      setIsValidContent(false);
+      console.log(checkContent);
+    }
+  };
 
   function requestPost() {
     const token = sessionStorage.getItem("accessToken");
@@ -71,7 +98,7 @@ function RegisterPost() {
     })
       .then((res) => {
         console.log(res.data.responseData.result["_id"]);
-        const postId = res.data.responseData.result["_id"];
+        // const postId = res.data.responseData.result["_id"];
         return res.data.responseData.redirect;
       })
       .then((res) => {
@@ -111,7 +138,11 @@ function RegisterPost() {
                 className="form-control"
                 id="title"
                 onChange={onTitleHandler}
+                onBlur={onTitleValidCheck}
               />
+              <Error className="error_text" visibility={isValidTitle}>
+                <span>제목을 입력해주세요.</span>
+              </Error>
             </div>
 
             <div className="form-group">
@@ -119,9 +150,14 @@ function RegisterPost() {
               <textarea
                 rows="10"
                 className="form-control"
+                id="content"
                 name="content"
                 onChange={onContentHandler}
+                onBlur={onContentValidCheck}
               ></textarea>
+              <Error className="error_text" visibility={isValidContent}>
+                <span>내용을 입력해주세요.</span>
+              </Error>
             </div>
 
             <div className="form-group">
@@ -142,12 +178,13 @@ function RegisterPost() {
               <label for="keyword" className="form-label">
                 키워드
               </label>
-              <input
+              <Tags keywords={keywords} setKeywords={setKeywords}></Tags>
+              {/* <input
                 type="text"
                 id="keyword"
                 className="form-control"
                 onChange={onKeywordsHandler}
-              ></input>
+              ></input> */}
             </div>
             <div class="form-group mt-5 ">
               <button

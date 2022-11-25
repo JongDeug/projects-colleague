@@ -4,14 +4,9 @@ import { Link } from 'react-router-dom';
 import '../../css/board.css';
 
 function PostWithComment(props){
-    const [postId, setPostId] = useState(props.postid);
-    // const [postTitle, setPostTitle] = useState(props.post.postTitle);
-    // const [postUserId, setPostUserId] = useState(props.post.userId);
-    // const [commentId, setCommentId] = useState(props.post.id);
-    const [commentContents, setCommentContents] = useState(props.comment);
-    const [postType, setPostType] = useState(props.posttype);
-    // const postId = 1;
-    // const commentContents = "테스트용임시댓글내용";
+    const [postId, setPostId] = useState(props.post.postId);
+    const [commentContents, setCommentContents] = useState(props.post.contents);
+    const [postType, setPostType] = useState(props.post.commentType);
     var postBoard;
     if(postType === "질문 게시판"){
         postBoard = "boardQuestion";

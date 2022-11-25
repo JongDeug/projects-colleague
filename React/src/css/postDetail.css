@@ -42,3 +42,8 @@ div.group{
     display: flex;
     justify-self: right;
 }
+
+/* 이미지파일 */
+img{
+    max-width: 100%;
+}

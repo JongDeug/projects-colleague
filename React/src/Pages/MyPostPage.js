@@ -4,11 +4,17 @@ import axios from 'axios';
 import BoardHead from '../Components/Board/BoardHead';
 import BodyContents from '../Components/Board/BoardBody';
 import Pagination from '../Components/Board/Pagination';
-import { Link } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
+import '../css/tab.css';
 
 function MyPostPage () {
+    const menu = ["자유 게시판", "자랑 게시판", "정보 공유 게시판", "질문 게시판"];
+    const [currentTab, setCurrentTab] = useState(0);
     const [posts, setPosts] = useState([]);
+    const [postsAny, setPostsAny] = useState([]);
+    const [postsBoast, setPostsBoast] = useState([]);
+    const [postsInfo, setPostsInfo] = useState([]);
+    const [postsQues, setPostsQues] = useState([]);
     const [postsAll, setPostsAll] = useState({});
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
@@ -16,7 +22,6 @@ function MyPostPage () {
 
     useEffect(()=>{
         requestGet();
-        console.log(postsAll);
     }, []);
 
     function requestGet() {
@@ -46,10 +51,13 @@ function MyPostPage () {
                 console.log(post);
             })
             setPosts(list);
+            setPostsAny(res.data.responseData.result.anything);
+            setPostsBoast(res.data.responseData.result.boast);
+            setPostsInfo(res.data.responseData.result.information);
+            setPostsQues(res.data.responseData.result.question);
+
             setPostsAll(res.data.responseData.result);
 
-            console.log(res.data.responseData.result);
-            console.log(posts);
         }).catch((err)=>{
             if(err.response){
                 console.log(err.response.data);
@@ -59,17 +67,56 @@ function MyPostPage () {
         })
     }
 
-    function ShowContents(){
+    function ShowContentsbyBoard(){
         var startNum=0;
-        if (posts.length-(limit+offset)>=0){
-            startNum = posts.length-(limit+offset);
-        } 
-        console.log(posts);
+        
         const list = [];
-        posts&&Array.from(posts).slice(startNum,posts.length-offset).reverse().map((posts) => {
-            list.push(<BodyContents post={posts}></BodyContents>)
-        })
+        if(currentTab===0){
+            if (postsAny.length-(limit+offset)>=0){
+                startNum = postsAny.length-(limit+offset);
+            } 
+            postsAny&&Array.from(postsAny).slice(startNum,postsAny.length-offset).reverse().map((posts) => {
+                list.push(<BodyContents post={posts}></BodyContents>)
+            })
+        } else if(currentTab===1){
+            if (postsBoast.length-(limit+offset)>=0){
+                startNum = postsBoast.length-(limit+offset);
+            } 
+            postsBoast&&Array.from(postsBoast).slice(startNum,postsBoast.length-offset).reverse().map((posts) => {
+                list.push(<BodyContents post={posts}></BodyContents>)
+            })
+        } else if(currentTab===2){
+            if (postsInfo.length-(limit+offset)>=0){
+                startNum = postsInfo.length-(limit+offset);
+            } 
+            postsInfo&&Array.from(postsInfo).slice(startNum,postsInfo.length-offset).reverse().map((posts) => {
+                list.push(<BodyContents post={posts}></BodyContents>)
+            })
+        } else if(currentTab===3){
+            if (postsQues.length-(limit+offset)>=0){
+                startNum = postsQues.length-(limit+offset);
+            } 
+            postsQues&&Array.from(postsQues).slice(startNum,postsQues.length-offset).reverse().map((posts) => {
+                list.push(<BodyContents post={posts}></BodyContents>)
+            })
+        }
         return list;
+    };
+
+    function PagingByBoard(){
+        if (currentTab===0){
+            return <Pagination total={postsAny.length} limit={limit} page={page} setPage={setPage}></Pagination>
+        } else if (currentTab===1){
+            return <Pagination total={postsBoast.length} limit={limit} page={page} setPage={setPage}></Pagination>
+        }else if (currentTab===2){
+            return <Pagination total={postsInfo.length} limit={limit} page={page} setPage={setPage}></Pagination>
+        }else if (currentTab===3){
+            return <Pagination total={postsQues.length} limit={limit} page={page} setPage={setPage}></Pagination>
+        }
+    }
+
+    function selectMenuHandler(index) {
+        setCurrentTab(index);
     };
 
 
@@ -77,18 +124,32 @@ function MyPostPage () {
         <>
         <h2>내가 작성한 게시글</h2>
 
+        <div className='to_flex'>
         <main>
+        <div className='tabmenu'>
+            {menu.map((ele, index)=>{
+                return (
+                    <li
+                    key={index}
+                    className={currentTab === index ? "submenu focused" : "submenu"}
+                    onClick={()=> selectMenuHandler(index)}
+                >
+                {ele}
+                </li>
+                )
+            })}
+        </div>
         <Table striped bordered hover>
             <div className=''></div>
                 <BoardHead></BoardHead>
                 <tbody>
-                    <ShowContents></ShowContents>
+                    <ShowContentsbyBoard></ShowContentsbyBoard>
                 </tbody>
         </Table>
-        {/* <div className='float-right'><Button className='create_btn float-right'><Link to='/writepost' className='link_to'>작성</Link></Button></div>
-         */}
         </main>
-        <Pagination total={posts.length} limit={limit} page={page} setPage={setPage}></Pagination>
+        </div>
+        <PagingByBoard></PagingByBoard>
+        {/* <Pagination total={posts.length} limit={limit} page={page} setPage={setPage}></Pagination> */}
         </>
     )
 }
