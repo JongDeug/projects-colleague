@@ -5,7 +5,7 @@ const userSchema = new schema(
     {
         likeVar: {
             type: Number,
-            default: 10,
+            default: 1,
         },
         likePage: {
             type: Number,

@@ -6,7 +6,7 @@ const postController = require("../../controllers/BoardControllers/postControlle
 const commentController = require("../../controllers/BoardControllers/commentController");
 const likeHitController = require("../../controllers/BoardControllers/likeHitController");
 const Post = require('../../model/PostBoast');
-const PostType = "boardBoastAPI";
+const PostType = "boardBoast";
 const Comment = require('../../model/CommentBoast');
 const upload = require('../../middleware/upload');
 

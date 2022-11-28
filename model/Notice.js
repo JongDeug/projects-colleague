@@ -18,6 +18,12 @@ const userSchema = new schema({
     type: String,
     required: true,
   },
+  check:{
+    type: Boolean,
+    required: true,
+    default: false,
+  }
+
 }, {
   versionKey: false
 });

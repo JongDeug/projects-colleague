@@ -337,3 +337,6 @@
 2022/11/28	16:30:52	TypeError: getInterestKeywords.map is not a function
 2022/11/28	16:32:26	TypeError: getInterestKeywords.map is not a function
 2022/11/28	16:44:54	ReferenceError: Cannot access 'Variable' before initialization
+2022/11/28	17:47:39	TypeError: DB.Post is not iterable
+2022/11/28	17:48:27	TypeError: Cannot read properties of null (reading 'postTitle')
+2022/11/28	17:52:10	TypeError: Cannot read properties of undefined (reading 'push')
