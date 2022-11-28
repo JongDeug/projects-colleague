@@ -26,8 +26,34 @@ const deleteMethod = async (req, res, next) => {
     }
 
     try {
-        const result = await Member.findByIdAndDelete(getMemberId);
-        console.log(result);
+        // const foundUser = await Member.findByIdAndDelete(getMemberId);
+        const foundUser = await Member.findById(getMemberId).exec();
+        if (!foundUser) {
+            return res.status(401).json({ "message": "회원을 찾을 수 없음" });
+        }
+
+        for (const key in DB.Post) {
+            // 자신의 post 찾기
+            const foundPost = await DB.Post[key].find({ userId: getUserId });
+
+            for (const post of foundPost) {
+                // postId를 통해 내 포스터의 모든 댓글 삭제
+                const deleteComment = await DB.Comment[key].deleteMany({ postId: post._id });
+                console.log(deleteComment);
+            }
+        }
+
+        // 내 게시글, 댓글 삭제
+        for (const key in DB.Post) {
+            const resultPost = await DB.Post[key].deleteMany({ userId: getUserId });
+            const resultComment = await DB.Comment[key].deleteMany({ userId: getUserId });
+            console.log(resultPost);
+            console.log(resultComment);
+        }
+
+        // 회원 삭제
+        const resultMember = await Member.deleteOne({ userId: getUserId });
+        console.log(resultMember);
 
         const responseData = responseDataForm("/memberlist", "adminMember delete request complete", null);
         res.status(200).json({ responseData });

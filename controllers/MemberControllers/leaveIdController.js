@@ -11,8 +11,6 @@ const DB = require("../../config/dbTemplate");
 const bcrypt = require("bcryptjs");
 const responseDataForm = require("../../config/responseDataForm");
 
-const Post = [PostAnything, PostBoast, PostInformation, PostQuestion];
-const Comment = [CommentAnything, CommentBoast, CommentInformation, CommentQuestion];
 
 const deleteMethod = async (req, res, next) => {
     const getUserId = req.userId;
@@ -61,16 +59,17 @@ const deleteMethod = async (req, res, next) => {
             // })
             // 자신의 포스트들 찾기
 
-            
-            const resultMember = await Member.deleteOne({ userId: getUserId });
-            console.log(resultMember);
-
+            // 내 게시글, 댓글 삭제
             for(const key in DB.Post){
                 const resultPost = await DB.Post[key].deleteMany({userId: getUserId});
                 const resultComment = await DB.Comment[key].deleteMany({userId : getUserId});
                 console.log(resultPost);
                 console.log(resultComment);
             }
+
+            // 회원 삭제
+            const resultMember = await Member.deleteOne({ userId: getUserId });
+            console.log(resultMember);
             // Post.map(async (db)=> {
             //     const result = await db.deleteMany({userId: getUserId});
             //     console.log(result);

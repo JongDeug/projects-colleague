@@ -7,6 +7,10 @@ const userSchema = new schema(
             type: Number,
             default: 10,
         },
+        likePage: {
+            type: Number,
+            default: 2,
+        },
         keywordVar: {
             type: Number,
             default: 3,

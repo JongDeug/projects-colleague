@@ -6,7 +6,7 @@ const getMethod = async (req, res, next) => {
     try {
         const foundUser = await Member.findOne({ userId: userId });
         if (!foundUser) {
-            return res.status(401).json({"message" : "회원을 찾을 수 없음"});
+            return res.status(401).json({ "message": "회원을 찾을 수 없음" });
         }
 
         const result = {
@@ -36,16 +36,18 @@ const putMethod = async (req, res, next) => {
     try {
         const foundUser = await Member.findOne({ userId: getUserId }).exec();
         if (!foundUser) {
-            return res.status(401).json({"message" : "회원을 찾을 수 없음"});
+            return res.status(401).json({ "message": "회원을 찾을 수 없음" });
         }
 
         // findOne return 값 null임
-        const duplicate = await Member.findOne({ email: getEmail }).exec();
-
-        if (!!duplicate) {
-            return res.status(401).json({"message" : "이메일 중복"});
+        // 찾은 회원의 email이 getEmail과 다를 경우 실행
+        // 같으면 중복을 확인할 필요가 없음.
+        if (foundUser.email !== getEmail) {
+            const duplicate = await Member.findOne({ email: getEmail }).exec();
+            if (!!duplicate) {
+                return res.status(401).json({ "message": "이메일 중복" });
+            }
         }
-
 
         // keyword # 빼기
         const getNewInterestKeywords = getInterestKeywords.map((keyword) => {
