@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useState } from "react";
+import { useLocation } from 'react-router-dom';
 import "../css/registerPost.css";
 import Tags from '../Components/Post/TagsInput';
 import Error from "../Components/ErrorMessage";
@@ -10,12 +11,14 @@ function RegisterPost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [keywords, setKeywords] = useState([]);
-  const [boardOption, setBoardOption] = useState("자유 게시판");
+  const [location, setLocation] = useState(useLocation());
+  console.log(location);
+  const [boardOption, setBoardOption] = useState(location.state.boardtype);
   const boardOptionList = [
     "자유 게시판",
+    "자랑 게시판",
     "정보 공유 게시판",
     "질문 게시판",
-    "자랑 게시판",
   ];
   const [attachedFile, setAttachedFile] = useState("");
   const [isValidTitle, setIsValidTitle] = useState(false);

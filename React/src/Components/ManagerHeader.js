@@ -2,7 +2,6 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import Button from "react-bootstrap/Button";
 import { useEffect, useState } from "react";
 import Dropdown from "./Dropdown";
 import { Link } from "react-router-dom";
@@ -10,17 +9,10 @@ import "../css/header2.css";
 import logo from "../semobanlogo_3.png";
 import { AiFillBell } from "react-icons/ai";
 import { BsFillPersonFill } from "react-icons/bs";
-import { BiX } from "react-icons/bi";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Popover from "react-bootstrap/Popover";
-import Badge from "react-bootstrap/Badge";
-import CommentNotice from './Commentnotice';
 
 function Header2() {
   const [isClicked, setIsClicked] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
-  const comments = [{userId:"user1",postTitle:"우리집 강아지 좀 보세요",content:"강아지가 너무 귀여워요~"},
-  {userId:"user2",postTitle:"우리집 고양이 좀 보세요",content:"너무 귀여워요~"}];
 
   function setLoginState() {
     if (!!sessionStorage.getItem("accessToken")) {
@@ -29,7 +21,7 @@ function Header2() {
       setIsLogin(false);
     }
   }
-  
+
   useEffect(() => {
     console.log(sessionStorage.getItem("accessToken"));
     setIsClicked(false);
@@ -55,14 +47,14 @@ function Header2() {
                 <NavDropdown.Item href="/board/free">
                   자유 게시판
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/board/boast">
-                  자랑 게시판
-                </NavDropdown.Item>
                 <NavDropdown.Item href="/board/info">
                   정보공유 게시판
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/board/question">
+                <NavDropdown.Item href="/board/questions">
                   질문 게시판
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/board/mypet">
+                  자랑 게시판
                 </NavDropdown.Item>
               </NavDropdown>
 
@@ -80,66 +72,44 @@ function Header2() {
               </NavDropdown>
 
               <NavDropdown title="나의 활동" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="/myact/post">
+                <NavDropdown.Item href="/mypage/post">
                   작성한 게시글 조회
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/myact/comment">
+                <NavDropdown.Item href="/mypage/comment">
                   작성한 댓글 조회
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/myact/like">
+                <NavDropdown.Item href="/mypage/likedpost">
                   좋아요 한 게시글 조회
                 </NavDropdown.Item>
               </NavDropdown>
             </Nav>
 
             <Nav className="nav-icon">
-              <OverlayTrigger
-                trigger="click"
-                placement="bottom"
-                overlay={
-                  <Popover id={`popover-positioned-bottom`}>
-                    <Popover.Header as="h3" className="popover-header">
-                      알림 목록
-                    </Popover.Header>
-                    <Popover.Body>
-                      <div class="list-group">
-                        {/* <CommentNotice comment={comments}></CommentNotice>
-                        <CommentNotice></CommentNotice>
-                        <CommentNotice></CommentNotice> */}
-                        {comments.map((comment,i)=>(
-                          <CommentNotice comment={comment}></CommentNotice>
-                        ))}
-                        
-                      </div>
-                    </Popover.Body>
-                  </Popover>
-                }
-              >
-                <Nav.Link>
-                  <AiFillBell size={24}></AiFillBell>
-                  <span class="position-absolute translate-middle p-2 bg-danger border border-light rounded-circle">
-                    <span class="indicator">{comments.length}</span>
-                  </span>
-                </Nav.Link>
-              </OverlayTrigger>
+              <Nav.Link>
+                <AiFillBell size={24}></AiFillBell>
+              </Nav.Link>
               {isLogin && (
                 <Nav.Link>
                   <div className="icon member dropdown">
                     <BsFillPersonFill
                       size={24}
                       onClick={(e) => setIsClicked(!isClicked)}
-                      className="data"
                     ></BsFillPersonFill>
                     <Dropdown visibility={isClicked}>
                       <ul className="boardmenu icon_content">
                         <li className="li_menu">
-                          <Link to="/updatemem" className="link_menu">
-                            회원정보 수정
+                          <Link to="/managerlogin" className="link_menu">
+                            로그아웃
                           </Link>
                         </li>
                         <li className="li_menu">
-                          <Link to="/logout" className="link_menu">
-                            로그아웃
+                          <Link to="/memberlist" className="link_menu">
+                            회원 관리
+                          </Link>
+                        </li>
+                        <li className="li_menu">
+                          <Link to="/variablecontrol" className="link_menu">
+                            변수값 조정
                           </Link>
                         </li>
                       </ul>
@@ -147,27 +117,14 @@ function Header2() {
                   </div>
                 </Nav.Link>
               )}
-              {isLogin && (
-                <Nav.Link>
-                  <span>
-                    안녕하세요 {sessionStorage.getItem("host")} 회원님!
-                  </span>
-                </Nav.Link>
-              )}
-              {!isLogin && (
+              {/* 관리자 헤더에서 로그인 하는 경우는 없을 듯? */}
+              {/* {!isLogin && (
                 <div className="no_login">
                   <div>
-                    <Link to="/login" className="header-login-btn">
-                      로그인
-                    </Link>
-                  </div>
-                  <div>
-                    <Link to="/register" className="header-join-btn">
-                      회원가입
-                    </Link>
+                    <Link to="/login">로그인</Link>
                   </div>
                 </div>
-              )}
+              )} */}
             </Nav>
           </Nav>
         </Navbar.Collapse>

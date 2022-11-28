@@ -329,3 +329,8 @@
 2022/11/25	09:15:10	Error: ENOENT: no such file or directory, stat '/home/jongdeug/src/Javascript/Node.js/web-community-project/React/build/index.html'
 2022/11/25	09:24:32	TypeError: Post.find(...).toObject is not a function
 2022/11/25	09:26:33	TypeError: Assignment to constant variable.
+2022/11/27	18:06:56	MongoServerError: Invalid $project :: caused by :: Cannot do exclusion on field password in inclusion projection
+2022/11/27	18:08:10	MongoServerError: Invalid $project :: caused by :: Cannot do exclusion on field refreshToken in inclusion projection
+2022/11/27	18:10:45	MongoServerError: Invalid $project :: caused by :: Cannot do exclusion on field refreshToken in inclusion projection
+2022/11/27	19:35:46	CastError: Cast to ObjectId failed for value "638331f4bd9c99e16ea0fcb" (type string) at path "_id" for model "Variable"
+2022/11/27	19:49:14	ReferenceError: getVariableId is not defined

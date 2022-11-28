@@ -68,6 +68,7 @@ export default function Login() {
       },
     })
       .then((res) => {
+        console.log(res.data.responseData.result);
         const accessToken = res.data.responseData.result.accessToken;
         const host = res.data.responseData.result.host;
         sessionStorage.setItem("host", host);
@@ -82,11 +83,11 @@ export default function Login() {
           console.log(err.response.data);
           console.log(err.response.status);
           console.log(err.response.header);
-          if (err.response.status === 401) {
-            console.log(err.response.status);
-            handleShow();
-            console.log(show);
-          }
+          const notification = new Notification("세모반 알림", {
+            icon: 'http://localhost:3500/semobanlogo_3.png',
+            body: `${err.response.data.message}`
+        })
+        setTimeout(notification.close.bind(notification), 3000);
         }
       });
   }
@@ -131,13 +132,13 @@ export default function Login() {
         >
           로그인
         </Button>
-        {/* <Warning
+        <Warning
           show={show}
           setShow={setShow}
           title={"회원정보 오류"}
           body={"아이디 또는 비밀번호가 틀립니다."}
           handleClose={handleClose}
-        ></Warning> */}
+        ></Warning>
 
         <div className="d-flex flex-row justify-content-around mb-4 findBtn">
           <Link to="/findid" className="findIdBtn">

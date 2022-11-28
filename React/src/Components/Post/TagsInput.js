@@ -12,17 +12,8 @@ export default function Tags(props) {
         if(!(props.keywords[props.keywords.length-1].charAt(0)==="#")){
           props.keywords[props.keywords.length-1] = "#"+props.keywords[props.keywords.length-1];
         }
-        // console.log(props.keywords.length);
-        // console.log(selected);
-        // console.log(props.keywords);
-        // console.log(props.keywords[props.keywords.length-1]);
-        // console.log(props.keywords[props.keywords.length-1].charAt(0));
-        // console.log("#"+props.keywords[props.keywords.length-1]);
-        // console.log(props.keywords[props.keywords.length-1].charAt(0)==="#");
-      
     }
   }
-
 
   console.log(selected);
   console.log(props.keywords);
@@ -36,7 +27,7 @@ export default function Tags(props) {
         onKeyUp={SetKeywords}
         classNames="keywords_input"
         name="keywords"
-        placeHolder="태그 입력 후 엔터"
+        placeHolder="입력 후 엔터"
       />
       {/* <p>#을 붙이고 태그</p> */}
       {/* {setKeywords} */}

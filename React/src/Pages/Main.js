@@ -1,12 +1,11 @@
 import React, {Component, useEffect} from 'react';
-import '../css/main.css';
+// import '../css/main.css';
 import { Link, Route, Routes } from 'react-router-dom';
-import { Button, Tab, Tabs } from 'react-bootstrap';
 import { useState, useRef } from 'react';
-import { postList } from '../Data';
 import axios from 'axios';
 import Carousel from '../Components/Main/CarouselSlide';
-import Card from '../Components/Main/SlideCard';
+import styles from'../css/Main.module.css';
+import { Tab, Tabs } from 'react-bootstrap';
 
 
 function Main() {
@@ -17,14 +16,25 @@ function Main() {
     {src:"unsplash3.jpg",content:"https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?ixlib=rb-4.0.3&ixid=MnwxMj"+
     "A3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"}]);
 
-    const [key, setKey] = useState('home');
+    const [key, setKey] = useState('popular');
     const [postTitles, setPostTitles] = useState([]);
     const [img, setImg] = useState(null);
 
     // const [posts, setPosts] = useState([]);
     const posts = useRef([]);
+    const recommendPosts = useRef([]);
+    const recomLen = useRef(0);
+    const popLen = useRef(0);
+    const [isLogin, setIsLogin] = useState(true);
 
-    function requestGet() {
+    function setLoginState() {
+        if (sessionStorage.getItem("accessToken")) {
+        setIsLogin(true);
+        } else {
+        setIsLogin(false);
+        }
+    }
+    function requestGetPopular() {
         const token = sessionStorage.getItem("accessToken");
         return axios({
             url:"/popularityPosts",
@@ -35,29 +45,69 @@ function Main() {
         }).then((res)=>{
             setPostTitles(res.data.responseData.result);
             let list = [];
+            console.log(posts);
             res.data.responseData.result.anything&&res.data.responseData.result.anything.map((post,i)=>{
                 list.push(post);
                 posts.current.push(post);
-            })
+            });
             res.data.responseData.result.boast&&res.data.responseData.result.boast.map((post)=>{
                 list.push(post);
                 posts.current.push(post);
-            })
+            });
             res.data.responseData.result.information&&res.data.responseData.result.information.map((post)=>{
                 list.push(post);
                 posts.current.push(post);
-            })
+            });
             res.data.responseData.result.question&&res.data.responseData.result.question.map((post)=>{
                 list.push(post);
                 posts.current.push(post);
-            })
-            console.log(list);
-            console.log(posts);
+            });
+            popLen.current = list.length;
+            console.log("popular: "+popLen.current);
+            // console.log(postslen);
+            console.log(list.length);
+            // setImg(res.data.responseData.result.anything[0].attachedFile);
+            // setPostslen(posts.current.length);
+        }).catch((err)=>{
+            if(err.response){
+                console.log(err.response.data);
+                console.log(err.response.status);
+                console.log(err.response.header);
+            }
+        })
+    }
+    function requestGetRecommend() {
+        const token = sessionStorage.getItem("accessToken");
+        return axios({
+            url:"/api/recommendPosts",
+            method:"get",
+            headers:{
+                Authorization: `Bearer ${token}`
+            },
+        }).then((res)=>{
+            let list = [];
             console.log(res.data.responseData.result);
-            console.log(res.data.responseData.result.anything[0].attachedFile[0]);
-            console.log(res.data.responseData.result.anything[1].attachedFile[0]);
-            console.log(res.data.responseData.result.anything[1].attachedFile[0]===undefined);
-            setImg(res.data.responseData.result.anything[0].attachedFile);
+            res.data.responseData.result.anything&&res.data.responseData.result.anything.map((post,i)=>{
+                list.push(post);
+                recommendPosts.current.push(post);
+            });
+            res.data.responseData.result.boast&&res.data.responseData.result.boast.map((post)=>{
+                list.push(post);
+                recommendPosts.current.push(post);
+            });
+            res.data.responseData.result.information&&res.data.responseData.result.information.map((post)=>{
+                list.push(post);
+                recommendPosts.current.push(post);
+            });
+            res.data.responseData.result.question&&res.data.responseData.result.question.map((post)=>{
+                list.push(post);
+                recommendPosts.current.push(post);
+            });
+            recomLen.current = list.length;
+            console.log("recommend: "+recomLen.current);
+            console.log(list.length);
+            // setImg(res.data.responseData.result.anything[0].attachedFile);
+            // setPostslen(posts.current.length);
         }).catch((err)=>{
             if(err.response){
                 console.log(err.response.data);
@@ -67,9 +117,11 @@ function Main() {
         })
     }
     useEffect(()=>{
-        requestGet();
+        requestGetPopular();
+        setLoginState();
+        console.log(isLogin);
     },[]);
-    console.log(posts);
+    
     function ShowPosts(){
         const list = [];
             postTitles&&Array(postTitles).slice(0,6).map((posts) => {
@@ -81,23 +133,38 @@ function Main() {
     
     return(
         <>
-        {/* <div className='main'>
-            <Link to='/register'>회원가입</Link>
-            <Link to='/login'>로그인</Link>
-            <Link to='/updatemem'>회원정보 수정</Link>
-            <Link to='/findid'>아이디찾기</Link>
-            <Link to='/findpassword'>비밀번호찾기</Link>
-            <Link to='/changepassword'>비밀번호변경</Link>
-            <Link to='/leaveid'>회원탈퇴</Link>
-            <p></p>
-            <Link to='/freeboard'>자유게시판</Link>
-            <Link to='/comments'>댓글예시</Link>
-            <Link to='/post'>게시글</Link>
-            <Link to='/updatepost'>게시글수정</Link>
-            <Link to='/writepost'>게시글작성</Link>
-        </div> */}
-        <Carousel imgs={imgs} posts={posts}></Carousel>
-        <div className='posts_main'>
+        <Tabs
+        id="controlled-tab-example"
+        activeKey={key}
+        onSelect={(k) => setKey(k)}
+        // className="mb-3"
+        className={`${"mb-3"} ${styles.tabs}`}>
+            <Tab eventKey={"popular"} title="인기 게시글" tabClassName={styles.tab}>
+                <Carousel posts={posts} len={popLen.current}></Carousel>
+            </Tab>
+            {isLogin&&<Tab eventKey="recommend" title="추천 게시글" tabClassName={styles.tab} onClick={requestGetRecommend}>
+                <Carousel posts={recommendPosts} len={recomLen.current}></Carousel>
+            </Tab>}
+        </Tabs>
+        {/* <main>
+        <div>
+            <ul className='tabmenu'>
+            {menu.map((ele, index)=>{
+                return (
+                    <li
+                    key={index}
+                    className={currentTab === index ? "submenu focused" : "submenu"}
+                    onClick={()=> selectMenuHandler(index)}
+                >
+                {ele}
+                </li>
+                )
+            })}
+            </ul>
+        </div>
+        <Carousel></Carousel>
+        </main> */}
+        {/* <div className='posts_main'>
             <Tabs
             id="controlled-tab-example"
             className="mb-3 main_tap"
@@ -106,13 +173,12 @@ function Main() {
                     <div className='post_titles'><ShowPosts /></div>
                 </Tab>
             </Tabs>
-            <Card></Card>
-            {/* <section className="mb-5">
+            <section className="mb-5">
                 <img src={`http://localhost:3500/${img}`}></img>
-            </section> */}
+            </section>
             <Button id='link_to'><Link to='/board/all' className='link_button'>게시판 목록으로 이동</Link></Button>
             
-        </div>
+        </div> */}
 
 
         </>

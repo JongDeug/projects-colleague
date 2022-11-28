@@ -135,7 +135,8 @@ function MyLikePage () {
         
         <div className='to_flex'>
         <main>
-        <div className='tabmenu'>
+        <div>
+            <ul className='tabmenu'>
             {menu.map((ele, index)=>{
                 return (
                     <li
@@ -147,6 +148,7 @@ function MyLikePage () {
                 </li>
                 )
             })}
+            </ul>
         </div>
         <Table striped bordered hover>
             <div className=''></div>

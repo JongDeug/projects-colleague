@@ -18,8 +18,10 @@ function Carousel(props) {
     // const [style, setStyle] = useState({
     //     marginLeft: `-${current}00%`
     // });
+    const [posts, setPosts] = useState(props.posts);
     const [moveLen,setMoveLen] = useState(100);
-    const [moveCnt, setMoveCnt] = useState(props.posts.current.length);
+    console.log(posts.current.length);
+    const [moveCnt, setMoveCnt] = useState(posts.current.length);
     const [windowSize, setWindowSize] = useState({
         width: window.innerWidth,
         height: window.innerHeight,
@@ -32,27 +34,34 @@ function Carousel(props) {
     }, 1000);
     
     function changeMov(){
+        console.log(moveCnt);
         var tabWidth = window.matchMedia("screen and (min-width:480px)");
         var pcWidth = window.matchMedia("screen and (min-width:800px)");
         if(pcWidth.matches){
             setMoveLen(current*33);
-            setMoveCnt(props.posts.current.length-2);
+            console.log(props.len-2);
+            setMoveCnt(props.len-2);
+            console.log("pcpsize: "+moveCnt);
         }
         
         else if(tabWidth.matches){
             setMoveLen(current*50);
-            setMoveCnt(props.posts.current.length-1);
+            console.log(props.len-1);
+            setMoveCnt(props.len-1);
+            console.log("tabsize: "+moveCnt);
         }
         else{
             setMoveLen(current*100);
-            setMoveCnt(props.posts.current.length);
+            console.log(props.len-0);
+            setMoveCnt(props.len);
+            console.log("phonesize: "+moveCnt);
         }
     }
 
-    const imgSize = useRef(3);
+    const imgSize = useRef(props.len);
     function moveSlide(i) {
-        console.log(i);
-        console.log(current);
+        console.log(moveCnt);
+        console.log(imgSize.current+"+"+"i"+i+"current"+current);
         let nextIndex = current + i;
         if(nextIndex<0){
             nextIndex = imgSize.current -1;
@@ -62,16 +71,17 @@ function Carousel(props) {
         }
         setCurrent(nextIndex);
     }
-
     useEffect(()=>{
         window.addEventListener('resize',handleResize);
         changeMov();
-        console.log(props.posts);
+        console.log("useEffect: "+moveCnt);
         return() =>{
             window.removeEventListener('resize',handleResize);
         }
     },[current]);
 
+    console.log(posts);
+    console.log(moveCnt);
     return(
         <>
         <div className={styles.container}>
@@ -81,16 +91,15 @@ function Carousel(props) {
                     <div className={styles.flexbox} style={{marginLeft:`-${moveLen}%`}}>
                     {props.posts.current.map((img, i) => (
                         img.attachedFile[0]?
-                        <Card imgsrc={img.attachedFile[0]} content={img.postContent}></Card>
+                        <Card imgsrc={img.attachedFile[0]} post={img} type={img.postType} content={img.postContent}></Card>
                         :
-                        <Card imgsrc={`unsplash${i+1}.jpg`} content={img.postContent}></Card>
+                        <Card imgsrc={"semobanlogo_3.png"} post={img} type={img.postType} content={img.postContent}></Card>
                     ))}
                     </div>
                 </div>
                 <div className={styles.btn} onClick={() => { moveSlide(1); }}>&gt;</div>
             </div>
         </div>
-        
         </>
     )
 }

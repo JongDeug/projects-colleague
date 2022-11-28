@@ -1,7 +1,38 @@
 const Member = require("../../model/Member");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const ROLES_LIST = require("../../config/roles_list");
 const responseDataForm = require("../../config/responseDataForm");
+
+const getMethod = async (req, res, next) => {
+    const getCookies = req.cookies;
+    if (!getCookies?.jwt) { // !cookies && !cookies.jwt
+        return res.sendStatus(200); // No content
+    }
+    const getRefreshToken = getCookies.jwt;
+
+    try {
+        const foundUser = await Member.findOne({ refreshToken: getRefreshToken }).exec();
+
+        if (!foundUser) {
+            res.clearCookie("jwt", { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+            return res.sendStatus(200);
+        }
+
+        // refreshToken db에서 지우기
+        foundUser.refreshToken = "";
+        const result = await foundUser.save();
+        console.log(result);
+
+        // jwt(refreshToken) client에서 지우기
+        res.clearCookie("jwt", { httpOnly: true });
+
+        const responseData = responseDataForm("/", "adminLogout get request complete", null);
+        res.status(200).json({ responseData });
+    } catch (err) {
+        next(err);
+    }
+}
 
 
 const postMethod = async (req, res, next) => {
@@ -17,7 +48,12 @@ const postMethod = async (req, res, next) => {
         // DB 확인
         const foundUser = await Member.findOne({ userId: getUserId }).exec();
         if (!foundUser) {
-            return res.status(401).json({ "message": "회원 정보를 찾을 수 없음" })
+            return res.status(401).json({ "message": "회원 정보를 찾을 수 없음" });
+        }
+
+        // 관리자인지 아닌지 판별함.
+        if (foundUser.roles.Admin !== ROLES_LIST.Admin) {
+            return res.status(401).json({ "message": "admin 계정이 아님" });
         }
 
         // 데이터베이스에 있는 비밀번호와 사용자 입력 비밀번호 체킹
@@ -59,9 +95,8 @@ const postMethod = async (req, res, next) => {
             const result = {};
             result.accessToken = accessToken;
             result.host = getUserId;
-            // roles를 추가했으니 admin인지 아닌지 확인 가능.
             result.roles = roles;
-            const responseData = responseDataForm("/", "login post request complete", result);
+            const responseData = responseDataForm("/", "adminLogin post request complete", result);
 
             res.status(200).json({ responseData });
         }
@@ -74,4 +109,4 @@ const postMethod = async (req, res, next) => {
 
 }
 
-module.exports = { postMethod };
+module.exports = { postMethod, getMethod };

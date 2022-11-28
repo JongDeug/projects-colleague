@@ -128,7 +128,8 @@ function MyCommentPage () {
         <h2>내가 작성한 댓글</h2>
         <div className='to_flex'>
         <main>
-        <div className='tabmenu'>
+        <div>
+            <ul className='tabmenu'>
             {menu.map((ele, index)=>{
                 return (
                     <li
@@ -140,6 +141,7 @@ function MyCommentPage () {
                 </li>
                 )
             })}
+            </ul>
         </div>
         <Table striped bordered hover>
             <div className=''></div>

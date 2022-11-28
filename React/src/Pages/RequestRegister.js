@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
+import React, {Component, useRef} from 'react';
 import'../css/member.css';
 import Error from '../Components/ErrorMessage';
 import {useState, useEffect, useCallback} from 'react';
 import axios from 'axios';
 import CreatableSelect from "react-select/creatable";
+import { getElementsByTagName } from 'domutils';
 
 
 function RequestRegister () {
@@ -13,8 +14,10 @@ function RequestRegister () {
     const [name, setName] = useState("");
     const [birth, setBirth]= useState("");
     const [email, setEmail] = useState("");
-    const [keyword, setKeyword] = useState("");
+    const [keywords, setKeywords] = useState([]);
     const [isEqual, setIsEqual] = useState(true);
+    const keys = useRef([]);
+    let keyword = [];
 
     const [isValidId, setIsValidId] = useState(false);
     const [isValidPw, setIsValidPw] = useState(false);
@@ -92,9 +95,20 @@ function RequestRegister () {
         setEmail(event.currentTarget.value);
     };
 
-    const onKeywordHandler = (event) => {
-        setKeyword(event.currentTarget.value);
-    };
+    // const onKeywordHandler = (event) => {
+    //     setKeywords(event.currentTarget.value);
+    // };
+
+    function SetKeywords(event){
+        // console.log("event:"+event.key);
+        if(event[event.length-1].value.charAt(0)==='#'){
+            event[event.length-1].label = event[event.length-1].label.slice(1);
+            event[event.length-1].value = event[event.length-1].value.slice(1);
+        }
+        keyword.push(event[event.length-1].value);
+        keys.current.push(event[event.length-1].value);
+        setKeywords(event);
+    }
 
     const onIdValidCheck = (event) => {
         const checkId = event.currentTarget.value;
@@ -153,7 +167,7 @@ function RequestRegister () {
                 userName: name,
                 dateOfBirth: birth,
                 email: email.value,
-                interestKeywords: keyword
+                interestKeywords: keys.current
             }
         })
         .then(res=>{
@@ -260,9 +274,9 @@ function RequestRegister () {
                         options={groupedOptions}
                         placeholder="키워드 입력"
                         formatCreateLabel={(inputText) => `"${inputText}" 추가`}
+                        onChange={SetKeywords}
                     />
                 </div>
-                
                 <input type='button' id="button" value="회원가입" class="btn btn-success" onClick={requestRegister}></input>
             </div>
         </div>

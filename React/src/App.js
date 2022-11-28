@@ -1,5 +1,5 @@
 // import logo from './logo.svg';
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Main from './Pages/Main';
 import Header from './Components/Header';
 import Header2 from "./Components/Header2";
@@ -25,8 +25,36 @@ import MyPostPage from './Pages/MyPostPage';
 import MyCommentPage from './Pages/MyCommentPage';
 import MyLikePage from './Pages/MyLikePage';
 import NewsArticleList from './Pages/NewsArticleList';
+import axios from 'axios';
 
 function App() {
+
+  function refreshToken(){
+    const token = sessionStorage.getItem("accessToken");
+
+    return axios({
+      url:`/auth/refresh`,
+      method:"get",
+      headers:{
+        Authorization: `Bearer ${token}`
+      },
+    }).then((res)=>{
+      console.log(res.data.responseData);
+      sessionStorage.setItem("accessToken", res.data.responseData.result.accessToken);
+      
+    }).catch((err)=>{
+      if(err.response){
+        console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.header);
+      }
+    })
+  }
+
+  useEffect(()=>{
+    // refreshToken();
+  },[]);
+
   return (
     <>
     <Header2></Header2>
@@ -47,7 +75,7 @@ function App() {
         <Route path='/comments' element={<Comments />}></Route>
         {/* <Route path='/post' element={<PostDetail />}></Route> */}
         <Route path='/post/:postType/:postId' element={<PostDetail />}></Route>
-        <Route path='/writepost' element={<RegisterPost />}></Route>
+        <Route path='/writepost' element={<RegisterPost />} component={RegisterPost}></Route>
         <Route path='/updatepost/:postType/:postId' element={<UpdatePost />}></Route>
         <Route path='/myact/post' element={<MyPostPage />}></Route>
         <Route path='/myact/like' element={<MyLikePage />}></Route>

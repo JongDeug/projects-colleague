@@ -10,6 +10,7 @@ const cors = require("cors");
 const corsOptions = require("./config/corsOptions");
 const { default: mongoose } = require("mongoose");
 const connectDB = require("./config/dbConn");
+const Variable = require("./model/Variable");
 const crawler = require("./middleware/crawler");
 const fs = require("fs");
 const PORT = 3500;
@@ -19,6 +20,9 @@ const PORT = 3500;
 if (!fs.existsSync("uploads")) {
     fs.mkdirSync("uploads");
 }
+
+// DB Variable 하나 생성
+// Variable.create({});
 
 connectDB();
 // crawler(); // 주기랑 다시 설정해야함.
@@ -56,8 +60,9 @@ app.use("/boardQuestion", require("./routes/boardQuestion"));
 app.use("/boardBoast", require("./routes/boardBoast"));
 app.use("/popularityPosts", require("./routes/popularityPosts"));
 
-// 로그인 유
 app.use("/auth", require('./routes/auth'));
+app.use("/adminAuth", require('./routes/adminAuth'));
+// 로그인 유 (유저, 관리자 전용)
 app.use(verifyJWT);
 app.use("/api/member", require("./routes/api/memberAPI"));
 app.use("/api/memberActivity", require("./routes/api/memberActivityAPI"));
@@ -70,6 +75,9 @@ app.use("/api/boardBoast", require("./routes/api/boardBoastAPI"));
 app.use("/api/recommendPosts", require("./routes/api/recommendPostsAPI"));
 app.use("/api/notice", require("./routes/api/noticeAPI"));
 
+// 로그인 유 (관리자 전용)
+app.use("/api/adminMember", require("./routes/api/adminMemberAPI"));
+app.use("/api/adminAdjust", require("./routes/api/adminAdjustAPI"));
 
 // middleware
 app.use(errorHandler);

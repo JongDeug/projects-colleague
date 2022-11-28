@@ -4,6 +4,7 @@
     width:100%;
     height:100%;
     display: flex;
+    flex-shrink: 0;
     /* margin:20px; */
 }
 .image_area{
@@ -15,16 +16,20 @@
     object-fit: cover;
     width: 100%;
     height: 100%;
+    border-radius: 10px 0px 0px 10px;
 }
 .text_area{
     margin: 0;
     width: 30%;
     background-color: beige;
     overflow: hidden;
+    border-radius: 0px 10px 10px 0px;
 }
 .text{
     word-wrap: break-word;
     color: gray;
+    padding:3px;
+    margin-bottom: 0.2em;
 }
 
 /*carousel*/
@@ -78,6 +83,7 @@
         /* object-fit: cover;
         width: 100%;
         height: 100%; */
+        border-radius: 10px 10px 0px 0px;
     }
     .text_area{
         height: 30%;
@@ -85,6 +91,7 @@
         /* margin: 0;
         background-color: beige;
         overflow: hidden; */
+        border-radius: 0px 0px 10px 10px;
     }
     .text{
         /* word-wrap: break-word;
@@ -180,4 +187,23 @@
         width: 100%;
         transition: all 0.4s ease-out; */
     }
+}
+
+
+/*Main*/
+.tab{
+    margin: auto 0;
+    /* color: gray !important;
+    background-color: #e7f5cf!important; */
+}
+.tab.active{
+    /* background-color: #E1FFB1; */
+}
+.tabs{
+    max-width: calc(1080px * 0.9);
+    width: calc(100vw *0.9);
+
+}
+.tabs>li{
+    margin:0;
 }

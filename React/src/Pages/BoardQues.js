@@ -161,8 +161,13 @@ function BoardQues () {
                         <ShowContents></ShowContents>
                     </tbody>
             </Table>
-            <div className='float-right'><Link to='/writepost' className='link_to'><Button className='create_btn float-right'>작성</Button></Link></div>
-            
+            <div className='float-right'>
+                <Link to={`/writepost`} state={{boardtype:'질문 게시판'}} className='link_to'>
+                    <Button className='create_btn float-right'>
+                        작성
+                    </Button>
+                </Link>
+            </div>
             </main>
         </div>
         

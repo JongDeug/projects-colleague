@@ -87,7 +87,7 @@ h2{
 }
 
 /* paging */
-.nav{
+.paging_nav{
     justify-content: center;
     width: 800px;
     margin: auto auto 20px auto;

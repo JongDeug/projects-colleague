@@ -1,19 +1,27 @@
 .tabmenu {
-    background-color: #dcdcdc;
     font-weight: bold;
     display: flex;
     flex-direction: row;
     justify-items: center;
     align-items: center;
     list-style: none;
+    align-items: flex-end;
+    padding: 0;
 }
 
 .submenu {
-    width:100% auto;
-    padding: 15px 10px;
+    background-color: #e7f5cf;
     cursor: pointer;
+    padding: 15px 10px;
+    text-align: center;
+    width: 100%;
+    border-radius: 10px 10px 0px 0px;
 }
 
-.focused {
-    /* border: solid 0.5px gray; */
+li.submenu.focused {
+    background-color: #E1FFB1;
+    border: solid #8bc34a;
+    border-bottom: none;
+    padding: 20px 10px;
+    cursor: default;
 }
