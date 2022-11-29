@@ -11,6 +11,27 @@ let tag = {
   deleteTag: "#contents #newsct_article #dic_area .img_desc",
 };
 
+const removeEtc = async (str) => {
+  let x = "";
+  try {
+    x = str.replace(/&#39;/g, "'");
+    x = x.replace(/&apos;/g, "'");
+    x = x.replace(/&#34;/g, '"');
+    x = x.replace(/&quot;/g, '"');
+    x = x.replace(/<b>/g, "");
+    x = x.replace(/<\/b>/g, "");
+
+    x = x.replace(/&nbsp;/g, " ");
+    x = x.replace(/&lt;/g, "<");
+    x = x.replace(/&gt;/g, ">");
+    x = x.replace(/&amp;/g, "&");
+    x = x.replace(/&#035;/g, "#");
+    return x;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const getHTML = async (link) => {
   try {
     return axios.get(`${link}`);
@@ -127,30 +148,31 @@ const naverNews = async (idx) => {
           continue;
         }
 
-        x = newsItem.title.replace(/&#39;/g, "'");
-        x = x.replace(/&apos;/g, "'");
-        x = x.replace(/&#34;/g, '"');
-        x = x.replace(/&quot;/g, '"');
-        x = x.replace(/<b>/g, "");
-        x = x.replace(/<\/b>/g, "");
-        newsItem.title = x;
+        newsItem.title = await removeEtc(newsItem.title);
+
+        // x = newsItem.title.replace(/&#39;/g, "'");
+        // x = x.replace(/&apos;/g, "'");
+        // x = x.replace(/&#34;/g, '"');
+        // x = x.replace(/&quot;/g, '"');
+        // x = x.replace(/<b>/g, "");
+        // x = x.replace(/<\/b>/g, "");
+        // newsItem.title = x;
         newsItem.description = newsItems[i].description;
         if (newsItem.description.includes("볼보")) {
           continue;
         }
-        x = newsItem.description.replace(/&#39;/g, "'");
-        x = x.replace(/&apos;/g, "'");
-        x = x.replace(/&#34;/g, '"');
-        x = x.replace(/&quot;/g, '"');
-        x = x.replace(/<b>/g, "");
-        x = x.replace(/<\/b>/g, "");
-        newsItem.description = x;
-        newsItem.pubDate = newsItems[i].pubDate;
-        // .replace(
-        //   /(<([^>]+)>)|&quot;/gi,
-        //   ""
-        // );
 
+        newsItem.description = await removeEtc(newsItem.description);
+
+        // x = newsItem.description.replace(/&#39;/g, "'");
+        // x = x.replace(/&apos;/g, "'");
+        // x = x.replace(/&#34;/g, '"');
+        // x = x.replace(/&quot;/g, '"');
+        // x = x.replace(/<b>/g, "");
+        // x = x.replace(/<\/b>/g, "");
+        // newsItem.description = x;
+
+        newsItem.pubDate = newsItems[i].pubDate;
         newsItem.sourceLink = newsItems[i].originallink;
         newsItem.naverLink = newsItems[i].link;
         if (newsItem.sourceLink != newsItem.naverLink) {
@@ -247,7 +269,7 @@ const youtubeNews = async () => {
 };
 
 const crawler = async () => {
-  const articleRefresh = await News.deleteMany();
+  // const articleRefresh = await News.deleteMany();
   // const videoRefresh = await VideoNews.deleteMany();
   naverNews("1");
   // naverNews("2");

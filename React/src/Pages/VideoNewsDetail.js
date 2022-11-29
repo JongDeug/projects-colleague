@@ -10,10 +10,11 @@ import { Modal } from "react-bootstrap";
 
 function VideoNewsDetail() {
   const params = useParams();
-  const [_id, set_id] = useState(params.videoNewsId);
-  const [videoId, setVideoNewsId] = useState();
-  const [newsTitle, setVideoNewsTitle] = useState();
-  const [newsDescription, setVideoNewsDescription] = useState();
+  const [_id, set_id] = useState(params.videoNewsId); //  테이블id
+  const [videoId, setVideoNewsId] = useState(); //  영상 출력용 고유 유튜브id (밑에 아이프레임에 필요)
+  const [videoNewsTitle, setVideoNewsTitle] = useState(); //  유튜브 제목
+  const [newsDescription, setVideoNewsDescription] = useState(); //  유튜브 영상 소개글 (요약문)
+  const [thumbnailURL, setThumbnailURL] = useState(); //  썸네일 이미지 (주소 형식)
 
   function requestGetDetail(_id) {
     const token = sessionStorage.getItem("accessToken");
@@ -29,6 +30,7 @@ function VideoNewsDetail() {
         setVideoNewsId(res.data.responseData.result.videoId);
         setVideoNewsTitle(res.data.responseData.result.newsTitle);
         setVideoNewsDescription(res.data.responseData.result.newsDescription);
+        setThumbnailURL(res.data.responseData.result.thumbnailURL);
         console.log(res.data.responseData.result);
       })
       .catch((err) => {
@@ -44,12 +46,13 @@ function VideoNewsDetail() {
     requestGetDetail(_id);
   }, []);
 
-  const source = "https://www.youtube.com/embed/" + videoId;
+  const source = "https://www.youtube.com/embed/" + videoId; //  유튜브 영상 url
 
   return (
     <div class="container mt-5">
-      {newsTitle}
+      {videoNewsTitle}
       <div className="row ri">
+        {/* iframe이 동영상 출력하는부분 src에 videoId 넣으면 영상 연결됨 */}
         <iframe
           id="ytplayer"
           type="text/html"

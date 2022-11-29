@@ -72,6 +72,7 @@ app.use("/api/boardInformation", require("./routes/api/boardInformationAPI"));
 app.use("/api/boardQuestion", require("./routes/api/boardQuestionAPI"));
 app.use("/api/boardBoast", require("./routes/api/boardBoastAPI"));
 
+app.use("/api/news", require("./routes/api/newsAPI"));
 app.use("/api/recommendPosts", require("./routes/api/recommendPostsAPI"));
 app.use("/api/notice", require("./routes/api/noticeAPI"));
 

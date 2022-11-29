@@ -72,6 +72,7 @@ function VideoNewsList() {
     <>
       <h2>유튜브 뉴스 목록</h2>
       <button onClick={requestGetWithKeyword}>내 키워드 적용</button>
+      <button onClick={requestGet}>전체 기사 조회</button>
 
       <main>
         <Table striped bordered hover>

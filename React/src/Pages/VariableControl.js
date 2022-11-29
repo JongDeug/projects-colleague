@@ -7,17 +7,16 @@ import "../css/updateMember.css";
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-function VariableControl() {
-  const [likeVar, setLikeVar] = useState();
-  const [keywordVar, setKeywordVar] = useState();
-  const [newsVar, setNewsVar] = useState();
+async function VariableControl() {
+  const [likeVar, setLikeVar] = useState(3); //  인기 게시글 충족 변수
+  const [keywordVar, setKeywordVar] = useState(3); //  추천 게시글 변수
+  const [newsVar, setNewsVar] = useState(3); //  뉴스 변수
+  const [page, setPage] = useState(1);
 
-
-
-  async function requestVariable() {
+  function requestVariable() {
     const token = sessionStorage.getItem("accessToken");
-    return await axios({
-      url: "/api/adminAdjust/adjust", //  현재 저장된 변수 find()로 다 가져오는 get 컨트롤러
+    return axios({
+      url: "/api/variableRead", //  현재 저장된 변수 find()로 다 가져오는 get 컨트롤러
       method: "get",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -42,7 +41,7 @@ function VariableControl() {
     const token = sessionStorage.getItem("accessToken");
 
     axios({
-      url: `/api/adminAdjust/adjust`, //    변수 3개 컨트롤러에 넘기면 3개다 전부 업데이트 하는 컨트롤러
+      url: "/api/variableUpdate", //    변수 3개 컨트롤러에 넘기면 3개다 전부 업데이트 하는 컨트롤러
       method: "put",
       headers: {
         Authorization: `Bearer ${token}`,

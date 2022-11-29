@@ -46,7 +46,6 @@ function MemberDetail() {
 
   function requestMemberDelete() {
     const token = sessionStorage.getItem("accessToken");
-    set_id(_id);
     axios({
       url: `/api/adminMember/manage/${_id}`,
       method: "delete",
@@ -55,7 +54,7 @@ function MemberDetail() {
       },
     })
       .then((res) => {
-        window.location = `${res.data.responseData.redirect}`;
+        console.log(res.data.responseData.result);
       })
       .catch((err) => {
         if (err.response) {
@@ -83,7 +82,7 @@ function MemberDetail() {
       사용자 관심 키워드 : {interestKeywords}
       <br></br>
       <div className="row ri">
-        <button onClick={requestMemberDelete}>계정 추방</button>
+        <button onClick={requestMemberDelete}>사용자 추방</button>
       </div>
     </div>
   );
