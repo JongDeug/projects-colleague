@@ -8,13 +8,57 @@ const getMethod = async (req, res, next) => {
   try {
     const getUser = await Member.findOne({ userId: getUserId });
     const getKeyword = getUser.interestKeywords;
-    const result = await News.find({
-      newsTitle: { $regex: getKeyword, $options: "i" },
-    });
+
+    let keywordSize = getKeyword.length;
+    const resultList = [];
+
+    for (let i = 0; i < keywordSize; i++) {
+      let x = getKeyword[i].replace(/#/g, "");
+      x = x.replace(/ /g, "");
+      const tempResult = await News.find({
+        $or: [
+          {
+            newsTitle: { $regex: x, $options: "i" },
+          },
+          {
+            newsDescription: { $regex: x, $options: "i" },
+          },
+        ],
+      });
+      // console.log(tempResult);
+      if (tempResult.length > 0) {
+        Object.assign(resultList, tempResult);
+      }
+    }
+
+    // console.log(resultList);
+
+    // console.log(resultList);
+    // console.log(resultList);
+    // getKeyword.forEach(async (element) => {
+    //   let x = element.replace(/#/g, "");
+    //   x = x.replace(/ /g, "");
+    //   // const tempResult = await News.find({
+    //   //   $or: [
+    //   //     {
+    //   //       // newsTitle: { $regex: x, $options: "i" },
+    //   //       newsTitle: { $regex: ".*" + x + ".*" },
+    //   //       newsDescription: { $regex: ".*" + x + ".*" },
+    //   //     },
+    //   //   ],
+    //   // });
+    //   tempResult = await News.find({
+    //     newsTitle: { $regex: ".*" + x + ".*" },
+    //   });
+    //   if (tempResult != null) {
+    //     resultList.push(tempResult);
+    //   }
+    // });
+    // console.log(tempResult);
     const responseData = responseDataForm(
       null,
       "News With Key get request complete",
-      result
+      resultList
     );
     // console.log("getKeyword:" + getUser.interestKeywords);
     // console.log("newslistKEYWORD:" + result);

@@ -8,13 +8,30 @@ const getMethod = async (req, res, next) => {
   try {
     const getUser = await Member.findOne({ userId: getUserId });
     const getKeyword = getUser.interestKeywords;
-    const result = await VideoNews.find({
-      newsTitle: { $regex: getKeyword, $options: "i" },
-    });
+    let keywordSize = getKeyword.length;
+    const resultList = [];
+
+    for (let i = 0; i < keywordSize; i++) {
+      let x = getKeyword[i].replace(/#/g, "");
+      x = x.replace(/ /g, "");
+      const tempResult = await VideoNews.find({
+        $or: [
+          {
+            newsTitle: { $regex: x, $options: "i" },
+          },
+          {
+            newsDescription: { $regex: x, $options: "i" },
+          },
+        ],
+      });
+      if (tempResult.length > 0) {
+        Object.assign(resultList, tempResult);
+      }
+    }
     const responseData = responseDataForm(
       null,
       "Video News With Key get request complete",
-      result
+      resultList
     );
     res.status(200).json({ responseData });
   } catch (err) {
