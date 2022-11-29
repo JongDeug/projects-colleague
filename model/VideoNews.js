@@ -3,23 +3,11 @@ const schema = mongoose.Schema;
 
 const userSchema = new schema(
   {
-    // newsId: {
-    //   type: Number,
-    //   required: true,
-    // },
     newsTitle: {
       type: String,
       required: true,
     },
-    newsSourceLink: {
-      type: String,
-      required: false,
-    },
-    newsNaverLink: {
-      type: String,
-      required: false,
-    },
-    newsContent: {
+    videoId: {
       type: String,
       required: false,
     },
@@ -27,11 +15,7 @@ const userSchema = new schema(
       type: String,
       required: false,
     },
-    newsImageURL: {
-      type: Array,
-      required: false,
-    },
-    newsPubDate: {
+    thumbnailURL: {
       type: String,
       required: false,
     },
@@ -41,4 +25,4 @@ const userSchema = new schema(
   }
 );
 
-module.exports = mongoose.model("News", userSchema);
+module.exports = mongoose.model("VideoNews", userSchema);

@@ -60,7 +60,14 @@ const postMethod = async (req, res, next) => {
             result.accessToken = accessToken;
             result.host = getUserId;
             // roles를 추가했으니 admin인지 아닌지 확인 가능.
-            result.roles = roles;
+            let role;
+            if(roles.includes(5000)){
+                role = "admin";
+            }else{
+                role = "user";
+            }
+            result.role = role;
+
             const responseData = responseDataForm("/", "login post request complete", result);
 
             res.status(200).json({ responseData });

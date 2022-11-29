@@ -14,6 +14,7 @@ const getMethod = async (req, res, next) => {
 
 const putMethod = async (req, res, next) => {
     const getLikeVar = req.body.likeVar;
+    const getLikePage = req.body.likePage;
     const getKeywordVar = req.body.keywordVar;
     const getNewsVar = req.body.newsVar;
     try {
@@ -23,6 +24,7 @@ const putMethod = async (req, res, next) => {
 
         const result = await Variable.findOne({tableId : 1});
         result.likeVar = getLikeVar;
+        result.likePage = getLikePage;
         result.keywordVar = getKeywordVar;
         result.newsVar = getNewsVar;
         await result.save();

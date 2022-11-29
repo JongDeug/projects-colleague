@@ -25,7 +25,7 @@ if (!fs.existsSync("uploads")) {
 // Variable.create({});
 
 connectDB();
-// crawler(); // 주기랑 다시 설정해야함.
+crawler(); // 주기랑 다시 설정해야함.
 
 // middleware
 app.use(express.urlencoded({ extended: false })); // true일 경우 qs 라이브러리 사용

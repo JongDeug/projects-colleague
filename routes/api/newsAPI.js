@@ -1,14 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const readNewsListController = require("../../controllers/NewsControllers/readNewsListController");
-const readNewsArticleDetailController = require("../../controllers/NewsControllers/readNewsArticleController");
+const articleNewsListController = require("../../controllers/NewsControllers/articleNewsListController");
+const articleNewsDetailController = require("../../controllers/NewsControllers/articleNewsDetailController");
+const videoNewsController = require("../../controllers/NewsControllers/videoNewsController");
+const videoNewsDetailController = require("../../controllers/NewsControllers/videoNewsDetailController");
+//test
+const articleKeywordNewsListController = require("../../controllers/NewsControllers/articleNewsListWithKeywordController");
+const videoKeywordNewsListController = require("../../controllers/NewsControllers/videoNewsListWithKeywordController");
 
-// 목록, get인듯
-router.route("/list")
-  .post(readNewsListController.postMethod);
-
-// 기사 상세, get인듯
-router.route("/articleDetail")
-  .post(readNewsArticleController.postMethod);
+router.route("/article").get(articleNewsListController.getMethod);
+router.route("/article/:newsId").get(articleNewsDetailController.getMethod);
+router.route("/video").get(videoNewsController.getMethod);
+router.route("/video/:videoNewsId").get(videoNewsDetailController.getMethod);
+//test
+router.route("/articleKeyword").get(articleKeywordNewsListController.getMethod);
+router.route("/videoKeyword").get(videoKeywordNewsListController.getMethod);
 
 module.exports = router;
