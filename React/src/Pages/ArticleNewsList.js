@@ -14,13 +14,13 @@ function ArticleNewsList() {
   const offset = (page - 1) * limit;
 
   function requestGet() {
-    const token = sessionStorage.getItem("accessToken");
+    // const token = sessionStorage.getItem("accessToken");
     return axios({
-      url: "/api/news/article",
+      url: "/news/article",
       method: "get",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      // headers: {
+        // Authorization: `Bearer ${token}`,
+      // },
     })
       .then((res) => {
         setNews(res.data.responseData.result);
@@ -36,13 +36,13 @@ function ArticleNewsList() {
       });
   }
   function requestGetWithKeyword() {
-    const token = sessionStorage.getItem("accessToken");
+    // const token = sessionStorage.getItem("accessToken");
     return axios({
-      url: "/api/news/articleKeyword",
+      url: "/news/articleKeyword",
       method: "get",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      // headers: {
+        // Authorization: `Bearer ${token}`,
+      // },
     })
       .then((res) => {
         setNews(res.data.responseData.result);

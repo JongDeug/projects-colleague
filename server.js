@@ -59,6 +59,7 @@ app.use("/boardInformation", require("./routes/boardInformation"));
 app.use("/boardQuestion", require("./routes/boardQuestion"));
 app.use("/boardBoast", require("./routes/boardBoast"));
 app.use("/popularityPosts", require("./routes/popularityPosts"));
+app.use("/news", require("./routes/newsAPI"));
 
 app.use("/auth", require('./routes/auth'));
 app.use("/adminAuth", require('./routes/adminAuth'));
@@ -72,7 +73,6 @@ app.use("/api/boardInformation", require("./routes/api/boardInformationAPI"));
 app.use("/api/boardQuestion", require("./routes/api/boardQuestionAPI"));
 app.use("/api/boardBoast", require("./routes/api/boardBoastAPI"));
 
-app.use("/api/news", require("./routes/api/newsAPI"));
 app.use("/api/recommendPosts", require("./routes/api/recommendPostsAPI"));
 app.use("/api/notice", require("./routes/api/noticeAPI"));
 

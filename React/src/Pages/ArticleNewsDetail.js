@@ -20,14 +20,14 @@ function ArticleNewsDetail() {
   const [newsSourceLink, setNewsSourceLink] = useState(); // 뉴스 원문 링크 (네이버뉴스X 소스링크)
 
   function requestGetDetail(_id) {
-    const token = sessionStorage.getItem("accessToken");
+    // const token = sessionStorage.getItem("accessToken");
     set_id(_id);
     return axios({
-      url: `/api/news/article/${_id}`,
+      url: `/news/article/${_id}`,
       method: "get",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      // headers: {
+        // Authorization: `Bearer ${token}`,
+      // },
     })
       .then((res) => {
         setNewsTitle(res.data.responseData.result.newsTitle);
