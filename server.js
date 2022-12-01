@@ -75,6 +75,7 @@ app.use("/api/boardBoast", require("./routes/api/boardBoastAPI"));
 
 app.use("/api/recommendPosts", require("./routes/api/recommendPostsAPI"));
 app.use("/api/notice", require("./routes/api/noticeAPI"));
+app.use("/api/news", require("./routes/api/newsKeywordAPI"));
 
 // 로그인 유 (관리자 전용)
 app.use("/api/adminMember", require("./routes/api/adminMemberAPI"));

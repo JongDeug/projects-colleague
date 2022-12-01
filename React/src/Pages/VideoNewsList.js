@@ -14,13 +14,13 @@ function VideoNewsList() {
   const offset = (page - 1) * limit;
 
   function requestGet() {
-    const token = sessionStorage.getItem("accessToken");
+    // const token = sessionStorage.getItem("accessToken");
     return axios({
-      url: "/api/news/video",
+      url: "/news/video",
       method: "get",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      // headers: {
+        // Authorization: `Bearer ${token}`,
+      // },
     })
       .then((res) => {
         setVideoNews(res.data.responseData.result);

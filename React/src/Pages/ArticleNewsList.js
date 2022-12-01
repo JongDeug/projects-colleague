@@ -36,13 +36,13 @@ function ArticleNewsList() {
       });
   }
   function requestGetWithKeyword() {
-    // const token = sessionStorage.getItem("accessToken");
+    const token = sessionStorage.getItem("accessToken");
     return axios({
-      url: "/news/articleKeyword",
+      url: "/api/news/articleKeyword",
       method: "get",
-      // headers: {
-        // Authorization: `Bearer ${token}`,
-      // },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then((res) => {
         setNews(res.data.responseData.result);

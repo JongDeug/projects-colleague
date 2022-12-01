@@ -90,12 +90,12 @@ function App() {
         <Route path='/myact/post' element={<MyPostPage />}></Route>
         <Route path='/myact/like' element={<MyLikePage />}></Route>
         <Route path='/myact/comment' element={<MyCommentPage />}></Route>
-        <Route path='/news/article' element={<ArticleNewsList/>}></Route>
+        <Route path='/news/articlelist' element={<ArticleNewsList/>}></Route>
         <Route
           path="/articleNews/:newsId"
           element={<ArticleNewsDetail />}
         ></Route>
-        <Route path="/news/video" element={<VideoNewsList />}></Route>
+        <Route path="/news/videolist" element={<VideoNewsList />}></Route>
         <Route
           path="/videoNews/:videoNewsId"
           element={<VideoNewsDetail />}

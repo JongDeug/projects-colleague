@@ -71,10 +71,10 @@ function Header2() {
                 className="nav_dropdown"
                 id="collasible-nav-dropdown"
               >
-                <NavDropdown.Item href="/news/video">
+                <NavDropdown.Item href="/news/videolist">
                   영상 뉴스
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/news/article">
+                <NavDropdown.Item href="/news/articlelist">
                   기사 뉴스
                 </NavDropdown.Item>
               </NavDropdown>
