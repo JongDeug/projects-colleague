@@ -33,7 +33,6 @@ function MemberDetail() {
         setDateofBirth(res.data.responseData.result.dateOfBirth);
         setEmail(res.data.responseData.result.email);
         setKeywords(res.data.responseData.result.interestKeywords);
-        console.log(res.data.responseData.result);
       })
       .catch((err) => {
         if (err) {
@@ -54,10 +53,7 @@ function MemberDetail() {
       },
     })
       .then((res) => {
-        console.log(res.data.responseData.result);
-        console.log(res.data.responseData);
-      }).then((res) => {
-        window.location = `${res}`;
+        window.location = `${res.data.responseData.redirect}`;
       })
       .catch((err) => {
         if (err.response) {

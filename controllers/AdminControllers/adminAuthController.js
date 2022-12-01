@@ -94,8 +94,7 @@ const postMethod = async (req, res, next) => {
 
             const result = {};
             result.accessToken = accessToken;
-            result.host = getUserId;
-            result.roles = roles;
+            // result.host = getUserId;
             const responseData = responseDataForm("/", "adminLogin post request complete", result);
 
             res.status(200).json({ responseData });

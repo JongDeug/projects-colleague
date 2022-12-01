@@ -14,6 +14,10 @@ const postMethod = async (req, res, next) => {
         return res.status(400).json({ "message": "빠뜨린 입력 존재" });
     }
 
+    if(getInterestKeywords.length === 0){
+        return res.status(400).json({"message" : "키워드 입력 필요"});
+    }
+
     try {
         // 중복 체킹, id랑 email 중복 체킹
         const duplicateId = await Member.findOne({ userId: getUserId }).exec();

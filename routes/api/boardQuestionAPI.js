@@ -11,7 +11,6 @@ const Comment = require('../../model/CommentQuestion');
 const upload = require('../../middleware/upload');
 
 router.route('/manage')
-    // .get(postController.getMethod(Post))
     .post(upload.array('attachedFile'), postController.postMethod(Post, PostType))
     .put(upload.array('attachedFile'), postController.putMethod(Post, PostType))
     .delete(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), postController.deleteMethod(Post, Comment, PostType));

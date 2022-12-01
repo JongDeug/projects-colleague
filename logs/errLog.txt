@@ -351,3 +351,31 @@
 2022/12/1	12:02:44	TypeError: Cannot read properties of null (reading 'interestKeywords')
 2022/12/1	12:03:33	TypeError: Cannot read properties of null (reading 'interestKeywords')
 2022/12/1	14:36:44	TypeError: Cannot read properties of null (reading 'commentType')
+2022/12/1	16:32:00	ReferenceError: Cannot access 'result' before initialization
+2022/12/1	16:33:06	ReferenceError: DB is not defined
+2022/12/1	16:33:58	ReferenceError: getUserId is not defined
+2022/12/1	16:36:35	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	16:37:18	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	16:39:12	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	16:40:53	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	16:43:14	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	16:44:14	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	16:46:10	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	16:46:18	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	16:46:50	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	16:47:59	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	16:55:53	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	16:56:27	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	16:56:31	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	16:58:13	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	17:00:12	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	17:02:32	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	17:03:23	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	17:05:29	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	17:05:49	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	17:05:57	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	17:06:22	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	17:07:22	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	17:15:45	CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Member"
+2022/12/1	17:16:06	CastError: Cast to ObjectId failed for value "[object Object]" (type string) at path "_id" for model "Member"
+2022/12/1	17:18:57	CastError: Cast to ObjectId failed for value "[object Object]" (type string) at path "_id" for model "Member"
