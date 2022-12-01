@@ -103,7 +103,7 @@ const getTest = async (link) => {
 
     let nonon = $(testStr).text();
 
-    console.log(nonon);
+    // console.log(nonon);
 
     // testStr = $(tag.content).html().split("<br>")[0].substr(0);
 

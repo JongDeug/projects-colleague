@@ -8,6 +8,7 @@ import '../css/board.css';
 import { Button, InputGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import {BiSearch} from 'react-icons/bi';
+import Sidebar from '../Components/Sidebar';
 
 
 function BoardInfo () {
@@ -71,42 +72,6 @@ function BoardInfo () {
     function Search(){
         requestSearch();
     }
-    // function SearchTitle(){
-    //     const list = [];
-    //     console.log(searchWord);
-    //     posts.map((posts) => {
-    //         if(posts.postTitle.includes(searchWord)){
-    //             list.push(posts);
-    //         }
-    //     })
-    //     setPosts(list);
-    //     console.log(list);
-    //     ShowContents();
-    // }
-    // function SearchContent(){
-    //     const list = [];
-    //     console.log(searchWord);
-    //     posts.map((posts) => {
-    //         if(posts.postContent.includes(searchWord)){
-    //             list.push(posts);
-    //         }
-    //     })
-    //     setPosts(list);
-    //     console.log(list);
-    //     ShowContents();
-    // }
-    // function SearchTitleAndCon(){
-    //     const list = [];
-    //     console.log(searchWord);
-    //     posts.map((posts) => {
-    //         if(posts.postTitle.includes(searchWord)||posts.postContent.includes(searchWord)){
-    //             list.push(posts);
-    //         }
-    //     })
-    //     setPosts(list);
-    //     console.log(list);
-    //     ShowContents();
-    // }
 
     function SearchEnter(event){
         if (event.key==='Enter'){
@@ -154,13 +119,16 @@ function BoardInfo () {
                     <BiSearch></BiSearch>
                 </Button>
             </InputGroup>
-            <Table striped bordered hover>
-                <div className=''></div>
-                    <BoardHead></BoardHead>
-                    <tbody>
-                        <ShowContents></ShowContents>
-                    </tbody>
-            </Table>
+            <div className='categoryNtable'>
+                <Sidebar></Sidebar>
+                <Table striped bordered hover>
+                    <div className=''></div>
+                        <BoardHead></BoardHead>
+                        <tbody>
+                            <ShowContents></ShowContents>
+                        </tbody>
+                </Table>
+            </div>
             <div className='float-right'>
                 <Link to={`/writepost`} state={{boardtype:'정보 공유 게시판'}} className='link_to'>
                     <Button className='create_btn float-right'>

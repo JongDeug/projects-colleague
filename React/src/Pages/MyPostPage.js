@@ -10,12 +10,10 @@ import '../css/tab.css';
 function MyPostPage () {
     const menu = ["자유 게시판", "자랑 게시판", "정보 공유 게시판", "질문 게시판"];
     const [currentTab, setCurrentTab] = useState(0);
-    const [posts, setPosts] = useState([]);
     const [postsAny, setPostsAny] = useState([]);
     const [postsBoast, setPostsBoast] = useState([]);
     const [postsInfo, setPostsInfo] = useState([]);
     const [postsQues, setPostsQues] = useState([]);
-    const [postsAll, setPostsAll] = useState({});
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     const offset = (page - 1) * limit;
@@ -36,28 +34,20 @@ function MyPostPage () {
             let list = [];
             res.data.responseData.result.anything&&res.data.responseData.result.anything.map((post)=>{
                 list.push(post);
-                console.log(post);
             })
             res.data.responseData.result.boast&&res.data.responseData.result.boast.map((post)=>{
                 list.push(post);
-                console.log(post);
             })
             res.data.responseData.result.information&&res.data.responseData.result.information.map((post)=>{
                 list.push(post);
-                console.log(post);
             })
             res.data.responseData.result.question&&res.data.responseData.result.question.map((post)=>{
                 list.push(post);
-                console.log(post);
             })
-            setPosts(list);
             setPostsAny(res.data.responseData.result.anything);
             setPostsBoast(res.data.responseData.result.boast);
             setPostsInfo(res.data.responseData.result.information);
             setPostsQues(res.data.responseData.result.question);
-
-            setPostsAll(res.data.responseData.result);
-
         }).catch((err)=>{
             if(err.response){
                 console.log(err.response.data);

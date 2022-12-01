@@ -22,18 +22,25 @@ function PostDetail() {
   const [hit, setHit] = useState("");
   const [likeHit, setLikeHit] = useState([]);
   const [likeHitBool, setLikeHitBool] = useState();
-  const [keywords, setKeywords] = useState("");
+  const [keywords, setKeywords] = useState([]);
   const [attachedFile, setAttatchedFile] = useState("");
   const [show, setShow] = useState(0);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState('');
   const [currentUser, setCurrentUser] = useState("");
   const [isUser, setIsUser] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
+  function setAdminState() {
+    if (sessionStorage.getItem("role")==="admin") {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+  }
   function requestGetDetail(postBoard,_id, method) {
     const token = sessionStorage.getItem("accessToken");
     set_id(_id);
@@ -57,9 +64,11 @@ function PostDetail() {
         setComments(res.data.responseData.result.comments);
         setCurrentUser(res.data.responseData.result.host);
         setIsUser(res.data.responseData.result.host===res.data.responseData.result.userId);
-        console.log(res.data.responseData.result.likeHit)
-        console.log(res.data.responseData.result.attachedFile);
-        console.log(typeof res.data.responseData.result.attachedFile);
+        console.log(res.data.responseData.result);
+        console.log(res.data.responseData.result.keywords);
+        // console.log(res.data.responseData.result.likeHit);
+        // console.log(res.data.responseData.result.attachedFile);
+        // console.log(typeof res.data.responseData.result.attachedFile);
       })
       .catch((err) => {
         if (err) {
@@ -72,6 +81,11 @@ function PostDetail() {
 
   useEffect(() => {
     requestGetDetail(postBoard,_id, "get");
+    console.log(sessionStorage.getItem("role"));
+    console.log(typeof sessionStorage.getItem("role"));
+
+    setAdminState();
+    console.log(isAdmin);
   }, []);
 
   function requestDelete() {
@@ -112,6 +126,7 @@ function PostDetail() {
         <Comment
           comment={comments}
           currentUser={currentUser}
+          isAdmin={isAdmin}
         />
       )
     });
@@ -172,18 +187,14 @@ function PostDetail() {
                 <div className="text-muted fst-italic mb-2">
                   by {postUserId}
                 </div>
-                <a
+                {keywords&&keywords.map((keyword)=>(
+                  <div
                   className="badge bg-secondary text-decoration-none link-light"
-                  href="#!"
-                >
-                  태그1
-                </a>
-                <a
-                  className="badge bg-secondary text-decoration-none link-light"
-                  href="#!"
-                >
-                  태그2
-                </a>
+                  >
+                    {keyword}
+                  </div>
+                ))}
+                
               </header>
               <section className="mb-5">
                 <p className="fs-5 mb-4">{postContent}</p>
@@ -198,7 +209,7 @@ function PostDetail() {
               <Like postid={_id} likeHitBool={likeHitBool} setLikeHitBool={setLikeHitBool} likeHit={likeHit} setLikeHit={setLikeHit} postBoard={postBoard}>
 
               </Like>
-              {isUser&&
+              {(isUser||isAdmin)&&
               <><p className="postDetailButtons mt-4 float-right">
               
                 <div>
@@ -259,7 +270,7 @@ function PostDetail() {
 
               </div>
               <div className='input_comment'>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                <Form.Group className="comment_group" controlId="exampleForm.ControlTextarea1">
                   <Form.Control placeholder='댓글 작성' as="textarea" rows={3} className='comment_form' onChange={onCommentHandler} />
                   <Button
                     variant="outline-secondary"

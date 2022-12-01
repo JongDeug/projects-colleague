@@ -5,10 +5,35 @@
     font-style: normal;
 }
 
-@media screen and (max-width: 980px) {
+/*태블릿이하크기size*/
+@media screen and (max-width: 993px) {
     .nav-icon {
         margin-left: 0px;
     }
+
+    .nav-icon {
+        /* margin: auto; */
+        display: flex;
+    }
+
+    .logo_header {
+        margin-left: 10px;
+        display: flex;
+        position: absolute;
+        left: -4em;
+        top: 0;
+        height: 100%;
+        max-width: fit-content;
+    }
+
+    .nav-cont.container {
+        margin: 0;
+    }
+    
+    .logo_header_link{
+        margin: 0;
+    }
+    
 }
 
 .dropdown-toggle::after {
@@ -42,17 +67,6 @@
     margin-right: 0px;
 }
 
-@media screen and (max-width: 993px) {
-    .nav-icon {
-        margin: auto;
-        display: flex;
-    }
-
-    .logo_header {
-        margin-left: 10px;
-        display: flex;
-    }
-}
 .li_menu{
     list-style-type:none;
 }
@@ -120,3 +134,29 @@
 .popover-notification{
     overflow-y: auto;
 }
+
+#collasible-nav-dropdown{
+    font-size: 1.5em;
+}
+
+.navbar.navbar-expand-lg.mt-3.navbar-light {
+    justify-content: center;
+    margin: 0 auto 1em;
+}
+
+.responsive-navbar-nav{
+    margin-right: 0px;
+}
+
+.nav-icon.navbar-nav{
+    padding: 0;
+}
+
+.me-auto.navbar-nav{
+    align-items : center;
+}
+
+.navbar{
+    --bs-navbar-nav-link-padding-x:0 !important;
+}
+

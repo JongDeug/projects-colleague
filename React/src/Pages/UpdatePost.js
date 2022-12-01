@@ -21,16 +21,6 @@ function UpdatePost() {
   const [isValidTitle, setIsValidTitle] = useState(false);
   const [isValidContent, setIsValidContent] = useState(false);
 
-  // function requestlist(){
-  //   console.log(params.postId);
-  //   setPostId(params.postId);
-  //   console.log(getPostById(1)[0]);
-  //   setPost(getPostById(params.postId)[0]);
-  //   console.log(post);
-  //   console.log(post.postTitle);
-  //   setPostContent(getPostById(params.postId)[0].postContent);
-  // };
-
   const onTitleHandler = (event) => {
     setTitle(event.currentTarget.value);
   };

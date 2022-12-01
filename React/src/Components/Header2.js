@@ -14,13 +14,14 @@ import { BiX } from "react-icons/bi";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
 import Badge from "react-bootstrap/Badge";
-import CommentNotice from './Commentnotice';
+import CommentNotice from "./Commentnotice";
+import axios from "axios";
 
 function Header2() {
   const [isClicked, setIsClicked] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
-  const comments = [{userId:"user1",postTitle:"우리집 강아지 좀 보세요",content:"강아지가 너무 귀여워요~"},
-  {userId:"user2",postTitle:"우리집 고양이 좀 보세요",content:"너무 귀여워요~"}];
+
+  const [noticelist, setNoticelist] = useState([]);
 
   function setLoginState() {
     if (!!sessionStorage.getItem("accessToken")) {
@@ -29,20 +30,75 @@ function Header2() {
       setIsLogin(false);
     }
   }
-  
+
+  function requestNotice() {
+    const token = sessionStorage.getItem("accessToken");
+    axios({
+      url: "/api/notice",
+      method: "get",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        console.log(res.data.responseData.result);
+        setNoticelist(res.data.responseData.result);
+      })
+      .catch((err) => {
+        if (err.response) {
+          console.log(err.response.data);
+          console.log(err.response.status);
+          console.log(err.response.header);
+        }
+      });
+  }
+
+  function requestNoticeDelete(noticeId) {
+    const token = sessionStorage.getItem("accessToken");
+    axios({
+      url: "/api/notice",
+      method: "delete",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        noticeId: noticeId,
+      },
+    })
+      .then((res) => {
+        console.log(res.data.responseData.result);
+      })
+      .catch((err) => {
+        if (err.response) {
+          console.log(err.response.data);
+          console.log(err.response.status);
+          console.log(err.response.header);
+        }
+      });
+  }
+
+  function clicktest(e) {
+    e.preventDefault();
+    console.log("You clicked submit.");
+  }
+  function setDeleteList(id){
+    console.log(id);
+    setNoticelist(noticelist.filter((notice)=>notice.id!==id));
+    console.log(noticelist);
+  }
   useEffect(() => {
     console.log(sessionStorage.getItem("accessToken"));
     setIsClicked(false);
     setLoginState();
+    requestNotice();
   }, []);
 
   return (
     <Navbar collapseOnSelect expand="lg mt-3" variant="light">
       <Container className="nav-cont">
-        <Link to="/">
+        <Link to="/" className="logo_header_link">
           <img src={logo} href="/main" className="logo_header"></img>
         </Link>
-
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
@@ -103,22 +159,18 @@ function Header2() {
                     </Popover.Header>
                     <Popover.Body>
                       <div class="list-group">
-                        {/* <CommentNotice comment={comments}></CommentNotice>
-                        <CommentNotice></CommentNotice>
-                        <CommentNotice></CommentNotice> */}
-                        {comments.map((comment,i)=>(
-                          <CommentNotice comment={comment}></CommentNotice>
+                        {noticelist.map((comment, i) => (
+                          <CommentNotice comment={comment} deletelist={setDeleteList}></CommentNotice>
                         ))}
-                        
                       </div>
                     </Popover.Body>
                   </Popover>
                 }
               >
                 <Nav.Link>
-                  <AiFillBell size={24}></AiFillBell>
+                  <AiFillBell size={24} onClick={requestNotice}></AiFillBell>
                   <span class="position-absolute translate-middle p-2 bg-danger border border-light rounded-circle">
-                    <span class="indicator">{comments.length}</span>
+                    <span class="indicator">{noticelist.length}</span>
                   </span>
                 </Nav.Link>
               </OverlayTrigger>

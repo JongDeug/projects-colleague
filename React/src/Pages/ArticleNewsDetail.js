@@ -15,19 +15,19 @@ function ArticleNewsDetail() {
   const [newsTitle, setNewsTitle] = useState(); //  뉴스 제목
   const [newsDescription, setNewsDescription] = useState(); //  뉴스 요약문
   const [newsContent, setNewsContent] = useState(); //  뉴스 기사 내용
-  const [newsImageURL, setNewsImageURL] = useState(); //  내용에 포함된 이미지 (url 형태) 이건 아직 조정중
+  const [newsImageURL, setNewsImageURL] = useState([]); //  내용에 포함된 이미지 (url 형태) 이건 아직 조정중
   const [newsPubDate, setNewsPubDate] = useState(); // 뉴스 발행일
   const [newsSourceLink, setNewsSourceLink] = useState(); // 뉴스 원문 링크 (네이버뉴스X 소스링크)
 
   function requestGetDetail(_id) {
-    // const token = sessionStorage.getItem("accessToken");
+    const token = sessionStorage.getItem("accessToken");
     set_id(_id);
     return axios({
       url: `/news/article/${_id}`,
       method: "get",
-      // headers: {
-        // Authorization: `Bearer ${token}`,
-      // },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then((res) => {
         setNewsTitle(res.data.responseData.result.newsTitle);
@@ -51,12 +51,26 @@ function ArticleNewsDetail() {
     requestGetDetail(_id);
   }, []);
 
+  function PrintImage() {
+    const arr = [];
+    newsImageURL && newsImageURL.map((img) => {
+      arr.push(
+        <div className="newsimg">
+          <img src={`${img}`}></img>
+        </div>
+      )
+    });
+    return arr;
+  }
+  
   return (
     <div class="container mt-5">
       {newsTitle}
       <pre></pre>
       <pre></pre>
       {/* {newsDescription} 요약문은 필요없을ㄷ스*/}
+      <PrintImage></PrintImage>
+
       <div className="row ri">{newsContent}</div>
     </div>
   );

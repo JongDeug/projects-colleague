@@ -17,14 +17,14 @@ function VideoNewsDetail() {
   const [thumbnailURL, setThumbnailURL] = useState(); //  썸네일 이미지 (주소 형식)
 
   function requestGetDetail(_id) {
-    const token = sessionStorage.getItem("accessToken");
+    // const token = sessionStorage.getItem("accessToken");
     set_id(_id);
     return axios({
-      url: `/api/news/video/${_id}`,
+      url: `/news/video/${_id}`,
       method: "get",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      // headers: {
+        // Authorization: `Bearer ${token}`,
+      // },
     })
       .then((res) => {
         setVideoNewsId(res.data.responseData.result.videoId);

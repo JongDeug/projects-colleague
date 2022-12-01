@@ -68,13 +68,12 @@ export default function Login() {
       },
     })
       .then((res) => {
-        console.log(res.data.responseData.result);
         const accessToken = res.data.responseData.result.accessToken;
         const host = res.data.responseData.result.host;
         const role = res.data.responseData.result.role;
         sessionStorage.setItem("host", host);
-        sessionStorage.setItem("role", role);
         sessionStorage.setItem("accessToken", accessToken);
+        sessionStorage.setItem("role", role);
         return res.data.responseData.redirect;
       })
       .then((res) => {

@@ -7,7 +7,7 @@ import Pagination from '../Components/Board/Pagination';
 import '../css/board.css';
 import { Button, InputGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import {BiSearch} from 'react-icons/bi'
+import {BiSearch} from 'react-icons/bi';
 import Sidebar from '../Components/Sidebar';
 
 
@@ -99,7 +99,6 @@ function BoardFree () {
         <h2>자유 게시판</h2>
 
         <div className='to_flex'>
-            <Sidebar></Sidebar>
             <main>
             <InputGroup className="mb-3">
                 <select
@@ -121,13 +120,16 @@ function BoardFree () {
                     <BiSearch></BiSearch>
                 </Button>
             </InputGroup>
-            <Table striped bordered hover>
-                <div className=''></div>
-                    <BoardHead></BoardHead>
-                    <tbody>
-                        <ShowContents></ShowContents>
-                    </tbody>
-            </Table>
+            <div className='categoryNtable'>
+                <Sidebar></Sidebar>
+                <Table striped bordered hover>
+                    <div className=''></div>
+                        <BoardHead></BoardHead>
+                        <tbody>
+                            <ShowContents></ShowContents>
+                        </tbody>
+                </Table>
+            </div>
             <div className='float-right'>
                 <Link to={`/writepost`} state={{boardtype:'자유 게시판'}} className='link_to'>
                     <Button className='create_btn float-right'>

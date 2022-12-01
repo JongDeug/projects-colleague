@@ -97,6 +97,7 @@ function Header2() {
                     ></BsFillPersonFill>
                     <Dropdown visibility={isClicked}>
                       <ul className="boardmenu icon_content">
+                        {/* 관리자용 기능들(로그아웃, 회원관리, 변수값 조정)*/}
                         <li className="li_menu">
                           <Link to="/managerlogin" className="link_menu">
                             로그아웃

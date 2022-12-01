@@ -7,6 +7,7 @@ const getMethod = (Post, Comment) => {
             const resultPost = await Post.find({});
             const result = [];
 
+
             for (let post of resultPost) {
                 // postId로 Comment의 개수 구하기
                 const commentCount = await Comment.find({ postId: post._id }).count();
@@ -27,7 +28,6 @@ const getMethod = (Post, Comment) => {
 const postMethod = (Post, PostType) => {
     return async (req, res, next) => {
         // 값 받기 
-        console.log(req.files);
         const getUserId = req.userId;
         const getPostTitle = JSON.parse(req.body.postTitle);
         const getPostContent = JSON.parse(req.body.postContent);
@@ -67,7 +67,7 @@ const postMethod = (Post, PostType) => {
                 keywords: getNewKeywords,
                 attachedFile: getAttachedFile
             });
-            console.log(`result : ${result}`);
+            // console.log(`result : ${result}`);
 
             const responseData = responseDataForm(`/post/${PostType}/${result._id}`, "board post request complete", result);
             res.status(200).json({ responseData });
@@ -107,7 +107,7 @@ const putMethod = (Post, PostType) => {
 
                 // 작성 일자에서 수정한 시간으로 바꿀까?
                 const result = await foundPost.save();
-                console.log(result);
+                // console.log(result);
 
                 const responseData = responseDataForm(`/post/${PostType}/${result._id}`, "board put request complete", result);
                 res.status(200).json({ responseData });

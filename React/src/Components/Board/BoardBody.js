@@ -1,5 +1,5 @@
 import {React} from 'react';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../../css/board.css';
 
@@ -11,6 +11,8 @@ function BodyContents(props) {
     const [postHit, setPostHit] = useState(props.post.hit);
     const [postLikehit, setPostLikehit] = useState(props.post.likeHit);
     const [postType, setPostType]= useState(props.post.postType);
+    const [ispcsize, setIspcsize] = useState(true);
+    const commentCount = props.post.commentCount;
 
     console.log(props.post);
     console.log(props.likeHit);
@@ -26,18 +28,44 @@ function BodyContents(props) {
         postBoard = "boardInformation";
     }
 
+    function changeContent(){
+        var tabWidth = window.matchMedia("screen and (min-width:480px)");
+        var pcWidth = window.matchMedia("screen and (min-width:800px)");
+        if(pcWidth.matches){
+            setIspcsize(true);
+        }
+        
+        else{
+            setIspcsize(false);
+        }
+    }
+    useEffect(()=>{
+        changeContent();
+    },[]);
     return (
         <tr>
             {/* <th className='content post_id'>{postId}</th> */}
-            <th className='content post_title'>
-                <Link to={{pathname:`/post/${postBoard}/${postId}`, state:{postBoard:postBoard, postId:postId}}} className='post_link'>
-                    <div>{postTitle}</div>
-                </Link>
-            </th>
-            <th className='content post_writer'>{postUserId}</th>
-            <th className='content post_date'>{postDate}</th>
-            <th className='content post_hit'>{postHit}</th>
-            <th className='content post_likehit'>{postLikehit.length}</th>
+            {ispcsize?
+                <><th className='content post_title'>
+                    <Link to={{pathname:`/post/${postBoard}/${postId}`, state:{postBoard:postBoard, postId:postId}}} className='post_link'>
+                        <div>{postTitle+" ("+commentCount+")"}</div>
+                    </Link>
+                </th>
+                <th className='content post_writer'>{postUserId}</th>
+                <th className='content post_date'>{postDate}</th>
+                <th className='content post_hit'>{postHit}</th>
+                <th className='content post_likehit'>{postLikehit.length}</th>
+            </>
+            :
+            <>
+                <th className='content post_title'>
+                    <Link to={{pathname:`/post/${postBoard}/${postId}`, state:{postBoard:postBoard, postId:postId}}} className='post_link'>
+                        <div>{postTitle+" ("+commentCount+")"}</div>
+                    </Link>
+                </th>
+                <th className='content post_hit'>{postHit}</th>
+            </>
+            }
         </tr>
     )
 }

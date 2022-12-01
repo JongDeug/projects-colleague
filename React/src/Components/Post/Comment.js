@@ -12,6 +12,7 @@ function Comment (props) {
     const [postId, setPostId] = useState(props.comment.postId);
     const [commentType,setCommentType] = useState(props.comment.commentType);
     const [isUser, setIsUser] = useState(props.currentUser===userId);
+    const [isAdmin, setIsAdmin] = useState(props.isAdmin);
     console.log(props);
     var postBoard;
     if(commentType === "질문 게시판"){
@@ -100,7 +101,7 @@ function Comment (props) {
                     <input type='button' value='작성' className='cmtbtn comment_write' onClick={()=>{EndUpdating();  requestCommentPut();}}></input>
                     :
                     (
-                    isUser&&<span>
+                    (isUser||isAdmin)&&<span>
                     <input type='button' value='수정' className='cmtbtn comment_update' onClick={isUpdating}></input>
                     <input type='button' value='삭제' className='cmtbtn comment_delete' onClick={requestCommentDelete}></input>
                     </span>)

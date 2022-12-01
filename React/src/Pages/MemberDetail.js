@@ -55,6 +55,9 @@ function MemberDetail() {
     })
       .then((res) => {
         console.log(res.data.responseData.result);
+        console.log(res.data.responseData);
+      }).then((res) => {
+        window.location = `${res}`;
       })
       .catch((err) => {
         if (err.response) {

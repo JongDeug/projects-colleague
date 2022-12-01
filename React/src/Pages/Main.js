@@ -1,5 +1,5 @@
 import React, {Component, useEffect} from 'react';
-// import '../css/main.css';
+import '../css/Main.module.css';
 import { Link, Route, Routes } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import axios from 'axios';
@@ -9,23 +9,24 @@ import { Tab, Tabs } from 'react-bootstrap';
 
 
 function Main() {
-    const imgs = useRef([{src:"unsplash1.jpg", content:"https://images.unsplash.com/photo-1456926631375-92c8ce8"+
-    "72def?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"},
-    {src:"unsplash2.jpg",content:"https://images.unsplash.com/photo-1425082661705-1834bfd09dca?ixlib=rb-4.0"+
-    ".3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80",},
-    {src:"unsplash3.jpg",content:"https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?ixlib=rb-4.0.3&ixid=MnwxMj"+
-    "A3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"}]);
-
     const [key, setKey] = useState('popular');
-    const [postTitles, setPostTitles] = useState([]);
-    const [img, setImg] = useState(null);
-
-    // const [posts, setPosts] = useState([]);
-    const posts = useRef([]);
+    const popularPosts = useRef([]);
     const recommendPosts = useRef([]);
     const recomLen = useRef(0);
     const popLen = useRef(0);
     const [isLogin, setIsLogin] = useState(true);
+    const boardmenu = ["자유 게시판", "자랑 게시판", "정보 공유 게시판", "질문 게시판"];
+    const [anything,setAnything] = useState([]);
+    const [boast,setBoast] = useState([]);
+    const [information,setInformation] = useState([]);
+    const [question,setQuestion] = useState([]);
+    const [currentTab, setCurrentTab] = useState(0);
+
+    const newsmenu = ["영상", "기사"];
+    const [currentTabNews,setCurrentTabNews] = useState(0);
+    const [article, setArticle] = useState([]);
+    const [video, setVideo] = useState([]);
+
 
     function setLoginState() {
         if (sessionStorage.getItem("accessToken")) {
@@ -34,6 +35,7 @@ function Main() {
         setIsLogin(false);
         }
     }
+    
     function requestGetPopular() {
         const token = sessionStorage.getItem("accessToken");
         return axios({
@@ -43,31 +45,24 @@ function Main() {
                 Authorization: `Bearer ${token}`
             },
         }).then((res)=>{
-            setPostTitles(res.data.responseData.result);
             let list = [];
-            console.log(posts);
             res.data.responseData.result.anything&&res.data.responseData.result.anything.map((post,i)=>{
                 list.push(post);
-                posts.current.push(post);
+                popularPosts.current.push(post);
             });
             res.data.responseData.result.boast&&res.data.responseData.result.boast.map((post)=>{
                 list.push(post);
-                posts.current.push(post);
+                popularPosts.current.push(post);
             });
             res.data.responseData.result.information&&res.data.responseData.result.information.map((post)=>{
                 list.push(post);
-                posts.current.push(post);
+                popularPosts.current.push(post);
             });
             res.data.responseData.result.question&&res.data.responseData.result.question.map((post)=>{
                 list.push(post);
-                posts.current.push(post);
+                popularPosts.current.push(post);
             });
             popLen.current = list.length;
-            console.log("popular: "+popLen.current);
-            // console.log(postslen);
-            console.log(list.length);
-            // setImg(res.data.responseData.result.anything[0].attachedFile);
-            // setPostslen(posts.current.length);
         }).catch((err)=>{
             if(err.response){
                 console.log(err.response.data);
@@ -76,17 +71,18 @@ function Main() {
             }
         })
     }
-    function requestGetRecommend() {
+    function requestRecommendPosts(){
         const token = sessionStorage.getItem("accessToken");
-        return axios({
-            url:"/api/recommendPosts",
-            method:"get",
-            headers:{
+        axios({
+            url: '/api/recommendPosts',
+            method: 'get',
+            headers: {
                 Authorization: `Bearer ${token}`
             },
-        }).then((res)=>{
-            let list = [];
+        }).then((res) => {
             console.log(res.data.responseData.result);
+            let list = [];
+            recommendPosts.current = [];
             res.data.responseData.result.anything&&res.data.responseData.result.anything.map((post,i)=>{
                 list.push(post);
                 recommendPosts.current.push(post);
@@ -104,10 +100,22 @@ function Main() {
                 recommendPosts.current.push(post);
             });
             recomLen.current = list.length;
-            console.log("recommend: "+recomLen.current);
-            console.log(list.length);
-            // setImg(res.data.responseData.result.anything[0].attachedFile);
-            // setPostslen(posts.current.length);
+        }).catch((err)=>{
+            if(err.response){
+                console.log(err.response.data);
+                console.log(err.response.status);
+                console.log(err.response.header);
+            }
+        });
+    }
+
+    function requestGetAny() {
+        return axios({
+            url:"/boardAnything/read",
+            method:"get",
+        }).then((res)=>{
+            setAnything(res.data.responseData.result.reverse().slice(0,10));
+            console.log(res.data.responseData.result.reverse().slice(0,10));
         }).catch((err)=>{
             if(err.response){
                 console.log(err.response.data);
@@ -116,18 +124,108 @@ function Main() {
             }
         })
     }
+    function requestGetBoast() {
+        return axios({
+            url:"/boardBoast/read",
+            method:"get",
+        }).then((res)=>{
+            setBoast(res.data.responseData.result.reverse().slice(0,10));
+            console.log(res.data.responseData.result.reverse().slice(0,10));
+        }).catch((err)=>{
+            if(err.response){
+                console.log(err.response.data);
+                console.log(err.response.status);
+                console.log(err.response.header);
+            }
+        })
+    }
+    function requestGetInfo() {
+        return axios({
+            url:"/boardInformation/read",
+            method:"get",
+        }).then((res)=>{
+            setInformation(res.data.responseData.result.reverse().reverse().slice(0,10));
+            console.log(res.data.responseData.result.reverse().reverse().slice(0,10));
+        }).catch((err)=>{
+            if(err.response){
+                console.log(err.response.data);
+                console.log(err.response.status);
+                console.log(err.response.header);
+            }
+        })
+    }
+    function requestGetQues() {
+        return axios({
+            url:"/boardQuestion/read",
+            method:"get",
+        }).then((res)=>{
+            setQuestion(res.data.responseData.result.slice(0,10));
+            console.log(res.data.responseData.result.slice(0,10));
+        }).catch((err)=>{
+            if(err.response){
+                console.log(err.response.data);
+                console.log(err.response.status);
+                console.log(err.response.header);
+            }
+        })
+    }
+
+
+    function ShowPostList(){
+        console.log(currentTab);
+        if(currentTab===0){
+            return <ShowPosts posts={anything}></ShowPosts>
+        }
+        else if(currentTab===1){
+            return <ShowPosts posts={boast}></ShowPosts>
+        }
+        else if(currentTab===2){
+            return <ShowPosts posts={information}></ShowPosts>
+        }
+        else if(currentTab===3){
+            return <ShowPosts posts={question}></ShowPosts>
+        }
+    }
+    function ShowNewsList(){
+        console.log(currentTabNews);
+        if(currentTabNews===0){
+            return <ShowPosts posts={article}></ShowPosts>
+        }
+        else if(currentTabNews===1){
+            return <ShowPosts posts={video}></ShowPosts>
+        }
+    }
+
     useEffect(()=>{
         requestGetPopular();
+        requestGetAny();
+        requestGetBoast();
+        requestGetInfo();
+        requestGetQues();
         setLoginState();
         console.log(isLogin);
     },[]);
-    
-    function ShowPosts(){
+
+    function ShowPosts(props){
+        console.log(props.posts);
+        console.log(props.posts[0]?.postContent);
         const list = [];
-            postTitles&&Array(postTitles).slice(0,6).map((posts) => {
-                list.push(<div className='content post_title'>{posts.postTitle}</div>)
+        for(let i=0; i<10; i++){
+            if(props.posts[i]){
+                console.log(props.posts[i]);
+                list.push(<div className={styles.posttitle}>{props.posts[i]?.postTitle}</div>)
             }
-        )
+            else{
+                console.log(props.posts[i]);
+                list.push(<div className={styles.posttitle}>&nbsp;</div>)
+            }
+        }
+        // props.posts&&props.posts.map((post) => {
+        //     console.log(post);
+        //     console.log();
+        //     list.push(<div className={styles.posttitle}>{post.postTitle}</div>)
+        // }
+        // )
         return list;
     };
     
@@ -137,33 +235,73 @@ function Main() {
         id="controlled-tab-example"
         activeKey={key}
         onSelect={(k) => setKey(k)}
-        // className="mb-3"
         className={`${"mb-3"} ${styles.tabs}`}>
             <Tab eventKey={"popular"} title="인기 게시글" tabClassName={styles.tab}>
-                <Carousel posts={posts} len={popLen.current}></Carousel>
+                <Carousel posts={popularPosts} len={popLen.current}></Carousel>
             </Tab>
-            {isLogin&&<Tab eventKey="recommend" title="추천 게시글" tabClassName={styles.tab} onClick={requestGetRecommend}>
+            {isLogin&&
+            <Tab eventKey={"recommend"} title="추천 게시글" tabClassName={styles.tab} onClick={requestRecommendPosts()}>
                 <Carousel posts={recommendPosts} len={recomLen.current}></Carousel>
             </Tab>}
         </Tabs>
-        {/* <main>
-        <div>
-            <ul className='tabmenu'>
-            {menu.map((ele, index)=>{
-                return (
-                    <li
-                    key={index}
-                    className={currentTab === index ? "submenu focused" : "submenu"}
-                    onClick={()=> selectMenuHandler(index)}
-                >
-                {ele}
-                </li>
-                )
-            })}
-            </ul>
+        
+        <div className={styles.listarea}>
+            <div className={styles.boardlist}>
+                <ul className={styles.tabmenu}>
+                {boardmenu.map((ele, index)=>{
+                    return (
+                        <li
+                        key={index}
+                        className={currentTab === index ? `${styles.submenu} ${styles.focused}` : `${styles.submenu}`}
+                        onClick={()=> setCurrentTab(index)}
+                    >
+                    {ele}
+                    </li>
+                    )
+                })}
+                </ul>
+                <div className={styles.titlearea}>
+                    <ShowPostList></ShowPostList>
+                </div>
+            </div>
+
+            <div className={styles.boardlist}>
+                <ul className={styles.tabmenu}>
+                {newsmenu.map((ele, index)=>{
+                    return (
+                        <li
+                        key={index}
+                        className={currentTabNews === index ? `${styles.submenu} ${styles.focused}` : `${styles.submenu}`}
+                        onClick={()=> setCurrentTabNews(index)}
+                    >
+                    {ele}
+                    </li>
+                    )
+                })}
+                </ul>
+                <div className={styles.titlearea}>
+                    <ShowNewsList></ShowNewsList>
+                </div>
+            </div>
+            {/* <div className='newslist'>
+                <ul className={styles.tabmenu}>
+                {newsmenu.map((ele, index)=>{
+                    return (
+                        <li
+                        key={index}
+                        className={currentTabNews === index ? `${styles.submenu} ${styles.focused}` : `${styles.submenu}`}
+                        onClick={()=> setCurrentTabNews(index)}
+                    >
+                    {ele}
+                    </li>
+                    )
+                })}
+                </ul>
+                <div>
+                    <ShowNewsList></ShowNewsList>
+                </div>
+            </div> */}
         </div>
-        <Carousel></Carousel>
-        </main> */}
         {/* <div className='posts_main'>
             <Tabs
             id="controlled-tab-example"
@@ -180,7 +318,7 @@ function Main() {
             
         </div> */}
 
-
+        <footer></footer>
         </>
     )
 }

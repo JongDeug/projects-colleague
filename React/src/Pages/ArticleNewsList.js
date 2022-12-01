@@ -3,6 +3,7 @@ import axios from "axios";
 import Table from "react-bootstrap/Table";
 import BodyContents from "./ArticleNewsBody";
 import Pagination from "../Components/Board/Pagination";
+import NewsBoardHead from "../Components/News/NewsBoardHead";
 import "../css/board.css";
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -74,24 +75,32 @@ function ArticleNewsList() {
   return (
     <>
       <h2>기사 뉴스 목록</h2>
-      <button onClick={requestGetWithKeyword}>내 키워드 적용</button>
-      <button onClick={requestGet}>전체 기사 조회</button>
+      <div className="to_flex">
+        <main>
+          <div className="article-btn-wrap news_btns">
+            <Button className="btn-success news_btn" onClick={requestGetWithKeyword}>
+              내 키워드 적용
+            </Button>
+            <Button className="btn-success news_btn" onClick={requestGet}>
+              전체 기사 조회
+            </Button>
+          </div>
+          <Table striped bordered hover>
+            <div className=""></div>
+            <NewsBoardHead></NewsBoardHead>
+            <tbody>
+              <ShowContents></ShowContents>
+            </tbody>
+          </Table>
 
-      <main>
-        <Table striped bordered hover>
-          <div className=""></div>
-          {/* <BoardHead></BoardHead> */}
-          <tbody>
-            <ShowContents></ShowContents>
-          </tbody>
-        </Table>
-      </main>
-      <Pagination
-        total={news.length}
-        limit={limit}
-        page={page}
-        setPage={setPage}
-      ></Pagination>
+          <Pagination
+            total={news.length}
+            limit={limit}
+            page={page}
+            setPage={setPage}
+          ></Pagination>
+        </main>
+      </div>
     </>
   );
 }

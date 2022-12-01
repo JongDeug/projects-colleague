@@ -4,16 +4,54 @@ import Error from "../Components/ErrorMessage";
 import "../css/updateMember.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
+import CreatableSelect from "react-select/creatable";
 
 function UpdateMember() {
   const [userId, setUserid] = useState("");
   const [dateOfBirth, setDateofBirth] = useState("");
   const [email, setEmail] = useState("");
-  const [interestKeywords, setKeywords] = useState("");
   const token = sessionStorage.getItem("accessToken");
+  const [keywords, setKeywords] = useState([]);
+  const keys = useRef([]);
+  const keysafter = useRef([]);
 
   const [isValidEmail, setIsValidEmail] = useState(false);
+
+  const majorSpeciesOptions = [
+    { value: "강아지", label: "강아지" },
+    { value: "고양이", label: "고양이" },
+  ];
+
+  const minorSpeciesOptions = [
+      { value: "토끼", label: "토끼" },
+      { value: "햄스터", label: "햄스터" },
+  ];
+
+  const groupedOptions = [
+    {
+        label: "동물",
+        options: majorSpeciesOptions,
+    },
+    {
+        label: "동물2",
+        options: minorSpeciesOptions,
+    },
+  ];
+
+  function SetKeywords(event){
+    console.log(event);
+    if(event[event.length-1].value.charAt(0)==='#'){
+        event[event.length-1].label = event[event.length-1].label.slice(1);
+        event[event.length-1].value = event[event.length-1].value.slice(1);
+    }
+    keys.current.push(event[event.length-1].value);
+    setKeywords(event);
+    console.log(keywords);
+    console.log(keywords[0]);
+    console.log(typeof keywords[0]);
+    console.log(keywords[0].value);
+}
 
   const onEmailValidCheck = (event) => {
     const checkEmail = event.currentTarget.value;
@@ -38,7 +76,12 @@ function UpdateMember() {
           setUserid(res.data.responseData.result.userId);
           setDateofBirth(res.data.responseData.result.dateOfBirth);
           setEmail(res.data.responseData.result.email);
-          setKeywords(res.data.responseData.result.interestKeywords);
+          console.log(res.data.responseData.result.interestKeywords);
+          res.data.responseData.result.interestKeywords&&res.data.responseData.result.interestKeywords.map((key)=>{
+            keys.current.push({value:`${key}`,label:`${key}`});
+          })
+          console.log(keys.current);
+          setKeywords(keys.current);
       })
       .catch(function (err) {
           if (err.response) {
@@ -55,7 +98,11 @@ function UpdateMember() {
   //데이터 전송
   function requestChangeInfo() {
     const token = sessionStorage.getItem("accessToken");
-
+    keywords.map((keyword)=>{
+      keysafter.current.push(keyword.value);
+      console.log(keyword.value);
+    })
+    console.log(keywords.current);
     axios({
       url: "/api/member/changeInfo",
       method: "put",
@@ -63,10 +110,10 @@ function UpdateMember() {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        "which": "changeInfo",
+        // "which": "changeInfo",
         "dateOfBirth": dateOfBirth,
         "email": email,
-        "interestKeywords": interestKeywords,
+        "interestKeywords": keysafter.current,
       },
     })
       .then((res) => {
@@ -77,6 +124,7 @@ function UpdateMember() {
       })
       .catch((err) => {
         if (err) {
+          console.log(keysafter.current);
           console.log(err.response.data);
           console.log(err.response.status);
           console.log(err.response.header);
@@ -92,9 +140,6 @@ function UpdateMember() {
   };
   const onEmailHandler = (event) => {
     setEmail(event.currentTarget.value);
-  };
-  const onKeywordHandler = (event) => {
-    setKeywords(event.currentTarget.value);
   };
 
   return (
@@ -135,20 +180,26 @@ function UpdateMember() {
           </Error>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>키워드</Form.Label>
-          <Form.Control
-            type="keywords"
-            id="inserestKeywords"
-            defaultValue={interestKeywords}
-            onChange={onKeywordHandler}
+        <div className='input_content'>
+          <div className='input_what'>
+            <label for="keyword" className='form-label'>
+              관심키워드
+            </label>
+          </div>
+          <CreatableSelect
+            isMulti
+            onFocus={console.log(keys)}
+            defaultValue={keys.current}
+            options={groupedOptions}
+            placeholder="키워드 입력"
+            formatCreateLabel={(inputText) => `"${inputText}" 추가`}
+            onChange={SetKeywords}
           />
-        </Form.Group>
+        </div>
 
         <p className="updateMemberButtons">
           <Button
             className="btn-success"
-            // type="submit"
             onClick={requestChangeInfo}
           >
             수정

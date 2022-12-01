@@ -14,7 +14,6 @@ function Card(props) {
     else if(type==="정보 공유 게시판") posttype="boardInformation";
     else if(type==="질문 게시판") posttype="boardQuestion";
 
-    console.log(props.post);
     return (
         <Link to={`/post/${posttype}/${id}`} className={styles.card_area}>
             <div className={styles.image_area}>

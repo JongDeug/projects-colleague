@@ -6,13 +6,6 @@ import { debounce } from 'lodash';
 
 
 function Carousel(props) {
-    const imgs = useRef([{src:"unsplash1.jpg", content:"https://images.unsplash.com/photo-1456926631375-92c8ce8"+
-    "72def?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"},
-    {src:"unsplash2.jpg",content:"https://images.unsplash.com/photo-1425082661705-1834bfd09dca?ixlib=rb-4.0"+
-    ".3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80",},
-    {src:"unsplash3.jpg",content:"https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?ixlib=rb-4.0.3&ixid=MnwxMj"+
-    "A3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"}]);
-
     
     const [current, setCurrent] = useState(0);
     // const [style, setStyle] = useState({
@@ -20,8 +13,8 @@ function Carousel(props) {
     // });
     const [posts, setPosts] = useState(props.posts);
     const [moveLen,setMoveLen] = useState(100);
-    console.log(posts.current.length);
-    const [moveCnt, setMoveCnt] = useState(posts.current.length);
+    // const [moveCnt, setMoveCnt] = useState(props.len);
+    const moveCnt = useRef(props.len);
     const [windowSize, setWindowSize] = useState({
         width: window.innerWidth,
         height: window.innerHeight,
@@ -34,39 +27,42 @@ function Carousel(props) {
     }, 1000);
     
     function changeMov(){
-        console.log(moveCnt);
         var tabWidth = window.matchMedia("screen and (min-width:480px)");
         var pcWidth = window.matchMedia("screen and (min-width:800px)");
         if(pcWidth.matches){
             setMoveLen(current*33);
             console.log(props.len-2);
-            setMoveCnt(props.len-2);
+            // setMoveCnt(props.len-2);
+            moveCnt.current = props.len-2;
             console.log("pcpsize: "+moveCnt);
         }
         
         else if(tabWidth.matches){
             setMoveLen(current*50);
             console.log(props.len-1);
-            setMoveCnt(props.len-1);
+            // setMoveCnt(props.len-1);
+            moveCnt.current = props.len-1;
             console.log("tabsize: "+moveCnt);
         }
         else{
             setMoveLen(current*100);
             console.log(props.len-0);
-            setMoveCnt(props.len);
+            // setMoveCnt(props.len);            
+            moveCnt.current = props.len;
             console.log("phonesize: "+moveCnt);
         }
     }
 
     const imgSize = useRef(props.len);
     function moveSlide(i) {
-        console.log(moveCnt);
-        console.log(imgSize.current+"+"+"i"+i+"current"+current);
+        changeMov();
+        console.log("moveCnt"+moveCnt);
+        console.log("imgSize"+imgSize.current+"+"+"i"+i+"current"+current);
         let nextIndex = current + i;
         if(nextIndex<0){
             nextIndex = imgSize.current -1;
         }
-        else if(nextIndex>=moveCnt){
+        else if(nextIndex>=moveCnt.current){
             nextIndex = 0;
         }
         setCurrent(nextIndex);
@@ -75,13 +71,12 @@ function Carousel(props) {
         window.addEventListener('resize',handleResize);
         changeMov();
         console.log("useEffect: "+moveCnt);
+        // setMoveCnt(posts.current.length);
         return() =>{
             window.removeEventListener('resize',handleResize);
         }
     },[current]);
 
-    console.log(posts);
-    console.log(moveCnt);
     return(
         <>
         <div className={styles.container}>

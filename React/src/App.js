@@ -24,6 +24,7 @@ import BoardQues from './Pages/BoardQues';
 import MyPostPage from './Pages/MyPostPage';
 import MyCommentPage from './Pages/MyCommentPage';
 import MyLikePage from './Pages/MyLikePage';
+// import NewsArticleList from './Pages/NewsArticleList';
 import axios from 'axios';
 import ArticleNewsList from "./Pages/ArticleNewsList"; //뉴스리스트
 import ArticleNewsDetail from "./Pages/ArticleNewsDetail"; //뉴스상세
@@ -36,24 +37,23 @@ import MemberList from "./Pages/MemberList"; //  회원관리에서 회원 리�
 import MemberDetail from "./Pages/MemberDetail"; //  회원리스트 누르면 상세정보 출력
 import VariableControl from "./Pages/VariableControl"; //  시스템 변수 조정(인기/추천/뉴스)
 
-
 function App() {
 
-  function refreshToken() {
+  function refreshToken(){
     const token = sessionStorage.getItem("accessToken");
 
     return axios({
-      url: `/auth/refresh`,
-      method: "get",
-      headers: {
+      url:`/auth/refresh`,
+      method:"get",
+      headers:{
         Authorization: `Bearer ${token}`
       },
-    }).then((res) => {
+    }).then((res)=>{
       console.log(res.data.responseData);
       sessionStorage.setItem("accessToken", res.data.responseData.result.accessToken);
-
-    }).catch((err) => {
-      if (err.response) {
+      
+    }).catch((err)=>{
+      if(err.response){
         console.log(err.response.data);
         console.log(err.response.status);
         console.log(err.response.header);
@@ -61,13 +61,13 @@ function App() {
     })
   }
 
-  useEffect(() => {
+  useEffect(()=>{
     // refreshToken();
-  }, []);
+  },[]);
 
   return (
     <>
-      <Header2></Header2>
+    <Header2></Header2>
       <Routes>
         <Route path="/" element={<Main></Main>}></Route>
         <Route path="/register" element={<RequestRegister />}></Route>
@@ -90,7 +90,7 @@ function App() {
         <Route path='/myact/post' element={<MyPostPage />}></Route>
         <Route path='/myact/like' element={<MyLikePage />}></Route>
         <Route path='/myact/comment' element={<MyCommentPage />}></Route>
-        <Route path='/news/articlelist' element={<ArticleNewsList/>}></Route>
+        <Route path='/news/articlelist' element={<ArticleNewsList />}></Route>
         <Route
           path="/articleNews/:newsId"
           element={<ArticleNewsDetail />}
@@ -108,7 +108,6 @@ function App() {
           element={<MemberDetail />}
         ></Route>
         <Route path="/variablecontrol" element={<VariableControl />}></Route>
-
       </Routes>
     </>
   );

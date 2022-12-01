@@ -13,9 +13,11 @@
 
 .row.ri{
     word-break: break-all;
-    margin: 1em;;
+    margin: 0.2em;
 }
-
+.container.mt-5 {
+    padding: 5px;
+}
 div.group{
     width: 900px;
 }

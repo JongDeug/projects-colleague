@@ -23,10 +23,10 @@ function BodyContents(props) {
           to={{ pathname: `/articleNews/${newsId}`, state: newsId }}
           className="post_link"
         >
-          {newsDescription}
+          {newsTitle}
         </Link>
       </th>
-      <th className="content post_writer">{newsTitle}</th>
+      <th className="content">{newsDescription}</th>
     </tr>
   );
 }
