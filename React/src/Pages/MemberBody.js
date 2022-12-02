@@ -14,7 +14,7 @@ function BodyContents(props) {
 
   return (
     <tr>
-      <th className="content post_title">
+      <th className="content post_title text-center">
         <Link
           to={{ pathname: `/memberdetail/${memberId}`, state: memberId }}
           className="post_link"

@@ -10,6 +10,7 @@ import { Button, Form, InputGroup } from "react-bootstrap";
 //async 삭제
 function VariableControl() {
   const [likeVar, setLikeVar] = useState(); //  인기 게시글 충족 변수
+  const [likePage, setLikePage] = useState(); //  인기 게시글 출력 수
   const [keywordVar, setKeywordVar] = useState(); //  추천 게시글 변수
   const [newsVar, setNewsVar] = useState(); //  뉴스 변수
   const [page, setPage] = useState(1);
@@ -25,6 +26,7 @@ function VariableControl() {
     })
       .then((res) => {
         setLikeVar(res.data.responseData.result.likeVar);
+        setLikePage(res.data.responseData.result.likePage);
         setKeywordVar(res.data.responseData.result.keywordVar);
         setNewsVar(res.data.responseData.result.newsVar);
         console.log(res.data.responseData.result);
@@ -50,6 +52,7 @@ function VariableControl() {
       data: {
         // which: "changeInfo", //  이게뭐지
         likeVar: likeVar,
+        likePage: likePage,
         keywordVar: keywordVar,
         newsVar: newsVar,
       },
@@ -76,6 +79,9 @@ function VariableControl() {
   const onLikeVarHandler = (event) => {
     setLikeVar(event.currentTarget.value);
   };
+  const onLikePageHandler = (event) => {
+    setLikePage(event.currentTarget.value);
+  };
   const onKeywordVarHandler = (event) => {
     setKeywordVar(event.currentTarget.value);
   };
@@ -96,6 +102,17 @@ function VariableControl() {
             onChange={onLikeVarHandler}
           />
         </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label>인기 게시글 출력 수</Form.Label>
+          <Form.Control
+            type="keywords"
+            id="inserestKeywords"
+            defaultValue={likePage}
+            onChange={onLikePageHandler}
+          />
+        </Form.Group>
+
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>추천 게시글 출력 수</Form.Label>
           <Form.Control

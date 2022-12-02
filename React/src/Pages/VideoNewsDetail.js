@@ -49,23 +49,58 @@ function VideoNewsDetail() {
   const source = "https://www.youtube.com/embed/" + videoId; //  유튜브 영상 url
 
   return (
-    <div class="container mt-5">
-      {videoNewsTitle}
-      <div className="row ri">
-        {/* iframe이 동영상 출력하는부분 src에 videoId 넣으면 영상 연결됨 */}
-        <iframe
-          id="ytplayer"
-          type="text/html"
-          width="720"
-          height="600"
-          src={source}
-          frameborder="0"
-          allowfullscreen
-        ></iframe>
-        {newsDescription}
-        {/* 이건 그냥 뺄까? */}
+    <>
+      <div class="container mt-5">
+        <div className="row ri">
+          <Form.Group className="group">
+            <article>
+              <header className="mb-4">
+                <h1 className="fw-bolder mb-3">{videoNewsTitle}</h1>
+                {/* <div className="text-muted fst-italic mb-2">
+                  발행날짜 : {newsPubDate}
+                </div>
+                <div className="text-muted mb-2">
+                  원문링크 : {newsSourceLink}
+                </div> */}
+              </header>
+
+              <iframe
+                id="ytplayer"
+                type="text/html"
+                width="720"
+                height="600"
+                src={source}
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+              {/* <section className="mb-5">
+                <p className="fs-5 mb-4">{newsDescription}</p>
+              </section> */}
+            </article>
+          </Form.Group>
+
+          <div />
+        </div>
       </div>
-    </div>
+    </>
+    
+    // <div class="container mt-5">
+    //   {videoNewsTitle}
+    //   <div className="row ri">
+    //     {/* iframe이 동영상 출력하는부분 src에 videoId 넣으면 영상 연결됨 */}
+    //     <iframe
+    //       id="ytplayer"
+    //       type="text/html"
+    //       width="720"
+    //       height="600"
+    //       src={source}
+    //       frameborder="0"
+    //       allowfullscreen
+    //     ></iframe>
+    //     {newsDescription}
+    //     {/* 이건 그냥 뺄까? */}
+    //   </div>
+    // </div>
   );
 }
 

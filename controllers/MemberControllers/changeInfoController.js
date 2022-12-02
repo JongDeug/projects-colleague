@@ -1,5 +1,6 @@
 const Member = require("../../model/Member");
 const responseDataForm = require("../../config/responseDataForm");
+const Crawler = require("../../middleware/crawler");
 
 const getMethod = async (req, res, next) => {
     const userId = req.userId;
@@ -15,6 +16,7 @@ const getMethod = async (req, res, next) => {
             email: foundUser.email,
             interestKeywords: foundUser.interestKeywords,
         }
+
 
         const responseData = responseDataForm(null, "changeInfo get request complete", result);
         res.status(200).json({ responseData });
@@ -73,6 +75,13 @@ const putMethod = async (req, res, next) => {
         foundUser.email = getEmail;
         foundUser.interestKeywords = getNewInterestKeywords;
         await foundUser.save();
+
+        const getKeyword = getNewInterestKeywords;
+        let keywordSize = getKeyword.length;
+        for (let i = 0; i < keywordSize; i++) {
+            Crawler.naverNewsWithKeyword(1, getKeyword[i].replace(/#/g, ""));
+            Crawler.youtubeNewsWithKeyword(getKeyword[i].replace(/#/g, ""));
+        }
 
         const responseData = responseDataForm("/updatemem", "changeInfo put request complete", null);
         res.status(200).json({ responseData });

@@ -48,7 +48,7 @@ function BodyContents(props) {
             {ispcsize?
                 <><th className='content post_title'>
                     <Link to={{pathname:`/post/${postBoard}/${postId}`, state:{postBoard:postBoard, postId:postId}}} className='post_link'>
-                        <div>{postTitle+" ("+commentCount+")"}</div>
+                        {commentCount?<div>{postTitle+" ("+commentCount+")"}</div>:<div>{postTitle}</div>}
                     </Link>
                 </th>
                 <th className='content post_writer'>{postUserId}</th>
@@ -60,7 +60,7 @@ function BodyContents(props) {
             <>
                 <th className='content post_title'>
                     <Link to={{pathname:`/post/${postBoard}/${postId}`, state:{postBoard:postBoard, postId:postId}}} className='post_link'>
-                        <div>{postTitle+" ("+commentCount+")"}</div>
+                    {commentCount?<div>{postTitle+" ("+commentCount+")"}</div>:<div>{postTitle}</div>}
                     </Link>
                 </th>
                 <th className='content post_hit'>{postHit}</th>

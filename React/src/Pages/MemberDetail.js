@@ -33,6 +33,7 @@ function MemberDetail() {
         setDateofBirth(res.data.responseData.result.dateOfBirth);
         setEmail(res.data.responseData.result.email);
         setKeywords(res.data.responseData.result.interestKeywords);
+        console.log(res.data.responseData.result);
       })
       .catch((err) => {
         if (err) {
@@ -53,7 +54,10 @@ function MemberDetail() {
       },
     })
       .then((res) => {
-        window.location = `${res.data.responseData.redirect}`;
+        console.log(res.data.responseData.result);
+        console.log(res.data.responseData);
+      }).then((res) => {
+        window.location = `${res}`;
       })
       .catch((err) => {
         if (err.response) {
@@ -69,21 +73,66 @@ function MemberDetail() {
   }, []);
 
   return (
-    <div class="container mt-5">
-      사용자 아이디 : {userId}
-      <br></br>
-      사용자 이름 : {userName}
-      <br></br>
-      사용자 생년월일 : {dateOfBirth}
-      <br></br>
-      사용자 이메일 : {email}
-      <br></br>
-      사용자 관심 키워드 : {interestKeywords}
-      <br></br>
-      <div className="row ri">
-        <button onClick={requestMemberDelete}>사용자 추방</button>
+      <div className="updateMember">
+        <Form>
+          <h3 className="updateMemberTitle mb-4">사용자 정보 조회</h3>
+          <Form.Group className="mb-3" controlId="id">
+            <Form.Label> 사용자 아이디</Form.Label>
+            <Form.Control type="id" id="userId" defaultValue={userId} disabled />
+          </Form.Group>
+  
+          <Form.Group className="mb-3" controlId="email">
+            <Form.Label>사용자 이름</Form.Label>
+            <Form.Control
+              type="name"
+              id="userName"
+              defaultValue={userName}
+              disabled
+            />
+          </Form.Group>
+  
+          <Form.Group className="mb-3" controlId="email">
+            <Form.Label>사용자 생년월일</Form.Label>
+            <Form.Control
+              type="date"
+              id="dateOfBirth"
+              defaultValue={dateOfBirth}
+              disabled
+            />
+          </Form.Group>
+  
+          <Form.Group className="mb-3" controlId="email">
+            <Form.Label>사용자 이메일</Form.Label>
+            <Form.Control type="email" defaultValue={email} disabled />
+          </Form.Group>
+  
+          <Form.Group className="mb-3" controlId="email">
+            <Form.Label>사용자 관심키워드</Form.Label>
+            <Form.Control type="text" defaultValue={interestKeywords} disabled />
+          </Form.Group>
+  
+          <p className="updateMemberButtons mt-5">
+            <Button className="btn-danger" onClick={requestMemberDelete}>
+              사용자 추방
+            </Button>
+          </p>
+        </Form>
       </div>
-    </div>
+    // <div class="container mt-5">
+    //   사용자 아이디 : {userId}
+    //   <br></br>
+    //   사용자 이름 : {userName}
+    //   <br></br>
+    //   사용자 생년월일 : {dateOfBirth}
+    //   <br></br>
+    //   사용자 이메일 : {email}
+    //   <br></br>
+    //   사용자 관심 키워드 : {interestKeywords}
+    //   <br></br>
+    //   <div className="row ri">
+    //     <button onClick={requestMemberDelete}>사용자 추방</button>
+    //   </div>
+    // </div>
   );
 }
 

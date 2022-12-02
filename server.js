@@ -11,7 +11,7 @@ const corsOptions = require("./config/corsOptions");
 const { default: mongoose } = require("mongoose");
 const connectDB = require("./config/dbConn");
 const Variable = require("./model/Variable");
-const crawler = require("./middleware/crawler");
+const Crawler = require("./middleware/crawler");
 const fs = require("fs");
 const PORT = 3500;
 
@@ -25,7 +25,7 @@ if (!fs.existsSync("uploads")) {
 // Variable.create({});
 
 connectDB();
-crawler(); // 주기랑 다시 설정해야함.
+Crawler.crawler(); // 주기랑 다시 설정해야함.
 
 // middleware
 app.use(express.urlencoded({ extended: false })); // true일 경우 qs 라이브러리 사용

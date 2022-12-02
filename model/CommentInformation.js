@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
-const getDateTime = require('../middleware/timezone');
+const getDateTime = require('../config/timezone');
 
 const userSchema = new schema({
   postId: {

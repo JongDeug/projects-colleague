@@ -19,7 +19,15 @@ function BodyContents(props) {
   );
   return (
     <tr>
-      <th className="content post_title">
+      <th className="content news_title">
+        <Link
+          to={{ pathname: `/videoNews/${videoNewsId}`, state: videoNewsId }}
+          className="post_link"
+        >
+          {videoNewsTitle}
+        </Link>
+      </th>
+      <th className="news_description">
         <Link
           to={{ pathname: `/videoNews/${videoNewsId}`, state: videoNewsId }}
           className="post_link"
@@ -27,7 +35,6 @@ function BodyContents(props) {
           {videoNewsDescription}
         </Link>
       </th>
-      <th className="content post_writer">{videoNewsTitle}</th>
     </tr>
   );
 }

@@ -13,13 +13,15 @@ function Pagination ({ total, limit, page, setPage }) {
             endNum = page+5;
         }
     }
-    
+    console.log(numPages);
+    console.log(startNum);
+    console.log(endNum);
 
 
     return (
         <Nav className='paging_nav'>
             <Button className='paging_button' onClick={() => setPage(page - 1)} disabled={page === 1}>&lt;</Button>
-            {numPages>0&&Array(numPages).slice(startNum,endNum).fill().map((v,i)=>(
+            {numPages>0&&Array(numPages).slice(startNum-1,endNum-1).fill().map((v,i)=>(
                 <Button 
                     className={i===(page-1)?'paging_button thispage':'paging_button'}
                     key={i+1} 

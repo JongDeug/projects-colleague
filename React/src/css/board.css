@@ -130,7 +130,7 @@ h2{
 .paging_button:active{
     display: flex;
     min-width: 25px;
-    margin:0 10px;
+    /* margin:0 10px; */
     justify-content: center;
     list-style: none;
     background-color: #59c294;

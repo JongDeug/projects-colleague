@@ -1,4 +1,4 @@
-const VideoNews = require("../../model/VideoNews");
+const KeywordVideoNews = require("../../model/KeywordVideoNews");
 const Member = require("../../model/Member");
 const responseDataForm = require("../../config/responseDataForm");
 const { User } = require("../../config/roles_list");
@@ -14,7 +14,7 @@ const getMethod = async (req, res, next) => {
     for (let i = 0; i < keywordSize; i++) {
       let x = getKeyword[i].replace(/#/g, "");
       x = x.replace(/ /g, "");
-      const tempResult = await VideoNews.find({
+      const tempResult = await KeywordVideoNews.find({
         $or: [
           {
             newsTitle: { $regex: x, $options: "i" },

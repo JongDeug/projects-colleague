@@ -17,17 +17,26 @@ function BodyContents(props) {
   ); // 뉴스 원문 링크 (네이버뉴스X 소스링크)
 
   return (
-    <tr>
-      <th className="content post_title">
-        <Link
-          to={{ pathname: `/articleNews/${newsId}`, state: newsId }}
-          className="post_link"
-        >
-          {newsTitle}
-        </Link>
-      </th>
-      <th className="content">{newsDescription}</th>
-    </tr>
+    <>
+      <tr>
+        <th className="content news_title">
+          <Link
+            to={{ pathname: `/articleNews/${newsId}`, state: newsId }}
+            className="post_link"
+          >
+            {newsTitle}
+          </Link>
+        </th>
+        <th className="content news_description">
+          <Link
+            to={{ pathname: `/articleNews/${newsId}`, state: newsId }}
+            className="post_link"
+          >
+            {newsDescription}
+          </Link>
+        </th>
+      </tr>
+    </>
   );
 }
 

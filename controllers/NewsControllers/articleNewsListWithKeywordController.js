@@ -1,7 +1,8 @@
-const News = require("../../model/News");
+const KeywordNews = require("../../model/KeywordNews");
 const Member = require("../../model/Member");
 const responseDataForm = require("../../config/responseDataForm");
 const { User } = require("../../config/roles_list");
+const Crawler = require("../../middleware/crawler");
 
 const getMethod = async (req, res, next) => {
   const getUserId = req.userId;
@@ -13,9 +14,13 @@ const getMethod = async (req, res, next) => {
     const resultList = [];
 
     for (let i = 0; i < keywordSize; i++) {
+      Crawler.naverNewsWithKeyword(1, getKeyword[i].replace(/#/g, ""));
+    }
+
+    for (let i = 0; i < keywordSize; i++) {
       let x = getKeyword[i].replace(/#/g, "");
       x = x.replace(/ /g, "");
-      const tempResult = await News.find({
+      const tempResult = await KeywordNews.find({
         $or: [
           {
             newsTitle: { $regex: x, $options: "i" },
@@ -30,38 +35,11 @@ const getMethod = async (req, res, next) => {
         Object.assign(resultList, tempResult);
       }
     }
-
-    // console.log(resultList);
-
-    // console.log(resultList);
-    // console.log(resultList);
-    // getKeyword.forEach(async (element) => {
-    //   let x = element.replace(/#/g, "");
-    //   x = x.replace(/ /g, "");
-    //   // const tempResult = await News.find({
-    //   //   $or: [
-    //   //     {
-    //   //       // newsTitle: { $regex: x, $options: "i" },
-    //   //       newsTitle: { $regex: ".*" + x + ".*" },
-    //   //       newsDescription: { $regex: ".*" + x + ".*" },
-    //   //     },
-    //   //   ],
-    //   // });
-    //   tempResult = await News.find({
-    //     newsTitle: { $regex: ".*" + x + ".*" },
-    //   });
-    //   if (tempResult != null) {
-    //     resultList.push(tempResult);
-    //   }
-    // });
-    // console.log(tempResult);
     const responseData = responseDataForm(
       null,
       "News With Key get request complete",
       resultList
     );
-    // console.log("getKeyword:" + getUser.interestKeywords);
-    // console.log("newslistKEYWORD:" + result);
     res.status(200).json({ responseData });
   } catch (err) {
     next(err);

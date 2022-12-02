@@ -3,6 +3,7 @@ import axios from "axios";
 import Table from "react-bootstrap/Table";
 import BodyContents from "./MemberBody";
 import Pagination from "../Components/Board/Pagination";
+import MemberListHead from "../Components/Board/MemberListHead";
 import "../css/board.css";
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -51,22 +52,24 @@ function MemberList() {
   return (
     <>
       <h2>회원 목록</h2>
+      <div className="to_flex">
+        <main>
+          <Table striped bordered hover>
+            <div className=""></div>
+            <MemberListHead></MemberListHead>
+            <tbody>
+              <ShowContents></ShowContents>
+            </tbody>
+          </Table>
 
-      <main>
-        <Table striped bordered hover>
-          <div className=""></div>
-          {/* <BoardHead></BoardHead> */}
-          <tbody>
-            <ShowContents></ShowContents>
-          </tbody>
-        </Table>
-      </main>
-      <Pagination
-        total={member.length}
-        limit={limit}
-        page={page}
-        setPage={setPage}
-      ></Pagination>
+          <Pagination
+            total={member.length}
+            limit={limit}
+            page={page}
+            setPage={setPage}
+          ></Pagination>
+        </main>
+      </div>
     </>
   );
 }

@@ -37,6 +37,7 @@ function ArticleNewsDetail() {
         setNewsPubDate(res.data.responseData.result.newsPubDate);
         setNewsSourceLink(res.data.responseData.result.newsSourceLink);
         console.log(res.data.responseData.result);
+        hi();
       })
       .catch((err) => {
         if (err) {
@@ -53,26 +54,53 @@ function ArticleNewsDetail() {
 
   function PrintImage() {
     const arr = [];
-    newsImageURL && newsImageURL.map((img) => {
-      arr.push(
-        <div className="newsimg">
-          <img src={`${img}`}></img>
-        </div>
-      )
-    });
+    newsImageURL &&
+      newsImageURL.map((img) => {
+        arr.push(
+          <div className="newsimg">
+            <img src={`${img}`}></img>
+            <br></br>
+          </div>
+        );
+      });
     return arr;
   }
   
-  return (
-    <div class="container mt-5">
-      {newsTitle}
-      <pre></pre>
-      <pre></pre>
-      {/* {newsDescription} 요약문은 필요없을ㄷ스*/}
-      <PrintImage></PrintImage>
+  function hi() {
+    const date = new Date({ newsPubDate });
 
-      <div className="row ri">{newsContent}</div>
-    </div>
+    const d = date.getDate;
+    console.log(d);
+  }
+
+  return (
+    <>
+      <div class="container mt-5">
+        <div className="row ri">
+          <Form.Group className="group">
+            <article>
+              <header className="mb-4">
+                <h1 className="fw-bolder mb-3">{newsTitle}</h1>
+                <div className="text-muted fst-italic mb-2">
+                  발행날짜 : {newsPubDate}
+                </div>
+                <div className="text-muted mb-2">
+                  원문링크 : {newsSourceLink}
+                </div>
+              </header>
+
+              <PrintImage></PrintImage>
+              <section className="mb-5">
+                <p className="fs-5 mb-4">{newsContent}</p>
+              </section>
+              {/* <img src={newsImageURL[0]}></img> */}
+            </article>
+          </Form.Group>
+
+          <div />
+        </div>
+      </div>
+    </>
   );
 }
 

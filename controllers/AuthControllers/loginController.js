@@ -2,7 +2,7 @@ const Member = require("../../model/Member");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const responseDataForm = require("../../config/responseDataForm");
-
+const Crawler = require("../../middleware/crawler");
 
 const postMethod = async (req, res, next) => {
     const getUserId = req.body.userId;
@@ -61,12 +61,19 @@ const postMethod = async (req, res, next) => {
             result.host = getUserId;
             // roles를 추가했으니 admin인지 아닌지 확인 가능.
             let role;
-            if(roles.includes(5000)){
+            if (roles.includes(5000)) {
                 role = "admin";
-            }else{
+            } else {
                 role = "user";
             }
             result.role = role;
+
+            const getKeyword = foundUser.interestKeywords;
+            let keywordSize = getKeyword.length;
+            for (let i = 0; i < keywordSize; i++) {
+                Crawler.naverNewsWithKeyword(1, getKeyword[i].replace(/#/g, ""));
+                Crawler.youtubeNewsWithKeyword(getKeyword[i].replace(/#/g, ""));
+            }
 
             const responseData = responseDataForm("/", "login post request complete", result);
 

@@ -23,6 +23,16 @@ export default function Login() {
     event.preventDefault();
   }
 
+  function LoginEnter(event) {
+    if (event.key === "Enter") {
+      Login();
+    }
+  }
+
+  function Login() {
+    requestAdminLogin();
+  }
+
   function requestAdminLogin() {
     axios({
       url: "/adminAuth/login",
@@ -63,12 +73,12 @@ export default function Login() {
             type="password"
             value={password}
             onChange={onPasswordHandler}
+            onKeyPress={LoginEnter}
           />
         </Form.Group>
 
         <Button
           block="true"
-          // type="submit"
           className="mb-5 btn btn-success loginBtn"
           size="lg"
           onClick={requestAdminLogin}
