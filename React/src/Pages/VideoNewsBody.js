@@ -5,6 +5,10 @@ import "../css/board.css";
 
 function BodyContents(props) {
   const [videoNewsId, setVideoNewsId] = useState(props.videoNews._id); //  db 테이블 id
+  const [videoId, setVideoId] = useState(
+    //  유튜브 제목
+    props.videoNews.videoId
+  );
   const [videoNewsTitle, setVideoNewsTitle] = useState(
     //  유튜브 제목
     props.videoNews.newsTitle
@@ -17,23 +21,23 @@ function BodyContents(props) {
     //  썸네일 이미지 (주소 형식)
     props.videoNews.thumbnailURL
   );
+  const srcLink = "https://www.youtube.com/watch?v=" + videoId;
   return (
-    <tr>
+    <tr className="cursoron" onClick={() => window.open(srcLink)}>
+      <th className="content news_thumbnail">
+        <div class="url" onClick={() => window.open(srcLink)}>
+          <img src={thumbnailURL}></img>
+        </div>
+      </th>
       <th className="content news_title">
-        <Link
-          to={{ pathname: `/videoNews/${videoNewsId}`, state: videoNewsId }}
-          className="post_link"
-        >
+        <div class="url" onClick={() => window.open(srcLink)}>
           {videoNewsTitle}
-        </Link>
+        </div>
       </th>
       <th className="news_description">
-        <Link
-          to={{ pathname: `/videoNews/${videoNewsId}`, state: videoNewsId }}
-          className="post_link"
-        >
+        <div class="url" onClick={() => window.open(srcLink)}>
           {videoNewsDescription}
-        </Link>
+        </div>
       </th>
     </tr>
   );

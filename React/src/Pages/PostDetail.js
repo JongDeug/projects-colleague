@@ -187,20 +187,18 @@ function PostDetail() {
                 <div className="text-muted fst-italic mb-2">
                   by {postUserId}
                 </div>
-                {keywords&&keywords.map((keyword)=>(
-                  <div
-                  className="badge bg-secondary text-decoration-none link-light"
-                  >
-                    {keyword}
-                  </div>
-                ))}
+                {keywords &&
+                  keywords.map((keyword) => (
+                    <div className="badge post-tag text-decoration-none link-light">
+                      {keyword}
+                    </div>
+                  ))}
                 
               </header>
               <section className="mb-5">
-                <p className="fs-5 mb-4">{postContent}</p>
+                <p className="fs-5 mb-4 content-wrap">{postContent}</p>
               </section>
               
-              {/* 여기 고친거 */}
               {printImage()}
 
             </article>

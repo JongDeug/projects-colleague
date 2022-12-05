@@ -29,8 +29,8 @@
 .text{
     word-wrap: break-word;
     color: gray;
-    padding:3px;
-    margin-bottom: 0.2em;
+    margin-bottom: 0;
+    padding: 3px 3px 0px 3px;
 }
 
 /*carousel*/
@@ -113,6 +113,13 @@
     .btn{
         /* width: 5%;
         margin: 0; */
+    font-size: xx-large;
+    }
+    .btn:first-child{
+        text-align: right;
+    }
+    .btn:last-child {
+        text-align: left;
     }
     .window{
         /* background: black;
@@ -263,6 +270,22 @@
     background-color: lightyellow;
     border-radius: 0px 0px 10px 10px;
 }
+.toborder{
+    color: dimgray;
+    border: solid 0.5px lightgray;
+    border-right: 0px;
+    border-left: 0px;
+    border-block-start: 0px;
+}
+.titlelink{
+    text-decoration: none;
+    color: dimgray;
+    border: solid 0.5px lightgray;
+    border-right: 0px;
+    border-left: 0px;
+    border-block-start: 0px;
+    cursor: pointer;
+}
 .posttitle{
     text-align: center;
     padding: 5px 0;
@@ -272,5 +295,8 @@
     border-block-start: 0px;
 }
 .posttitle:last-child{
-    border:0px;
+    border: 0px;
+}
+.toborder:last-child{
+    border: 0px;
 }

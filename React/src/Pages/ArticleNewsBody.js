@@ -10,30 +10,40 @@ function BodyContents(props) {
     //  뉴스 요약문
     props.news.newsDescription
   );
+  const [newsNaverLink, setNewsNaverLink] = useState(props.news.newsNaverLink); // 네이버 뉴스 링크
   const [newsPubDate, setNewsPubDate] = useState(props.news.newsPubDate); // 뉴스 발행일
-  const [newsImageURL, setNewsImageURL] = useState(); //  내용에 포함된 이미지 (url 형태) 이건 아직 조정중
+  const [newsImageURL, setNewsImageURL] = useState(props.news.newsImageURL); //  내용에 포함된 이미지 (url 형태)
   const [newsSourceLink, setNewsSourceLink] = useState(
     props.news.newsSourceLink
   ); // 뉴스 원문 링크 (네이버뉴스X 소스링크)
 
+  function move() {
+    window.location.href = newsNaverLink;
+  }
+
   return (
     <>
-      <tr>
-        <th className="content news_title">
-          <Link
+      <tr className='cursoron' onClick={() => window.open(newsSourceLink)}>
+        <th className="content news_thumbnail">
+          {/* <Link
             to={{ pathname: `/articleNews/${newsId}`, state: newsId }}
             className="post_link"
           >
+            <img src={newsImageURL[0]}></img>
+          </Link> */}
+          <div class="url" onClick={() => window.open(newsNaverLink)}>
+            <img src={newsImageURL[0]}></img>
+          </div>
+        </th>
+        <th className="content news_title">
+          <div class="url" onClick={() => window.open(newsNaverLink)}>
             {newsTitle}
-          </Link>
+          </div>
         </th>
         <th className="content news_description">
-          <Link
-            to={{ pathname: `/articleNews/${newsId}`, state: newsId }}
-            className="post_link"
-          >
+          <div class="url" onClick={() => window.open(newsNaverLink)}>
             {newsDescription}
-          </Link>
+          </div>
         </th>
       </tr>
     </>

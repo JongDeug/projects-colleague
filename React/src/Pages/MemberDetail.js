@@ -56,6 +56,7 @@ function MemberDetail() {
       .then((res) => {
         console.log(res.data.responseData.result);
         console.log(res.data.responseData);
+        return res.data.responseData.redirect;
       }).then((res) => {
         window.location = `${res}`;
       })

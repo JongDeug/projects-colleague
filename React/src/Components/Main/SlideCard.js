@@ -8,6 +8,7 @@ function Card(props) {
     const [content, setContent] = useState(props.post.postContent);
     const [type, setType] = useState(props.post.postType);
     const [id, setId] = useState(props.post._id);
+    const [title, setTitle] = useState(props.post.postTitle);
     let posttype;
     if(type==="자유 게시판") posttype="boardAnything";
     else if(type==="자랑 게시판") posttype="boardBoast";
@@ -21,6 +22,9 @@ function Card(props) {
                 <img src={img} className={styles.img} />
             </div>
             <div className={styles.text_area}>
+            <p className={styles.text}>
+                    {title}
+                </p>
                 <p className={styles.text}>
                     {type}
                 </p>

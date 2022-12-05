@@ -1,5 +1,5 @@
 // import logo from './logo.svg';
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Main from './Pages/Main';
 import Header from './Components/Header';
 import Header2 from "./Components/Header2";
@@ -38,6 +38,7 @@ import MemberDetail from "./Pages/MemberDetail"; //  회원리스트 누르면 �
 import VariableControl from "./Pages/VariableControl"; //  시스템 변수 조정(인기/추천/뉴스)
 
 function App() {
+  const [isAdmin, setIsAdmin] = useState(false);
 
   function refreshToken(){
     const token = sessionStorage.getItem("accessToken");
@@ -60,14 +61,27 @@ function App() {
       }
     })
   }
+  function setAdminState() {
+    if (sessionStorage.getItem("role")==="admin") {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+  }
 
   useEffect(()=>{
     // refreshToken();
+    setAdminState();
   },[]);
 
   return (
     <>
+    {isAdmin?
+    <ManagerHeader></ManagerHeader>
+    :
     <Header2></Header2>
+    }
+    
       <Routes>
         <Route path="/" element={<Main></Main>}></Route>
         <Route path="/register" element={<RequestRegister />}></Route>

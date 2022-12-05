@@ -9,7 +9,7 @@ import Table from 'react-bootstrap/Table';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 
 function MyLikePage () {
-    const menu = ["자유 게시판", "자랑 게시판", "정보 공유 게시판", "질문 게시판"];
+    const menu = ["자유 게시판", "자랑 게시판", "공유 게시판", "질문 게시판"];
     const [currentTab, setCurrentTab] = useState(0);
     const [posts, setPosts] = useState([]);
     const [postsAny, setPostsAny] = useState([]);

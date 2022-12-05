@@ -13,9 +13,11 @@ const getMethod = async (req, res, next) => {
     let keywordSize = getKeyword.length;
     const resultList = [];
 
+    /*  //  키워드 적용 시 크롤링 x
     for (let i = 0; i < keywordSize; i++) {
       Crawler.naverNewsWithKeyword(1, getKeyword[i].replace(/#/g, ""));
     }
+    */
 
     for (let i = 0; i < keywordSize; i++) {
       let x = getKeyword[i].replace(/#/g, "");

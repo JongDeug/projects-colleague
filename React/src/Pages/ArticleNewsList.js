@@ -15,17 +15,14 @@ function ArticleNewsList() {
   const offset = (page - 1) * limit;
 
   function requestGet() {
-    // const token = sessionStorage.getItem("accessToken");
     return axios({
       url: "/news/article",
       method: "get",
-      // headers: {
-        // Authorization: `Bearer ${token}`,
-      // },
     })
       .then((res) => {
-        setNews(res.data.responseData.result);
+        setNews([...res.data.responseData.result].reverse());
         console.log(res.data.responseData.result);
+        console.log(res.data.responseData.result.reverse());
         console.log(news);
       })
       .catch((err) => {

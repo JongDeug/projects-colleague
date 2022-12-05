@@ -55,8 +55,8 @@ const getData = async (newsItem) => {
 
     $(tag.deleteTag).remove();
 
-    getContent = $(tag.content).html().replace(/<br>/g, "\n");
-    contents = $(getContent).text();
+    // getContent = $(tag.content).html().replace(/<br>/g, "\n");
+    // contents = $(getContent).text();
 
     $(tag.imgLink).each(function (item, index, array) {
       imgArray.push($(this).attr("data-src"));
@@ -65,7 +65,7 @@ const getData = async (newsItem) => {
       newsTitle: newsItem.title,
       newsSourceLink: newsItem.sourceLink,
       newsNaverLink: newsItem.naverLink,
-      newsContent: contents,
+      newsContent: "1234",
       newsDescription: newsItem.description,
       newsPubDate: newsItem.pubDate,
       newsImageURL: imgArray,
@@ -153,8 +153,8 @@ const getDataWithKeyword = async (newsItem, K) => {
 
     $(tag.deleteTag).remove();
 
-    getContent = $(tag.content).html().replace(/<br>/g, "\n");
-    contents = $(getContent).text();
+    // getContent = $(tag.content).html().replace(/<br>/g, "\n");
+    // contents = $(getContent).text();
 
     $(tag.imgLink).each(function (item, index, array) {
       imgArray.push($(this).attr("data-src"));
@@ -163,7 +163,7 @@ const getDataWithKeyword = async (newsItem, K) => {
       newsTitle: newsItem.title,
       newsSourceLink: newsItem.sourceLink,
       newsNaverLink: newsItem.naverLink,
-      newsContent: contents,
+      newsContent: "1234",
       newsDescription: newsItem.description,
       newsPubDate: newsItem.pubDate,
       newsImageURL: imgArray,
@@ -351,12 +351,11 @@ const youtubeNewsWithKeyword = async (userKeyword) => {
 const crawler = async () => {
   // const articleRefresh = await News.deleteMany();
   // const videoRefresh = await VideoNews.deleteMany();
-  // naverNews("1");
+  naverNews("1");
   // naverNews("2");
   // naverNews("3");
   // naverNews("4");
   // youtubeNews();
-  // getTest("https://n.news.naver.com/mnews/article/001/0013605975?sid=101");
 };
 
 module.exports = { crawler, naverNewsWithKeyword, youtubeNewsWithKeyword };

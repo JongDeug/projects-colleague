@@ -15,16 +15,12 @@ function VideoNewsList() {
   const offset = (page - 1) * limit;
 
   function requestGet() {
-    // const token = sessionStorage.getItem("accessToken");
     return axios({
       url: "/news/video",
       method: "get",
-      // headers: {
-        // Authorization: `Bearer ${token}`,
-      // },
     })
       .then((res) => {
-        setVideoNews(res.data.responseData.result);
+        setVideoNews([...res.data.responseData.result].reverse());
         console.log(res.data.responseData.result);
       })
       .catch((err) => {
@@ -75,7 +71,10 @@ function VideoNewsList() {
       <div className="to_flex">
         <main>
           <div className="article-btn-wrap mb-3">
-            <Button className="btn-success news_btn" onClick={requestGetWithKeyword}>
+            <Button
+              className="btn-success news_btn"
+              onClick={requestGetWithKeyword}
+            >
               내 키워드 적용
             </Button>
             <Button className="btn-success news_btn" onClick={requestGet}>

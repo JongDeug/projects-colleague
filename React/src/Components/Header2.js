@@ -96,13 +96,13 @@ function Header2() {
   return (
     <Navbar collapseOnSelect expand="lg mt-3" variant="light">
       <Container className="nav-cont">
-        <Link to="/" className="logo_header_link">
-          <img src={logo} href="/main" className="logo_header"></img>
-        </Link>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <Nav>
+          <Link to="/" className="logo_header_link">
+            <img src={logo} href="/main" className="logo_header"></img>
+          </Link>
               <NavDropdown
                 title="게시판"
                 className="nav_dropdown"
@@ -160,7 +160,10 @@ function Header2() {
                     <Popover.Body>
                       <div class="list-group">
                         {noticelist.map((comment, i) => (
-                          <CommentNotice comment={comment} deletelist={setDeleteList}></CommentNotice>
+                          <CommentNotice 
+                          comment={comment} 
+                          deletelist={setDeleteList}
+                          ></CommentNotice>
                         ))}
                       </div>
                     </Popover.Body>
@@ -168,8 +171,10 @@ function Header2() {
                 }
               >
                 <Nav.Link>
-                  <AiFillBell size={24} onClick={requestNotice}></AiFillBell>
-                  <span class="position-absolute translate-middle p-2 bg-danger border border-light rounded-circle">
+                  <div className="icon member dropdown">
+                    <AiFillBell size={24} onClick={requestNotice}></AiFillBell>
+                  </div>
+                  <span class="position-absolute translate-middle p-2 bg-danger border border-light rounded-circle notification-badge">
                     <span class="indicator">{noticelist.length}</span>
                   </span>
                 </Nav.Link>
@@ -200,11 +205,9 @@ function Header2() {
                 </Nav.Link>
               )}
               {isLogin && (
-                <Nav.Link>
-                  <span>
-                    안녕하세요 {sessionStorage.getItem("host")} 회원님!
-                  </span>
-                </Nav.Link>
+                <span className="greeting-member">
+                  안녕하세요 {sessionStorage.getItem("host")} 회원님!
+                </span>
               )}
               {!isLogin && (
                 <div className="no_login">

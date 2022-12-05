@@ -13,11 +13,9 @@
 
 .row.ri{
     word-break: break-all;
-    margin: 0.2em;
+    margin: 1em;;
 }
-.container.mt-5 {
-    padding: 5px;
-}
+
 div.group{
     width: 900px;
 }
@@ -49,3 +47,18 @@ div.group{
 img{
     max-width: 100%;
 }
+
+.content-wrap{
+    white-space: pre-wrap;
+}
+
+.post-tag{
+    background-color: #76ce76d6;
+    font-size: 1.1em;
+    margin: 5px 5px;
+}
+
+.post-tag:first {
+    margin-left: 0px;
+}
+

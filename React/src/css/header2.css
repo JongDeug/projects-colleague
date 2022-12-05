@@ -5,79 +5,53 @@
     font-style: normal;
 }
 
-/*태블릿이하크기size*/
-@media screen and (max-width: 993px) {
-    .nav-icon {
-        margin-left: 0px;
-    }
-
-    .nav-icon {
-        /* margin: auto; */
-        display: flex;
-    }
-
-    .logo_header {
-        margin-left: 10px;
-        display: flex;
-        position: absolute;
-        left: -4em;
-        top: 0;
-        height: 100%;
-        max-width: fit-content;
-    }
-
-    .nav-cont.container {
-        margin: 0;
-    }
-    
-    .logo_header_link{
-        margin: 0;
-    }
-    
-}
 
 .dropdown-toggle::after {
     display: none !important;
 }
 
-.logo_header{
+.logo_header {
     width: 150px;
-    margin-left: 100px;
+    display: flex;
+    margin-right: 50px;
+}
+
+.no_login {
     display: flex;
 }
 
-.no_login{
-    display: flex;
-}
-
-#collasible-nav-dropdown{
-    text-align:center;
+#collasible-nav-dropdown {
+    text-align: center;
     margin: 0 30px;
     font-size: 3.5vh;
 }
+
 .dropdown:hover .dropdown-content {
     display: block;
 }
 
-.nav-icon{
-    margin-left: 120px;
+.nav-icon {
+    margin-left: 50px;
 }
 
-.me-auto.navbar-nav{
+.me-auto.navbar-nav {
     margin-right: 0px;
 }
 
-.li_menu{
-    list-style-type:none;
+.li_menu {
+    list-style-type: none;
 }
-.link_menu{
+
+.link_menu {
     text-decoration: none;
     color: aliceblue;
 }
-.link_menu:hover{
+
+.link_menu:hover {
     text-decoration: none;
     color: rgb(92, 92, 92);
 }
+
 .header-join-btn,
 .header-login-btn {
     text-decoration: none;
@@ -85,7 +59,7 @@
     white-space: nowrap;
 }
 
-.list-group-item{
+.list-group-item {
     margin: 0;
 }
 
@@ -104,14 +78,16 @@
     max-width: 350px !important;
 }
 
-.popover-header{
-        background-color: #ade87196 !important;
-        color: #333335b8 !important;
-        text-align: center !important;
+.popover-header {
+    background-color: #ade87196 !important;
+    color: #333335b8 !important;
+    text-align: center !important;
 }
 
 .popover-body {
     max-height: 400px;
+    min-width: 348px;
+    /* min-height: 120px; */
     overflow: auto;
 }
 
@@ -119,23 +95,23 @@
     border-bottom: 0px !important;
 }
 
-.popover-arrow{
+.popover-arrow {
     display: none !important;
 }
 
-.text-dark{
+.text-dark {
     text-decoration: none;
 }
 
-.col-2.deleteBtn{
+.col-2.deleteBtn {
     text-align: right;
 }
 
-.popover-notification{
+.popover-notification {
     overflow-y: auto;
 }
 
-#collasible-nav-dropdown{
+#collasible-nav-dropdown {
     font-size: 1.5em;
 }
 
@@ -144,19 +120,46 @@
     margin: 0 auto 1em;
 }
 
-.responsive-navbar-nav{
+.responsive-navbar-nav {
     margin-right: 0px;
 }
 
-.nav-icon.navbar-nav{
+.nav-icon.navbar-nav {
     padding: 0;
 }
 
-.me-auto.navbar-nav{
-    align-items : center;
+.me-auto.navbar-nav {
+    align-items: center;
 }
 
-.navbar{
-    --bs-navbar-nav-link-padding-x:0 !important;
+/* .navbar {
+    --bs-navbar-nav-link-padding-x: 0 !important;
+} */
+
+.navbar-nav{
+    align-items: center;
 }
 
+/*태블릿이하크기size*/
+@media screen and (max-width: 993px) {
+    .logo_header {
+        display: none;
+    }
+
+    .nav-icon {
+        margin-left: 0px;
+    }
+
+    .nav-icon.navbar-nav {
+        margin: 30px 0;
+    }
+}
+
+.notification-badge{
+    margin-left: 26px;
+    margin-top: -30px;
+}
+
+.greeting-member {
+    padding: 10px;
+}

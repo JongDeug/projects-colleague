@@ -15,14 +15,14 @@ function Main() {
     const recomLen = useRef(0);
     const popLen = useRef(0);
     const [isLogin, setIsLogin] = useState(true);
-    const boardmenu = ["자유 게시판", "자랑 게시판", "정보 공유 게시판", "질문 게시판"];
+    const boardmenu = ["자유 게시판", "자랑 게시판", "정보 게시판", "질문 게시판"];
     const [anything,setAnything] = useState([]);
     const [boast,setBoast] = useState([]);
     const [information,setInformation] = useState([]);
     const [question,setQuestion] = useState([]);
     const [currentTab, setCurrentTab] = useState(0);
 
-    const newsmenu = ["영상", "기사"];
+    const newsmenu = ["기사", "영상"];
     const [currentTabNews,setCurrentTabNews] = useState(0);
     const [article, setArticle] = useState([]);
     const [video, setVideo] = useState([]);
@@ -36,6 +36,7 @@ function Main() {
         }
     }
     
+    /*인기 게시글*/
     function requestGetPopular() {
         const token = sessionStorage.getItem("accessToken");
         return axios({
@@ -71,6 +72,7 @@ function Main() {
             }
         })
     }
+    /*추천 게시글*/
     function requestRecommendPosts(){
         const token = sessionStorage.getItem("accessToken");
         axios({
@@ -102,6 +104,43 @@ function Main() {
             recomLen.current = list.length;
         }).catch((err)=>{
             if(err.response){
+                console.log(err.response.data);
+                console.log(err.response.status);
+                console.log(err.response.header);
+            }
+        });
+    }
+    function requestGetArticle() {
+        return axios({
+            url: "/news/article",
+            method: "get",
+        })
+        .then((res) => {
+            const len = res.data.responseData.result.length;
+            setArticle(res.data.responseData.result.reverse().slice(0,10));
+            console.log(res.data.responseData.result.reverse().slice(0,10));
+            console.log(article);
+        })
+        .catch((err) => {
+            if (err.response) {
+            console.log(err.response.data);
+            console.log(err.response.status);
+            console.log(err.response.header);
+            }
+        });
+    }
+    /*영상 뉴스*/
+    function requestGetVideo() {
+        return axios({
+            url: "/news/video",
+            method: "get",
+        })
+        .then((res) => {
+            setVideo(res.data.responseData.result.reverse().slice(0,10));
+            console.log(res.data.responseData.result.reverse().slice(0,10));
+        })
+        .catch((err) => {
+            if (err.response) {
                 console.log(err.response.data);
                 console.log(err.response.status);
                 console.log(err.response.header);
@@ -144,8 +183,8 @@ function Main() {
             url:"/boardInformation/read",
             method:"get",
         }).then((res)=>{
-            setInformation(res.data.responseData.result.reverse().reverse().slice(0,10));
-            console.log(res.data.responseData.result.reverse().reverse().slice(0,10));
+            setInformation(res.data.responseData.result.reverse().slice(0,10));
+            console.log(res.data.responseData.result.reverse().slice(0,10));
         }).catch((err)=>{
             if(err.response){
                 console.log(err.response.data);
@@ -159,8 +198,8 @@ function Main() {
             url:"/boardQuestion/read",
             method:"get",
         }).then((res)=>{
-            setQuestion(res.data.responseData.result.slice(0,10));
-            console.log(res.data.responseData.result.slice(0,10));
+            setQuestion(res.data.responseData.result.reverse().slice(0,10));
+            console.log(res.data.responseData.result.reverse().slice(0,10));
         }).catch((err)=>{
             if(err.response){
                 console.log(err.response.data);
@@ -189,10 +228,10 @@ function Main() {
     function ShowNewsList(){
         console.log(currentTabNews);
         if(currentTabNews===0){
-            return <ShowPosts posts={article}></ShowPosts>
+            return <ShowNewsArticle posts={article}></ShowNewsArticle>
         }
         else if(currentTabNews===1){
-            return <ShowPosts posts={video}></ShowPosts>
+            return <ShowNewsVideo posts={video}></ShowNewsVideo>
         }
     }
 
@@ -202,33 +241,86 @@ function Main() {
         requestGetBoast();
         requestGetInfo();
         requestGetQues();
+        requestGetVideo();
+        requestGetArticle();
         setLoginState();
         console.log(isLogin);
     },[]);
 
     function ShowPosts(props){
-        console.log(props.posts);
-        console.log(props.posts[0]?.postContent);
         const list = [];
         for(let i=0; i<10; i++){
             if(props.posts[i]){
-                console.log(props.posts[i]);
-                list.push(<div className={styles.posttitle}>{props.posts[i]?.postTitle}</div>)
+                const post = props.posts[i];
+                console.log(post);
+                var postBoard;
+                if(post.postType === "질문 게시판"){
+                    postBoard = "boardQuestion";
+                }else if(post.postType === "자유 게시판"){
+                    postBoard = "boardAnything";
+                }else if(post.postType === "자랑 게시판"){
+                    postBoard = "boardBoast";
+                }else if(post.postType === "정보 공유 게시판"){
+                    postBoard = "boardInformation";
+                }
+                list.push(
+                    <div className={styles.toborder}>
+                        <Link 
+                            to={{pathname:`/post/${postBoard}/${post._id}`, state:{postBoard:postBoard, postId:post._id}}}
+                            className={styles.titlelink}
+                        >
+                            <div className={styles.posttitle}>{props.posts[i]?.postTitle}</div>
+                        </Link>
+                    </div>
+                )
             }
             else{
-                console.log(props.posts[i]);
                 list.push(<div className={styles.posttitle}>&nbsp;</div>)
             }
         }
-        // props.posts&&props.posts.map((post) => {
-        //     console.log(post);
-        //     console.log();
-        //     list.push(<div className={styles.posttitle}>{post.postTitle}</div>)
-        // }
-        // )
         return list;
     };
-    
+    function ShowNewsVideo(props){
+        const list = [];
+        for(let i=0; i<10; i++){
+            if(props.posts[i]){
+                const post = props.posts[i];
+                const srcLink = "https://www.youtube.com/watch?v=" + post.videoId;
+                console.log(props.posts[i]);
+                list.push(
+                <div onClick={() => window.open(srcLink)} className={styles.titlelink}>
+                    <div className={styles.posttitle}>
+                        {props.posts[i]?.newsTitle}
+                    </div>
+                </div>
+                )
+            }
+            else{
+                list.push(<div className={styles.posttitle}>&nbsp;</div>)
+            }
+        }
+        return list;
+    };
+    function ShowNewsArticle(props){
+        const list = [];
+        for(let i=0; i<10; i++){
+            if(props.posts[i]){
+                
+                const post = props.posts[i];
+                list.push(
+                <div onClick={() => window.open(post.newsSourceLink)} className={styles.titlelink}>
+                    <div className={styles.posttitle}>
+                        {props.posts[i]?.newsTitle}
+                    </div>
+                </div>
+                )
+            }
+            else{
+                list.push(<div className={styles.posttitle}>&nbsp;</div>)
+            }
+        }
+        return list;
+    };
     return(
         <>
         <Tabs
