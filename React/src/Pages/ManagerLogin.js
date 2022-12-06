@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/login.css";
 import Form from "react-bootstrap/Form";
@@ -44,7 +44,12 @@ export default function Login() {
     })
       .then((res) => {
         const accessToken = res.data.responseData.result.accessToken;
+        const host = res.data.responseData.result.host;
+        const role = res.data.responseData.result.roles;
+        // sessionStorage.setItem("host", host);
         sessionStorage.setItem("accessToken", accessToken);
+        sessionStorage.setItem("roles", role);
+        sessionStorage.setItem("state", "manager");
         console.log(res.data.responseData.result);
       })
       .then((res) => {
@@ -55,9 +60,21 @@ export default function Login() {
           console.log(err.response.data);
           console.log(err.response.status);
           console.log(err.response.header);
-        }
+          const notification = new Notification("세모반 알림", {
+            icon: 'http://localhost:3500/semobanlogo_3.png',
+            body: `${err.response.data.message}`
+          })
+          setTimeout(notification.close.bind(notification), 3000);
+          }
       });
   }
+  
+  useEffect(()=>{
+    if (sessionStorage.getItem("accessToken")) {
+      alert("이미 로그인 되어 있습니다.");
+      window.location.href = `/`;
+      } 
+  },[]);
 
   return (
     <div className="Login">

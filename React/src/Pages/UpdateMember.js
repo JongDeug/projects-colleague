@@ -41,16 +41,18 @@ function UpdateMember() {
 
   function SetKeywords(event){
     console.log(event);
-    if(event[event.length-1].value.charAt(0)==='#'){
-        event[event.length-1].label = event[event.length-1].label.slice(1);
-        event[event.length-1].value = event[event.length-1].value.slice(1);
+    // if(event[event.length-1].value.charAt(0)==='#'){
+    //     event[event.length-1].label = event[event.length-1].label.slice(1);
+    //     event[event.length-1].value = event[event.length-1].value.slice(1);
+    // }
+    if(event!==[]){
+      // keys.current.push(event[event.length-1].value);
+
     }
-    keys.current.push(event[event.length-1].value);
     setKeywords(event);
     console.log(keywords);
     console.log(keywords[0]);
     console.log(typeof keywords[0]);
-    console.log(keywords[0].value);
 }
 
   const onEmailValidCheck = (event) => {
@@ -128,6 +130,11 @@ function UpdateMember() {
           console.log(err.response.data);
           console.log(err.response.status);
           console.log(err.response.header);
+          const notification = new Notification("세모반 알림", {
+            icon: 'http://localhost:3500/semobanlogo_3.png',
+            body: `${err.response.data.message}`
+          })
+          setTimeout(notification.close.bind(notification), 3000);
         }
       });
   }
@@ -188,7 +195,6 @@ function UpdateMember() {
           </div>
           <CreatableSelect
             isMulti
-            onFocus={console.log(keys)}
             defaultValue={keys.current}
             options={groupedOptions}
             placeholder="키워드 입력"

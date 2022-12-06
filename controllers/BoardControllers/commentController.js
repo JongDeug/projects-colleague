@@ -92,6 +92,7 @@ const deleteMethod = (Comment, PostType) => {
             // 작성자, 권한 확인
             if (foundComment.userId === userId || req.allowed) {
                 const result = await Comment.deleteOne({ _id: commentId });
+                const deleteNotice = await Notice.deleteOne({commentId: commentId});
                 console.log(result);
 
                 const responseData = responseDataForm(`/post/${PostType}/${foundComment.postId}`, "comment delete request complete", null);

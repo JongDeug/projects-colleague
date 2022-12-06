@@ -62,3 +62,7 @@
 .comment_group {
     width: 95%;
 }
+/*댓글수정삭제버튼*/
+.commentbtn{
+    margin:0;
+}

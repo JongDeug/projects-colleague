@@ -39,6 +39,7 @@ import VariableControl from "./Pages/VariableControl"; //  시스템 변수 조�
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
+  const token = sessionStorage.getItem("accessToken");
 
   function refreshToken(){
     const token = sessionStorage.getItem("accessToken");
@@ -51,6 +52,7 @@ function App() {
       },
     }).then((res)=>{
       console.log(res.data.responseData);
+      console.log("refreshToken");
       sessionStorage.setItem("accessToken", res.data.responseData.result.accessToken);
       
     }).catch((err)=>{
@@ -62,7 +64,7 @@ function App() {
     })
   }
   function setAdminState() {
-    if (sessionStorage.getItem("role")==="admin") {
+    if (sessionStorage.getItem("state")==="manager") {
       setIsAdmin(true);
     } else {
       setIsAdmin(false);
@@ -73,6 +75,8 @@ function App() {
     // refreshToken();
     setAdminState();
   },[]);
+  // useEffect(()=>{
+  // },[token]);
 
   return (
     <>

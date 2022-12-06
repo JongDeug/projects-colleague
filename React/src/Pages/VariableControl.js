@@ -123,16 +123,6 @@ function VariableControl() {
           />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>뉴스 출력 수</Form.Label>
-          <Form.Control
-            type="keywords"
-            id="inserestKeywords"
-            defaultValue={newsVar}
-            onChange={onNewsVarHandler}
-          />
-        </Form.Group>
-
         <p className="updateMemberButtons">
           <Button
             className="btn-success"

@@ -15,7 +15,6 @@ const Crawler = require("./middleware/crawler");
 const fs = require("fs");
 const PORT = 3500;
 
-
 // uploads 파일 생성
 if (!fs.existsSync("uploads")) {
     fs.mkdirSync("uploads");

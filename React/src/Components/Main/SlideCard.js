@@ -9,11 +9,20 @@ function Card(props) {
     const [type, setType] = useState(props.post.postType);
     const [id, setId] = useState(props.post._id);
     const [title, setTitle] = useState(props.post.postTitle);
+    const [keywords, setKeywords]=useState(props.post.keywords);
     let posttype;
     if(type==="자유 게시판") posttype="boardAnything";
     else if(type==="자랑 게시판") posttype="boardBoast";
     else if(type==="정보 공유 게시판") posttype="boardInformation";
     else if(type==="질문 게시판") posttype="boardQuestion";
+
+    function ShowKeywords(){
+        let list = [];
+        keywords.map((keyword)=>{
+            list.push(<span className={styles.text}>{keyword}</span>);
+        })
+        return list;
+    }
 
     return (
         <Link to={`/post/${posttype}/${id}`} className={styles.card_area}>
@@ -31,6 +40,7 @@ function Card(props) {
                 <p className={styles.text}>
                     {content}
                 </p>
+                <ShowKeywords></ShowKeywords>
             </div>
         </Link>
     )

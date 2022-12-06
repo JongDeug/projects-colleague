@@ -39,46 +39,26 @@ function Header2() {
               <Link to="/" className="logo_header_link">
                 <img src={logo} href="/main" className="logo_header"></img>
               </Link>
-              <NavDropdown
-                title="게시판"
-                className="nav_dropdown"
-                id="collasible-nav-dropdown"
-              >
-                <NavDropdown.Item href="/board/free">
-                  자유 게시판
-                </NavDropdown.Item>
-                <NavDropdown.Item href="/board/info">
-                  정보공유 게시판
-                </NavDropdown.Item>
-                <NavDropdown.Item href="/board/questions">
-                  질문 게시판
-                </NavDropdown.Item>
-                <NavDropdown.Item href="/board/mypet">
-                  자랑 게시판
-                </NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown
-                title="뉴스"
-                className="nav_dropdown"
-                id="collasible-nav-dropdown"
-              >
-                <NavDropdown.Item href="/news/articlelist">
-                  기사 뉴스
-                </NavDropdown.Item>
-                <NavDropdown.Item href="/news/videolist">
-                  영상 뉴스
-                </NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown title="관리자 활동" id="collasible-nav-dropdown">
+              {/* <NavDropdown title="관리자 활동" id="collasible-nav-dropdown">
                 <NavDropdown.Item href="/memberlist">
                   회원 관리
                 </NavDropdown.Item>
                 <NavDropdown.Item href="/variablecontrol">
                   변수값 설정
                 </NavDropdown.Item>
-              </NavDropdown>
+              </NavDropdown> */}
+              <Nav.Link
+                href="/memberlist"
+                className="manager-nav-item nav-link"
+              >
+                회원 관리
+              </Nav.Link>
+              <Nav.Link
+                href="/variablecontrol"
+                className="manager-nav-item nav-link"
+              >
+                변수값 설정
+              </Nav.Link>
             </Nav>
 
             <Nav className="nav-icon">

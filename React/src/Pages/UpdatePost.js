@@ -86,10 +86,12 @@ function UpdatePost() {
 
   async function requestPut() {
     const token = sessionStorage.getItem("accessToken");
+    const keywordarr = [...new Set(keywords)];
+    console.log(keywordarr);
     frm.append('postId', JSON.stringify(postId));
     frm.append('postTitle', JSON.stringify(title));
     frm.append('postContent', JSON.stringify(content));
-    frm.append('keywords', JSON.stringify(keywords));
+    frm.append('keywords', JSON.stringify(keywordarr));
 
     Array.from(attachedFile).forEach(file => {
       frm.append('attachedFile', file);
@@ -113,6 +115,11 @@ function UpdatePost() {
         console.log(err.response.data);
         console.log(err.response.status);
         console.log(err.response.header);
+        const notification = new Notification("세모반 알림", {
+          icon: 'http://localhost:3500/semobanlogo_3.png',
+          body: `${err.response.data.message}`
+        })
+        setTimeout(notification.close.bind(notification), 3000);
       }
     });
   };

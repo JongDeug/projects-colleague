@@ -83,6 +83,11 @@ function FindIdPage() {
                     console.log(err.response.data);
                     console.log(err.response.status);
                     console.log(err.response.header);
+                    const notification = new Notification("세모반 알림", {
+                        icon: 'http://localhost:3500/semobanlogo_3.png',
+                        body: `${err.response.data.message}`
+                    })
+                    setTimeout(notification.close.bind(notification), 3000);
                     // console.log(err);
                 }
             });

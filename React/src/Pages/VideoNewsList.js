@@ -13,6 +13,16 @@ function VideoNewsList() {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
+  const [isLogin, setIsLogin] = useState(true);
+
+  function setLoginState() {
+    if (sessionStorage.getItem("accessToken")) {
+    setIsLogin(true);
+    } else {
+    setIsLogin(false);
+    }
+}
+
 
   function requestGet() {
     return axios({
@@ -55,6 +65,7 @@ function VideoNewsList() {
 
   useEffect(() => {
     requestGet();
+    setLoginState();
   }, []);
 
   function ShowContents() {
@@ -71,12 +82,13 @@ function VideoNewsList() {
       <div className="to_flex">
         <main>
           <div className="article-btn-wrap mb-3">
-            <Button
-              className="btn-success news_btn"
-              onClick={requestGetWithKeyword}
-            >
-              내 키워드 적용
-            </Button>
+            {isLogin?
+              <Button className="btn-success news_btn" onClick={requestGetWithKeyword}>
+                내 키워드 적용
+              </Button>
+              :  
+              <></>
+            }
             <Button className="btn-success news_btn" onClick={requestGet}>
               전체 기사 조회
             </Button>

@@ -101,7 +101,7 @@ function Comment (props) {
                     <input type='button' value='작성' className='cmtbtn comment_write' onClick={()=>{EndUpdating();  requestCommentPut();}}></input>
                     :
                     (
-                    (isUser||isAdmin)&&<span>
+                    (isUser||isAdmin)&&<span className='commentbtn'>
                     <input type='button' value='수정' className='cmtbtn comment_update' onClick={isUpdating}></input>
                     <input type='button' value='삭제' className='cmtbtn comment_delete' onClick={requestCommentDelete}></input>
                     </span>)

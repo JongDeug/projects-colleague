@@ -31,33 +31,24 @@ function Carousel(props) {
         var pcWidth = window.matchMedia("screen and (min-width:800px)");
         if(pcWidth.matches){
             setMoveLen(current*33);
-            console.log(props.len-2);
             // setMoveCnt(props.len-2);
             moveCnt.current = props.len-2;
-            console.log("pcpsize: "+moveCnt);
         }
         
         else if(tabWidth.matches){
             setMoveLen(current*50);
-            console.log(props.len-1);
             // setMoveCnt(props.len-1);
             moveCnt.current = props.len-1;
-            console.log("tabsize: "+moveCnt);
         }
         else{
-            setMoveLen(current*100);
-            console.log(props.len-0);
-            // setMoveCnt(props.len);            
+            setMoveLen(current*100);       
             moveCnt.current = props.len;
-            console.log("phonesize: "+moveCnt);
         }
     }
 
     const imgSize = useRef(props.len);
     function moveSlide(i) {
         changeMov();
-        console.log("moveCnt"+moveCnt);
-        console.log("imgSize"+imgSize.current+"+"+"i"+i+"current"+current);
         let nextIndex = current + i;
         if(nextIndex<0){
             nextIndex = imgSize.current -1;
@@ -70,8 +61,6 @@ function Carousel(props) {
     useEffect(()=>{
         window.addEventListener('resize',handleResize);
         changeMov();
-        console.log("useEffect: "+moveCnt);
-        // setMoveCnt(posts.current.length);
         return() =>{
             window.removeEventListener('resize',handleResize);
         }
@@ -81,7 +70,7 @@ function Carousel(props) {
         <>
         <div className={styles.container}>
             <div className={styles.slide}>
-                <div className={styles.btn} onClick={() => { moveSlide(-1); }}>&lt;</div>
+                <div className={styles.btn} onClick={() => { moveSlide(-1); }}><p className={styles.btntxt}>&lt;</p></div>
                 <div className={styles.window}>
                     <div className={styles.flexbox} style={{marginLeft:`-${moveLen}%`}}>
                     {props.posts.current.map((img, i) => (
@@ -92,7 +81,7 @@ function Carousel(props) {
                     ))}
                     </div>
                 </div>
-                <div className={styles.btn} onClick={() => { moveSlide(1); }}>&gt;</div>
+                <div className={styles.btn} onClick={() => { moveSlide(1); }}><p className={styles.btntxt}>&gt;</p></div>
             </div>
         </div>
         </>

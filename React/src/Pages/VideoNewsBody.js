@@ -1,5 +1,5 @@
 import { React } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../css/board.css";
 
@@ -21,9 +21,28 @@ function BodyContents(props) {
     //  썸네일 이미지 (주소 형식)
     props.videoNews.thumbnailURL
   );
+  const [ispcsize, setIspcsize] = useState(true);
+  
+  function changeContent(){
+    var tabWidth = window.matchMedia("screen and (min-width:480px)");
+    var pcWidth = window.matchMedia("screen and (min-width:800px)");
+    if(pcWidth.matches){
+        setIspcsize(true);
+    }
+    
+    else{
+        setIspcsize(false);
+    }
+  }
+  useEffect(()=>{
+      changeContent();
+  },[]);
+
   const srcLink = "https://www.youtube.com/watch?v=" + videoId;
   return (
-    <tr className="cursoron" onClick={() => window.open(srcLink)}>
+    <>
+    {ispcsize?
+      <tr className="cursoron" onClick={() => window.open(srcLink)}>
       <th className="content news_thumbnail">
         <div class="url" onClick={() => window.open(srcLink)}>
           <img src={thumbnailURL}></img>
@@ -39,7 +58,22 @@ function BodyContents(props) {
           {videoNewsDescription}
         </div>
       </th>
-    </tr>
+      </tr>
+      :
+      <tr className="cursoron" onClick={() => window.open(srcLink)}>
+        <th className="content news_thumbnail">
+          <div class="url" onClick={() => window.open(srcLink)}>
+            <img src={thumbnailURL}></img>
+          </div>
+        </th>
+        <th className="content news_title">
+          <div class="url" onClick={() => window.open(srcLink)}>
+            {videoNewsTitle}
+          </div>
+        </th>
+      </tr>
+    }
+    </>
   );
 }
 

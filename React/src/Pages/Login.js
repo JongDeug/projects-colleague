@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/login.css";
 import Form from "react-bootstrap/Form";
@@ -92,6 +92,13 @@ export default function Login() {
         }
       });
   }
+
+  useEffect(()=>{
+    if (sessionStorage.getItem("accessToken")) {
+      alert("이미 로그인 되어 있습니다.");
+      window.location.href = `/`;
+      } 
+  },[]);
 
   return (
     <div className="Login">

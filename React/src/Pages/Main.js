@@ -82,7 +82,6 @@ function Main() {
                 Authorization: `Bearer ${token}`
             },
         }).then((res) => {
-            console.log(res.data.responseData.result);
             let list = [];
             recommendPosts.current = [];
             res.data.responseData.result.anything&&res.data.responseData.result.anything.map((post,i)=>{
@@ -116,10 +115,7 @@ function Main() {
             method: "get",
         })
         .then((res) => {
-            const len = res.data.responseData.result.length;
             setArticle(res.data.responseData.result.reverse().slice(0,10));
-            console.log(res.data.responseData.result.reverse().slice(0,10));
-            console.log(article);
         })
         .catch((err) => {
             if (err.response) {
@@ -137,7 +133,6 @@ function Main() {
         })
         .then((res) => {
             setVideo(res.data.responseData.result.reverse().slice(0,10));
-            console.log(res.data.responseData.result.reverse().slice(0,10));
         })
         .catch((err) => {
             if (err.response) {
@@ -154,7 +149,6 @@ function Main() {
             method:"get",
         }).then((res)=>{
             setAnything(res.data.responseData.result.reverse().slice(0,10));
-            console.log(res.data.responseData.result.reverse().slice(0,10));
         }).catch((err)=>{
             if(err.response){
                 console.log(err.response.data);
@@ -169,7 +163,6 @@ function Main() {
             method:"get",
         }).then((res)=>{
             setBoast(res.data.responseData.result.reverse().slice(0,10));
-            console.log(res.data.responseData.result.reverse().slice(0,10));
         }).catch((err)=>{
             if(err.response){
                 console.log(err.response.data);
@@ -184,7 +177,6 @@ function Main() {
             method:"get",
         }).then((res)=>{
             setInformation(res.data.responseData.result.reverse().slice(0,10));
-            console.log(res.data.responseData.result.reverse().slice(0,10));
         }).catch((err)=>{
             if(err.response){
                 console.log(err.response.data);
@@ -199,7 +191,6 @@ function Main() {
             method:"get",
         }).then((res)=>{
             setQuestion(res.data.responseData.result.reverse().slice(0,10));
-            console.log(res.data.responseData.result.reverse().slice(0,10));
         }).catch((err)=>{
             if(err.response){
                 console.log(err.response.data);
@@ -208,10 +199,34 @@ function Main() {
             }
         })
     }
-
+    function refreshToken(){
+        const token = sessionStorage.getItem("accessToken");
+    
+        return axios({
+            url:`/auth/refresh`,
+            method:"get",
+            headers:{
+                Authorization: `Bearer ${token}`
+            },
+        }).then((res)=>{
+            console.log(res.data.responseData);
+            console.log("refreshToken");
+            sessionStorage.setItem("accessToken", res.data.responseData.result.accessToken);
+            
+        }).catch((err)=>{
+            if(err.response){
+                console.log(err.response.data);
+                console.log(err.response.status);
+                console.log(err.response.header);
+            }
+        })
+    }
+    function OpenRecommend(){
+        // refreshToken();
+        requestRecommendPosts();
+    }
 
     function ShowPostList(){
-        console.log(currentTab);
         if(currentTab===0){
             return <ShowPosts posts={anything}></ShowPosts>
         }
@@ -226,7 +241,6 @@ function Main() {
         }
     }
     function ShowNewsList(){
-        console.log(currentTabNews);
         if(currentTabNews===0){
             return <ShowNewsArticle posts={article}></ShowNewsArticle>
         }
@@ -252,7 +266,6 @@ function Main() {
         for(let i=0; i<10; i++){
             if(props.posts[i]){
                 const post = props.posts[i];
-                console.log(post);
                 var postBoard;
                 if(post.postType === "질문 게시판"){
                     postBoard = "boardQuestion";
@@ -286,7 +299,6 @@ function Main() {
             if(props.posts[i]){
                 const post = props.posts[i];
                 const srcLink = "https://www.youtube.com/watch?v=" + post.videoId;
-                console.log(props.posts[i]);
                 list.push(
                 <div onClick={() => window.open(srcLink)} className={styles.titlelink}>
                     <div className={styles.posttitle}>
@@ -308,7 +320,7 @@ function Main() {
                 
                 const post = props.posts[i];
                 list.push(
-                <div onClick={() => window.open(post.newsSourceLink)} className={styles.titlelink}>
+                <div onClick={() => window.open(post.newsNaverLink)} className={styles.titlelink}>
                     <div className={styles.posttitle}>
                         {props.posts[i]?.newsTitle}
                     </div>
@@ -332,7 +344,7 @@ function Main() {
                 <Carousel posts={popularPosts} len={popLen.current}></Carousel>
             </Tab>
             {isLogin&&
-            <Tab eventKey={"recommend"} title="추천 게시글" tabClassName={styles.tab} onClick={requestRecommendPosts()}>
+            <Tab eventKey={"recommend"} title="추천 게시글" tabClassName={styles.tab} onClick={OpenRecommend()}>
                 <Carousel posts={recommendPosts} len={recomLen.current}></Carousel>
             </Tab>}
         </Tabs>
