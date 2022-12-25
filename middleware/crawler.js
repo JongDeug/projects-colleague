@@ -242,7 +242,7 @@ const youtubeNews = async () => {
   let youtube = new Youtube();
   let word = "반려동물뉴스";
   let limit = 100;
-  youtube.setKey("AIzaSyD11JqVwWbJsAZf40dDvtwxHoSN30Cqdb4");
+  youtube.setKey("AIzaSyAqp5j0WfvS0azAnXKjDIhxStGnCyfnscY");
   youtube.search(word, limit, async (err, result) => {
     if (err) {
       console.log(err);
@@ -295,7 +295,7 @@ const youtubeNewsWithKeyword = async (userKeyword) => {
   let word = "반려동물뉴스";
   let keyword = word + " " + userKeyword;
   let limit = 100;
-  youtube.setKey("AIzaSyD11JqVwWbJsAZf40dDvtwxHoSN30Cqdb4");
+  youtube.setKey("AIzaSyAqp5j0WfvS0azAnXKjDIhxStGnCyfnscY");
 
   // youtube.addParam('order', 'rating'); // 평점 순으로 정렬
   // youtube.addParam("type", "video"); // 타입 지정
@@ -355,7 +355,7 @@ const crawler = async () => {
   // naverNews("2");
   // naverNews("3");
   // naverNews("4");
-  // youtubeNews();
+  youtubeNews();
 };
 
 module.exports = { crawler, naverNewsWithKeyword, youtubeNewsWithKeyword };

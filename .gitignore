@@ -1,5 +1,5 @@
 node_modules
 .env
-React/node_modules
-React/build
+react/node_modules
+react/build
 uploads

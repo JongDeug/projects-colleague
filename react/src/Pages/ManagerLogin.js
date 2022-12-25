@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { result } from "lodash";
 
 export default function Login() {
   const [id, setId] = useState("");
@@ -51,6 +52,7 @@ export default function Login() {
         sessionStorage.setItem("roles", role);
         sessionStorage.setItem("state", "manager");
         console.log(res.data.responseData.result);
+        return res.data.responseData.redirect;
       })
       .then((res) => {
         window.location = `${res}`; //  컨트롤러에서 리다이렉트 없으면 이거 삭제
