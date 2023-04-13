@@ -40,7 +40,7 @@ export class HomeScene extends Phaser.Scene {
 	}
 
 	init(data) {
-		this.connection.room.send(2, "homeScene");
+		this.connection.room.send('enterHomeScene', 'homeScene');
 	}
 
 	preload() {
@@ -177,7 +177,7 @@ export class HomeScene extends Phaser.Scene {
 		this.inputPayload.down = this.cursorKeys.down.isDown;
 		this.inputPayload.left = this.cursorKeys.left.isDown;
 		this.inputPayload.right = this.cursorKeys.right.isDown;
-		this.connection.room.send(0, this.inputPayload);
+		this.connection.room.send('keyboard', this.inputPayload);
 
 		// 속도
 		const velocity = 2;
@@ -221,7 +221,7 @@ export class HomeScene extends Phaser.Scene {
 			x: entity.body.x,
 			y: entity.body.y
 		};
-		this.connection.room.send(1, position);
+		this.connection.room.send('position', position);
 
 		// 이름 설정 및 다른 플레이어 위치 동기화
 		for (let sessionId in this.playerEntities) {

@@ -37,6 +37,7 @@ export class WaitingScene extends Phaser.Scene {
 	}
 
 	preload() {
+		// 키보드 
 		this.cursorKeys = this.input.keyboard.createCursorKeys();
 		// 플레이어
 		this.load.spritesheet('player', 'assets/player.png', {
@@ -83,46 +84,6 @@ export class WaitingScene extends Phaser.Scene {
 				this.physics.world.debugGraphic,
 				debugGraphics
 			]);
-
-			// Adapter
-			this.connection.room.state.players.onAdd = (player, sessionId) => {
-				console.log('hi');
-				// 생성
-				this.playerEntities[sessionId] = this.physics.add
-					.sprite(player.x, player.y, 'player', 0)
-					.setSize(14, 20)
-					.setScale(0.8, 0.75)
-					.setDepth(2);
-				this.playerNames[sessionId] = this.add.text(-200, -200, player.name).setDepth(4);
-
-				// 상태 변화
-				player.onChange = () => {
-					this.connection.playerState[sessionId] = {
-						serverX: player.x,
-						serverY: player.y,
-						serverLeft: player.left,
-						serverRight: player.right,
-						serverUp: player.up,
-						serverDown: player.down,
-						serverCurrentScene: player.currentScene,
-						serverName: player.name,
-					};
-				};
-
-				// 룸 세션과 동일한 세션이 현재 플레이어임.
-				if (sessionId === this.connection.room.sessionId) {
-					this.currentPlayer = this.playerEntities[sessionId];
-					// 카메라 관리
-					this.cameras.main.startFollow(this.currentPlayer);
-				}
-
-				// 플레이어와 충돌 타일간 설정
-				this.physics.add.collider(this.playerEntities[sessionId], worldLayer);
-				// 플레이어와 게임 전체 경계 충돌
-				this.playerEntities[sessionId].body.collideWorldBounds = true;
-				// UICam에서 플레이어 제거
-				UICam.ignore([this.playerEntities[sessionId], this.playerNames[sessionId]]);
-			};
 
 			// 플레이어 애니메이션 생성
 			this.createPlayerAnimation('down', 0, 2);

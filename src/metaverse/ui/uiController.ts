@@ -207,7 +207,8 @@ export default class UIController {
 
 		this._scene.input.keyboard.on('keydown-ENTER', () => {
 			if (editInput.inputText.text !== '' && !!editInput.inputText.text) {
-				this._connection.room.send('message', editInput.inputText.text);
+				// 서버에게 전송
+				this._connection.room.send('chat', editInput.inputText.text);
 				editInput.inputText.text = '';
 			}
 		});
