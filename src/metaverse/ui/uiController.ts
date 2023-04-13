@@ -1,14 +1,14 @@
 import type Phaser from 'phaser';
-import type { Room } from 'colyseus.js';
 import Calendar from './calendar';
 import FullScreen from './fullscreen';
 import MeetingMinutes from './meetingMinutes';
 import Setting from './setting';
 import Chat from './chat';
+import type Connection from '../interaction/connection';
 
 export default class UIController {
 	_scene: Phaser.Scene;
-	_room: Room;
+	_connection: Connection;
 	_group: Phaser.GameObjects.Group;
 	_status: any;
 	_calendar: Calendar;
@@ -30,13 +30,15 @@ export default class UIController {
 		chatUIInputText: null
 	};
 
-	constructor(scene: Phaser.Scene) {
+	constructor(scene: Phaser.Scene, connection: Connection) {
 		this._scene = scene;
 		this._status = {
 			settingButton: false,
 			calendarButton: false,
 			meetingMinutesButton: false
 		};
+		this._connection = connection;
+
 		this._calendar = new Calendar(this._scene);
 		this._fullscreen = new FullScreen(this._scene);
 		this._meetingMinutes = new MeetingMinutes(this._scene);
@@ -192,7 +194,11 @@ export default class UIController {
 				editInput = this._scene.rexUI.edit(this._uiContainer.chatUIInputText, {
 					enterClose: false,
 					onClose(textObject) {
-						textObject.text = '';
+						try {
+							textObject.text = '';
+						} catch (error) {
+							console.log('채팅창 씬 변경 시 에러', error);
+						}
 					}
 				});
 			},
@@ -200,9 +206,8 @@ export default class UIController {
 		);
 
 		this._scene.input.keyboard.on('keydown-ENTER', () => {
-			// ?. 에러 검사하는 문법 찾기.
 			if (editInput.inputText.text !== '' && !!editInput.inputText.text) {
-				this._room.send('message', editInput.inputText.text);
+				this._connection.room.send('message', editInput.inputText.text);
 				editInput.inputText.text = '';
 			}
 		});
@@ -210,19 +215,6 @@ export default class UIController {
 		this._scene.input.keyboard.on('keydown-SPACE', () => {
 			if (editInput.inputText.text !== '' && !!editInput.inputText.text) {
 				editInput.inputText.text += ' ';
-			}
-		});
-
-		// 서버에서 채팅 메시지 착신
-		this.room.onMessage('message', (message) => {
-			this._uiContainer.chatUISlider.value += 1;
-			this._uiContainer.chatUI.appendText(`${message.sessionId}: ${message.message}` + '\n');
-		});
-
-		// 서버에서 입장 메시지 착신
-		this.room.onMessage('enterRoom', (sessionId) => {
-			if (this.room.sessionId !== sessionId) {
-				this._uiContainer.chatUI.appendText(`[color=green]${sessionId} 입장![/color]` + '\n');
 			}
 		});
 	}
@@ -259,13 +251,5 @@ export default class UIController {
 				});
 			}
 		});
-	}
-
-	public get room(): Room<any> {
-		return this._room;
-	}
-
-	public set room(room: Room<any>) {
-		this._room = room;
 	}
 }

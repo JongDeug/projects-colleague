@@ -1,25 +1,39 @@
-import { Client, Room } from 'colyseus.js';
 import Phaser from 'phaser';
 import UIController from '../ui/uiController';
+import Connection from '../interaction/connection';
+import type { Room } from 'colyseus.js';
+
+interface InputPayload {
+	up: boolean,
+	down: boolean,
+	left: boolean,
+	right: boolean,
+}
 
 export class WaitingScene extends Phaser.Scene {
-	private client = new Client('ws://localhost:2567');
-	private metaverse: Room;
-	private uiController;
-	public playerEntities: { [sessionId: string]: any } = {};
-	private currentPlayer: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
-	private cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
-	private userNames: { [sessionId: string]: any } = {};
-	private inputPayload = {
-		left: false,
-		right: false,
-		up: false,
-		down: false
-	};
+	connection: Connection;
+	uiController: UIController;
+	currentPlayer: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+	cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
+	inputPayload: InputPayload;
+	playerEntities: { [sessionId: string]: any };
+	playerNames: { [sessionId: string]: any };
 
 	constructor() {
 		super('waitingScene');
-		this.uiController = new UIController(this);
+
+		this.connection = Connection.getInstance();
+		this.uiController = new UIController(this, this.connection);
+		this.currentPlayer = null;
+		this.cursorKeys = null;
+		this.inputPayload = {
+			left: false,
+			right: false,
+			up: false,
+			down: false,
+		}
+		this.playerEntities = {};
+		this.playerNames = {};
 	}
 
 	preload() {
@@ -32,27 +46,12 @@ export class WaitingScene extends Phaser.Scene {
 		// 맵, 타일
 		this.load.image('waitingTiles', 'assets/waitingTiles.png');
 		this.load.tilemapTiledJSON('map', 'assets/waiting.json');
-
-		// 채팅 다이어로그
-		this.load.image('chatDialog', 'assets/dialog.png');
 		// UI
 		this.uiController.preload();
 	}
 
 	async create() {
-		// 채팅 다이어로그
-		// const chatDialog = this.add.image(150, 100, 'chatDialog').setScale(0.9, 0.9);
-		// const chatMessage =
-		// 방 접속 전 teamId get!
-		try {
-			console.log('Joining my_room...');
-			this.metaverse = await this.client.joinOrCreate('metaverse', { teamId: '1234' });
-			this.uiController.room = this.metaverse;
-			console.log('Joined successfully!');
-		} catch (e) {
-			console.error('대기방 접속 에러 : ', e);
-		}
-
+		await this.connection.connect(this.connection.teamId);
 		// 생성
 		try {
 			// 맵 생성
@@ -66,12 +65,12 @@ export class WaitingScene extends Phaser.Scene {
 			worldLayer.setCollisionByProperty({ collides: true }); // 충돌 타일 설정
 
 			// 충돌 구역 표시
-			// const debugGraphics = this.add.graphics().setAlpha(0.75).setDepth(0);
-			// worldLayer.renderDebug(debugGraphics, {
-			//     tileColor: null, // Color of non-colliding tiles
-			//     collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-			//     faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-			// });
+			const debugGraphics = this.add.graphics().setAlpha(0.75).setDepth(0);
+			worldLayer.renderDebug(debugGraphics, {
+				tileColor: null, // Color of non-colliding tiles
+				collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+				faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+			});
 
 			// 메인 카메라, UI 카메라 생성 및 설정
 			this.cameras.main.setBounds(0, 0, 800, 600);
@@ -81,48 +80,48 @@ export class WaitingScene extends Phaser.Scene {
 				worldLayer,
 				belowLayer,
 				aboveLayer,
-				this.physics.world.debugGraphic
-				// debugGraphics
+				this.physics.world.debugGraphic,
+				debugGraphics
 			]);
 
-			// 플레이어 생성, 이거를 asycn로 해야될 것 같은디.
-			this.metaverse.state.players.onAdd = (player, sessionId) => {
-				const entity = this.physics.add
+			// Adapter
+			this.connection.room.state.players.onAdd = (player, sessionId) => {
+				console.log('hi');
+				// 생성
+				this.playerEntities[sessionId] = this.physics.add
 					.sprite(player.x, player.y, 'player', 0)
 					.setSize(14, 20)
 					.setScale(0.8, 0.75)
 					.setDepth(2);
-				entity.setData('name', player.name);
+				this.playerNames[sessionId] = this.add.text(-200, -200, player.name).setDepth(4);
 
-				this.playerEntities[sessionId] = entity;
-
-				// 이름 생성
-				this.userNames[sessionId] = this.add.text(-200, -200, player.name).setDepth(4);
+				// 상태 변화
+				player.onChange = () => {
+					this.connection.playerState[sessionId] = {
+						serverX: player.x,
+						serverY: player.y,
+						serverLeft: player.left,
+						serverRight: player.right,
+						serverUp: player.up,
+						serverDown: player.down,
+						serverCurrentScene: player.currentScene,
+						serverName: player.name,
+					};
+				};
 
 				// 룸 세션과 동일한 세션이 현재 플레이어임.
-				if (sessionId === this.metaverse.sessionId) {
-					this.currentPlayer = entity;
+				if (sessionId === this.connection.room.sessionId) {
+					this.currentPlayer = this.playerEntities[sessionId];
 					// 카메라 관리
 					this.cameras.main.startFollow(this.currentPlayer);
 				}
-				// 다른 플레이어가 움직였을 때 내 화면에 표시해야하므로
-				else {
-					player.onChange = () => {
-						entity.setData('serverX', player.x);
-						entity.setData('serverY', player.y);
-						entity.setData('serverLeft', player.left);
-						entity.setData('serverRight', player.right);
-						entity.setData('serverUp', player.up);
-						entity.setData('serverDown', player.down);
-					};
-				}
 
 				// 플레이어와 충돌 타일간 설정
-				this.physics.add.collider(entity, worldLayer);
+				this.physics.add.collider(this.playerEntities[sessionId], worldLayer);
 				// 플레이어와 게임 전체 경계 충돌
-				entity.body.collideWorldBounds = true;
+				this.playerEntities[sessionId].body.collideWorldBounds = true;
 				// UICam에서 플레이어 제거
-				UICam.ignore([this.playerEntities[sessionId], this.userNames[sessionId]]);
+				UICam.ignore([this.playerEntities[sessionId], this.playerNames[sessionId]]);
 			};
 
 			// 플레이어 애니메이션 생성
@@ -139,17 +138,18 @@ export class WaitingScene extends Phaser.Scene {
 		}
 
 		try {
-			// 플레이어 제거
-			this.metaverse.state.players.onRemove = (player, sessionId) => {
+			// Remove Adapter
+			this.connection.room.state.players.onRemove = (player, sessionId) => {
 				const entity = this.playerEntities[sessionId];
-				const userName = this.userNames[sessionId];
+				const playerNames = this.playerNames[sessionId];
 				if (entity) {
 					// destroy entity
 					entity.destroy();
-					userName.destroy();
+					playerNames.destroy();
 					// clear local reference
+					delete this.connection.playerState[sessionId];
 					delete this.playerEntities[sessionId];
-					delete this.userNames[sessionId];
+					delete this.playerNames[sessionId];
 				}
 			};
 		} catch (e) {
@@ -157,10 +157,9 @@ export class WaitingScene extends Phaser.Scene {
 		}
 	}
 
-	update(time: number, delta: number): void {
+	async update(time: number, delta: number): Promise<void> {
 		// game loop
-
-		if (!this.metaverse) {
+		if (!this.connection.room) {
 			return;
 		}
 		// loop를 돌기 때문에 onAdd()에서 this.currentPlayer를 초기화 하는 것 보다 빨리 접근할 수 있으므로 차단
@@ -175,17 +174,7 @@ export class WaitingScene extends Phaser.Scene {
 		this.inputPayload.down = this.cursorKeys.down.isDown;
 		this.inputPayload.left = this.cursorKeys.left.isDown;
 		this.inputPayload.right = this.cursorKeys.right.isDown;
-		this.metaverse.send(0, this.inputPayload);
-
-		// 씬 이동
-		if ((entity.body.x <= 590 && entity.body.x >= 574) || entity.body.y === 120) {
-			this.scene.start('homeScene', {
-				metaverse: this.metaverse,
-				currentPlayer: this.currentPlayer,
-				playerEntities: this.playerEntities,
-				userNames: this.userNames
-			});
-		}
+		this.connection.room.send(0, this.inputPayload);
 
 		// 속도
 		const velocity = 2;
@@ -229,23 +218,24 @@ export class WaitingScene extends Phaser.Scene {
 			x: entity.body.x,
 			y: entity.body.y
 		};
-		this.metaverse.send(1, position);
+		this.connection.room.send(1, position);
 
 		// 이름 설정 및 다른 플레이어 위치 동기화
 		for (let sessionId in this.playerEntities) {
 			const entity = this.playerEntities[sessionId];
-			const { serverX, serverY, serverLeft, serverRight, serverUp, serverDown } =
-				entity.data.values;
+			// console.log(this.connection.playerState[sessionId]);
+			const { serverX, serverY, serverLeft, serverRight, serverUp, serverDown } = this.connection.playerState[sessionId];
+
 
 			// 플레이어 이름 설정
-			this.userNames[sessionId]
+			this.playerNames[sessionId]
 				.setAlign('center')
 				.setOrigin(0.3, 1.2)
 				.setPosition(entity.body.x, entity.body.y)
 				.setFontSize(10);
 
 			// do not interpolate the current player
-			if (sessionId === this.metaverse.sessionId) {
+			if (sessionId === this.connection.room.sessionId) {
 				continue;
 			}
 
@@ -271,6 +261,28 @@ export class WaitingScene extends Phaser.Scene {
 				entity.anims.play('down', true);
 			}
 		}
+
+		// 씬이동(모든 플레이어 대상)
+		for (const sessionId in this.connection.playerState) {
+			// 지워졌는지 확인하지 않으면 루프를 돌아서 에러 발생시킴
+			if (!!this.playerEntities[sessionId] === false) {
+				continue;
+			}
+
+			if (this.connection.playerState[sessionId].serverX <= 590 && this.connection.playerState[sessionId].serverX >= 574 &&
+				this.connection.playerState[sessionId].serverY === 120) {
+				// 씬안의 플레이어 제거
+				await this.playerEntities[sessionId].destroy();
+				await this.playerNames[sessionId].destroy();
+				delete this.playerEntities[sessionId];
+				// 만약 sessionId가 같다면! 씬이동
+				if (sessionId === this.connection.room.sessionId) {
+					this.scene.start('homeScene', {
+					})
+				}
+			}
+		}
+
 	}
 
 	createPlayerAnimation(key: string, start: number, end: number) {
