@@ -4,12 +4,6 @@ import Connection from '../interaction/connection';
 import type { Room } from 'colyseus.js';
 import Player from '../util/player';
 
-interface InputPayload {
-	up: boolean,
-	down: boolean,
-	left: boolean,
-	right: boolean,
-}
 interface SceneItems {
 	uiCam: Phaser.Cameras.Scene2D.Camera,
 	belowLayer: Phaser.Tilemaps.TilemapLayer,
@@ -17,7 +11,7 @@ interface SceneItems {
 	aboveLayer: Phaser.Tilemaps.TilemapLayer,
 }
 
-export class WaitingScene extends Phaser.Scene {
+export default class WaitingScene extends Phaser.Scene {
 	connection: Connection;
 	uiController: UIController;
 	player: Player;
@@ -103,6 +97,7 @@ export class WaitingScene extends Phaser.Scene {
 
 		this.inAdapter();
 		this.outAdapter();
+
 	}
 
 	// game loop
@@ -128,6 +123,11 @@ export class WaitingScene extends Phaser.Scene {
 		this.player.moveCurrentPlayer();
 		this.player.syncOtherPlayer();
 		await this.player.enterWaitingSceneToHomeScene();
+
+
+
+
+
 	}
 
 	createPlayerAnimation(key: string, start: number, end: number) {

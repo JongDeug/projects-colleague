@@ -10,7 +10,7 @@ interface SceneItems {
 	aboveLayer: Phaser.Tilemaps.TilemapLayer,
 }
 
-export class HomeScene extends Phaser.Scene {
+export default class HomeScene extends Phaser.Scene {
 	connection: Connection;
 	uiController: UIController;
 	player: Player

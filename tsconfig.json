@@ -1,7 +1,7 @@
 {
 	"extends": "./.svelte-kit/tsconfig.json",
 	"compilerOptions": {
-		"target": "es2017",
+		"target": "ES2017",
 		"allowJs": true,
 		"checkJs": true,
 		"esModuleInterop": true,
@@ -10,7 +10,7 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": false,
-		"module": "ES2022"
+		"module": "ESNext"
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 	//

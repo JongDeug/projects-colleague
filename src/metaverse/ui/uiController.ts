@@ -218,6 +218,9 @@ export default class UIController {
 				editInput.inputText.text += ' ';
 			}
 		});
+
+		// Label에도 pointerdown event 적용가능.
+		// 굳이 setName을 통해서 edit할 필요 없을듯. loginScene 참고.
 	}
 
 	initialize(group: Phaser.GameObjects.Group) {

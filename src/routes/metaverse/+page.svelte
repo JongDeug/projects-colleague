@@ -1,5 +1,5 @@
 <script>
-	import {start} from "./config";
+	import { start } from './config';
 	start();
 </script>
 
@@ -18,4 +18,3 @@
 		}
 	</style>
 </svelte:head>
-

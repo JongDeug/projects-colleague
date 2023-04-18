@@ -1,4 +1,3 @@
-import { Room } from 'colyseus.js';
 import type UserInterface from './userInterface';
 
 export default class Chat implements UserInterface {

@@ -1,11 +1,9 @@
 import { Client, Room } from 'colyseus.js';
-import { WaitingScene } from '../scene/waiting';
-import { HomeScene } from '../scene/home';
-import UIController from '../ui/uiController';
 
 export default class Connection {
 	private static instance: Connection;
 	private client: Client;
+	private _loginScene: any;
 	private _waitingScene: any;
 	private _homeScene: any;
 	private _room: Room;
@@ -94,6 +92,10 @@ export default class Connection {
 
 	public set teamId(teamId: string) {
 		this._teamId = teamId;
+	}
+
+	public set loginScene(loginScene: Phaser.Scene){
+		this._loginScene = loginScene;
 	}
 
 	public set waitingScene(waitingScene: Phaser.Scene) {
