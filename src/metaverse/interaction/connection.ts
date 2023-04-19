@@ -21,21 +21,33 @@ export default class Connection {
 		return Connection.instance;
 	}
 
-	async connect(teamId: string) {
+	async connect(teamId: string, username: string, password: string): Promise<boolean> {
 		try {
 			this.client = new Client('ws://localhost:2567');
 			console.log('Joining Room...');
-			this.room = await this.client.joinOrCreate('metaverse', { teamId: teamId });
+			this.room = await this.client.joinOrCreate('metaverse', { teamId: teamId, username: username, password: password })
 			console.log('Joined successfully!');
 
 			// 이벤트 등록
 			this.registerEvent();
 
-
+			const connected = true;
+			return connected;
 		} catch (error) {
-			console.log('방 접속 에러', error);
+			console.log('방 접속 에러 코드', error.code);
+			console.log('방 접속 에러 메시지', error.message);
+			const connected = false;
+			return connected;
 		}
 	}
+
+	// async auth(){
+	// 	try {
+	// 		await this.client.auth.login();
+	// 	} catch (error) {
+	// 		console.log('방 로그인 에러', error);
+	// 	}
+	// }
 
 	public registerEvent() {
 		// 채팅
@@ -55,7 +67,7 @@ export default class Connection {
 		});
 
 		// 채팅 입장 표시
-		this.room.onMessage('enterMetaverse', (sessionId) => {
+		this.room.onMessage('enterWaitingScene', (sessionId) => {
 			// 본인 제외
 			if (this.room.sessionId !== sessionId) {
 				if (this._waitingScene.scene.isActive('waitingScene')) {
@@ -94,7 +106,7 @@ export default class Connection {
 		this._teamId = teamId;
 	}
 
-	public set loginScene(loginScene: Phaser.Scene){
+	public set loginScene(loginScene: Phaser.Scene) {
 		this._loginScene = loginScene;
 	}
 

@@ -17,3 +17,20 @@ index a2eb6a8..8872657 100644
      resetPerspective() {
          this.setPerspective(this.width, this.height, FOV);
          return this;
+diff --git a/node_modules/phaser3-rex-plugins/plugins/gameobjects/mesh/perspective/rendertexture/RenderTexture.js b/node_modules/phaser3-rex-plugins/plugins/gameobjects/mesh/perspective/rendertexture/RenderTexture.js
+index 4fbc920..1ea3e0d 100644
+--- a/node_modules/phaser3-rex-plugins/plugins/gameobjects/mesh/perspective/rendertexture/RenderTexture.js
++++ b/node_modules/phaser3-rex-plugins/plugins/gameobjects/mesh/perspective/rendertexture/RenderTexture.js
+@@ -26,8 +26,10 @@ class RenderTexture extends Image {
+     destroy(fromScene) {
+         super.destroy(fromScene);
+ 
+-        this.rt.destroy();
+-        this.rt = null;
++        if (this.rt !== null) {
++          this.rt.destroy();
++          this.rt = null;
++        }
+     }
+ 
+     snapshot(gameObjects, config) {

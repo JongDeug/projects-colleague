@@ -1,9 +1,10 @@
-import { Room, Client } from "colyseus";
+import { Room, Client, ServerError } from "colyseus";
 import { MetaverseState, Player } from "./schema/MetaverseState";
 import { IncomingMessage } from "http";
 
 
 export class Metaverse extends Room<MetaverseState> {
+
     onCreate(options: any): void | Promise<any> {
         this.setState(new MetaverseState());
 
@@ -25,11 +26,15 @@ export class Metaverse extends Room<MetaverseState> {
             // console.log(position);
         });
 
+        // this.onMessage('enterWaitingScene', (client, currentScene) => {
+
+        // })
+
         // HomeScene 입장 
         this.onMessage('enterHomeScene', (client, currentScene) => {
             const player = this.state.players.get(client.sessionId);
-            player.x = 703;
-            player.y = 242;
+            player.x = 711;
+            player.y = 253;
             player.currentScene = currentScene;
             player.name = client.sessionId;
             player.left = false;
@@ -47,17 +52,32 @@ export class Metaverse extends Room<MetaverseState> {
             }
             this.broadcast("chat", msg);
         });
+
+        // 로그인 핸들러
+        this.onMessage("login", (client, password) => {
+            const auth = true;
+            this.broadcast("login", auth);
+        })
+
+        // 플레이어 삭제 핸들러
+        this.onMessage("deletePlayer", (client, sessionId) => {
+            this.broadcast("deleteWaitingPlayer", sessionId);
+            this.broadcast("deleteHomePlayer", sessionId);
+        })
     }
 
-    onLogin() {
-        
-    }
+    // async onAuth(client: Client, options: any, request?: IncomingMessage) {
+    //     console.log(options, "auth");
+    //     if (options.password === '1234') {
+    //         return "ok";
+    //     } else {
+    //         throw new ServerError(400, "wrong password");
+    //     }
+    // }
 
-    onJoin(client: Client, options?: any, auth?: any): void | Promise<any> {
+    async onJoin(client: Client, options?: any, auth?: any): Promise<any> {
         // Metaverse 입장
         console.log(client.sessionId, "joined!");
-
-
         // create Player instance
         const player = new Player();
         // initialize
@@ -72,7 +92,7 @@ export class Metaverse extends Room<MetaverseState> {
         player.down = false;
 
         this.state.players.set(client.sessionId, player);
-        this.broadcast('enterMetaverse', client.sessionId);
+        this.broadcast('enterWaitingScene', client.sessionId);
     }
 
     onLeave(client: Client, consented?: boolean): void | Promise<any> {

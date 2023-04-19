@@ -1,8 +1,7 @@
 import Phaser from 'phaser';
 import UIController from '../ui/uiController';
 import Connection from '../interaction/connection';
-import type { Room } from 'colyseus.js';
-import Player from '../util/player';
+import WaitingPlayer from '../util/waitingPlayer';
 
 interface SceneItems {
 	uiCam: Phaser.Cameras.Scene2D.Camera,
@@ -14,7 +13,7 @@ interface SceneItems {
 export default class WaitingScene extends Phaser.Scene {
 	connection: Connection;
 	uiController: UIController;
-	player: Player;
+	waitingPlayer: WaitingPlayer;
 	cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
 	sceneItems: SceneItems
 
@@ -23,7 +22,7 @@ export default class WaitingScene extends Phaser.Scene {
 
 		this.connection = Connection.getInstance();
 		this.uiController = new UIController(this, this.connection);
-		this.player = new Player(this, this.connection);
+		this.waitingPlayer = new WaitingPlayer(this, this.connection);
 		this.cursorKeys = null;
 		this.sceneItems = {
 			uiCam: null,
@@ -49,7 +48,8 @@ export default class WaitingScene extends Phaser.Scene {
 	}
 
 	async create() {
-		await this.connection.connect(this.connection.teamId);
+		// await this.connection.connect(this.connection.teamId);
+		// const connected = await this.connection.connect(this.connection.teamId, 'sdfsdf', 'sdf');
 		// 생성
 		try {
 			// 맵 생성
@@ -63,12 +63,12 @@ export default class WaitingScene extends Phaser.Scene {
 			this.sceneItems.worldLayer.setCollisionByProperty({ collides: true }); // 충돌 타일 설정
 
 			// 충돌 구역 표시
-			const debugGraphics = this.add.graphics().setAlpha(0.75).setDepth(0);
-			this.sceneItems.worldLayer.renderDebug(debugGraphics, {
-				tileColor: null, // Color of non-colliding tiles
-				collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-				faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-			});
+			// const debugGraphics = this.add.graphics().setAlpha(0.75).setDepth(0);
+			// this.sceneItems.worldLayer.renderDebug(debugGraphics, {
+			// 	tileColor: null, // Color of non-colliding tiles
+			// 	collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+			// 	faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+			// });
 
 			// 메인 카메라, UI 카메라 생성 및 설정
 			this.cameras.main.setBounds(0, 0, 800, 600);
@@ -79,7 +79,7 @@ export default class WaitingScene extends Phaser.Scene {
 				this.sceneItems.belowLayer,
 				this.sceneItems.aboveLayer,
 				this.physics.world.debugGraphic,
-				debugGraphics
+				// debugGraphics
 			]);
 
 			// 플레이어 애니메이션 생성
@@ -95,9 +95,47 @@ export default class WaitingScene extends Phaser.Scene {
 			console.error('오브젝트 생성 에러 : ', e);
 		}
 
-		this.inAdapter();
-		this.outAdapter();
+		// this.inAdapter();
+		// this.outAdapter();
 
+		const sessionId = this.connection.room.sessionId;
+		const x = this.connection.playerState[sessionId].serverX;
+		const y = this.connection.playerState[sessionId].serverY;
+		const name = this.connection.playerState[sessionId].serverName;
+		this.waitingPlayer.playerEntities[sessionId] = this.physics.add
+			.sprite(x, y, 'player', 0)
+			.setSize(14, 20)
+			.setScale(0.8, 0.75)
+			.setDepth(2);
+		// name
+		this.waitingPlayer.playerNames[sessionId] = this.add.text(-200, -200, name).setDepth(2);
+
+		// current player
+		if (sessionId === this.connection.room.sessionId) {
+			this.waitingPlayer.currentPlayer = this.waitingPlayer.playerEntities[sessionId];
+			this.cameras.main.startFollow(this.waitingPlayer.currentPlayer);
+		}
+
+		// 플레이어와 충돌 타일간 설정
+		this.physics.add.collider(this.waitingPlayer.playerEntities[sessionId], this.sceneItems.worldLayer);
+		// 플레이어와 게임 전체 경계 충돌
+		this.waitingPlayer.playerEntities[sessionId].body.collideWorldBounds = true;
+		// UICam에서 플레이어 제거
+		this.sceneItems.uiCam.ignore([this.waitingPlayer.playerEntities[sessionId], this.waitingPlayer.playerNames[sessionId]]);
+
+
+		// delete
+		this.connection.room.onMessage("deleteWaitingPlayer", (sessionId) => {
+			const entity = this.waitingPlayer.playerEntities[sessionId]
+			const name = this.waitingPlayer.playerNames[sessionId];
+
+			if (entity) {
+				entity.setVisible(false);
+				name.setVisible(false);
+				delete this.waitingPlayer.playerEntities[sessionId];
+				delete this.waitingPlayer.playerNames[sessionId];
+			}
+		})
 	}
 
 	// game loop
@@ -106,28 +144,24 @@ export default class WaitingScene extends Phaser.Scene {
 		if (this.connection.room == null) {
 			return;
 		}
-		if (this.player.currentPlayer == null) {
+		if (this.waitingPlayer.currentPlayer == null) {
 			return;
 		}
-		if (!this.scene.isActive('waitingScene')) {
-			return;
-		}
+		// if (!this.scene.isActive('waitingScene')) {
+		// 	return;
+		// }
 
-		this.player.inputPayload.up = this.cursorKeys.up.isDown;
-		this.player.inputPayload.down = this.cursorKeys.down.isDown;
-		this.player.inputPayload.left = this.cursorKeys.left.isDown;
-		this.player.inputPayload.right = this.cursorKeys.right.isDown;
-		this.connection.room.send('keyboard', this.player.inputPayload); // server에게 전송
-
-
-		this.player.moveCurrentPlayer();
-		this.player.syncOtherPlayer();
-		await this.player.enterWaitingSceneToHomeScene();
+		this.waitingPlayer.inputPayload.up = this.cursorKeys.up.isDown;
+		this.waitingPlayer.inputPayload.down = this.cursorKeys.down.isDown;
+		this.waitingPlayer.inputPayload.left = this.cursorKeys.left.isDown;
+		this.waitingPlayer.inputPayload.right = this.cursorKeys.right.isDown;
+		this.connection.room.send('keyboard', this.waitingPlayer.inputPayload); // server에게 전송
 
 
-
-
-
+		this.waitingPlayer.moveCurrentPlayer();
+		this.waitingPlayer.syncOtherPlayer();
+		await this.waitingPlayer.enterWaitingSceneToHomeScene();
+		this.waitingPlayer.createOtherPlayer(this.sceneItems);
 	}
 
 	createPlayerAnimation(key: string, start: number, end: number) {
@@ -142,68 +176,24 @@ export default class WaitingScene extends Phaser.Scene {
 		});
 	}
 
-	inAdapter() {
-		try {
-			this.connection.room.state.players.onAdd = (player, sessionId) => {
-				// body
-				this.player.playerEntities[sessionId] = this.physics.add
-					.sprite(player.x, player.y, 'player', 0)
-					.setSize(14, 20)
-					.setScale(0.8, 0.75)
-					.setDepth(2);
-				// name
-				this.player.playerNames[sessionId] = this.add.text(-200, -200, player.name).setDepth(4);
 
-				// current player
-				if (sessionId === this.connection.room.sessionId) {
-					this.player.currentPlayer = this.player.playerEntities[sessionId];
-					this.cameras.main.startFollow(this.player.currentPlayer);
-				}
 
-				// 서버로부터 player 상태 receive
-				player.onChange = () => {
-					this.connection.playerState[sessionId] = {
-						serverX: player.x,
-						serverY: player.y,
-						serverLeft: player.left,
-						serverRight: player.right,
-						serverUp: player.up,
-						serverDown: player.down,
-						serverCurrentScene: player.currentScene,
-						serverName: player.name
-					};
-				};
 
-				// 플레이어와 충돌 타일간 설정
-				this.physics.add.collider(this.player.playerEntities[sessionId], this.sceneItems.worldLayer);
-				// 플레이어와 게임 전체 경계 충돌
-				this.player.playerEntities[sessionId].body.collideWorldBounds = true;
-				// UICam에서 플레이어 제거
-				this.sceneItems.uiCam.ignore([this.player.playerEntities[sessionId], this.player.playerNames[sessionId]]);
-			};
-		} catch (error) {
-			console.log('onAdd 에러', error);
-		}
-
-	}
-
-	outAdapter() {
-		try {
-			this.connection.room.state.players.onRemove = (player, sessionId) => {
-				const entity = this.player.playerEntities[sessionId];
-				const playerNames = this.player.playerNames[sessionId];
-				if (entity) {
-					// destroy entity
-					entity.destroy();
-					playerNames.destroy();
-					// clear local reference
-					delete this.connection.playerState[sessionId]; // 플레이어 상태 제거
-					delete this.player.playerEntities[sessionId];
-					delete this.player.playerNames[sessionId];
-				}
-			};
-		} catch (error) {
-			console.error('onRemove 에러: ', error);
-		}
-	}
+	// try {
+	// 		this.connection.room.state.players.onRemove = (player, sessionId) => {
+	// 			const entity = this.player.playerEntities[sessionId];
+	// 			const playerNames = this.player.playerNames[sessionId];
+	// 			if (entity) {
+	// 				// destroy entity
+	// 				entity.destroy();
+	// 				playerNames.destroy();
+	// 				// clear local reference
+	// 				delete this.connection.playerState[sessionId]; // 플레이어 상태 제거
+	// 				delete this.player.playerEntities[sessionId];
+	// 				delete this.player.playerNames[sessionId];
+	// 			}
+	// 		};
+	// 	} catch (error) {
+	// 		console.error('onRemove 에러: ', error);
+	// 	}
 }

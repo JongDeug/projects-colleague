@@ -3,17 +3,20 @@ import Connection from "../interaction/connection";
 import WebFontLoader from 'phaser3-rex-plugins/plugins/webfontloader.js';
 import { PerspectiveCarousel } from 'phaser3-rex-plugins/plugins/perspectiveimage.js';
 import { PerspectiveCard } from 'phaser3-rex-plugins/templates/ui/ui-components.js';
+import { Client } from "colyseus.js";
 
 
 export default class LoginScene extends Phaser.Scene {
     connection: Connection;
     cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
+    auth: boolean;
 
     constructor() {
         super('loginScene');
 
         this.connection = Connection.getInstance();
         this.cursorKeys = null;
+        this.auth = false;
     }
 
     preload() {
@@ -118,7 +121,7 @@ export default class LoginScene extends Phaser.Scene {
             space: { top: 8, bottom: 8, left: 8, right: 8 }
         })
             .setInteractive()
-            .on('pointerdown', function () {
+            .on('pointerdown', async () => {
                 loginDialog.emit('login', username, password);
             });
 
@@ -207,16 +210,33 @@ export default class LoginScene extends Phaser.Scene {
         //     .setDepth(1)
 
 
-        await this.connection.connect(this.connection.teamId);
         // // event
-        loginDialog.on('login', (username, password) => {
-            // print.text += `${username}:${password}\n`;
-            // this.scene
-            // this.scene.start('waitingScene');
-            try {
-                // this.scene.start('waitingScene');
-            } catch (error) {
-                console.log(error);
+        loginDialog.on('login', async (username, password) => {
+            const connected = await this.connection.connect(this.connection.teamId, username, password);
+
+            if (connected) {
+                // OnAdd
+                this.connection.room.state.players.onAdd = (player, sessionId) => {
+                    player.onChange = () => {
+                        this.connection.playerState[sessionId] = {
+                            serverX: player.x,
+                            serverY: player.y,
+                            serverLeft: player.left,
+                            serverRight: player.right,
+                            serverUp: player.up,
+                            serverDown: player.down,
+                            serverCurrentScene: player.currentScene,
+                            serverName: player.name
+                        }
+                    };
+                }
+                // onRemove
+                this.connection.room.state.players.onRemove = (player, sessionId) => {
+                    delete this.connection.playerState[sessionId]; // 플레이어 상태 제거
+                    this.connection.room.send('deletePlayer', sessionId);
+                };
+                // this.scene.start("waitingScene", 여기에 character 번호 알아서 주면됨);
+                this.scene.start("waitingScene");
             }
         })
             // .drawBounds(this.add.graphics(), 0xff0000)
@@ -256,6 +276,10 @@ export default class LoginScene extends Phaser.Scene {
                 // face 정하기
                 console.log(carousel.face);
             });
+
+
+
+
     }
 
 
