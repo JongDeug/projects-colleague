@@ -20,7 +20,7 @@ class MemberServiceImplTest {
         member.setName("kim");
 
         //when
-        Long saveId = memberService.join(member);
+        String saveId = memberService.join(member);
 
         //then
         Member findMember = memberService.findOne(saveId).get();
@@ -31,10 +31,10 @@ class MemberServiceImplTest {
     public void 중복_회원_예외(){
         //given
         Member member1 = new Member();
-        member1.setId(1l);
+        member1.setId("id1");
 
         Member member2 = new Member();
-        member2.setId(1l);
+        member2.setId("id1");
 
         //when
         memberService.join(member1);

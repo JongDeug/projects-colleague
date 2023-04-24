@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
-@RequestMapping("member")
+@RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
 
@@ -19,15 +23,63 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping("/new")
-    public String createForm() {
-        return "member/createMemberForm";
+    @GetMapping("/join")
+    public String joinForm() {
+        return "/member/join";
     }
-    @PostMapping("/new")
-    public String create(@ModelAttribute Member member, Model model){
+    @PostMapping("/join")
+    public String join(@ModelAttribute Member member, Model model){
         memberService.join(member);
         model.addAttribute("member", member);
-        return "add-result";
-    };
+        return "/member/join-result";
+    }
+    @GetMapping("/list")
+    public String memberList(Model model){
+        List<Member> members = memberService.findMembers();
+        model.addAttribute("members", members);
+        return "/member/member-list";
+    }
+    @GetMapping("/profile/{memberId}/edit")
+    public String updateProfileForm(@PathVariable("memberId") String memberId, Model model) {
+        Member member = memberService.findOne(memberId).get();
+        model.addAttribute("member", member);
+
+        return "/member/update-profile";
+    }
+    @PostMapping("/profile/{memberId}/edit")
+    public String updateProfile(@PathVariable("memberId") String memberId, @ModelAttribute("member") Member member){
+        memberService.updateMember(memberId, member.getName(), member.getEmail(), member.getPhoneNum(), member.getDepartment(), member.getProfileImg());
+        return "/member/update-profile-result";
+    }
+    @GetMapping("/password/{memberId}/edit")
+    public String changePwdForm(@PathVariable("memberId") String memberId, Model model){
+        Member member = memberService.findOne(memberId).get();
+        model.addAttribute("member", member);
+
+        return "/member/update-pw";
+    }
+    @PostMapping("/password/{memberId}/edit")
+    public String changePwd(@PathVariable("memberId") String memberId, @RequestParam("pw") String pw, @RequestParam("newpw") String newPW, @RequestParam("newpwcheck") String newPWcheck){
+        memberService.updatePW(memberId, pw, newPW, newPWcheck);
+        return "/member/update-pw-result";
+    }
+    @GetMapping("/find/id")
+    public String findIdForm(){
+        return "/member/find-id";
+    }
+    @PostMapping("/find/id")
+    public String findId(@ModelAttribute Member member, Model model){
+        String memberId = memberService.findId(member.getName(), member.getEmail());
+        model.addAttribute("id", memberId);
+        return "/member/find-id-result";
+    }
+    @GetMapping("/find/pw")
+    public String findPwForm(){
+        return "/member/find-pw";
+    }
+    @PostMapping("/find/pw")
+    public String findPw(Model model){
+        return "/member/find-pw-result";
+    }
 
 }

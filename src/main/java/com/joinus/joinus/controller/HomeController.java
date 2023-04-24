@@ -9,4 +9,8 @@ public class HomeController {
     public String home(){
         return "home";
     }
+    @GetMapping("/member")
+    public String menu(){
+        return "/member/member-main";
+    }
 }

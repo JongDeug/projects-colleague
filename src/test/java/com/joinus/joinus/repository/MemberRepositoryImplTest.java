@@ -2,16 +2,14 @@ package com.joinus.joinus.repository;
 
 import com.joinus.joinus.domain.Member;
 import com.joinus.joinus.persistence.MemberRepository;
-import com.joinus.joinus.persistence.MemberRepositoryImpl;
+import com.joinus.joinus.persistence.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
 public class MemberRepositoryImplTest {
-    MemberRepository repository = new MemberRepositoryImpl();
+    MemberRepository repository = new MemoryMemberRepository();
 
     @AfterEach
     public void afterEach(){
