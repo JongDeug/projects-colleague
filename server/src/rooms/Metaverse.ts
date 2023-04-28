@@ -33,8 +33,23 @@ export class Metaverse extends Room<MetaverseState> {
         // HomeScene 입장 
         this.onMessage('enterHomeScene', (client, currentScene) => {
             const player = this.state.players.get(client.sessionId);
-            player.x = 711;
-            player.y = 253;
+            player.x = 709;
+            player.y = 298;
+            console.log(currentScene)
+            player.currentScene = currentScene;
+            player.name = client.sessionId;
+            player.left = false;
+            player.right = false;
+            player.up = false;
+            player.down = false;
+        });
+
+        // WaitingScene 입장
+        this.onMessage('enterWaitingScene', (client, currentScene) => {
+            const player = this.state.players.get(client.sessionId);
+            player.x = 580;
+            player.y = 150;
+            console.log(currentScene)
             player.currentScene = currentScene;
             player.name = client.sessionId;
             player.left = false;

@@ -25,6 +25,38 @@ export default class WaitingPlayer implements Player {
         }
     }
 
+    createCurrentPlayer(sceneItems) {
+        // player 생성
+        const sessionId = this.connection.room.sessionId;
+        const x = this.connection.playerState[sessionId].serverX;
+        const y = this.connection.playerState[sessionId].serverY;
+        const name = this.connection.playerState[sessionId].serverName;
+        const currentScene = this.connection.playerState[sessionId].serverCurrentScene;
+        if (currentScene === "homeScene") {
+            return;
+        }
+        this.playerEntities[sessionId] = this.scene.physics.add
+            .sprite(x, y, 'player', 0)
+            .setSize(14, 20)
+            .setScale(0.8, 0.75)
+            .setDepth(2);
+        // name
+        this.playerNames[sessionId] = this.scene.add.text(-200, -200, name).setDepth(2);
+
+        // current player
+        if (sessionId === this.connection.room.sessionId) {
+            this.currentPlayer = this.playerEntities[sessionId];
+            this.scene.cameras.main.startFollow(this.currentPlayer);
+        }
+
+        // 플레이어와 충돌 타일간 설정
+        this.scene.physics.add.collider(this.playerEntities[sessionId], sceneItems.worldLayer);
+        // 플레이어와 게임 전체 경계 충돌
+        this.playerEntities[sessionId].body.collideWorldBounds = true;
+        // UICam에서 플레이어 제거
+        sceneItems.uiCam.ignore([this.playerEntities[sessionId], this.playerNames[sessionId]]);
+    }
+
     // 내 캐릭터 이동  (상,좌 / 하,좌는 left 애니메이션 모션) (상,우 / 하,우는 right 애니메이션 모션)
     moveCurrentPlayer() {
         // console.log(this._id);
@@ -54,6 +86,7 @@ export default class WaitingPlayer implements Player {
             this.currentPlayer.body.setVelocityX(velocity);
             this.currentPlayer.anims.play('right', true);
         } else if (this.inputPayload.up) {
+            // this.currentPlayer.setVelocityX(-velocity)
             this.currentPlayer.body.setVelocityY(-velocity);
             this.currentPlayer.anims.play('up', true);
         } else if (this.inputPayload.down) {
@@ -61,7 +94,7 @@ export default class WaitingPlayer implements Player {
             this.currentPlayer.anims.play('down', true);
         }
         this.currentPlayer.body.velocity.normalize().scale(200); // velocity 가속 제거
-        let position = {
+        const position = {
             x: this.currentPlayer.body.x,
             y: this.currentPlayer.body.y
         };
@@ -69,9 +102,9 @@ export default class WaitingPlayer implements Player {
     }
 
     // waiting -> home 이동
-    enterWaitingSceneToHomeScene() {
-        for (let sessionId in this.playerEntities) {
-            if (this.playerEntities[sessionId] == null) {
+    async enterHomeScene() {
+        for (const sessionId in this.playerEntities) {
+            if (this.playerEntities[sessionId]?.body?.x == null) {
                 continue;
             }
 
@@ -89,8 +122,12 @@ export default class WaitingPlayer implements Player {
 
                 // 자신의 캐릭터만 이동
                 if (sessionId === this.connection.room.sessionId) {
-                    this.scene.scene.start('homeScene');
-                    // this.scene.scene.setActive(false, 'waitingScene');
+                    this.currentPlayer = null;
+                    this.scene.anims.remove('down')
+                    this.scene.anims.remove('up')
+                    this.scene.anims.remove('right')
+                    this.scene.anims.remove('left')
+                    this.scene.scene.start('homeScene', {fromTo: 'fromWaitingToHome'});
                     return;
                 }
             }
@@ -109,10 +146,10 @@ export default class WaitingPlayer implements Player {
 
     // 다른 플레이어 생성
     createOtherPlayer(sceneItems: any) {
-        for (let sessionId in this.connection.playerState) {
+        for (const sessionId in this.connection.playerState) {
             const playerState = this.connection.playerState[sessionId];
 
-            // console.log(this.connection.playerState[sessionId].serverCurrentScene);
+            // 나는 생성하지 않음.
             if (sessionId === this.connection.room.sessionId && playerState == null) {
                 continue;
             }
@@ -136,14 +173,17 @@ export default class WaitingPlayer implements Player {
                 if (this.connection.room.sessionId === sessionId) {
                     this.currentPlayer = this.playerEntities[sessionId];
                 }
+
+                console.log(this.playerEntities);
             }
         }
     }
 
     // 다른 플레이어 동기화
     syncOtherPlayer() {
-        for (let sessionId in this.playerEntities) {
-            if (this.playerEntities[sessionId] == null) {
+        for (const sessionId in this.playerEntities) {
+            if (this.playerEntities[sessionId]?.body?.x == null) {
+                console.log(this.playerEntities)
                 continue;
             }
             if (this.connection.playerState[sessionId] == null) {
@@ -160,12 +200,12 @@ export default class WaitingPlayer implements Player {
                 serverDown
             } = this.connection.playerState[sessionId];
 
-            // 이름 
+            // 이름
             this.playerNames[sessionId]
-                .setAlign('center')
                 .setOrigin(0.3, 1.2)
                 .setPosition(entity.body.x, entity.body.y)
                 .setFontSize(10);
+
 
             // 내 캐릭터까지 동기화할 필요 없음.
             if (sessionId === this.connection.room.sessionId) {
@@ -201,6 +241,7 @@ export default class WaitingPlayer implements Player {
     public get scene() {
         return this._scene;
     }
+
     public set scene(scene) {
         this._scene = scene;
     }

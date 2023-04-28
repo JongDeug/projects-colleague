@@ -12,7 +12,6 @@ export default class Connection {
 	// private _playerSessionIds: any;
 	// state한 것이 무엇이 있냐, 모든 플레이어를 모아놓은. 플레이어의 위치 정보, 플레이어의 키 인풋
 
-	private constructor() { }
 
 	public static getInstance(): Connection {
 		if (!Connection.instance) {
