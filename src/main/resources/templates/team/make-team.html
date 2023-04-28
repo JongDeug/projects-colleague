@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>팀 만들기 페이지</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<form action="#" th:action="@{/team/make-team}" method="post">
+    <p>아이디: <input type="text" name="id"/></p>
+    <p>비밀번호: <input type="text" name="pw"/></p>
+    <p>이름: <input type="text" name="name"/></p>
+    <p>이메일: <input type="text" name="email"/></p>
+    <p>전화번호: <input type="text" name="phoneNum"/></p>
+    <p>기술스택: <input type="text" name="techStack"/></p>
+    <p>소속: <input type="text" name="department"/></p>
+    <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+</form>
+</body>
+</html>

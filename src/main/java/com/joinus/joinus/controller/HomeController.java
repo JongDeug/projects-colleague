@@ -10,7 +10,11 @@ public class HomeController {
         return "home";
     }
     @GetMapping("/member")
-    public String menu(){
+    public String memberMenu(){
         return "/member/member-main";
+    }
+    @GetMapping("/team")
+    public String teamMenu(){
+        return "/team/team-main";
     }
 }
