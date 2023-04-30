@@ -1,22 +1,22 @@
 import Phaser from "phaser";
 import Connection from "../interaction/connection";
 import WebFontLoader from 'phaser3-rex-plugins/plugins/webfontloader.js';
-import { PerspectiveCarousel } from 'phaser3-rex-plugins/plugins/perspectiveimage.js';
-import { PerspectiveCard } from 'phaser3-rex-plugins/templates/ui/ui-components.js';
-import { Client } from "colyseus.js";
+import {PerspectiveCarousel} from 'phaser3-rex-plugins/plugins/perspectiveimage.js';
+import {PerspectiveCard} from 'phaser3-rex-plugins/templates/ui/ui-components.js';
+import {Client} from "colyseus.js";
 
 
 export default class LoginScene extends Phaser.Scene {
     connection: Connection;
     cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
-    auth: boolean;
+    playerImg: any;
 
     constructor() {
         super('loginScene');
 
         this.connection = Connection.getInstance();
         this.cursorKeys = null;
-        this.auth = false;
+        this.playerImg = 'character00';
     }
 
     preload() {
@@ -26,6 +26,10 @@ export default class LoginScene extends Phaser.Scene {
         this.load.image('user', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/assets/images/person.png');
         this.load.image('password', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/assets/images/key.png');
 
+        this.load.spritesheet('character00', 'assets/Character_000.png', {
+            frameWidth: 24,
+            frameHeight: 24
+        });
         this.load.spritesheet('character01', 'assets/Character_001.png', {
             frameWidth: 24,
             frameHeight: 24
@@ -62,10 +66,6 @@ export default class LoginScene extends Phaser.Scene {
             frameWidth: 24,
             frameHeight: 24
         });
-        this.load.spritesheet('character10', 'assets/Character_010.png', {
-            frameWidth: 24,
-            frameHeight: 24
-        });
         WebFontLoader.call(this.load, {
             google: {
                 families: ['Pacifico']
@@ -82,7 +82,10 @@ export default class LoginScene extends Phaser.Scene {
         const COLOR_DARK = 0x260e04;
 
         this.add.image(400, 300, 'backgroundImage').setOrigin(0.5, 0.5).setScale(2.5, 2.5);
-        this.add.text(400, 90, 'JoinUs', { fontFamily: 'Pacifico', fontSize: '80px', }).setOrigin(0.5, 0.5).setTint(COLOR_DARK);
+        this.add.text(400, 90, 'JoinUs', {
+            fontFamily: 'Pacifico',
+            fontSize: '80px',
+        }).setOrigin(0.5, 0.5).setTint(COLOR_DARK);
         // const print = this.add.text(0, 0, '');
         // this.add.tween(main.to( { y: 245 }, 2400, Phaser.Easing.Bounce.Out, true);
 
@@ -96,33 +99,41 @@ export default class LoginScene extends Phaser.Scene {
             return new Array(password.length + 1).join('•');
         };
 
-        let background = this.rexUI.add.roundRectangle(0, 0, 10, 10, 10, COLOR_DARK);
-        let titleField = this.add.text(0, 0, title).setTint(COLOR_LIGHT);
-        let userNameField = this.rexUI.add.label({
+        const background = this.rexUI.add.roundRectangle(0, 0, 10, 10, 10, COLOR_DARK);
+        const titleField = this.add.text(0, 0, title).setTint(COLOR_LIGHT);
+        const userNameField = this.rexUI.add.label({
             orientation: 'x',
             background: this.rexUI.add.roundRectangle(0, 0, 10, 10, 10).setStrokeStyle(2, COLOR_PRIMARY),
             icon: this.add.image(0, 0, 'user').setTint(COLOR_LIGHT),
-            text: this.rexUI.add.BBCodeText(0, 0, username, { fixedWidth: 150, fixedHeight: 36, valign: 'center' }).setTint(COLOR_LIGHT),
-            space: { top: 5, bottom: 5, left: 5, right: 5, icon: 10, }
+            text: this.rexUI.add.BBCodeText(0, 0, username, {
+                fixedWidth: 150,
+                fixedHeight: 36,
+                valign: 'center'
+            }).setTint(COLOR_LIGHT),
+            space: {top: 5, bottom: 5, left: 5, right: 5, icon: 10,}
         }).setInteractive();
 
         const passwordField = this.rexUI.add.label({
             orientation: 'x',
             background: this.rexUI.add.roundRectangle(0, 0, 10, 10, 10).setStrokeStyle(2, COLOR_PRIMARY),
             icon: this.add.image(0, 0, 'password').setTint(COLOR_LIGHT),
-            text: this.rexUI.add.BBCodeText(0, 0, markPassword(password), { fixedWidth: 150, fixedHeight: 36, valign: 'center' }).setTint(COLOR_LIGHT),
-            space: { top: 5, bottom: 5, left: 5, right: 5, icon: 10, }
+            text: this.rexUI.add.BBCodeText(0, 0, markPassword(password), {
+                fixedWidth: 150,
+                fixedHeight: 36,
+                valign: 'center'
+            }).setTint(COLOR_LIGHT),
+            space: {top: 5, bottom: 5, left: 5, right: 5, icon: 10,}
         }).setInteractive();
 
         const loginButton = this.rexUI.add.label({
             orientation: 'x',
             background: this.rexUI.add.roundRectangle(0, 0, 10, 10, 10, COLOR_PRIMARY),
             text: this.add.text(0, 0, 'Login').setTint(COLOR_LIGHT),
-            space: { top: 8, bottom: 8, left: 8, right: 8 }
+            space: {top: 8, bottom: 8, left: 8, right: 8}
         })
             .setInteractive()
             .on('pointerdown', async () => {
-                loginDialog.emit('login', username, password);
+                loginDialog.emit('login', username, password, this.playerImg);
             });
 
         const loginDialog = this.rexUI.add.sizer({
@@ -133,10 +144,10 @@ export default class LoginScene extends Phaser.Scene {
             height: undefined,
         })
             .addBackground(background)
-            .add(titleField, 0, 'center', { top: 10, bottom: 10, left: 10, right: 10 }, false)
-            .add(userNameField, 0, 'left', { bottom: 10, left: 10, right: 10 }, true)
-            .add(passwordField, 0, 'left', { bottom: 10, left: 10, right: 10 }, true)
-            .add(loginButton, 0, 'center', { bottom: 10, left: 10, right: 10 }, false)
+            .add(titleField, 0, 'center', {top: 10, bottom: 10, left: 10, right: 10}, false)
+            .add(userNameField, 0, 'left', {bottom: 10, left: 10, right: 10}, true)
+            .add(passwordField, 0, 'left', {bottom: 10, left: 10, right: 10}, true)
+            .add(loginButton, 0, 'center', {bottom: 10, left: 10, right: 10}, false)
             .layout();
 
 
@@ -146,7 +157,7 @@ export default class LoginScene extends Phaser.Scene {
                 orientation: 1,
                 background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 20, COLOR_PRIMARY).setStrokeStyle(2, COLOR_LIGHT),
                 icon: this.add.sprite(0, 0, key, 0).setScale(4, 4),
-                space: { left: 20, right: 20, top: 10, bottom: 30, }
+                space: {left: 20, right: 20, top: 10, bottom: 30,}
             })
         }
 
@@ -154,7 +165,7 @@ export default class LoginScene extends Phaser.Scene {
             return scene.rexUI.add.label({
                 orientation: 1,
                 background: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 20, COLOR_DARK).setStrokeStyle(2, COLOR_PRIMARY),
-                space: { left: 20, right: 20, top: 10, bottom: 30, }
+                space: {left: 20, right: 20, top: 10, bottom: 30,}
             })
         }
 
@@ -175,6 +186,7 @@ export default class LoginScene extends Phaser.Scene {
         }
 
         const faces = [];
+        faces.push(CreatePerspectiveCard(this, 'character00'));
         faces.push(CreatePerspectiveCard(this, 'character01'));
         faces.push(CreatePerspectiveCard(this, 'character02'));
         faces.push(CreatePerspectiveCard(this, 'character03'));
@@ -184,7 +196,6 @@ export default class LoginScene extends Phaser.Scene {
         faces.push(CreatePerspectiveCard(this, 'character07'));
         faces.push(CreatePerspectiveCard(this, 'character08'));
         faces.push(CreatePerspectiveCard(this, 'character09'));
-        faces.push(CreatePerspectiveCard(this, 'character10'));
 
         const carousel = new PerspectiveCarousel(this, {
             x: 400, y: 230,
@@ -211,8 +222,8 @@ export default class LoginScene extends Phaser.Scene {
 
 
         // // event
-        loginDialog.on('login', async (username, password) => {
-            const connected = await this.connection.connect(this.connection.teamId, username, password);
+        loginDialog.on('login', async (username, password, playerImg) => {
+            const connected = await this.connection.connect(this.connection.teamId, username, password, playerImg);
 
             if (connected) {
                 // OnAdd
@@ -226,7 +237,8 @@ export default class LoginScene extends Phaser.Scene {
                             serverUp: player.up,
                             serverDown: player.down,
                             serverCurrentScene: player.currentScene,
-                            serverName: player.name
+                            serverName: player.name,
+                            serverImg: player.img
                         }
                     };
                 }
@@ -235,7 +247,7 @@ export default class LoginScene extends Phaser.Scene {
                     delete this.connection.playerState[sessionId]; // 플레이어 상태 제거
                     this.connection.room.send('deletePlayer', sessionId);
                 };
-                // this.scene.start("waitingScene", 여기에 character 번호 알아서 주면됨);
+
                 this.scene.start("waitingScene");
             }
         })
@@ -265,29 +277,53 @@ export default class LoginScene extends Phaser.Scene {
         })
 
 
-        // // carousel
+        // carousel
         carousel.setInteractive()
-            .on('pointerdown', function (pointer, localX, localY, event) {
+            .on('pointerdown', (pointer, localX, localY, event) => {
                 if (localX <= (carousel.width / 2)) {
                     carousel.roll.toLeft();
                 } else {
                     carousel.roll.toRight();
                 }
+
+                switch (carousel.face) {
+                    case 0 :
+                        this.playerImg = 'character00';
+                        break;
+                    case 1 :
+                        this.playerImg = 'character01';
+                        break;
+                    case 2 :
+                        this.playerImg = 'character02';
+                        break;
+                    case 3 :
+                        this.playerImg = 'character03';
+                        break;
+                    case 4 :
+                        this.playerImg = 'character04';
+                        break;
+                    case 5 :
+                        this.playerImg = 'character05';
+                        break;
+                    case 6 :
+                        this.playerImg = 'character06';
+                        break;
+                    case 7 :
+                        this.playerImg = 'character07';
+                        break;
+                    case 8 :
+                        this.playerImg = 'character08';
+                        break;
+                    case 9 :
+                        this.playerImg = 'character09';
+                        break;
+                }
                 // face 정하기
-                console.log(carousel.face);
             });
-
-
-
-
     }
-
-
 
     update(time: number, delta: number): void {
         // this.debug.clear();
         // this.debug.lineStyle(1, 0x00ff00);
     }
-
-
 }

@@ -26,16 +26,11 @@ export class Metaverse extends Room<MetaverseState> {
             // console.log(position);
         });
 
-        // this.onMessage('enterWaitingScene', (client, currentScene) => {
-
-        // })
-
-        // HomeScene 입장 
+        // HomeScene 입장
         this.onMessage('enterHomeScene', (client, currentScene) => {
             const player = this.state.players.get(client.sessionId);
             player.x = 709;
             player.y = 298;
-            console.log(currentScene)
             player.currentScene = currentScene;
             player.name = client.sessionId;
             player.left = false;
@@ -49,7 +44,6 @@ export class Metaverse extends Room<MetaverseState> {
             const player = this.state.players.get(client.sessionId);
             player.x = 580;
             player.y = 150;
-            console.log(currentScene)
             player.currentScene = currentScene;
             player.name = client.sessionId;
             player.left = false;
@@ -81,6 +75,7 @@ export class Metaverse extends Room<MetaverseState> {
         })
     }
 
+    // 인증!
     // async onAuth(client: Client, options: any, request?: IncomingMessage) {
     //     console.log(options, "auth");
     //     if (options.password === '1234') {
@@ -96,11 +91,11 @@ export class Metaverse extends Room<MetaverseState> {
         // create Player instance
         const player = new Player();
         // initialize
-        player.name = client.sessionId;
+        player.name = options.username;
+        player.img = options.playerImg;
         player.x = 175;
         player.y = 16;
         player.currentScene = 'waitingScene';
-        player.name = client.sessionId;
         player.left = false;
         player.right = false;
         player.up = false;
@@ -115,6 +110,7 @@ export class Metaverse extends Room<MetaverseState> {
         this.state.players.delete(client.sessionId);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     onDispose(): void | Promise<any> { }
 }
 

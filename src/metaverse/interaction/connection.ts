@@ -20,11 +20,11 @@ export default class Connection {
 		return Connection.instance;
 	}
 
-	async connect(teamId: string, username: string, password: string): Promise<boolean> {
+	async connect(teamId: string, username: string, password: string, playerImg: string): Promise<boolean> {
 		try {
 			this.client = new Client('ws://localhost:2567');
 			console.log('Joining Room...');
-			this.room = await this.client.joinOrCreate('metaverse', { teamId: teamId, username: username, password: password })
+			this.room = await this.client.joinOrCreate('metaverse', { teamId: teamId, username: username, password: password, playerImg: playerImg })
 			console.log('Joined successfully!');
 
 			// 이벤트 등록
