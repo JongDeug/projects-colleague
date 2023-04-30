@@ -97,9 +97,9 @@ export default class WaitingScene extends Phaser.Scene {
         try {
             // 맵 생성
             const map = this.make.tilemap({
-                key: 'map'
+                key: 'map',
             });
-            const tileSet = map.addTilesetImage('waitingTiles', 'waitingTiles');
+            const tileSet = map.addTilesetImage('waitingTiles', 'waitingTiles', 12, 12, 1, 2);
             this.sceneItems.belowLayer = map.createLayer('BelowLayer', tileSet, 0, 0).setDepth(0);
             this.sceneItems.worldLayer = map.createLayer('WorldLayer', tileSet, 0, 0).setDepth(1);
             this.sceneItems.aboveLayer = map.createLayer('AboveLayer', tileSet, 0, 0).setDepth(3);
@@ -126,6 +126,7 @@ export default class WaitingScene extends Phaser.Scene {
                 this.physics.world.debugGraphic,
                 // debugGraphics
             ]);
+            this.cameras.main.roundPixels = true;
 
 
             // 플레이어 애니메이션 생성

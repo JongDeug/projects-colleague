@@ -68,11 +68,11 @@ export default class HomeScene extends Phaser.Scene {
                 key: 'home'
             });
             const tileSet = [];
-            tileSet[0] = map.addTilesetImage('homeTiles', 'homeTiles');
-            tileSet[1] = map.addTilesetImage('homeDoors', 'homeDoors');
-            tileSet[2] = map.addTilesetImage('homeFurnitureState1', 'homeFurnitureState1');
-            tileSet[3] = map.addTilesetImage('homeFurnitureState2', 'homeFurnitureState2');
-            tileSet[4] = map.addTilesetImage('homeSmallItems', 'homeSmallItems');
+            tileSet[0] = map.addTilesetImage('homeTiles', 'homeTiles', 16, 16, 1, 2);
+            tileSet[1] = map.addTilesetImage('homeDoors', 'homeDoors', 16, 16, 1, 2);
+            tileSet[2] = map.addTilesetImage('homeFurnitureState1', 'homeFurnitureState1', 16, 16, 1, 2);
+            tileSet[3] = map.addTilesetImage('homeFurnitureState2', 'homeFurnitureState2', 16, 16, 1, 2);
+            tileSet[4] = map.addTilesetImage('homeSmallItems', 'homeSmallItems', 16, 16, 1, 2);
             this.sceneItems.belowLayer = map.createLayer('BelowLayer', tileSet, 0, 0).setDepth(0);
             this.sceneItems.worldLayer = map.createLayer('WorldLayer', tileSet, 0, 0).setDepth(1);
             this.sceneItems.aboveLayer = map.createLayer('AboveLayer', tileSet, 0, 0).setDepth(3);
