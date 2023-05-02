@@ -45,7 +45,7 @@ export default class Calendar implements UserInterface {
 			plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, scrollPlugin],
 			// fullcalendar free trial
 			schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
-			dayMinWidth: 20,
+			dayMinWidth: 80,
 			stickyFooterScrollbar: true,
 			initialView: 'dayGridMonth',
 			contentHeight: 390,
