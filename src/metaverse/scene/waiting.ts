@@ -103,7 +103,7 @@ export default class WaitingScene extends Phaser.Scene {
             this.sceneItems.belowLayer = map.createLayer('BelowLayer', tileSet, 0, 0).setDepth(0);
             this.sceneItems.worldLayer = map.createLayer('WorldLayer', tileSet, 0, 0).setDepth(1);
             this.sceneItems.aboveLayer = map.createLayer('AboveLayer', tileSet, 0, 0).setDepth(3);
-            this.sceneItems.worldLayer.setCollisionByProperty({collides: true}); // 충돌 타일 설정
+            this.sceneItems.worldLayer.setCollisionByProperty({ collides: true }); // 충돌 타일 설정
 
             // 충돌 구역 표시
             // const debugGraphics = this.add.graphics().setAlpha(0.75).setDepth(0);
@@ -182,7 +182,11 @@ export default class WaitingScene extends Phaser.Scene {
 
             // UI 생성
             this.uiController.create();
+
             this.uiController.event();
+            if(this.connection.chatDB != null){
+                this.uiController._uiContainer.chatUI.setText(this.connection.chatDB);
+            }
         } catch (e) {
             console.error('오브젝트 생성 에러 : ', e);
         }

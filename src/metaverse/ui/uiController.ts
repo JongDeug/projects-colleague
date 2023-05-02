@@ -24,6 +24,9 @@ export default class UIController {
 		settingMenuItemVoice: null,
 		fullscreenButton: null,
 		calendarButton: null,
+		calendarContainer: null,
+		calendarBoard: null,
+		calendarContent: null,
 		meetingMinutesButton: null,
 		chatUI: null,
 		chatUISlider: null,
@@ -59,6 +62,7 @@ export default class UIController {
 			frameWidth: 180,
 			frameHeight: 60
 		});
+		this._scene.load.html('calendar', 'html/calendar.html');
 	}
 
 	create(): void {
@@ -75,6 +79,11 @@ export default class UIController {
 		this.initialize(this._fullscreen.group);
 		this.initialize(this._setting.group);
 		this.initialize(this._meetingMinutes.group);
+		//
+		// console.log(this._uiContainer.calendarContainer);
+		// console.log(this._uiContainer.calendarContent);
+		// console.log(this._uiContainer.calendarBoard);
+		// console.log(this._uiContainer.calendarButton);
 
 		this._uiContainer.settingButton.on(
 			'pointerup',
@@ -130,10 +139,17 @@ export default class UIController {
 				if (!!this._status.calendarButton == true) {
 					this._status.calendarButton = false;
 					this._uiContainer.calendarButton.setFrame(0);
+					//test
+					this._uiContainer.calendarContent.setVisible(false);
+					this._uiContainer.calendarBoard.setVisible(false);
 
 					this._scene.cameras.main.setAlpha(1);
 				} else {
 					this._status.calendarButton = true;
+					//test
+					this._uiContainer.calendarContent.setVisible(true);
+					this._uiContainer.calendarBoard.setVisible(true);
+
 					this._status.settingButton = false;
 					this._status.meetingMinutesButton = false;
 					this._uiContainer.calendarButton.setFrame(1);
@@ -197,7 +213,7 @@ export default class UIController {
 						try {
 							textObject.text = '';
 						} catch (error) {
-							console.log('채팅창 씬 변경 시 에러', error);
+							console.log('채팅창 씬 변경 시 에러 아직 못고침', error);
 						}
 					}
 				});
@@ -242,7 +258,17 @@ export default class UIController {
 
 			if (object.name === 'fullscreenButton') this._uiContainer.fullscreenButton = object;
 
+			// calendar
+			if (object.name === 'calendarBoard') {
+				this._uiContainer.calendarBoard = object;
+				this._uiContainer.calendarBoard.setVisible(false);
+			}
+			if (object.name === 'calendarContent') {
+				this._uiContainer.calendarContent = object;
+				this._uiContainer.calendarContent.setVisible(false);
+			}
 			if (object.name === 'calendarButton') this._uiContainer.calendarButton = object;
+
 
 			if (object.name === 'meetingMinutesButton') this._uiContainer.meetingMinutesButton = object;
 

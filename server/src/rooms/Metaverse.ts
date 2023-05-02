@@ -1,9 +1,12 @@
-import { Room, Client, ServerError } from "colyseus";
-import { MetaverseState, Player } from "./schema/MetaverseState";
-import { IncomingMessage } from "http";
+import {Room, Client, ServerError} from "colyseus";
+import {MetaverseState, Player} from "./schema/MetaverseState";
+import {IncomingMessage} from "http";
 
 
 export class Metaverse extends Room<MetaverseState> {
+
+    //test
+    // chatDB: string;
 
     onCreate(options: any): void | Promise<any> {
         this.setState(new MetaverseState());
@@ -32,7 +35,6 @@ export class Metaverse extends Room<MetaverseState> {
             player.x = 709;
             player.y = 298;
             player.currentScene = currentScene;
-            player.name = client.sessionId;
             player.left = false;
             player.right = false;
             player.up = false;
@@ -45,7 +47,6 @@ export class Metaverse extends Room<MetaverseState> {
             player.x = 580;
             player.y = 150;
             player.currentScene = currentScene;
-            player.name = client.sessionId;
             player.left = false;
             player.right = false;
             player.up = false;
@@ -54,9 +55,10 @@ export class Metaverse extends Room<MetaverseState> {
 
         // 채팅 핸들러
         this.onMessage("chat", (client, content) => {
-            // console.log("received message from", client.sessionId, ":", message);
+            const player = this.state.players.get(client.sessionId);
             const msg = {
                 message: content,
+                username: player.name,
                 sessionId: client.sessionId
             }
             this.broadcast("chat", msg);
@@ -102,7 +104,14 @@ export class Metaverse extends Room<MetaverseState> {
         player.down = false;
 
         this.state.players.set(client.sessionId, player);
-        this.broadcast('enterWaitingScene', client.sessionId);
+        // 채팅 입장
+        const payload = {
+            sessionId: client.sessionId,
+            username: player.name,
+            serverImg: player.img
+        }
+
+        this.broadcast('enterWaitingScene', payload);
     }
 
     onLeave(client: Client, consented?: boolean): void | Promise<any> {
@@ -111,6 +120,7 @@ export class Metaverse extends Room<MetaverseState> {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    onDispose(): void | Promise<any> { }
+    onDispose(): void | Promise<any> {
+    }
 }
 
