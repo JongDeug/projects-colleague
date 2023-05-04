@@ -9,4 +9,8 @@ export default defineConfig({
 	// optimizeDeps: {
 	// 	include: ['@fullcalendar/common']
 	// }
+	server:{
+		port:8000,
+		strictPort:false,
+	},
 });

@@ -2,6 +2,7 @@ package com.joinus.joinus.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class HomeController {
@@ -16,5 +17,9 @@ public class HomeController {
     @GetMapping("/team")
     public String teamMenu(){
         return "/team/team-main";
+    }
+    @GetMapping("/test")
+    public String test(){
+        return "Test Success";
     }
 }
