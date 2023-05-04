@@ -52,6 +52,5 @@
     "phaser3-rex-plugins": "^1.60.0",
     "quill": "^1.3.7",
     "svelte-quill": "^1.2.0"
-  },
-  "proxy": "http://localhost:8080"
+  }
 }

@@ -51,8 +51,8 @@
     // axios.get('/test')
     //     .then(response => test = response.data)
     //     .catch(error => console.log(error))
-    async function getValue() {
-        const res = await axios.get('/test');
+    function getValue() {
+        const res = axios.get('/test').then(response => test = response.data).catch(error => console.log(error));
         console.log(res);
     }
 
@@ -61,7 +61,12 @@
 <SmallHeader header="TEST Page" />
 
 <Layout>
-    <!-- 필터와 검색 버튼 -->
+    <button
+            class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-gray-200 font-medium rounded-lg px-3 py-1.5"
+            type="button"
+            on:click={getValue()}>
+        값 테스트
+    </button>
     <div class="sm:flex items-center justify-between pb-4">
         테스트 데이터 : {test}
     </div>
