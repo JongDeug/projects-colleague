@@ -51,6 +51,11 @@
     // axios.get('/test')
     //     .then(response => test = response.data)
     //     .catch(error => console.log(error))
+
+    // axios.get('/api/test')
+    //      .then(response => test.set(response.data))
+    //      .catch(error => console.log(error))
+
     function getValue() {
         const res = axios.get('/test').then(response => test = response.data).catch(error => console.log(error));
         console.log(res);
