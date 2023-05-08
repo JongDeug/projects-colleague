@@ -3,6 +3,21 @@
 	import ConfirmBtn from '../../../component/ConfirmBtn.svelte';
 	import Layout from '../../../component/Layout.svelte';
 	import { InputAddon, ButtonGroup, Label, Input, Helper } from 'flowbite-svelte';
+	import axios from "axios";
+	import {error} from "@sveltejs/kit";
+	function checkId() {
+		let userId = document.getElementById("userId").value
+		axios({
+			url: '/api/member/duplicateCheck',	//	아이디 중복체크
+			method: 'post',
+			data: {
+				id: userId
+			},
+		})
+				.then((res) => {
+					console.log(res);
+				})
+	}
 </script>
 
 <Layout>
@@ -13,8 +28,8 @@
 			<Label for="success" color="green" class="block mb-2">아이디</Label>
 
 			<div class="flex items-center">
-				<Input id="success" color="green" placeholder="Success input" class="mr-3" />
-				<ConfirmBtn content="중복확인" color="black" style="w-[15%]" txtColor="white" />
+				<Input id="userId" color="green" placeholder="Success input" class="mr-3" />
+				<ConfirmBtn content="중복확인" color="black" style="w-[15%]" txtColor="black" on:click={checkId}/>
 			</div>
 
 			<Helper class="mt-2" color="green"

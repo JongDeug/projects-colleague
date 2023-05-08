@@ -19,16 +19,14 @@ public class MemberServiceImpl implements MemberService{
     }
 
     public String join(Member member){
-        validateDuplicateMember(member);    //  중복 id 체크
+        validateDuplicateMember(member.getId());    //  중복 id 체크
         memberRepository.save(member);
         return member.getId();
     }
 
-    private void validateDuplicateMember(Member member) {
-        memberRepository.findById(member.getId())
-                .ifPresent(m -> {
-                    throw new IllegalStateException("이미 존재하는 아이디입니다.");
-                });
+    public boolean validateDuplicateMember(String memberId) {
+        return memberRepository.findById(memberId)
+                .isPresent();
     }
 
     public void updateMember(String memberId, String name, String email, String phoneNum, String department, String profileImg){

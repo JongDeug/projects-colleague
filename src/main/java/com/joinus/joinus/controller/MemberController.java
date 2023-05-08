@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/member")
+@RequestMapping("/api/member")
 public class MemberController {
     private final MemberService memberService;
 
@@ -32,6 +32,11 @@ public class MemberController {
         memberService.join(member);
         model.addAttribute("member", member);
         return "/member/join-result";
+    }
+
+    @PostMapping("/duplicateCheck")
+    public boolean duplicateIdCheck(@RequestParam("id") String memberId){
+        return true;
     }
     @GetMapping("/list")
     public String memberList(Model model){
