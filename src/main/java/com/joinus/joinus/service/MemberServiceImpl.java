@@ -19,7 +19,7 @@ public class MemberServiceImpl implements MemberService{
     }
 
     public String join(Member member){
-        validateDuplicateMember(member.getId());    //  중복 id 체크
+//        validateDuplicateMember(member.getId());    //  중복 id 체크
         memberRepository.save(member);
         return member.getId();
     }
