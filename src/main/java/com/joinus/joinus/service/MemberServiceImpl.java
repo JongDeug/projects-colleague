@@ -18,17 +18,20 @@ public class MemberServiceImpl implements MemberService{
         this.memberRepository = memberRepository;
     }
 
+    @Override
     public String join(Member member){
 //        validateDuplicateMember(member.getId());    //  중복 id 체크
         memberRepository.save(member);
         return member.getId();
     }
 
+    @Override
     public boolean validateDuplicateMember(String memberId) {
         return memberRepository.findById(memberId)
                 .isPresent();
     }
 
+    @Override
     public void updateMember(String memberId, String name, String email, String phoneNum, String department, String profileImg){
         Member member = memberRepository.findById(memberId).get();
         member.setName(name);
@@ -38,6 +41,7 @@ public class MemberServiceImpl implements MemberService{
         member.setProfileImg(profileImg);
     }
 
+    @Override
     public void updatePW(String memberId, String curPW, String newPW, String checkPW){
         Member member = memberRepository.findById(memberId).get();
         if (member.getPw().equals(curPW) && newPW.equals(checkPW)){
@@ -47,6 +51,7 @@ public class MemberServiceImpl implements MemberService{
             throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
         }
     }
+    @Override
     public String findId(String name, String email){
         return memberRepository.findByName(name).get().getId();
     }
@@ -54,10 +59,12 @@ public class MemberServiceImpl implements MemberService{
     /**
      * 관리자용 전체 회원 조회
      */
+    @Override
     public List<Member> findMembers(){
         return memberRepository.findAll();
     }
 
+    @Override
     public Optional<Member> findOne(String memberId){
         return memberRepository.findById(memberId);
     }

@@ -5,7 +5,6 @@
 	import { InputAddon, ButtonGroup, Label, Input, Helper } from 'flowbite-svelte';
 	import axios from "axios";
 	import {error} from "@sveltejs/kit";
-	import {regex_double_quotes} from "svelte/types/compiler/utils/patterns.js";
 	let realId;
 	function checkId() {
 		let userId = document.getElementById("userId").value;
@@ -21,6 +20,7 @@
 						alert("avaliable")
 						realId = userId;
 					}
+					console.log(response.data)
 				})
 				.catch(error => console.log(error))
 		console.log(res);
@@ -33,6 +33,12 @@
 		let phoneNum = document.getElementById("phoneNumber").value;
 		let department = document.getElementById("department").value;
 
+		if (userId.empty() || pw.empty() || name.empty() || email.empty() || phoneNum.empty() || department.empty())
+		{
+			alert("join failed");
+			return;
+		}
+
 		const res = axios.post('/api/member/join',
 				{
 					id : userId,
@@ -43,7 +49,7 @@
 					department : department
 				})
 				.then(response => {
-					if (userId == response.data.id)
+					if (userId == response.data)
 						alert("join success")
 					else
 						alert("join failed")

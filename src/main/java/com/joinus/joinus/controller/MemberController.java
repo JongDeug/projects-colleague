@@ -29,8 +29,8 @@ public class MemberController {
     }
 
     @PostMapping("/duplicateCheck")
-    public boolean duplicateIdCheck(@RequestBody String memberId){
-        return memberService.validateDuplicateMember(memberId);
+    public boolean duplicateIdCheck(@RequestBody Member member){    //  requestparam, 생략 string id, modelattribute는 작동이 안됨 일단 dto로 박아놓음
+        return memberService.validateDuplicateMember(member.getId());
     }
     @GetMapping("/list")
     public ModelAndView memberList(Model model){
