@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface MemberService {
     String join(Member member);
+
+    boolean validateDuplicateMember(String memberId);
     void updateMember(String memberId, String name, String email, String phoneNum, String department, String profileImg);
     void updatePW(String memberId, String curPW, String newPW, String checkPW);
     String findId(String name, String email);

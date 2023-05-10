@@ -13,8 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
-@RequestMapping("/member")
+@RestController
+@RequestMapping("/api/member")
 public class MemberController {
     private final MemberService memberService;
 
@@ -23,21 +23,20 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping("/join")
-    public String joinForm() {
-        return "/member/join";
-    }
     @PostMapping("/join")
-    public String join(@ModelAttribute Member member, Model model){
-        memberService.join(member);
-        model.addAttribute("member", member);
-        return "/member/join-result";
+    public String join(@RequestBody Member member){
+        return memberService.join(member);
+    }
+
+    @PostMapping("/duplicateCheck")
+    public boolean duplicateIdCheck(@RequestBody Member member){    //  requestparam, 생략 string id, modelattribute는 작동이 안됨 일단 dto로 박아놓음
+        return memberService.validateDuplicateMember(member.getId());
     }
     @GetMapping("/list")
-    public String memberList(Model model){
+    public ModelAndView memberList(Model model){
         List<Member> members = memberService.findMembers();
         model.addAttribute("members", members);
-        return "/member/member-list";
+        return new ModelAndView("/member/member-list");
     }
     @GetMapping("/profile/{memberId}/edit")
     public String updateProfileForm(@PathVariable("memberId") String memberId, Model model) {
