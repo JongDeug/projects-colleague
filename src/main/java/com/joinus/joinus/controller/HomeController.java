@@ -23,6 +23,6 @@ public class HomeController {
     }
     @GetMapping("/test")
     public String test(){
-        return "Test Success";
+        return "Connect Test Success";
     }
 }
