@@ -32,12 +32,7 @@ public class MemberController {
     public boolean duplicateIdCheck(@RequestBody Member member){    //  requestparam, 생략 string id, modelattribute는 작동이 안됨 일단 dto로 박아놓음
         return memberService.validateDuplicateMember(member.getId());
     }
-    @GetMapping("/list")
-    public ModelAndView memberList(Model model){
-        List<Member> members = memberService.findMembers();
-        model.addAttribute("members", members);
-        return new ModelAndView("/member/member-list");
-    }
+
     @GetMapping("/profile/{memberId}/edit")
     public String updateProfileForm(@PathVariable("memberId") String memberId, Model model) {
         Member member = memberService.findOne(memberId).get();
@@ -67,10 +62,8 @@ public class MemberController {
         return "/member/find-id";
     }
     @PostMapping("/find/id")
-    public String findId(@ModelAttribute Member member, Model model){
-        String memberId = memberService.findId(member.getName(), member.getEmail());
-        model.addAttribute("id", memberId);
-        return "/member/find-id-result";
+    public String findId(@RequestBody Member member){
+        return memberService.findId(member.getName(), member.getEmail());
     }
     @GetMapping("/find/pw")
     public String findPwForm(){
@@ -79,6 +72,13 @@ public class MemberController {
     @PostMapping("/find/pw")
     public String findPw(Model model){
         return "/member/find-pw-result";
+    }
+
+    @GetMapping("/list")
+    public ModelAndView memberList(Model model){
+        List<Member> members = memberService.findMembers();
+        model.addAttribute("members", members);
+        return new ModelAndView("/member/member-list");
     }
 
 }
