@@ -1,12 +1,11 @@
 package com.joinus.joinus.controller;
 
 import com.joinus.joinus.domain.Team;
-import com.joinus.joinus.persistence.TeamRepository;
 import com.joinus.joinus.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -20,29 +19,19 @@ public class TeamController {
         this.teamService = teamService;
     }
 
-    @GetMapping("/make-team")
-    public String makeTeamForm(){
-        return "/team/make-team";
+    @PostMapping("/create")
+    public String makeTeam(@RequestBody Team team){
+        return teamService.makeTeam(team);
     }
-    @PostMapping("/make-team")
-    public String makeTeam(@ModelAttribute Team team, Model model){
-        teamService.makeTeam(team);
-        model.addAttribute("team", team);
-        return "/team/make-team-result";
+    @GetMapping("/myTeam/list")
+    public List<Team> getTeamList(@RequestParam("memberId") String memberId){
+        return teamService.findMyTeams(memberId);
     }
-    @GetMapping("/{memberId}/team/list")
-    public String getTeamList(@PathVariable("memberId") String memberId, Model model){
-        List<Team> teams = teamService.findMyTeams(memberId);
-        model.addAttribute("teams", teams);
-
-        return "/team/team-list";
-    }
-    @GetMapping("/{teamId}/teamInfo")
-    public String getTeamInfo(@PathVariable("teamId") Long teamId, Model model){
+    @GetMapping("/myTeam/detail")
+    public Team getTeamInfo(@RequestParam("teamId") Long teamId){
         Team team = teamService.findTeamById(teamId);
-        model.addAttribute("team", team);
 
-        return "/team/team-info";
+        return teamService.findTeamById(teamId);
     }
     @GetMapping("/{teamId}/update")
     public String updateTeamInfoForm(@PathVariable("teamId") Long teamId, Model model){
@@ -67,5 +56,12 @@ public class TeamController {
     public String getCalendar(@PathVariable("teamId") Long teamId, Model model){
 
         return "/team/manage-calendar";
+    }
+
+    @GetMapping("/list")
+    public ModelAndView teamList(Model model){
+        List<Team> teams = teamService.findMyTeams("qwe");
+        model.addAttribute("teams", teams);
+        return new ModelAndView("/team/team-list");
     }
 }

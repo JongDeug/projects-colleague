@@ -7,8 +7,54 @@
 	import Layout from '../../../component/Layout.svelte';
 	import SmallHeader from '../../../component/SmallHeader.svelte';
 	import { Label, Input, InputAddon, ButtonGroup, Checkbox, Fileupload } from 'flowbite-svelte';
+	import axios from "axios";
 
-	let value;
+	let value;	//	 프사?
+	let userId = "qwe" //세션 유지 id
+	let userName="";
+	let userEmail="";
+	let userPhoneNum="";
+	let userDepartment="";
+	function setProfile(){
+
+		const res = axios.get('/api/member/profile/update',
+				{
+					params:{
+						id : userId
+					}
+				})
+				.then(response => {
+					userName = response.data.name;
+					userEmail = response.data.email;
+					userPhoneNum = response.data.phoneNum;
+					userDepartment = response.data.department;
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
+	function updateProfile(){
+		userName = document.getElementById("name").value;
+		userEmail = document.getElementById("email").value;
+		userPhoneNum = document.getElementById("phoneNumber").value;
+		userDepartment = document.getElementById("department").value;
+		const res = axios.post('/api/member/profile/update',
+				{
+					id : userId,
+					name : userName,
+					email : userEmail,
+					phoneNum : userPhoneNum,
+					department : userDepartment,
+					profileImg:"aa"
+
+				})
+				.then(response => {
+					if (response.data == userId)
+						alert("update success")
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
+	setProfile();
 </script>
 
 <SmallHeader header="My Page" />
@@ -29,7 +75,7 @@
 					<InputAddon>
 						<Svg svgName="이름" />
 					</InputAddon>
-					<Input id="website-admin" placeholder="elonmusk" />
+					<Input id="name" placeholder="elonmusk" value={userName}/>
 				</ButtonGroup>
 			</div>
 
@@ -40,7 +86,7 @@
 					<InputAddon>
 						<Svg svgName="이메일" />
 					</InputAddon>
-					<Input id="email" type="email" placeholder="name@gmail.com" />
+					<Input id="email" type="email" placeholder="name@gmail.com" value={userEmail}/>
 				</ButtonGroup>
 			</div>
 
@@ -51,7 +97,7 @@
 					<InputAddon>
 						<Svg svgName="전화번호" />
 					</InputAddon>
-					<Input id="phoneNumber" type="tel" placeholder="010-####-####" />
+					<Input id="phoneNumber" type="tel" placeholder="010-####-####" value={userPhoneNum}/>
 				</ButtonGroup>
 			</div>
 
@@ -62,7 +108,7 @@
 					<InputAddon>
 						<Svg svgName="소속" />
 					</InputAddon>
-					<Input id="phoneNumber" type="tel" placeholder="010-####-####" />
+					<Input id="department" type="tel" placeholder="010-####-####" value={userDepartment}/>
 				</ButtonGroup>
 			</div>
 
@@ -107,6 +153,6 @@
 			</div>
 		</div>
 
-		<ConfirmBtn content="회원정보 수정 확인" color="blue" style="w-[100%] py-4 shadow-md" />
+		<ConfirmBtn content="회원정보 수정 확인" color="blue" style="w-[100%] py-4 shadow-md" on:click={updateProfile} />
 	</div>
 </Layout>

@@ -1,4 +1,4 @@
-package com.joinus.joinus.domain;
+package com.joinus.joinus.dto;
 
 import lombok.Data;
 

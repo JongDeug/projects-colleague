@@ -33,11 +33,11 @@
 		let phoneNum = document.getElementById("phoneNumber").value;
 		let department = document.getElementById("department").value;
 
-		if (userId.empty() || pw.empty() || name.empty() || email.empty() || phoneNum.empty() || department.empty())
-		{
-			alert("join failed");
-			return;
-		}
+		// if (userId.empty() || pw.empty() || name.empty() || email.empty() || phoneNum.empty() || department.empty())
+		// {
+		// 	alert("join failed");
+		// 	return;
+		// }
 
 		const res = axios.post('/api/member/join',
 				{

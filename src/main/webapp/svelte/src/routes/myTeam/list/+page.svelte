@@ -3,6 +3,25 @@
 	import CardPlaceholder from '../../../component/CardPlaceholder.svelte';
 	import Layout from '../../../component/Layout.svelte';
 	import SmallHeader from '../../../component/SmallHeader.svelte';
+	import axios from "axios";
+
+	function setList(){
+
+		const res = axios.get('/api/team/myTeam/list',
+				{
+					params:{
+						id : userId
+					}
+				})
+				.then(response => {
+					userName = response.data.name;
+					userEmail = response.data.email;
+					userPhoneNum = response.data.phoneNum;
+					userDepartment = response.data.department;
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
 </script>
 
 <SmallHeader header="My Team" />

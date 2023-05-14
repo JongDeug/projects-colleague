@@ -1,9 +1,9 @@
 package com.joinus.joinus.service;
 
 import com.joinus.joinus.domain.Member;
+import com.joinus.joinus.dto.Response;
 import com.joinus.joinus.persistence.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,9 +52,35 @@ public class MemberServiceImpl implements MemberService{
         }
     }
     @Override
-    public String findId(String name, String email){
-        return memberRepository.findByName(name).get().getId();
+    public Response findId(String name, String email, String phoneNum){
+        Response response = new Response();
+        if (memberRepository.findByInfo(name, email, phoneNum).isPresent()){
+            response.setData(memberRepository.findByInfo(name, email, phoneNum).get().getId());
+            response.setRedirect("here");
+            return response;
+        }
+        else {
+            response.setData("empty");
+            response.setRedirect("here");
+            return response;
+        }
     }
+
+    @Override
+    public Response findPw(String id, String email){
+        Response response = new Response();
+        if (memberRepository.findPw(id, email).isPresent()){
+            response.setData(memberRepository.findPw(id, email).get().getPw());
+            response.setRedirect("here");
+            return response;
+        }
+        else {
+            response.setData("empty");
+            response.setRedirect("here");
+            return response;
+        }
+    }
+
 
     /**
      * 관리자용 전체 회원 조회

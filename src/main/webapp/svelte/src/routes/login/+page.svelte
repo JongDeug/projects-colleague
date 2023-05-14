@@ -41,6 +41,9 @@
 				</div>
 				<ConfirmBtn content="계속" color="blue" style="w-[100%]" />
 				<div class="mt-4 text-center">
+					<a href="/login/forgotId" class="text-blue-700 underline">아이디를 잊으셨나요?</a>
+				</div>
+				<div class="mt-4 text-center">
 					<a href="/login/forgotPwd" class="text-blue-700 underline">비밀번호를 잊으셨나요?</a>
 				</div>
 			</form>

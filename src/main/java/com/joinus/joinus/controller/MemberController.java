@@ -1,16 +1,14 @@
 package com.joinus.joinus.controller;
 
 import com.joinus.joinus.domain.Member;
+import com.joinus.joinus.dto.ChangePasswordForm;
+import com.joinus.joinus.dto.Response;
 import com.joinus.joinus.service.MemberService;
-import com.joinus.joinus.service.MemberServiceImpl;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -33,45 +31,28 @@ public class MemberController {
         return memberService.validateDuplicateMember(member.getId());
     }
 
-    @GetMapping("/profile/{memberId}/edit")
-    public String updateProfileForm(@PathVariable("memberId") String memberId, Model model) {
-        Member member = memberService.findOne(memberId).get();
-        model.addAttribute("member", member);
+    @GetMapping("/profile/update")
+    public Member getProfile(@RequestParam("id") String memberId) {
 
-        return "/member/update-profile";
+        return memberService.findOne(memberId).get();
     }
-    @PostMapping("/profile/{memberId}/edit")
-    public String updateProfile(@PathVariable("memberId") String memberId, @ModelAttribute("member") Member member){
-        memberService.updateMember(memberId, member.getName(), member.getEmail(), member.getPhoneNum(), member.getDepartment(), member.getProfileImg());
-        return "/member/update-profile-result";
+    @PostMapping("/profile/update")
+    public String updateProfile(@RequestBody Member member){
+        memberService.updateMember(member.getId(), member.getName(), member.getEmail(), member.getPhoneNum(), member.getDepartment(), member.getProfileImg());
+        return member.getId();
     }
-    @GetMapping("/password/{memberId}/edit")
-    public String changePwdForm(@PathVariable("memberId") String memberId, Model model){
-        Member member = memberService.findOne(memberId).get();
-        model.addAttribute("member", member);
-
-        return "/member/update-pw";
-    }
-    @PostMapping("/password/{memberId}/edit")
-    public String changePwd(@PathVariable("memberId") String memberId, @RequestParam("pw") String pw, @RequestParam("newpw") String newPW, @RequestParam("newpwcheck") String newPWcheck){
-        memberService.updatePW(memberId, pw, newPW, newPWcheck);
-        return "/member/update-pw-result";
-    }
-    @GetMapping("/find/id")
-    public String findIdForm(){
-        return "/member/find-id";
+    @PostMapping("/profile/changePwd")
+    public String changePwd(@RequestBody ChangePasswordForm pf){
+        memberService.updatePW(pf.getMemberId(), pf.getCurPw(), pf.getNewPw(), pf.getNewPwCheck());
+        return pf.getMemberId();
     }
     @PostMapping("/find/id")
-    public String findId(@RequestBody Member member){
-        return memberService.findId(member.getName(), member.getEmail());
-    }
-    @GetMapping("/find/pw")
-    public String findPwForm(){
-        return "/member/find-pw";
+    public Response findId(@RequestBody Member member){
+        return memberService.findId(member.getName(), member.getEmail(), member.getPhoneNum());
     }
     @PostMapping("/find/pw")
-    public String findPw(Model model){
-        return "/member/find-pw-result";
+    public Response findPw(@RequestBody Member member){
+        return memberService.findPw(member.getId(), member.getEmail());
     }
 
     @GetMapping("/list")

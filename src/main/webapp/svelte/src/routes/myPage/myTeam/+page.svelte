@@ -14,6 +14,7 @@
 		Pagination
 	} from 'flowbite-svelte';
 	import { page } from '$app/stores';
+	import axios from "axios";
 
 	let searchTerm = '';
 	let items = [
@@ -50,6 +51,46 @@
 		pages = pages;
 	}
 
+	let userId = "qwe" //세션 유지 id
+
+	function getList(){
+
+		const res = axios.get('/api/team/myTeam/list',
+				{
+					params:{
+						id : userId
+					}
+				})
+				.then(response => {
+					//	리스트 형태로 받는법
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
+	function getDetail(){
+		let teamId;
+		let teamPw;
+		let teamName;
+		let teamInfo;
+		let teamLeader;
+		let teamPeople;
+		const res = axios.get('/api/team/myTeam/list',
+				{
+					params:{
+						id : teamId
+					}
+				})
+				.then(response => {
+					teamPw = response.data.pw;
+					teamName = response.data.name;
+					teamInfo = response.data.info;
+					teamLeader = response.data.leader;
+					teamPeople = response.data.people;
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
+
 	const previous = () => {
 		alert('Previous btn clicked. Make a call to your server to fetch data.');
 	};
@@ -69,7 +110,7 @@
 		<div class="mt-3 p-10 rounded-lg border shadow-md">
 			<h1 class="font-bold mb-7">내 팀 목록</h1>
 
-			<TableSearch content="팀 생성" color="blue">
+			<TableSearch content="팀 생성" color="blue"location="/myTeam/create" >
 				<Table hoverable={true}>
 					<TableHead>
 						<TableHeadCell>ID</TableHeadCell>

@@ -32,6 +32,21 @@ public class MemoryMemberRepository implements MemberRepository{
                 .filter(member -> member.getName().equals(name))
                 .findAny();
     }
+    @Override
+    public Optional<Member> findByInfo(String name, String email, String phoneNum) {
+        return members.stream()
+                .filter(member -> member.getName().equals(name))
+                .filter(member -> member.getEmail().equals(email))
+                .filter(member -> member.getPhoneNum().equals(phoneNum))
+                .findAny();
+    }
+    @Override
+    public Optional<Member> findPw(String id, String email){
+        return members.stream()
+                .filter(member -> member.getId().equals(id))
+                .filter(member -> member.getEmail().equals(email))
+                .findAny();
+    }
 
     @Override
     public List<Member> findAll() {

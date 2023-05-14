@@ -1,12 +1,10 @@
 package com.joinus.joinus.service;
 
-import com.joinus.joinus.domain.Member;
 import com.joinus.joinus.domain.Team;
 import com.joinus.joinus.persistence.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

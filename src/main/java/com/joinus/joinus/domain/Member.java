@@ -1,11 +1,11 @@
 package com.joinus.joinus.domain;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
+//@Entity
 public class Member {
+//    @Id @GeneratedValue
     private String id;
     private String pw;
     private String name;

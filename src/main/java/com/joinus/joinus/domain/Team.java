@@ -1,10 +1,9 @@
 package com.joinus.joinus.domain;
 
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+import lombok.Data;
+
+@Data
 public class Team {
     private Long id;
     private String pw;
