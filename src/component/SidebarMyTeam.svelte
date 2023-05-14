@@ -17,8 +17,8 @@
 </script>
 
 <Sidebar>
-	<div class="overflow-y-auto py-4 px-3 dark:bg-gray-800 border-2 rounded-lg border-indigo-200">
-		<SidebarBrand {site} id="logo" />
+	<div class="overflow-y-auto py-4 px-3 border-2 rounded-lg border-indigo-200">
+		<SidebarBrand {site} id="logo" spanClass="self-center whitespace-nowrap"/>
 		<SidebarGroup>
 			<SidebarItem label="대시보드" href="/myTeam/detail/dashboard">
 				<svelte:fragment slot="icon">

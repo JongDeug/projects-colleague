@@ -34,55 +34,51 @@
 		font-family: 'Pacifico';
 	}
 
-	.navLogo {
-		font-size: 2.5rem !important;
-	}
-
-	#nav {
-		font-family: 'Dongle';
-	}
-
 	#nav * {
-		font-size: 1.4rem;
+		font-size: 0.85rem;
 	}
 
-	#layout {
-		font-family: 'Dongle';
+	.navLogo {
+		font-size: 2rem !important;
 	}
+
+	/*#layout {*/
+	/*	!*font-family: 'Dongle';*!*/
+	/*}*/
 
 	#layout * {
-		@apply text-2xl;
+		font-size: 0.8rem;
 	}
 
 	#layout h1 {
-		@apply text-6xl;
+		@apply text-3xl;
 	}
 
 	#layout h2 {
-		@apply text-5xl;
+		@apply text-2xl;
 	}
 
 	#layout h3 {
-		@apply text-4xl;
+		@apply text-2xl;
 	}
 
 	#layout h4 {
-		@apply text-3xl;
-	}
-
-	#quill * {
-		@apply text-base;
-	}
-
-	#quill h1 {
-		@apply text-4xl;
-	}
-
-	#quill h2 {
-		@apply text-3xl;
-	}
-
-	#quill h3 {
 		@apply text-2xl;
 	}
+
+	/*#quill * {*/
+	/*	@apply text-base;*/
+	/*}*/
+
+	/*#quill h1 {*/
+	/*	@apply text-4xl;*/
+	/*}*/
+
+	/*#quill h2 {*/
+	/*	@apply text-3xl;*/
+	/*}*/
+
+	/*#quill h3 {*/
+	/*	@apply text-2xl;*/
+	/*}*/
 }

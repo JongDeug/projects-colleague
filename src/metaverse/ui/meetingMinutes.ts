@@ -19,6 +19,21 @@ export default class MeetingMinutes implements UserInterface {
 			.setInteractive()
 			.setDepth(1);
 
+		const board = this._scene.add
+			.sprite(400, 330, 'settingMenu', 1)
+			.setScale(7, 4.2)
+			.setName('calendarBoard')
+			.setOrigin(0.5, 0.5)
+			.setInteractive()
+			.setDepth(1);
+
+		const test = this._scene.add
+			.dom(400, 310)
+			.createFromCache('meetingMinutes')
+			.setOrigin(0.5, 0.5)
+			// .setName('calendarContent')
+			.setDepth(1);
+
 		this._group.add(meetingMinutesButton);
 
 		// 메인 카메라(플레이어, 맵)과 UI 카메라 분리

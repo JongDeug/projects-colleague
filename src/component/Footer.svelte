@@ -6,14 +6,14 @@
 					<img src="/images/JoinUs.png" class="h-8 mr-3" alt="FlowBite Logo" />
 					<span
 						id="logo"
-						class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
+						class="self-center text-2xl whitespace-nowrap"
 						>Join.Us</span
 					>
 				</a>
 			</div>
 			<div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
 				<div>
-					<h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Menu</h2>
+					<h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase">Menu</h2>
 					<ul class="text-gray-600 dark:text-gray-400">
 						<li class="mb-4">
 							<a href="/board/list" class="hover:underline">게시판</a>
