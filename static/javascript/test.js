@@ -1,11 +1,9 @@
-// import { io } from "socket.io-client";
+import { io } from "socket.io-client";
 
 // DOM elements.
 const roomSelectionContainer = document.getElementById('room-selection-container');
 const roomInput = document.getElementById('room-input');
 const connectButton = document.getElementById('connect-button');
-
-console.log(connectButton);
 
 const videoChatContainer = document.getElementById('video-chat-container');
 const localVideoComponent = document.getElementById('local-video');
@@ -13,6 +11,7 @@ const remoteVideoComponent = document.getElementById('remote-video');
 
 // Variables.
 const socket = io('http://localhost:2567/');
+// const socket = io('https://2cee-222-103-180-169.ngrok-free.app/');
 const mediaConstraints = {
 	audio: true,
 	video: { width: 1280, height: 720 }
@@ -36,7 +35,6 @@ const iceServers = {
 
 // BUTTON LISTENER ============================================================
 connectButton.addEventListener('click', () => {
-	console.log('hi')
 	joinRoom(roomInput.value);
 });
 

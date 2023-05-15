@@ -1,5 +1,6 @@
 import Arena from '@colyseus/arena';
 import { monitor } from '@colyseus/monitor';
+import { WebSocketTransport } from '@colyseus/ws-transport';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
 
@@ -85,5 +86,5 @@ export default Arena({
 		/**
 		 * Before before gameServer.listen() is called.
 		 */
-	}
+	},
 });

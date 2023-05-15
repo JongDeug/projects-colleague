@@ -55,9 +55,8 @@
   <video id="remote-video" autoplay="autoplay"></video>
 </div>
 
-
 <script type="module">
-  import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
+  import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 
   // DOM elements.
   const roomSelectionContainer = document.getElementById('room-selection-container');
@@ -70,7 +69,7 @@
 
   // Variables.
   // const socket = io('http://localhost:3000/');
-  const socket = io('https://2cee-222-103-180-169.ngrok-free.app/');
+  const socket = io('https://2176-222-103-180-169.ngrok-free.app');
   const mediaConstraints = {
     audio: true,
     video: { width: 1280, height: 720 }
