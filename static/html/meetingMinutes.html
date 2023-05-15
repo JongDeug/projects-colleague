@@ -67,9 +67,16 @@
   const localVideoComponent = document.getElementById('local-video');
   const remoteVideoComponent = document.getElementById('remote-video');
 
-  // Variables.
-  // const socket = io('http://localhost:3000/');
-  const socket = io('https://2176-222-103-180-169.ngrok-free.app');
+  // const socket = io('http://localhost:3000', {
+  //   cors: {
+  //     origin : '*'
+  //   }
+  // });
+  const socket = io('https://quick-yak-53.loca.lt/', {
+      cors: {
+        origin : '*'
+      }
+  });
   const mediaConstraints = {
     audio: true,
     video: { width: 1280, height: 720 }

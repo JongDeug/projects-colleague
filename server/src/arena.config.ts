@@ -3,13 +3,12 @@ import { monitor } from '@colyseus/monitor';
 import { WebSocketTransport } from '@colyseus/ws-transport';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
+import cors from 'cors';
 
 /**
  * Import your Room files
  */
 import { Metaverse } from './rooms/Metaverse';
-
-// const transport =
 
 export default Arena({
 	getId: () => 'Your Colyseus App',
@@ -23,11 +22,15 @@ export default Arena({
 	},
 
 	initializeExpress: (app) => {
+		const allowedOrigins = [
+			'http://localhost:8000',
+			'https://master--preeminent-douhua-939041.netlify.app'
+		];
+
 		const server = createServer(app);
 		const io = new Server(server, {
 			cors: {
-				// origin: 'http://localhost:8000' //specific origin you want to give access to,
-				origin: 'https://master--preeminent-douhua-939041.netlify.app' //specific origin you want to give access to,
+				origin: '*', //specific origin you want to give access to,
 			}
 		});
 
@@ -86,5 +89,5 @@ export default Arena({
 		/**
 		 * Before before gameServer.listen() is called.
 		 */
-	},
+	}
 });
