@@ -28,10 +28,17 @@ export default Arena({
 		];
 
 		const server = createServer(app);
+		// const io = new Server(server, {
+		// 	cors: {
+		// 		origin: allowedOrigins, //specific origin you want to give access to,
+		// 	}
+		// });
+
 		const io = new Server(server, {
 			cors: {
-				origin: allowedOrigins, //specific origin you want to give access to,
-			}
+				origin: allowedOrigins,
+				credentials: true,
+			},
 		});
 
 		/**

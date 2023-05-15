@@ -72,10 +72,13 @@
   //     origin : '*'
   //   }
   // });
-  const socket = io('https://little-bobcat-56.loca.lt', {
-      cors: {
-        origin : 'https://master--preeminent-douhua-939041.netlify.app',
-      }
+  // const socket = io('https://little-bobcat-56.loca.lt', {
+  //     cors: {
+  //       origin : 'https://master--preeminent-douhua-939041.netlify.app',
+  //     }
+  // });
+  const socket = io('https://d44b-222-103-180-169.ngrok-free.app', {
+    withCredentials: true,
   });
   const mediaConstraints = {
     audio: true,
