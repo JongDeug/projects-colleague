@@ -1,12 +1,16 @@
 package com.joinus.joinus.domain;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-//@Entity
+@Entity
 public class Member {
-//    @Id @GeneratedValue
+    @Id
     private String id;
+
     private String pw;
     private String name;
     private String email;
@@ -14,4 +18,7 @@ public class Member {
     private String techStack;
     private String department;
     private String profileImg;
+
+    @ManyToMany(mappedBy = "members")
+    private List<Team> teams;
 }

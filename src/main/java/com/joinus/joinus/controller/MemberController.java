@@ -4,7 +4,9 @@ import com.joinus.joinus.domain.Member;
 import com.joinus.joinus.dto.ChangePasswordForm;
 import com.joinus.joinus.dto.Response;
 import com.joinus.joinus.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,13 +15,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/member")
+@RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
 
-    @Autowired
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
-    }
 
     @PostMapping("/join")
     public String join(@RequestBody Member member){

@@ -1,13 +1,14 @@
 package com.joinus.joinus.persistence;
-import com.joinus.joinus.domain.Team;
 
+import com.joinus.joinus.domain.Team;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public interface TeamRepository {
-    void save(Team team);
-    Optional<Team> findById(Long id);
+public interface TeamRepository extends JpaRepository <Team, Long>{
+    Optional<Team> findTeamById(Long id);
     Optional<Team> findByName(String name);
-    List<Team> findAll();
     Optional<List<Team>> findByLeaderId(String id);
 }
