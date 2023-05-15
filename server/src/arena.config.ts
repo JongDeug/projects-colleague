@@ -25,7 +25,8 @@ export default Arena({
 		const server = createServer(app);
 		const io = new Server(server, {
 			cors: {
-				origin: 'http://localhost:8000' //specific origin you want to give access to,
+				// origin: 'http://localhost:8000' //specific origin you want to give access to,
+				origin: 'https://master--preeminent-douhua-939041.netlify.app' //specific origin you want to give access to,
 			}
 		});
 

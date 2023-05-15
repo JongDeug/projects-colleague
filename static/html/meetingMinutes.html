@@ -69,7 +69,8 @@
   const remoteVideoComponent = document.getElementById('remote-video');
 
   // Variables.
-  const socket = io('http://localhost:3000/');
+  // const socket = io('http://localhost:3000/');
+  const socket = io('https://ead6-222-103-180-169.ngrok-free.app');
   const mediaConstraints = {
     audio: true,
     video: { width: 1280, height: 720 }
