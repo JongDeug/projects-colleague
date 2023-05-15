@@ -3,95 +3,244 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <style>
+      body {
+          margin: 0;
+          font-size: 20px;
+      }
+      .centered {
+          position: absolute;
+          top: 40%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+      }
+
+      .video-position {
+          position: absolute;
+          top: 35%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+      }
+
+      #video-chat-container {
+          width: 100%;
+          background-color: black;
+      }
+
+      #local-video {
+          position: absolute;
+          height: 30%;
+          width: 30%;
+          bottom: 0px;
+          left: 0px;
+      }
+
+      #remote-video {
+          height: 100%;
+          width: 100%;
+      }
+  </style>
 </head>
 <body>
 
-<div class="mx-auto max-w-xl">
-
-  <div class="flex flex-col">
-    <div class="overflow-x-auto">
-      <div class="inline-block min-w-full align-middle">
-        <div class="overflow-hidden">
-          <table class="min-w-full divide-y divide-gray-200 table-fixed">
-            <thead class="bg-gray-100 dark:bg-gray-700">
-            <tr>
-              <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">
-                제목
-              </th>
-              <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">
-                작성자
-              </th>
-              <th scope="col"
-                  class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">
-                날짜
-              </th>
-              <th scope="col" class="p-4">
-                <span class="sr-only">수정</span>
-              </th>
-            </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-              <td
-                class="block w-60 truncate overflow-x-hidden py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap">
-                MacBsfdsdfsdfsfdsdfooksdfdsfsfdsdsf Pro
-                17"
-              </td>
-              <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap">김종환</td>
-              <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap">2022-12-19</td>
-              <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <nav aria-label="Page navigation">
-    <ul class="inline-flex space-x-2">
-      <li>
-        <button
-          class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
-          <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-            <path
-              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-              clip-rule="evenodd" fill-rule="evenodd"></path>
-          </svg>
-        </button>
-      </li>
-      <li>
-        <button
-          class="w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
-          1
-        </button>
-      </li>
-      <li>
-        <button
-          class="w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
-          2
-        </button>
-      </li>
-      <li>
-        <button
-          class="w-10 h-10 text-white transition-colors duration-150 bg-indigo-600 border border-r-0 border-indigo-600 rounded-full focus:shadow-outline">
-          3
-        </button>
-      </li>
-      <li>
-        <button
-          class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
-          <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-            <path
-              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-              clip-rule="evenodd" fill-rule="evenodd"></path>
-          </svg>
-        </button>
-      </li>
-    </ul>
-  </nav>
+<div id="room-selection-container" class="centered">
+  <h1>WebRTC video conference</h1>
+  <label>Enter the number of the room you want to connect</label>
+  <input id="room-input" type="text" />
+  <button id="connect-button">CONNECT</button>
 </div>
+
+<div id="video-chat-container" class="video-position" style="display: none">
+  <video id="local-video" autoplay="autoplay"></video>
+  <video id="remote-video" autoplay="autoplay"></video>
+</div>
+
+
+<script type="module">
+  import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
+
+  // DOM elements.
+  const roomSelectionContainer = document.getElementById('room-selection-container');
+  const roomInput = document.getElementById('room-input');
+  const connectButton = document.getElementById('connect-button');
+
+  const videoChatContainer = document.getElementById('video-chat-container');
+  const localVideoComponent = document.getElementById('local-video');
+  const remoteVideoComponent = document.getElementById('remote-video');
+
+  // Variables.
+  const socket = io('http://localhost:3000/');
+  const mediaConstraints = {
+    audio: true,
+    video: { width: 1280, height: 720 }
+  };
+  let localStream;
+  let remoteStream;
+  let isRoomCreator;
+  let rtcPeerConnection; // Connection between the local device and the remote peer.
+  let roomId;
+
+  // Free public STUN servers provided by Google.
+  const iceServers = {
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' },
+      { urls: 'stun:stun2.l.google.com:19302' },
+      { urls: 'stun:stun3.l.google.com:19302' },
+      { urls: 'stun:stun4.l.google.com:19302' }
+    ]
+  };
+
+  // BUTTON LISTENER ============================================================
+  connectButton.addEventListener('click', () => {
+    joinRoom(roomInput.value);
+  });
+
+  // SOCKET EVENT CALLBACKS =====================================================
+  socket.on('room_created', async () => {
+    console.log('Socket event callback: room_created');
+
+    await setLocalStream(mediaConstraints);
+    isRoomCreator = true;
+  });
+
+  socket.on('room_joined', async () => {
+    console.log('Socket event callback: room_joined');
+
+    await setLocalStream(mediaConstraints);
+    socket.emit('start_call', roomId);
+  });
+
+  socket.on('full_room', () => {
+    console.log('Socket event callback: full_room');
+
+    alert('The room is full, please try another one');
+  });
+
+  // FUNCTIONS ==================================================================
+  function joinRoom(room) {
+    if (room === '') {
+      alert('Please type a room ID');
+    } else {
+      roomId = room;
+      socket.emit('join', room);
+      showVideoConference();
+    }
+  }
+
+  function showVideoConference() {
+    roomSelectionContainer.style = 'display: none';
+    videoChatContainer.style = 'display: block';
+  }
+
+  async function setLocalStream(mediaConstraints) {
+    let stream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+    } catch (error) {
+      console.error('Could not get user media', error);
+    }
+
+    localStream = stream;
+    localVideoComponent.srcObject = stream;
+  }
+
+  // SOCKET EVENT CALLBACKS =====================================================
+  socket.on('start_call', async () => {
+    console.log('Socket event callback: start_call')
+
+    if (isRoomCreator) {
+      rtcPeerConnection = new RTCPeerConnection(iceServers)
+      addLocalTracks(rtcPeerConnection)
+      rtcPeerConnection.ontrack = setRemoteStream
+      rtcPeerConnection.onicecandidate = sendIceCandidate
+      await createOffer(rtcPeerConnection)
+    }
+  })
+
+  socket.on('webrtc_offer', async (event) => {
+    console.log('Socket event callback: webrtc_offer')
+
+    if (!isRoomCreator) {
+      rtcPeerConnection = new RTCPeerConnection(iceServers)
+      addLocalTracks(rtcPeerConnection)
+      rtcPeerConnection.ontrack = setRemoteStream
+      rtcPeerConnection.onicecandidate = sendIceCandidate
+      rtcPeerConnection.setRemoteDescription(new RTCSessionDescription(event))
+      await createAnswer(rtcPeerConnection)
+    }
+  })
+
+  socket.on('webrtc_answer', (event) => {
+    console.log('Socket event callback: webrtc_answer')
+
+    rtcPeerConnection.setRemoteDescription(new RTCSessionDescription(event))
+  })
+
+  socket.on('webrtc_ice_candidate', (event) => {
+    console.log('Socket event callback: webrtc_ice_candidate')
+
+    // ICE candidate configuration.
+    var candidate = new RTCIceCandidate({
+      sdpMLineIndex: event.label,
+      candidate: event.candidate,
+    })
+    rtcPeerConnection.addIceCandidate(candidate)
+  })
+
+  // FUNCTIONS ==================================================================
+  function addLocalTracks(rtcPeerConnection) {
+    localStream.getTracks().forEach((track) => {
+      rtcPeerConnection.addTrack(track, localStream)
+    })
+  }
+
+  async function createOffer(rtcPeerConnection) {
+    let sessionDescription
+    try {
+      sessionDescription = await rtcPeerConnection.createOffer()
+      rtcPeerConnection.setLocalDescription(sessionDescription)
+    } catch (error) {
+      console.error(error)
+    }
+
+    socket.emit('webrtc_offer', {
+      type: 'webrtc_offer',
+      sdp: sessionDescription,
+      roomId,
+    })
+  }
+
+  async function createAnswer(rtcPeerConnection) {
+    let sessionDescription
+    try {
+      sessionDescription = await rtcPeerConnection.createAnswer()
+      rtcPeerConnection.setLocalDescription(sessionDescription)
+    } catch (error) {
+      console.error(error)
+    }
+
+    socket.emit('webrtc_answer', {
+      type: 'webrtc_answer',
+      sdp: sessionDescription,
+      roomId,
+    })
+  }
+
+  function setRemoteStream(event) {
+    remoteVideoComponent.srcObject = event.streams[0]
+    remoteStream = event.stream
+  }
+
+  function sendIceCandidate(event) {
+    if (event.candidate) {
+      socket.emit('webrtc_ice_candidate', {
+        roomId,
+        label: event.candidate.sdpMLineIndex,
+        candidate: event.candidate.candidate,
+      })
+    }
+  }
+</script>
 </body>
 </html>

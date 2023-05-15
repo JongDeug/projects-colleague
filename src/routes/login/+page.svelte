@@ -12,9 +12,7 @@
 			<p class="block mt-3">Join.us가 여러분의 팀프로젝트에 도움이 되길 바랍니다.</p>
 		</div>
 
-		<LoginBtn style="bg-[#3b5998] hover:bg-[#3b5998]/90 mb-3" content="페이스북으로 계속하기" svgName="페이스북" />
-		<LoginBtn style="bg-[#24292F] hover:bg-[#24292F]/90 mb-3" content="깃허브로 계속하기" svgName="깃허브" />
-		<LoginBtn style="bg-[#4285F4] hover:bg-[#4285F4]/90 mb-3" content="구글로 계속하기" svgName="구글" />
+		<LoginBtn style="bg-[#24292F] hover:bg-[#24292F]/90 mb-3" content="구글로 계속하기" svgName="구글" />
 
 		<!--  -->
 		<div

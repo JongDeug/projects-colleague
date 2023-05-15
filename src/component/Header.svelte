@@ -37,7 +37,7 @@
 			<div class="flex items-center">
 				<div class="flex-shrink-0">
 					<a
-						href="/board/list"
+						href="/"
 						on:click={() => (current = 'Board')}
 						class="flex navLogo items-center"
 						id="logo"
@@ -50,7 +50,7 @@
 				<div class="hidden md:block">
 					<div class="ml-10 flex items-baseline space-x-4">
 						<HeaderBtn
-							href="/board/list"
+							href="/"
 							on:click={() => (current = 'Board')}
 							content="게시판"
 							{current}

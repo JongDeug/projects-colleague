@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Svg from '../../../component/Svg.svelte';
-	import DropdownItem from '../../../component/DropdownItem.svelte';
-	import ConfrimBtn from '../../../component/ConfirmBtn.svelte';
-	import Layout from '../../../component/Layout.svelte';
-	import SmallHeader from '../../../component/SmallHeader.svelte';
+	import Svg from '../component/Svg.svelte';
+	import DropdownItem from '../component/DropdownItem.svelte';
+	import ConfrimBtn from '../component/ConfirmBtn.svelte';
+	import Layout from '../component/Layout.svelte';
+	import SmallHeader from '../component/SmallHeader.svelte';
 	import {
 		Pagination,
 		Table,
@@ -14,7 +14,7 @@
 		TableBodyRow
 	} from 'flowbite-svelte';
 	import { page } from '$app/stores';
-	import ConfirmBtn from '../../../component/ConfirmBtn.svelte';
+	import ConfirmBtn from '../component/ConfirmBtn.svelte';
 
 	let dropdownStatus = false;
 	const handleDropdownStatus = () => {
