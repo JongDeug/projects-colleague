@@ -18,27 +18,22 @@ export default Arena({
 		 * Define your room handlers:
 		 */
 		gameServer.define('metaverse', Metaverse).filterBy(['teamId']);
-		// 나중에 전체 게임에서 metaverse 여러개 생성해야함. example lobby
 	},
 
 	initializeExpress: (app) => {
 		const allowedOrigins = [
 			'http://localhost:8000',
-			'https://master--preeminent-douhua-939041.netlify.app'
+			'https://master--preeminent-douhua-939041.netlify.app',
+			'https://strong-loops-fry.loca.lt',
 		];
 
 		const server = createServer(app);
-		// const io = new Server(server, {
-		// 	cors: {
-		// 		origin: allowedOrigins, //specific origin you want to give access to,
-		// 	}
-		// });
 
 		const io = new Server(server, {
 			cors: {
 				origin: allowedOrigins,
-				credentials: true,
-			},
+				credentials: true
+			}
 		});
 
 		/**
@@ -49,46 +44,54 @@ export default Arena({
 		app.use('/colyseus', monitor());
 
 		// webrtc
+		const users: any = {};
+		const socketToRoom: any = {};
+		const maximum = 2;
+
 		io.on('connection', (socket) => {
-			socket.on('join', (roomId) => {
-				const roomClients: any = io.sockets.adapter.rooms.get(roomId) || { length: 0 };
-				const numberOfClients = roomClients.length;
-
-				// These events are emitted only to the sender socket.
-				if (numberOfClients == 0) {
-					console.log(`Creating room ${roomId} and emitting room_created socket event`);
-					socket.join(roomId);
-					socket.emit('room_created', roomId);
-				} else if (numberOfClients == 1) {
-					console.log(`Joining room ${roomId} and emitting room_joined socket event`);
-					socket.join(roomId);
-					socket.emit('room_joined', roomId);
+			socket.on('join_room', (data) => {
+				// room exist
+				if (users[data.room]) {
+					const length = users[data.room].length;
+					// 인원 제한
+					if (length === maximum) {
+						socket.to(socket.id).emit('room_full');
+						return;
+					}
+					users[data.room].push({ id: socket.id, email: data.email });
 				} else {
-					console.log(`Can't join room ${roomId}, emitting full_room socket event`);
-					socket.emit('full_room', roomId);
+					// room no exist
+					users[data.room] = [{ id: socket.id, email: data.email }];
 				}
+
+				socketToRoom[socket.id] = data.room;
+				socket.join(data.room);
+				console.log(`[${socketToRoom[socket.id]}]: ${socket.id} enter`);
+
+				console.log(users);
+
+				// 본인을 제외한 같은 room의 user array
+				const usersInThisRoom = users[data.room].filter((user: any) => user.id !== socket.id);
+
+				console.log(usersInThisRoom);
+
+				// 본인에게 해당 user array를 전송
+				// 새로 접속하는 user가 이미 방에 있는 user들에게 offer(signal)를 보내기 위해
+				io.sockets.to(socket.id).emit('all_users', usersInThisRoom);
 			});
 
-			// These events are emitted to all the sockets connected to the same room except the sender.
-			socket.on('start_call', (roomId) => {
-				console.log(`Broadcasting start_call event to peers in room ${roomId}`);
-				socket.broadcast.to(roomId).emit('start_call');
+			socket.on('offer', (offer) => {
+				socket.broadcast.emit('getOffer', offer);
 			});
-			socket.on('webrtc_offer', (event) => {
-				console.log(`Broadcasting webrtc_offer event to peers in room ${event.roomId}`);
-				socket.broadcast.to(event.roomId).emit('webrtc_offer', event.sdp);
+
+			socket.on('answer', (answer) => {
+				socket.broadcast.emit('getAnswer', answer);
 			});
-			socket.on('webrtc_answer', (event) => {
-				console.log(`Broadcasting webrtc_answer event to peers in room ${event.roomId}`);
-				socket.broadcast.to(event.roomId).emit('webrtc_answer', event.sdp);
-			});
-			socket.on('webrtc_ice_candidate', (event) => {
-				console.log(`Broadcasting webrtc_ice_candidate event to peers in room ${event.roomId}`);
-				socket.broadcast.to(event.roomId).emit('webrtc_ice_candidate', event);
-			});
+
+			socket.on("ice", (ice) => {
+				socket.broadcast.emit("getIce", ice);
+			})
 		});
-
-		// port 는 index.ts 에서 설정
 		server.listen(3000, () => console.log(`Listening on port 3000`));
 	},
 
