@@ -18,7 +18,14 @@ public class Member {
     private String techStack;
     private String department;
     private String profileImg;
+    private String info;
+    private String blog;
+    private String gitAddress;
 
     @ManyToMany(mappedBy = "members")
     private List<Team> teams;
+
+    public void addTeam(Team team){
+        this.teams.add(team);
+    }
 }

@@ -10,7 +10,7 @@
 	import axios from "axios";
 
 	let value;	//	 프사?
-	let userId = "qwe" //세션 유지 id
+	let userId = "" //세션 유지 id
 	let userName="";
 	let userEmail="";
 	let userPhoneNum="";
@@ -19,11 +19,9 @@
 
 		const res = axios.get('/api/member/profile/update',
 				{
-					params:{
-						id : userId
-					}
 				})
 				.then(response => {
+					userId = response.data.id;
 					userName = response.data.name;
 					userEmail = response.data.email;
 					userPhoneNum = response.data.phoneNum;

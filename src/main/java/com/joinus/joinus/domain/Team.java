@@ -17,7 +17,13 @@ public class Team {
     private String name;
     private String info;
     private String leader;
+    private String state;
 
     @ManyToMany //  얘가 주인
     private List<Member> members;
+
+    public void addMember(Member member)
+    {
+        this.members.add(member);
+    }
 }

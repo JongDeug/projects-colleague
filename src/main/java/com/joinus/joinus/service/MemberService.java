@@ -27,13 +27,8 @@ public class MemberService{
         return memberRepository.findById(memberId)
                 .isPresent();
     }
-    public void updateMember(String memberId, String name, String email, String phoneNum, String department, String profileImg){
-        Member member = memberRepository.findById(memberId).get();
-        member.setName(name);
-        member.setEmail(email);
-        member.setPhoneNum(phoneNum);
-        member.setDepartment(department);
-        member.setProfileImg(profileImg);
+    public void updateMember(Member member){
+        memberRepository.save(member);
     }
 
     public void updatePW(String memberId, String curPW, String newPW, String checkPW){

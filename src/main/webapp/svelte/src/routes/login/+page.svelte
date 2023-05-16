@@ -3,6 +3,33 @@
 	import LoginBtn from '../../component/LoginBtn.svelte';
 	import ConfirmBtn from '../../component/ConfirmBtn.svelte';
 	import { Input, Label, Checkbox } from 'flowbite-svelte';
+	import axios from "axios";
+	import {redirect} from "@sveltejs/kit";
+
+	function login(){
+		let userId = document.getElementById("userId").value;
+		let userPw = document.getElementById("userPw").value;
+
+
+		const res = axios.post('/api/login',
+				{
+					loginId : userId,
+					loginPw : userPw
+				})
+				.then(response => {
+					if (response.data.data == "success")
+					{
+						alert("login success");
+						redirect(300, response.data.redirect);
+					}
+					else {
+						alert("login failure")
+						redirect(301, response.data.redirect);
+					}
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
 </script>
 
 <Layout>
@@ -29,17 +56,17 @@
 		<div>
 			<form>
 				<div class="mb-6">
-					<Label for="email" class="mb-2">이메일</Label>
-					<Input type="email" id="email" placeholder="john.doe@company.com" required />
+					<Label for="email" class="mb-2">아이디</Label>
+					<Input type="email" id="userId" placeholder="john.doe@company.com" required />
 				</div>
 				<div class="mb-6">
 					<Label for="password" class="mb-2">패스워드</Label>
-					<Input type="password" id="password" placeholder="•••••••••" required />
+					<Input type="password" id="userPw" placeholder="•••••••••" required />
 				</div>
 				<div class="mb-6">
 					<Checkbox>아이디 기억하기</Checkbox>
 				</div>
-				<ConfirmBtn content="계속" color="blue" style="w-[100%]" />
+				<ConfirmBtn content="계속" color="blue" style="w-[100%]" on:click={login} location=""/>
 				<div class="mt-4 text-center">
 					<a href="/login/forgotId" class="text-blue-700 underline">아이디를 잊으셨나요?</a>
 				</div>

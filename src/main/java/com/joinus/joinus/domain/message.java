@@ -9,14 +9,11 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-public class Post {
+public class message {
     @Id @GeneratedValue
     private Long id;
-
-    private String userId;
-    private String title;
+    private String sender;
+    private String receiver;
     private String content;
-    private int hit;
-    private LocalDateTime createTime;
-    private boolean type;
+    private LocalDateTime sendTime;
 }

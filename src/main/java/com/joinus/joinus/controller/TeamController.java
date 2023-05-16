@@ -1,7 +1,11 @@
 package com.joinus.joinus.controller;
 
+import com.joinus.joinus.domain.Member;
 import com.joinus.joinus.domain.Team;
 import com.joinus.joinus.service.TeamService;
+import com.joinus.joinus.web.validation.SessionConst;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,32 +24,29 @@ public class TeamController {
     }
 
     @PostMapping("/create")
-    public String makeTeam(@RequestBody Team team){
+    public String makeTeam(@RequestBody Team team, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
+        team.setLeader(member.getId());
         return teamService.makeTeam(team);
     }
     @GetMapping("/myTeam/list")
-    public List<Team> getTeamList(@RequestParam("memberId") String memberId){
-        return teamService.findMyTeams(memberId);
+    public List<Team> getTeamList(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
+        return teamService.findMyTeams(member.getId());
     }
-    @GetMapping("/myTeam/detail")
+    @GetMapping("/detail")
     public Team getTeamInfo(@RequestParam("teamId") Long teamId){
         Team team = teamService.findTeamById(teamId);
 
         return teamService.findTeamById(teamId);
     }
-    @GetMapping("/{teamId}/update")
-    public String updateTeamInfoForm(@PathVariable("teamId") Long teamId, Model model){
-        Team team = teamService.findTeamById(teamId);
-        model.addAttribute("team", team);
-
-        return "/team/update-info";
+    @PostMapping("/myTeam/update")
+    public String updateTeamInfo(@RequestBody Team team){
+        teamService.updateTeam(team);
+        return "ok";
     }
-    @PostMapping("/{teamId}/update")
-    public String updateTeamInfo(@PathVariable("teamId") Long teamId, @ModelAttribute("team") Team team){
-        teamService.updateTeam(teamId, team.getPw(), team.getName(), team.getInfo(), team.getLeader(), team.getPeople());
-        return "/team/update-info-result";
-    }
-
     
     @GetMapping("/{teamId}/manage/minutes")
     public String getMinutesList(@PathVariable("teamId") Long teamId, Model model){

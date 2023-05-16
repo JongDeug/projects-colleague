@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
-@Entity
+//@Entity
 public class MemberTeam {
     @Id @GeneratedValue
     private Long id;

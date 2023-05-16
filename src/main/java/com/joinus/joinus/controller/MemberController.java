@@ -4,6 +4,9 @@ import com.joinus.joinus.domain.Member;
 import com.joinus.joinus.dto.ChangePasswordForm;
 import com.joinus.joinus.dto.Response;
 import com.joinus.joinus.service.MemberService;
+import com.joinus.joinus.web.validation.SessionConst;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,13 +34,16 @@ public class MemberController {
     }
 
     @GetMapping("/profile/update")
-    public Member getProfile(@RequestParam("id") String memberId) {
+    public Member getProfile(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
-        return memberService.findOne(memberId).get();
+        return memberService.findOne(member.getId()).get();
     }
     @PostMapping("/profile/update")
     public String updateProfile(@RequestBody Member member){
-        memberService.updateMember(member.getId(), member.getName(), member.getEmail(), member.getPhoneNum(), member.getDepartment(), member.getProfileImg());
+
+        memberService.updateMember(member);
         return member.getId();
     }
     @PostMapping("/profile/changePwd")
