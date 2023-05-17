@@ -5,7 +5,6 @@ import com.joinus.joinus.domain.TechStack;
 import com.joinus.joinus.dto.Response;
 import com.joinus.joinus.persistence.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
