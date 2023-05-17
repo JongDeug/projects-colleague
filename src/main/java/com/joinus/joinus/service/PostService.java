@@ -1,5 +1,6 @@
 package com.joinus.joinus.service;
 
+import com.joinus.joinus.domain.Member;
 import com.joinus.joinus.domain.Post;
 import com.joinus.joinus.persistence.PostRepository;
 import jakarta.transaction.Transactional;

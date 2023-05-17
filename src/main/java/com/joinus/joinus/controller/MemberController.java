@@ -60,6 +60,13 @@ public class MemberController {
         return memberService.findPw(member.getId(), member.getEmail());
     }
 
+    @GetMapping("/recommend")
+    public List<Member> recommendUsers(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
+        return memberService.recommendUsers(member);
+    }
+
     @GetMapping("/list")
     public ModelAndView memberList(Model model){
         List<Member> members = memberService.findMembers();

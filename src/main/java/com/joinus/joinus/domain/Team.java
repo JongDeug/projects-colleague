@@ -17,7 +17,7 @@ public class Team {
     private String name;
     private String info;
     private String leader;
-    private String state = "stable";
+    private String state = "stabilized";
 
     @ManyToMany //  얘가 주인
     private List<Member> members;

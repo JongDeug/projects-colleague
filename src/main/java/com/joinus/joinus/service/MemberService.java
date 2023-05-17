@@ -1,6 +1,7 @@
 package com.joinus.joinus.service;
 
 import com.joinus.joinus.domain.Member;
+import com.joinus.joinus.domain.TechStack;
 import com.joinus.joinus.dto.Response;
 import com.joinus.joinus.persistence.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,6 +68,16 @@ public class MemberService{
             response.setRedirect("here");
             return response;
         }
+    }
+
+
+    public List<Member> recommendUsers(Member member){
+        List<TechStack> techStacks = member.getTechStacks();
+        List<Member> members = new ArrayList<>();
+        for(TechStack techStack : techStacks){
+            members.addAll(memberRepository.findMembersByTechStacks(techStack).get());
+        }
+        return members;
     }
 
 
