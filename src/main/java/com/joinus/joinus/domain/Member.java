@@ -21,6 +21,7 @@ public class Member {
     private String info;
     private String blog;
     private String gitAddress;
+    private boolean roleType = false;
 
     @ManyToMany(mappedBy = "members")
     private List<Team> teams;
