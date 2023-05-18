@@ -21,7 +21,11 @@
     <button id="mute">Mute</button>
     <button id="camera">Turn Camera Off</button>
     <select id="cameras"></select>
-    <video id="peerFace" autoplay="" playsinline="" width="400" height="400"></video>
+    <div id="peerFaces">
+      <video id="peerFace1" autoplay="" playsinline="" width="400" height="400"></video>
+      <video id="peerFace2" autoplay="" playsinline="" width="400" height="400"></video>
+      <video id="peerFace3" autoplay="" playsinline="" width="400" height="400"></video>
+    </div>
   </div>
 </main>
 
@@ -38,10 +42,13 @@
   call.hidden = true;
 
   let myStream;
+  let streams = new Array();
   let muted = false;
   let cameraOff = false;
   let roomName;
+  let email;
   let myPeerConnection;
+  let peerConnections;
 
   // const socket = io('http://localhost:3000', {
   //   cors: {
@@ -54,7 +61,7 @@
   //     }
   // });
   // const URL = "http://localhost:3000/";
-  const URL = "https://2037-222-103-180-169.ngrok-free.app";
+  const URL = "https://16e4-112-217-167-202.ngrok-free.app/";
   const socket = io(URL, {
     withCredentials: true
   });
@@ -62,13 +69,15 @@
   // 시작
   const welcome = document.getElementById("welcome");
   const welcomeForm = welcome.querySelector("form");
+
   async function handleWelcomeSubmit(event) {
     event.preventDefault();
     const input = welcomeForm.querySelector("input");
+    email = input.value;
     await initCall();
-    await join(input.value);
     input.value = "";
   }
+
   welcomeForm.addEventListener("submit", handleWelcomeSubmit);
 
   async function getCameras() {
@@ -116,16 +125,12 @@
     welcome.hidden = true;
     call.hidden = false;
     await getMedia();
-    makeConnection();
-  }
-
-  async function join(email) {
-    await initCall();
     roomName = "1234";
     socket.emit("join_room", { room: roomName, email: email });
+    makeConnection(socket.id, email, socket, myStream);
   }
 
-  function makeConnection() {
+  function makeConnection(socketId, email, socket, myStream) {
     myPeerConnection = new RTCPeerConnection({
       iceServers: [
         {
@@ -139,23 +144,39 @@
         }
       ]
     });
-    myPeerConnection.addEventListener("icecandidate", handleIce);
-    myPeerConnection.addEventListener("addstream", handleAddStream);
+
+    peerConnections = { ...peerConnections, [socketId]: myPeerConnection };
+
+    myPeerConnection.addEventListener("icecandidate", (data) => {
+      console.log("sent the candidate");
+      socket.emit("ice", {
+        ice: data.candidate,
+        iceSendId: socket.id,
+        iceReceiveId: socketId
+      });
+    });
+
+    // 그냥 데이터스트림 저장하는 변수 설정해놓고 addStream event trigger시 다 넣는걸로 하자
+    myPeerConnection.addEventListener("addstream", (data) => {
+      console.log("got an event from my peer");
+      streams.push(data.stream);
+      renderStream();
+    });
+
+    // ontrack?
     myStream.getTracks().forEach(track => myPeerConnection.addTrack(track, myStream));
   }
 
-  function handleIce(data) {
-    console.log("sent the candidate");
-    socket.emit("ice", data.candidate);
-  }
+  function renderStream() {
+    const peerFace1 = document.getElementById("peerFace1");
+    const peerFace2 = document.getElementById("peerFace2");
+    const peerFace3 = document.getElementById("peerFace3");
 
-  // 받아온 stream을 출력
-  function handleAddStream(data) {
-    console.log("got an event from my peer");
-    const peerFace = document.getElementById("peerFace");
-    peerFace.srcObject = data.stream;
+    // console.log(streams);
+    peerFace1.srcObject = streams[0];
+    peerFace2.srcObject = streams[1];
+    peerFace3.srcObject = streams[2];
   }
-
 
   // ===========================================================================
 
@@ -188,12 +209,14 @@
 
   async function handleCameraChange() {
     await getMedia(camerasSelect.value);
-    if (myPeerConnection) {
-      const videoTrack = myStream.getVideoTracks()[0];
-      const videoSender = myPeerConnection.getSenders()
-        .find((sender) => sender.track.kind === "video");
+    const videoTrack = myStream.getVideoTracks()[0];
+    // 이 부분을 배열로해서 전달하기!
+    // test
+    for (const peerConnection of peerConnections) {
+      const videoSender = peerConnection.getSenders().find((sender) => sender.track.kind === "video");
       await videoSender.replaceTrack(videoTrack);
     }
+    // await videoSender.replaceTrack(videoTrack);
   }
 
   muteBtn.addEventListener("click", handleMuteClick);
@@ -205,34 +228,65 @@
   // 먼저 들어온 놈
   socket.on("all_users", async (allUsers) => {
     let length = allUsers.length;
-    if (length > 0) {
-      // create offer
-      const offer = await myPeerConnection.createOffer();
-      await myPeerConnection.setLocalDescription(offer);
-      console.log("sent the offer");
-      socket.emit("offer", offer);
+    // console.log(length);
+    for (let i = 0; i < length; i++) {
+      makeConnection(allUsers[i].id, allUsers[i].email, socket, myStream);
+
+      // console.log(peerConnections);
+
+      let peerConnection = peerConnections[allUsers[i].id];
+      if (peerConnection) {
+        const offer = await peerConnection.createOffer();
+        // console.log(offer);
+        await peerConnection.setLocalDescription(offer);
+        // console.log(peerConnection);
+        console.log(`sent the offer`);
+        socket.emit("offer", {
+          offer: offer,
+          offerSendId: socket.id,
+          offerSendEmail: email,
+          offerReceiveId: allUsers[i].id
+        });
+      }
     }
   });
 
   // 나중에 들어온 놈
   socket.on("getOffer", async (offer) => {
+    // console.log(offer);
     console.log("received the offer");
     // create answer
-    await myPeerConnection.setRemoteDescription(offer);
-    const answer = await myPeerConnection.createAnswer();
-    await myPeerConnection.setLocalDescription(answer);
-    socket.emit("answer", answer);
-    console.log("sent the answer");
+    makeConnection(offer.offerSendId, offer.offerSendEmail, socket, myStream);
+
+    let peerConnection = peerConnections[offer.offerSendId];
+    if (peerConnection) {
+      await peerConnection.setRemoteDescription(offer.offer);
+      const answer = await peerConnection.createAnswer();
+      await peerConnection.setLocalDescription(answer);
+      console.log(`sent the answer`);
+      socket.emit("answer", {
+        answer: answer,
+        answerSendId: socket.id,
+        answerReceiveId: offer.offerSendId
+      });
+    }
   });
 
   // 먼저 들어온 놈
   socket.on("getAnswer", async (answer) => {
     console.log("received the answer");
-    await myPeerConnection.setRemoteDescription(answer);
+    let peerConnection = peerConnections[answer.answerSendId];
+    if (peerConnection) {
+      await peerConnection.setRemoteDescription(answer.answer);
+      // console.log(peerConnection);
+    }
   });
 
   socket.on("getIce", (ice) => {
-    myPeerConnection.addIceCandidate(ice).then(() => console.log("received the candidate"));
+    let myPeerConnection = peerConnections[ice.iceSendId];
+    if (myPeerConnection) {
+      myPeerConnection.addIceCandidate(ice.ice).then(() => console.log("received the candidate"));
+    }
   });
 
 </script>

@@ -21,14 +21,15 @@ export default Arena({
 	},
 
 	initializeExpress: (app) => {
+		// colyseus monitor
+		app.use('/colyseus', monitor());
+
 		const allowedOrigins = [
 			'http://localhost:8000',
 			'https://master--preeminent-douhua-939041.netlify.app',
-			'https://strong-loops-fry.loca.lt',
+			'https://hip-pens-lead.loca.lt',
 		];
-
 		const server = createServer(app);
-
 		const io = new Server(server, {
 			cors: {
 				origin: allowedOrigins,
@@ -36,17 +37,10 @@ export default Arena({
 			}
 		});
 
-		/**
-		 * Bind @colyseus/monitor
-		 * It is recommended to protect this route with a password.
-		 * Read more: https://docs.colyseus.io/tools/monitor/
-		 */
-		app.use('/colyseus', monitor());
-
-		// webrtc
+		// WebRTC
 		const users: any = {};
 		const socketToRoom: any = {};
-		const maximum = 2;
+		const maximum = 4;
 
 		io.on('connection', (socket) => {
 			socket.on('join_room', (data) => {
@@ -81,17 +75,32 @@ export default Arena({
 			});
 
 			socket.on('offer', (offer) => {
-				socket.broadcast.emit('getOffer', offer);
+				// socket.broadcast.emit('getOffer', offer);
+				socket.to(offer.offerReceiveId).emit('getOffer', {
+					offer: offer.offer,
+					offerSendId: offer.offerSendId,
+					offerSendEmail: offer.offerSendEmail
+				});
 			});
 
 			socket.on('answer', (answer) => {
-				socket.broadcast.emit('getAnswer', answer);
+				// socket.broadcast.emit('getAnswer', answer);
+				socket.to(answer.answerReceiveId).emit("getAnswer", {
+					answer: answer.answer,
+					answerSendId: answer.answerSendId,
+				});
 			});
 
-			socket.on("ice", (ice) => {
-				socket.broadcast.emit("getIce", ice);
-			})
+			socket.on('ice', (ice) => {
+				// socket.broadcast.emit("getIce", ice);
+				socket.to(ice.iceReceiveId).emit('getIce', {
+					ice: ice.ice,
+					iceSendId: ice.iceSendId
+				});
+			});
 		});
+
+
 		server.listen(3000, () => console.log(`Listening on port 3000`));
 	},
 
