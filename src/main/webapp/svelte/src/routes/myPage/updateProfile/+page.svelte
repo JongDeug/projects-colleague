@@ -10,22 +10,28 @@
 	import axios from "axios";
 
 	let value;	//	 프사?
-	let userId = "" //세션 유지 id
+	let userId = sessionStorage.getItem("loginMember");
 	let userName="";
 	let userEmail="";
 	let userPhoneNum="";
 	let userDepartment="";
+	let userInfo="";
+	let userBlog="";
+	let userGit="";
 	function setProfile(){
 
 		const res = axios.get('/api/member/profile/update',
 				{
 				})
 				.then(response => {
-					userId = response.data.id;
-					userName = response.data.name;
-					userEmail = response.data.email;
-					userPhoneNum = response.data.phoneNum;
-					userDepartment = response.data.department;
+					userId = response.data.data.id;
+					userName = response.data.data.name;
+					userEmail = response.data.data.email;
+					userPhoneNum = response.data.data.phoneNum;
+					userDepartment = response.data.data.department;
+					userInfo = response.data.data.info;
+					userBlog = response.data.data.blog;
+					userGit = response.data.data.gitAddress;
 				})
 				.catch(error => console.log(error))
 		console.log(res);
@@ -35,6 +41,9 @@
 		userEmail = document.getElementById("email").value;
 		userPhoneNum = document.getElementById("phoneNumber").value;
 		userDepartment = document.getElementById("department").value;
+		userInfo = document.getElementById("info").value;
+		userBlog = document.getElementById("blog").value;
+		userGit = document.getElementById("git").value;
 		const res = axios.post('/api/member/profile/update',
 				{
 					id : userId,
@@ -42,12 +51,16 @@
 					email : userEmail,
 					phoneNum : userPhoneNum,
 					department : userDepartment,
+					info : userInfo,
+					blog : userBlog,
+					gitAddress : userGit,
 					profileImg:"aa"
 
 				})
 				.then(response => {
-					if (response.data == userId)
+					if (response.data == "success")
 						alert("update success")
+					else alert("update failure")
 				})
 				.catch(error => console.log(error))
 		console.log(res);
@@ -125,19 +138,19 @@
 			<!-- 간단한 자기소개 -->
 			<div class="mb-6 w-[70%]">
 				<Label for="default-input" class="block mb-2">간단한 자기소개</Label>
-				<Input id="default-input" placeholder="Default input" />
+				<Input id="info" placeholder="Default input" value={userInfo}/>
 			</div>
 
 			<!-- 웹사이트 -->
 			<div class="mb-6 w-[70%]">
 				<Label for="default-input" class="block mb-2">웹사이트</Label>
-				<Input id="default-input" placeholder="Default input" />
+				<Input id="blog" placeholder="Default input" value={userBlog}/>
 			</div>
 
 			<!-- 깃허브 주소 -->
 			<div class="mb-6 w-[70%]">
 				<Label for="default-input" class="block mb-2">깃허브 주소</Label>
-				<Input id="default-input" placeholder="Default input" />
+				<Input id="git" placeholder="Default input" value={userGit}/>
 			</div>
 
 			<!-- 기술스택 -->

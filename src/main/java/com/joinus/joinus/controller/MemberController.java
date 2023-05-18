@@ -22,8 +22,13 @@ public class MemberController {
 
 
     @PostMapping("/join")
-    public String join(@RequestBody Member member){
-        return memberService.join(member);
+    public Response join(@RequestBody Member member){
+        Response response = new Response();
+        if (memberService.join(member).equals(member.getId()))
+            response.setData("success");
+        else response.setData("failure");
+        response.setRedirect("/login");
+        return response;
     }
 
     @PostMapping("/duplicateCheck")
@@ -32,17 +37,22 @@ public class MemberController {
     }
 
     @GetMapping("/profile/update")
-    public Member getProfile(HttpServletRequest request) {
+    public Response getProfile(HttpServletRequest request) {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
-        return memberService.findOne(member.getId()).get();
+        Response response = new Response();
+        response.setData(memberService.findOne(member.getId()).get());
+        response.setRedirect("/myPage/updateProfile");
+        return response;
     }
     @PostMapping("/profile/update")
-    public String updateProfile(@RequestBody Member member){
-
+    public Response updateProfile(@RequestBody Member member){
         memberService.updateMember(member);
-        return member.getId();
+        Response response = new Response();
+        response.setData("success");
+        response.setRedirect("/myPage/updateProfile");
+        return response;
     }
     @PostMapping("/profile/changePwd")
     public String changePwd(@RequestBody ChangePasswordForm pf){

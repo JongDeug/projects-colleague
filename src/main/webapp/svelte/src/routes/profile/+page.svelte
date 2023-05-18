@@ -4,6 +4,36 @@
 	import Card from '../../component/Card.svelte';
 	import Layout from '../../component/Layout.svelte';
 	import { Input, Label } from 'flowbite-svelte';
+	import axios from "axios";
+
+	let userId = sessionStorage.getItem("loginMember");
+	let userName="";
+	let userEmail="";
+	let userPhoneNum="";
+	let userDepartment="";
+	let userInfo="";
+	let userBlog="";
+	let userGit="";
+
+	function setProfile(){
+
+		const res = axios.get('/api/member/profile/update',
+				{
+				})
+				.then(response => {
+					userId = response.data.data.id;
+					userName = response.data.data.name;
+					userEmail = response.data.data.email;
+					userPhoneNum = response.data.data.phoneNum;
+					userDepartment = response.data.data.department;
+					userInfo = response.data.data.info;
+					userBlog = response.data.data.blog;
+					userGit = response.data.data.gitAddress;
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
+	setProfile();
 </script>
 
 <Layout use="Profile">
@@ -21,9 +51,9 @@
 
 			<div class="text-center">
 				<div>
-					<h1 class="font-bold">김종환</h1>
+					<h1 class="font-bold">{userName}</h1>
 					<p class="mt-3">안녕하세요</p>
-					<span class="inline-block mt-3">금오공대 컴퓨터소프트웨어공학과</span>
+					<span class="inline-block mt-3">{userDepartment}</span>
 				</div>
 			</div>
 		</div>
@@ -34,13 +64,13 @@
 		<!-- 웹사이트 -->
 		<div class="mb-6 w-[70%]">
 			<Label for="default-input" class="block mb-2">웹사이트</Label>
-			<Input id="default-input" placeholder="Default input" readonly value="dslkj" />
+			<Input id="blog" placeholder="Default input" readonly value={userBlog} />
 		</div>
 
 		<!-- 깃허브 주소 -->
 		<div class="mb-6 w-[70%]">
 			<Label for="default-input" class="block mb-2">깃허브 주소</Label>
-			<Input id="default-input" placeholder="Default input" readonly />
+			<Input id="git" placeholder="Default input" readonly value={userGit}/>
 		</div>
 
 		<!-- 기술스택 -->

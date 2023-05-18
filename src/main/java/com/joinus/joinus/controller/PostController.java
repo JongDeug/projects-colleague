@@ -2,6 +2,7 @@ package com.joinus.joinus.controller;
 
 import com.joinus.joinus.domain.Member;
 import com.joinus.joinus.domain.Post;
+import com.joinus.joinus.dto.Response;
 import com.joinus.joinus.service.PostService;
 import com.joinus.joinus.web.validation.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,32 +20,55 @@ public class PostController {
 
 
     @GetMapping("/list")
-    public List<Post> getPostList(){
-        return postService.postList();
+    public Response getPostList(){
+        List<Post> posts = postService.postList();
+        Response response = new Response();
+        response.setData(posts);
+        response.setRedirect("/board/list");
+        return response;
     }
     @GetMapping("/detail")
-    public Post getPostDetail(@RequestParam Long postId){
-        return postService.postDetail(postId);
+    public Response getPostDetail(@RequestParam Long postId){
+        Post post =  postService.postDetail(postId);
+        Response response = new Response();
+        response.setData(post);
+        response.setRedirect("/board/detail");
+        return response;
     }
     @PostMapping("/detail/edit")
-    public void updatePost(@RequestBody Post post, HttpServletRequest request){
+    public Response updatePost(@RequestBody Post post, HttpServletRequest request){
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
         postService.update(post, member.getId());
+
+        Response response = new Response();
+        response.setData("success");
+        response.setRedirect("/board/detail/edit");
+        return response;
     }
     @PostMapping("/detail/delete")
-    public void deletePost(@RequestBody Post post, HttpServletRequest request){
+    public Response deletePost(@RequestBody Post post, HttpServletRequest request){
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
         postService.delete(post, member.getId());
+
+        Response response = new Response();
+        response.setData("success");
+        response.setRedirect("/board/detail/edit");
+
+        return response;
     }
     @GetMapping("/myPost")
-    public List<Post> getMyPost(HttpServletRequest request){
+    public Response getMyPost(HttpServletRequest request){
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
+        List<Post> posts = postService.myPosts(member.getId());
 
-        return postService.myPosts(member.getId());
+        Response response = new Response();
+        response.setData(posts);
+        response.setRedirect("/myPage/myPosts");
+        return response;
     }
 }

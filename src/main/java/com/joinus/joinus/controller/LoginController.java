@@ -9,8 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -22,40 +20,15 @@ import org.springframework.web.bind.annotation.*;
 public class LoginController {
     private final LoginService loginService;
 
-//    @GetMapping("/")
-//    public String home(HttpServletRequest request, Model model){
-//        HttpSession session = request.getSession(false);
-//        if(session==null){
-//            return "index";
-//        }
-//        Member loginMember = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
-//
-//        if(loginMember==null){
-//            return "index";
-//        }
-//
-//        model.addAttribute("member",loginMember);
-//
-//        return "index";
-//    }
-
-//    @GetMapping("/login")
-//    public String loginForm(@ModelAttribute("loginForm") LoginForm loginForm){
-//        return "login/login-Form";
-//    }
-
     @PostMapping("/login")
     public Response login(@Validated @RequestBody LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request){
-//        if(bindingResult.hasErrors()){
-//            return "login/login-Form";
-//        }
 
 
         Response response = new Response();
         Member loginMember = loginService.login(loginForm.getLoginId(), loginForm.getLoginPw());
         if(loginMember == null){
             bindingResult.reject("loginFail","아이디 또는 비밀번호가 맞지 않습니다.");
-            response.setData("error");
+            response.setData("failure");
             response.setRedirect("/login");
             return response;
         }
@@ -71,11 +44,15 @@ public class LoginController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request){
+    public Response logout(HttpServletRequest request){
         HttpSession session = request.getSession(false);
         if(session!=null){
             session.invalidate();
         }
-        return "redirect:/";
+
+        Response response = new Response();
+        response.setData("success");
+        response.setRedirect("/");
+        return response;
     }
 }

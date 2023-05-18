@@ -1,11 +1,8 @@
 package com.joinus.joinus.service;
 
-import com.joinus.joinus.domain.Member;
 import com.joinus.joinus.domain.Team;
-import com.joinus.joinus.persistence.MemberRepository;
 import com.joinus.joinus.persistence.TeamRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +18,7 @@ public class TeamService{
     }
 
     public List<Team> findMyTeams(String memberId){
-        return teamRepository.findTeamsByLeaderaAndState(memberId, "processing").get();
+        return teamRepository.findTeamsByLeaderAndState(memberId, "processing").get();
     }
 
     public Team findTeamById(Long teamId){

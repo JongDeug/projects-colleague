@@ -16,6 +16,7 @@
 	} from 'flowbite-svelte';
 
 	import { page } from '$app/stores';
+	import axios from "axios";
 
 	let searchTerm = '';
 	let items = [
@@ -60,6 +61,21 @@
 		alert('Next btn clicked. Make a call to your server to fetch data.');
 	};
 
+	let userId = sessionStorage.getItem("loginMember");
+	let posts = [];
+
+	function setPosts(){
+
+		const res = axios.get('/api/post/myPost',
+				{
+				})
+				.then(response => {
+					posts = response.data.data;
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
+	setPosts();
 </script>
 
 <SmallHeader header="My Page" />
