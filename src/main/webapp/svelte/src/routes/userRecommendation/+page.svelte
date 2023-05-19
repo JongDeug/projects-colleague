@@ -4,6 +4,21 @@
 	import Avatar from '../../component/Avatar.svelte';
 	import { Card } from 'flowbite-svelte';
 	import ConfirmBtn from '../../component/ConfirmBtn.svelte';
+	import axios from "axios";
+
+	let users = [];
+	function getUsers(){
+
+		const res = axios.get('/api/member/recommend',
+				{
+				})
+				.then(response => {
+					users = response.data.data;
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
+	// getUsers()
 </script>
 
 <SmallHeader header="User Recommendation" />
