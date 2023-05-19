@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/team")
+@RequestMapping("/api/team")
 public class TeamController {
     private final TeamService teamService;
 
@@ -27,7 +27,7 @@ public class TeamController {
     public String makeTeam(@RequestBody Team team, HttpServletRequest request) {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
-        team.setLeader(member.getId());
+//        team.setLeader(member.getId());       >> 프론트에서 세션 스토리지로 해주니까?
         return teamService.makeTeam(team);
     }
     @GetMapping("/myTeam/list")

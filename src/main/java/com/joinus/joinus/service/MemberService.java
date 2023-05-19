@@ -41,31 +41,22 @@ public class MemberService{
             throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
         }
     }
-    public Response findId(String name, String email, String phoneNum){
-        Response response = new Response();
+    public String findId(String name, String email, String phoneNum){
         if (memberRepository.findByNameAndEmailAndPhoneNum(name, email, phoneNum).isPresent()){
-            response.setData(memberRepository.findByNameAndEmailAndPhoneNum(name, email, phoneNum).get().getId());
-            response.setRedirect("here");
-            return response;
+            return memberRepository.findByNameAndEmailAndPhoneNum(name, email, phoneNum).get().getId();
         }
         else {
-            response.setData("empty");
-            response.setRedirect("here");
-            return response;
+            return "user not exist";
         }
     }
 
-    public Response findPw(String id, String email){
+    public String findPw(String id, String email){
         Response response = new Response();
         if (memberRepository.findMemberByPwAndEmail(id, email).isPresent()){
-            response.setData(memberRepository.findMemberByPwAndEmail(id, email).get().getPw());
-            response.setRedirect("here");
-            return response;
+            return memberRepository.findMemberByPwAndEmail(id, email).get().getPw();
         }
         else {
-            response.setData("empty");
-            response.setRedirect("here");
-            return response;
+            return "user not exist";
         }
     }
 

@@ -59,13 +59,19 @@ public class MemberController {
         memberService.updatePW(pf.getMemberId(), pf.getCurPw(), pf.getNewPw(), pf.getNewPwCheck());
         return pf.getMemberId();
     }
-    @PostMapping("/find/id")
+    @PostMapping("/find/id")    //  get으로+requestparam 여러개 받아오고 프론트 param 하기 vs post로 편하게 받기
     public Response findId(@RequestBody Member member){
-        return memberService.findId(member.getName(), member.getEmail(), member.getPhoneNum());
+        Response response = new Response();
+        response.setData(memberService.findId(member.getName(), member.getEmail(), member.getPhoneNum()));
+        response.setRedirect("/login");
+        return response;
     }
-    @PostMapping("/find/pw")
+    @PostMapping("/find/pw")    //  get으로
     public Response findPw(@RequestBody Member member){
-        return memberService.findPw(member.getId(), member.getEmail());
+        Response response = new Response();
+        response.setData(memberService.findPw(member.getId(), member.getEmail()));
+        response.setRedirect("/login");
+        return response;
     }
 
     @GetMapping("/recommend")
