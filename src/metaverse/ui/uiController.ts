@@ -63,7 +63,7 @@ export default class UIController {
 			frameHeight: 60
 		});
 		this._scene.load.html('calendar', 'html/calendar.html');
-		this._scene.load.html('meetingMinutes', 'html/meetingMinutes.html');
+		// this._scene.load.html('meeting', 'html/meeting.html');
 	}
 
 	create(): void {

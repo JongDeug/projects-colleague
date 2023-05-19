@@ -118,4 +118,45 @@ export default class HomePlayer extends Player {
 			}
 		}
 	}
+
+	async enterMeetingScene() {
+		for (const sessionId in this.playerEntities) {
+			if (this.playerEntities[sessionId]?.body?.x == null) {
+				continue;
+			}
+			const entity = this.playerEntities[sessionId];
+
+			// MeetingScene 이동
+			if (entity.body.x <= 190 && entity.body.x >= 44.95 && entity.body.y >= 430 && entity.body.y <= 528) {
+				this.playerEntities[sessionId].destroy();
+				this.playerNames[sessionId].destroy();
+				delete this.playerEntities[sessionId];
+				delete this.playerNames[sessionId];
+
+				// 자신의 캐릭터만 이동
+				if (sessionId === this.connection.room.sessionId) {
+					this.currentPlayer = null;
+
+					// Remove animation
+					const numberStr = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'];
+					numberStr.forEach((item) => {
+						this.removeAnims(item);
+					});
+
+					this.scene.scene.start('meetingScene', { fromTo: 'fromHomeToMeeting' });
+					return;
+				}
+			}
+
+			// 다른 플레이어가 봤을 때 entity.body.x 범위에 들어가지 않는 버그가 있어서 추가함.
+			if (this.connection.playerState[sessionId].serverCurrentScene === 'meetingScene') {
+				if (this.playerEntities[sessionId]) {
+					this.playerEntities[sessionId].destroy();
+					this.playerNames[sessionId].destroy();
+					delete this.playerEntities[sessionId];
+					delete this.playerNames[sessionId];
+				}
+			}
+		}
+	}
 }

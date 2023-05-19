@@ -5,8 +5,7 @@ import {IncomingMessage} from "http";
 
 export class Metaverse extends Room<MetaverseState> {
 
-    //test
-    // chatDB: string;
+
 
     onCreate(options: any): void | Promise<any> {
         this.setState(new MetaverseState());

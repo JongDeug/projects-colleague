@@ -1,11 +1,16 @@
 import { Client, Room } from 'colyseus.js';
+import { io } from "socket.io-client";
 
 export default class Connection {
 	private static instance: Connection;
 	private client: Client;
+	//
+	public socket: any;
+	//
 	private _loginScene: any;
 	private _waitingScene: any;
 	private _homeScene: any;
+	private _meetingScene: any;
 	private _room: Room;
 	private _playerState: { [sessionId: string]: any } = {};
 	private _teamId;
@@ -27,6 +32,13 @@ export default class Connection {
 		playerImg: string
 	): Promise<boolean> {
 		try {
+			const URL = 'http://localhost:3000/';
+			// const URL = "https://c733-112-217-167-202.ngrok-free.app/";
+			this.socket = io(URL, {
+				withCredentials: true
+			});
+
+
 			this.client = new Client('ws://localhost:2567');
 			console.log('Joining Room...');
 			this.room = await this.client.joinOrCreate('metaverse', {
@@ -80,6 +92,10 @@ export default class Connection {
 				this._homeScene.uiController._uiContainer.chatUI.setText(this.chatDB);
 				this._homeScene.uiController._uiContainer.chatUISlider.value += 1;
 			}
+			if (this._meetingScene.scene.isActive('meetingScene')) {
+				this._meetingScene.uiController._uiContainer.chatUI.setText(this.chatDB);
+				this._meetingScene.uiController._uiContainer.chatUISlider.value += 1;
+			}
 		});
 
 		// 채팅 입장 표시
@@ -104,6 +120,10 @@ export default class Connection {
 				if (this._homeScene.scene.isActive('homeScene')) {
 					this._homeScene.uiController._uiContainer.chatUI.setText(this.chatDB);
 					this._homeScene.uiController._uiContainer.chatUISlider.value += 1;
+				}
+				if (this._meetingScene.scene.isActive('meetingScene')) {
+					this._meetingScene.uiController._uiContainer.chatUI.setText(this.chatDB);
+					this._meetingScene.uiController._uiContainer.chatUISlider.value += 1;
 				}
 			}
 		});
@@ -164,5 +184,9 @@ export default class Connection {
 
 	public set homeScene(homeScene: Phaser.Scene) {
 		this._homeScene = homeScene;
+	}
+
+	public set meetingScene(meetingScene: Phaser.Scene) {
+		this._meetingScene = meetingScene;
 	}
 }

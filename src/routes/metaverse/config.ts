@@ -1,6 +1,8 @@
 import WaitingScene from '../../metaverse/scene/waiting';
 import HomeScene from '../../metaverse/scene/home';
 import LoginScene from '../../metaverse/scene/login';
+import MeetingScene from '../../metaverse/scene/meeting';
+
 import Connection from '../../metaverse/interaction/connection';
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin';
 
@@ -42,9 +44,11 @@ const game = new Phaser.Game(config);
 const loginScene = new LoginScene();
 const waitingScene = new WaitingScene();
 const homeScene = new HomeScene();
+const meetingScene= new MeetingScene();
 game.scene.add('loginScene', loginScene, false);
 game.scene.add('waitingScene', waitingScene, false);
 game.scene.add('homeScene', homeScene, false);
+game.scene.add('meetingScene', meetingScene, false);
 
 const teamId = '1234';
 const connection = Connection.getInstance();
@@ -52,6 +56,7 @@ connection.teamId = teamId;
 connection.loginScene = loginScene;
 connection.waitingScene = waitingScene;
 connection.homeScene = homeScene;
+connection.meetingScene = meetingScene;
 
 
 export const start = () => {

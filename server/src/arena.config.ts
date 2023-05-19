@@ -27,7 +27,7 @@ export default Arena({
 		const allowedOrigins = [
 			'http://localhost:8000',
 			'https://master--preeminent-douhua-939041.netlify.app',
-			'https://hip-pens-lead.loca.lt',
+			'https://7699-112-217-167-202.ngrok-free.app'
 		];
 		const server = createServer(app);
 		const io = new Server(server, {
@@ -85,9 +85,9 @@ export default Arena({
 
 			socket.on('answer', (answer) => {
 				// socket.broadcast.emit('getAnswer', answer);
-				socket.to(answer.answerReceiveId).emit("getAnswer", {
+				socket.to(answer.answerReceiveId).emit('getAnswer', {
 					answer: answer.answer,
-					answerSendId: answer.answerSendId,
+					answerSendId: answer.answerSendId
 				});
 			});
 
@@ -99,7 +99,6 @@ export default Arena({
 				});
 			});
 		});
-
 
 		server.listen(3000, () => console.log(`Listening on port 3000`));
 	},

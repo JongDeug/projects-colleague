@@ -159,7 +159,7 @@ export default class HomeScene extends Phaser.Scene {
 			this.uiController.create();
 
 			this.uiController.event();
-			console.log(this.connection.chatDB);
+			// console.log(this.connection.chatDB);
 			if (this.connection.chatDB != null) {
 				this.uiController._uiContainer.chatUI.setText(this.connection.chatDB);
 			}
@@ -204,6 +204,7 @@ export default class HomeScene extends Phaser.Scene {
 		// 순서 중요
 		this.homePlayer.moveCurrentPlayer();
 		await this.homePlayer.enterWaitingScene();
+		await this.homePlayer.enterMeetingScene();
 	}
 
 	createPlayerAnimation(key: string, start: number, end: number, img: string) {
