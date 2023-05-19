@@ -75,10 +75,13 @@ public class MemberController {
     }
 
     @GetMapping("/recommend")
-    public List<Member> recommendUsers(HttpServletRequest request){
+    public Response recommendUsers(HttpServletRequest request){
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
-        return memberService.recommendUsers(member);
+        Response response = new Response();
+        response.setData(memberService.recommendUsers(member));
+        response.setRedirect("/userRecommendation");
+        return response;
     }
 
     @GetMapping("/list")
