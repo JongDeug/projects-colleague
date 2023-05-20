@@ -5,10 +5,77 @@ import {IncomingMessage} from "http";
 
 export class Metaverse extends Room<MetaverseState> {
 
+    private users: any = {};
+    private socketToRoom: any = {};
+    private maximum = 4;
+
 
 
     onCreate(options: any): void | Promise<any> {
         this.setState(new MetaverseState());
+
+        // WebRTC
+        this.onMessage('join_room', (client, data) => {
+            if ((this.users)[data.room]) {
+                const length = (this.users)[data.room].length;
+                // 인원 제한
+                if (length === this.maximum) {
+                    client.send('room_full');
+                    return;
+                }
+                this.users[data.room].push({ id: client.id, email: data.email });
+            } else {
+                // room no exist
+                this.users[data.room] = [{ id: client.id, email: data.email }];
+            }
+
+            // this.socketToRoom[socket.id] = data.room;
+            // socket.join(data.room);
+            // console.log(users);
+
+            // 본인을 제외한 같은 room의 user array
+            const usersInThisRoom = this.users[data.room].filter((user: any) => user.id !== client.id);
+            console.log(usersInThisRoom);
+
+            // 본인에게 해당 user array를 전송
+            // 새로 접속하는 user가 이미 방에 있는 user들에게 offer(signal)를 보내기 위해
+            // io.sockets.to(socket.id).emit('all_users', usersInThisRoom);
+            // this.broadcast('all_users', usersInThisRoom, {except: client});
+            this.clients.forEach((client) => {
+                client.send('all_users', usersInThisRoom);
+            })
+            // this.broadcast('all_users', usersInThisRoom);
+        });
+
+        this.onMessage('offer', (client, offer) => {
+            const findClient = this.clients.find((client) => client.id === offer.offerReceiveId);
+            findClient.send('getOffer', {
+                    offer: offer.offer,
+                    offerSendId: offer.offerSendId,
+                    offerSendEmail: offer.offerSendEmail
+            })
+        });
+
+        this.onMessage('answer', (client, answer) => {
+            const findClient = this.clients.find(client => client.id === answer.answerReceiveId);
+            findClient.send('getAnswer', {
+                    answer: answer.answer,
+                    answerSendId: answer.answerSendId
+            });
+        });
+
+        this.onMessage('ice', (client, ice) => {
+            const findClient = this.clients.find(client => client.id === ice.iceReceiveId);
+            findClient.send('getIce', {
+                    ice: ice.ice,
+                    iceSendId: ice.iceSendId
+            });
+            // socket.to(ice.iceReceiveId).emit('getIce', {
+            //     ice: ice.ice,
+            //     iceSendId: ice.iceSendId
+            // });
+        });
+
 
         // 방향 메시지 핸들러
         this.onMessage('keyboard', (client, input) => {
