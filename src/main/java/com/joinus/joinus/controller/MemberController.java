@@ -33,7 +33,7 @@ public class MemberController {
 
     @PostMapping("/duplicateCheck")
     public boolean duplicateIdCheck(@RequestBody Member member){    //  requestparam, 생략 string id, modelattribute는 작동이 안됨 일단 dto로 박아놓음
-        return memberService.validateDuplicateMember(member.getId());
+        return memberService.validateDuplicateMember(member.getId());       //  간단한 기능이라, 리다이렉트 필요없어서 bool로 함
     }
 
     @GetMapping("/profile/update")
@@ -42,7 +42,7 @@ public class MemberController {
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
         Response response = new Response();
-        response.setData(memberService.findOne(member.getId()).get());
+        response.setData(memberService.findOne(member.getId()).get());      //  member 객체 반환
         response.setRedirect("/myPage/updateProfile");
         return response;
     }
