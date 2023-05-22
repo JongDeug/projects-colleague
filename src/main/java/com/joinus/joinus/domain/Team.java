@@ -13,7 +13,6 @@ public class Team {
     private Long id;
 
     private String pw;
-    private String usersId;
     private String name;
     private String info;
     private String leader;

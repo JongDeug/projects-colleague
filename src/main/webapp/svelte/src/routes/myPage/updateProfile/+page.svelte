@@ -58,7 +58,7 @@
 
 				})
 				.then(response => {
-					if (response.data == "success")
+					if (response.data.data == "success")
 						alert("update success")
 					else alert("update failure")
 				})

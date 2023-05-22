@@ -5,6 +5,7 @@ import com.joinus.joinus.persistence.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -12,13 +13,17 @@ import java.util.List;
 public class TeamService{
     private final TeamRepository teamRepository;
 
-    public String makeTeam(Team team){
+    public void makeTeam(Team team){
         teamRepository.save(team);
-        return team.getId().toString();
     }
 
     public List<Team> findMyTeams(String memberId){
-        return teamRepository.findTeamsByLeaderAndState(memberId, "processing").get();
+        List<Team> teams = new ArrayList<>();
+        if (teamRepository.findTeamsByLeaderAndState(memberId, "processing").isPresent())
+            teams.addAll(teamRepository.findTeamsByLeaderAndState(memberId, "processing").get());
+        if (teamRepository.findTeamsByMembersId(memberId).isPresent())
+            teams.addAll(teamRepository.findTeamsByMembersId(memberId).get());
+        return teams;
     }
 
     public Team findTeamById(Long teamId){

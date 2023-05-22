@@ -2,33 +2,54 @@ package com.joinus.joinus.controller;
 
 import com.joinus.joinus.domain.Member;
 import com.joinus.joinus.domain.Team;
+import com.joinus.joinus.dto.Response;
+import com.joinus.joinus.dto.TeamForm;
+import com.joinus.joinus.service.MemberService;
 import com.joinus.joinus.service.TeamService;
 import com.joinus.joinus.web.validation.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/team")
+@RequiredArgsConstructor
 public class TeamController {
     private final TeamService teamService;
-
-    @Autowired
-    public TeamController(TeamService teamService) {
-        this.teamService = teamService;
-    }
+    private final MemberService memberService;
 
     @PostMapping("/create")
-    public String makeTeam(@RequestBody Team team, HttpServletRequest request) {
+    public Response makeTeam(@RequestBody TeamForm teamForm, HttpServletRequest request) {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
-//        team.setLeader(member.getId());       >> 프론트에서 세션 스토리지로 해주니까?
-        return teamService.makeTeam(team);
+
+        Team team = new Team();
+        List<Member> members = new ArrayList<>();
+
+        team.setLeader(member.getId());
+        team.setName(teamForm.getTeamName());
+        team.setPw(teamForm.getTeamPw());
+        team.setInfo(teamForm.getTeamInfo());
+
+        for (String str : teamForm.getMemberIds()){
+            if (memberService.searchMember(str).isPresent())
+                members.add(memberService.searchMember(str).get());
+        }
+        team.setMembers(members);
+
+        teamService.makeTeam(team);
+
+        Response response = new Response();
+        response.setData("success");
+        response.setRedirect("/myPage/updateProfile");
+
+        return response;
     }
     @GetMapping("/myTeam/list")
     public List<Team> getTeamList(HttpServletRequest request) {

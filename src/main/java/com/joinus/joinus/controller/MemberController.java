@@ -84,6 +84,16 @@ public class MemberController {
         return response;
     }
 
+    @GetMapping("/search")
+    public Response searchUser(@RequestParam String memberId){
+        Response response = new Response();
+        if (memberService.searchMember(memberId).isPresent())
+            response.setData(memberService.searchMember(memberId).get());
+        else response.setData("failure");
+        response.setRedirect("no required");
+        return response;
+    }
+
     @GetMapping("/list")
     public ModelAndView memberList(Model model){
         List<Member> members = memberService.findMembers();

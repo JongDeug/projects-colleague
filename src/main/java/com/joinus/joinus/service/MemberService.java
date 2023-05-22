@@ -60,12 +60,19 @@ public class MemberService{
         }
     }
 
+    public Optional<Member> searchMember(String memberId){
+        return memberRepository.findMemberById(memberId);
+    }
+
 
     public List<Member> recommendUsers(Member member){
         List<TechStack> techStacks = member.getTechStacks();
         List<Member> members = new ArrayList<>();
         for(TechStack techStack : techStacks){
-            members.addAll(memberRepository.findMembersByTechStacks(techStack).get());
+            if (memberRepository.findMemberByTechStacks(techStack).isPresent()){
+                if (!members.contains(memberRepository.findMemberByTechStacks(techStack)))
+                    members.add(memberRepository.findMemberByTechStacks(techStack).get());
+            }
         }
         return members;
     }
