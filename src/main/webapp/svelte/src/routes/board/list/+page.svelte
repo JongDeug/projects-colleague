@@ -15,119 +15,14 @@
 	} from 'flowbite-svelte';
 	import { page } from '$app/stores';
 	import ConfirmBtn from '../../../component/ConfirmBtn.svelte';
+	import axios from "axios";
+
+	let userId = sessionStorage.getItem("loginMember");
 
 	let dropdownStatus = false;
 	const handleDropdownStatus = () => {
 		dropdownStatus = !dropdownStatus;
 	};
-
-	let board = [
-		{
-			id: '공지',
-			title: 'test1',
-			writer: 'kim',
-			createTime: '2023-03-10',
-			hit: '30'
-		},
-		{
-			id: '공지',
-			title: 'test2',
-			writer: 'kim',
-			createTime: '2023-03-10',
-			hit: '30'
-		},
-		{
-			id: 1,
-			title: 'test3',
-			writer: 'kim',
-			createTime: '2023-03-10',
-			hit: '30'
-		},
-		{
-			id: 2,
-			title: 'test4',
-			writer: 'kim',
-			createTime: '2023-03-10',
-			hit: '30'
-		},
-		{
-			id: 3,
-			title: 'test5',
-			writer: 'kim',
-			createTime: '2023-03-10',
-			hit: '30'
-		},
-		{
-			id: 4,
-			title: 'test5',
-			writer: 'kim',
-			createTime: '2023-03-10',
-			hit: '30'
-		},
-		{
-			id: 4,
-			title: 'test5',
-			writer: 'kim',
-			createTime: '2023-03-10',
-			hit: '30'
-		},
-		{
-			id: 4,
-			title: 'test5',
-			writer: 'kim',
-			createTime: '2023-03-10',
-			hit: '30'
-		},
-		{
-			id: 4,
-			title: 'test5',
-			writer: 'kim',
-			createTime: '2023-03-10',
-			hit: '30'
-		},
-		{
-			id: 4,
-			title: 'test5',
-			writer: 'kim',
-			createTime: '2023-03-10',
-			hit: '30'
-		},
-		{
-			id: 4,
-			title: 'test5',
-			writer: 'kim',
-			createTime: '2023-03-10',
-			hit: '30'
-		},
-		{
-			id: 4,
-			title: 'test5',
-			writer: 'kim',
-			createTime: '2023-03-10',
-			hit: '30'
-		},
-		{
-			id: 4,
-			title: 'test5',
-			writer: 'kim',
-			createTime: '2023-03-10',
-			hit: '30'
-		},
-		{
-			id: 4,
-			title: 'test5',
-			writer: 'kim',
-			createTime: '2023-03-10',
-			hit: '30'
-		},
-		{
-			id: 4,
-			title: 'test5',
-			writer: 'kim',
-			createTime: '2023-03-10',
-			hit: '30'
-		}
-	];
 
 	$: activeUrl = $page.url.searchParams.get('page');
 	let pages = [
@@ -153,12 +48,26 @@
 		pages = pages;
 	}
 
+	let posts = [];
+
+	function getPosts(){
+		const res = axios.get('/api/post/list',
+				{
+				})
+				.then(response => {
+					posts = response.data.data;
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
+
 	const previous = () => {
 		alert('Previous btn clicked. Make a call to your server to fetch data.');
 	};
 	const next = () => {
 		alert('Next btn clicked. Make a call to your server to fetch data.');
 	};
+	getPosts();
 </script>
 
 <SmallHeader header="Board" />
@@ -216,12 +125,12 @@
 			<TableHeadCell>조회수</TableHeadCell>
 		</TableHead>
 		<TableBody>
-			{#each board as item}
-				{#if item.id == '공지'}
-					<TableBodyRow color="custom" class="bg-gray-100 hover:bg-gray-200">
-						<TableBodyCell>{item.id}</TableBodyCell>
+			{#each posts as item}
+				{#if item.type == true}
+					<TableBodyRow color="custom" class="bg-gray-100 hover:bg-gray-200" >
+						<TableBodyCell>{"공지"}</TableBodyCell>
 						<TableBodyCell>{item.title}</TableBodyCell>
-						<TableBodyCell>{item.writer}</TableBodyCell>
+						<TableBodyCell>{item.userId}</TableBodyCell>
 						<TableBodyCell>{item.createTime}</TableBodyCell>
 						<TableBodyCell>{item.hit}</TableBodyCell>
 					</TableBodyRow>
@@ -229,7 +138,7 @@
 					<TableBodyRow>
 						<TableBodyCell>{item.id}</TableBodyCell>
 						<TableBodyCell>{item.title}</TableBodyCell>
-						<TableBodyCell>{item.writer}</TableBodyCell>
+						<TableBodyCell>{item.userId}</TableBodyCell>
 						<TableBodyCell>{item.createTime}</TableBodyCell>
 						<TableBodyCell>{item.hit}</TableBodyCell>
 					</TableBodyRow>
@@ -240,7 +149,7 @@
 
 	<!-- 게시글 작성 버튼과 Pagination -->
 	<div class="flex mt-5 items-center justify-end">
-		<ConfirmBtn content="게시글 작성" color="blue" />
+		<ConfirmBtn content="게시글 작성" color="blue" location="/board/create"/>
 	</div>
 
 	<div class="flex justify-center">

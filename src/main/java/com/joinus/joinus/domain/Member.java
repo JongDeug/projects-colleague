@@ -1,11 +1,15 @@
 package com.joinus.joinus.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 @Data
 @Entity
@@ -25,16 +29,15 @@ public class Member {
     private boolean roleType = false;
 
     @ManyToMany(mappedBy = "members")
-    private List<Team> teams;
+    private List<Team> teams = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn
-    private List<TechStack> techStacks = new ArrayList<>();
+    @ElementCollection
+    private Set<String> techStack = new HashSet<>();
 
     public void addTeam(Team team){
         this.teams.add(team);
     }
-    public void addTechStack(TechStack techStack){
-        this.techStacks.add(techStack);
+    public void addTechStack(String stack){
+        this.techStack.add(stack);
     }
 }

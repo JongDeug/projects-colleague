@@ -49,7 +49,7 @@
 					department : department
 				})
 				.then(response => {
-					if (userId == response.data)
+					if (response.data.data == "success")
 						alert("join success")
 					else
 						alert("join failed")
@@ -85,7 +85,7 @@
 		</div>
 		<div class="mb-6">
 			<Label for="success" color="green" class="block mb-2">비밀번호 확인</Label>
-			<Input id="pw" color="green" placeholder="Success input" />
+			<Input id="pwCheck" color="green" placeholder="Success input" />
 			<Helper class="mt-2" color="green"
 				><span class="font-medium">Well done!</span> Some success messsage.</Helper
 			>

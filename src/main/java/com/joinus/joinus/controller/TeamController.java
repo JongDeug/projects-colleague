@@ -37,11 +37,11 @@ public class TeamController {
         team.setPw(teamForm.getTeamPw());
         team.setInfo(teamForm.getTeamInfo());
 
-        for (String str : teamForm.getMemberIds()){
-            if (memberService.searchMember(str).isPresent())
-                members.add(memberService.searchMember(str).get());
-        }
-        team.setMembers(members);
+//        for (String str : teamForm.getMemberIds()){
+//            if (memberService.searchMember(str).isPresent())
+//                members.add(memberService.searchMember(str).get());
+//        }
+//        team.setMembers(members);
 
         teamService.makeTeam(team);
 
@@ -52,10 +52,13 @@ public class TeamController {
         return response;
     }
     @GetMapping("/myTeam/list")
-    public List<Team> getTeamList(HttpServletRequest request) {
+    public Response getTeamList(HttpServletRequest request) {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
-        return teamService.findMyTeams(member.getId());
+        Response response = new Response();
+        response.setData(teamService.findMyTeams(member.getId()));
+        response.setRedirect("/myPage/myTeam");
+        return response;
     }
     @GetMapping("/detail")
     public Team getTeamInfo(@RequestParam("teamId") Long teamId){

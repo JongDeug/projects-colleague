@@ -1,9 +1,11 @@
 package com.joinus.joinus.controller;
 
 import com.joinus.joinus.domain.Member;
+import com.joinus.joinus.domain.TechStack;
 import com.joinus.joinus.dto.ChangePasswordForm;
 import com.joinus.joinus.dto.Response;
 import com.joinus.joinus.service.MemberService;
+import com.joinus.joinus.service.TechStackService;
 import com.joinus.joinus.web.validation.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final TechStackService techStackService;
 
 
     @PostMapping("/join")
@@ -99,6 +102,19 @@ public class MemberController {
         List<Member> members = memberService.findMembers();
         model.addAttribute("members", members);
         return new ModelAndView("/member/member-list");
+    }
+
+    @GetMapping("/name")
+    public String memberName(@RequestParam String memberId){
+        Member member = new Member();
+        if (memberService.searchMember(memberId).isPresent())
+            member = memberService.searchMember(memberId).get();
+        return member.getName();
+    }
+
+    @GetMapping("/techStack")
+    public List<TechStack> getData(){
+        return techStackService.getList();
     }
 
 }

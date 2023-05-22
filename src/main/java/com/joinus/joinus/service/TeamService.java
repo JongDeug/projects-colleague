@@ -19,8 +19,8 @@ public class TeamService{
 
     public List<Team> findMyTeams(String memberId){
         List<Team> teams = new ArrayList<>();
-        if (teamRepository.findTeamsByLeaderAndState(memberId, "processing").isPresent())
-            teams.addAll(teamRepository.findTeamsByLeaderAndState(memberId, "processing").get());
+        if (teamRepository.findTeamsByLeader(memberId).isPresent())
+            teams.addAll(teamRepository.findTeamsByLeader(memberId).get());
         if (teamRepository.findTeamsByMembersId(memberId).isPresent())
             teams.addAll(teamRepository.findTeamsByMembersId(memberId).get());
         return teams;

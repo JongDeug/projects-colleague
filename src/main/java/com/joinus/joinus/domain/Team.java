@@ -4,6 +4,7 @@ package com.joinus.joinus.domain;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -19,7 +20,7 @@ public class Team {
     private String state = "stabilized";
 
     @ManyToMany //  얘가 주인
-    private List<Member> members;
+    private List<Member> members = new ArrayList<>();
 
     public void addMember(Member member)
     {

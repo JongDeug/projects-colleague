@@ -1,10 +1,11 @@
 package com.joinus.joinus.persistence;
 
 import com.joinus.joinus.domain.Member;
-import com.joinus.joinus.domain.TechStack;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 public interface MemberRepository extends JpaRepository<Member, String> {
 
@@ -15,5 +16,5 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     Optional<Member> findByNameAndEmailAndPhoneNum(String name, String email, String phoneNum);
     Optional<Member> findMemberByPwAndEmail(String id, String email);
 
-    Optional<Member> findMemberByTechStacks(TechStack techStack);    //  수정 필요
+    Optional<List<Member>> findByTechStackIn(Set<String> stack);
 }

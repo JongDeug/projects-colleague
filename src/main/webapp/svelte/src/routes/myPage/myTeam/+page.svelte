@@ -51,18 +51,21 @@
 		pages = pages;
 	}
 
-	let userId = "qwe" //세션 유지 id
+	let userId = sessionStorage.getItem("loginMember");
+	let teamList = [];
+	$: filteredList = teamList.filter(
+			(t) => t.leader.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
+	);
 
 	function getList(){
 
 		const res = axios.get('/api/team/myTeam/list',
 				{
-					params:{
-						id : userId
-					}
+
 				})
 				.then(response => {
-					//	리스트 형태로 받는법
+					teamList = response.data.data;
+					console.log(teamList);
 				})
 				.catch(error => console.log(error))
 		console.log(res);
@@ -98,6 +101,8 @@
 		alert('Next btn clicked. Make a call to your server to fetch data.');
 	};
 
+	getList();
+
 </script>
 
 <SmallHeader header="My Page" />
@@ -115,16 +120,16 @@
 					<TableHead>
 						<TableHeadCell>ID</TableHeadCell>
 						<TableHeadCell>팀 명</TableHeadCell>
-						<TableHeadCell>팀원 수</TableHeadCell>
-						<TableHeadCell>생성일자</TableHeadCell>
+						<TableHeadCell>리더</TableHeadCell>
+						<TableHeadCell>상태</TableHeadCell>
 					</TableHead>
 					<TableBody>
-						{#each filteredItems as item}
-							<TableBodyRow>
+						{#each filteredList as item}
+							<TableBodyRow on:click={getDetail}>
 								<TableBodyCell>{item.id}</TableBodyCell>
-								<TableBodyCell>{item.maker}</TableBodyCell>
-								<TableBodyCell>{item.type}</TableBodyCell>
-								<TableBodyCell>{item.make}</TableBodyCell>
+								<TableBodyCell>{item.name}</TableBodyCell>
+								<TableBodyCell>{item.leader}</TableBodyCell>
+								<TableBodyCell>{item.state}</TableBodyCell>
 							</TableBodyRow>
 						{/each}
 					</TableBody>

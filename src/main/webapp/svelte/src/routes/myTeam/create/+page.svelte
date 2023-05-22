@@ -14,6 +14,9 @@
 	} from 'flowbite-svelte';
 	import axios from "axios";
 
+	let userId = sessionStorage.getItem("loginMember");
+	let members = [];
+
 	let textareaprops = {
 		id: 'message',
 		name: 'message',
@@ -23,25 +26,25 @@
 
 	let value;
 
-	let userId = "qwe" //세션 유지 id
 	function createTeam(){
 		let teamName = document.getElementById("teamName").value;
 		let teamInfo = document.getElementById("teamInfo").value;
 		let teamPw = document.getElementById("teamPw").value;
 		const res = axios.post('/api/team/create',
 				{
-					id : 1,	//	db autoincrement로 변경하고 생략
-					pw : teamPw,
-					name : teamName,
-					info : teamInfo,
-					leader : userId
+					teamName : teamName,
+					teamInfo : teamInfo,
+					teamPw : teamPw,
 				})
 				.then(response => {
-					if (response.data == "1")
+					if (response.data.data == "success")
 						alert("create success")
 				})
 				.catch(error => console.log(error))
 		console.log(res);
+	}
+	function searchUser(){
+
 	}
 </script>
 
@@ -63,6 +66,7 @@
 			<div class="mb-6">
 				<Label for="phoneNumber" class="block mb-2">팀원 리스트</Label>
 				<Search size="md" />
+				<ConfrimBtn content="찾기" color="blue" style="w-[100%]" on:click={createTeam} location="/myPage/myTeam"/>
 			</div>
 			<Listgroup active>
 				<h5 class="text-center bg-blue-500 text-white font-bold rounded-t-lg">팀원 목록</h5>

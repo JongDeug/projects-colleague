@@ -24,3 +24,4 @@
 * 내 팀 리스트 -> 팀장, 팀원 모두 찾기
 * member team -> manytomany 나중에 수정 필요할수도
 * 팀 상태 따라 찾기나 보기 설정 (teamService 진행중인 팀 찾기에서 processing)
+* 게시글 작성할때 프론트쪽에서 세션스토리지 id 안따짐

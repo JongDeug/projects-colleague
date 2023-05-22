@@ -1,16 +1,15 @@
 package com.joinus.joinus.service;
 
 import com.joinus.joinus.domain.Member;
-import com.joinus.joinus.domain.TechStack;
 import com.joinus.joinus.dto.Response;
 import com.joinus.joinus.persistence.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -66,14 +65,8 @@ public class MemberService{
 
 
     public List<Member> recommendUsers(Member member){
-        List<TechStack> techStacks = member.getTechStacks();
-        List<Member> members = new ArrayList<>();
-        for(TechStack techStack : techStacks){
-            if (memberRepository.findMemberByTechStacks(techStack).isPresent()){
-                if (!members.contains(memberRepository.findMemberByTechStacks(techStack)))
-                    members.add(memberRepository.findMemberByTechStacks(techStack).get());
-            }
-        }
+        Set<String> techStacks = member.getTechStack();
+        List<Member> members = memberRepository.findByTechStackIn(techStacks).get();
         return members;
     }
 

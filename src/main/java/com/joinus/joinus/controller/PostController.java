@@ -18,6 +18,18 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
 
+    @PostMapping("/create")
+    public Response createPost(@RequestBody Post post, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+        post.setUserId(member.getId());
+        postService.create(post);
+        Response response = new Response();
+        response.setData("success");
+        response.setRedirect("/board/list");
+        return response;
+    }
 
     @GetMapping("/list")
     public Response getPostList(){

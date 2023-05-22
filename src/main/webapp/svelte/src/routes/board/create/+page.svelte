@@ -4,6 +4,9 @@
 	import SmallHeader from '../../../component/SmallHeader.svelte';
 	import ConfirmBtn from '../../../component/ConfirmBtn.svelte';
 	import { Toggle, Label, Select } from 'flowbite-svelte';
+	import axios from "axios";
+
+	let abc = sessionStorage.getItem("loginMember");
 
 	let selected;
 
@@ -22,6 +25,20 @@
 	$: console.log(content);
 
 	let title;
+	function createPost(){
+		const res = axios.post('/api/post/create',
+				{
+					title : title,
+					userId : abc,
+					content : content.text,
+				})
+				.then(response => {
+					if (response.data.data == "success")
+						alert("create success");
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
 </script>
 
 <SmallHeader header="Create Post" />
@@ -56,7 +73,7 @@
 
 				<!-- 버튼 -->
 				<div>
-					<ConfirmBtn content="저장" color="blue" />
+					<ConfirmBtn content="저장" color="blue" on:click={createPost} location="/board/list"/>
 					<ConfirmBtn content="미리보기" color="blue" on:click={handlePreviewBtn} />
 					<!-- <Button content="저장" /> -->
 					<!-- <Button content="Preview" on:click={handlePreviewBtn} /> -->

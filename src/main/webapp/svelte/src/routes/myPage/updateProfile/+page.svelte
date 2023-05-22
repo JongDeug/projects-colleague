@@ -18,6 +18,7 @@
 	let userInfo="";
 	let userBlog="";
 	let userGit="";
+	let teckStack = [];
 	function setProfile(){
 
 		const res = axios.get('/api/member/profile/update',
@@ -35,6 +36,9 @@
 				})
 				.catch(error => console.log(error))
 		console.log(res);
+	}
+	function getTeckStack(){
+		const res = axios.get('/api/')
 	}
 	function updateProfile(){
 		userName = document.getElementById("name").value;

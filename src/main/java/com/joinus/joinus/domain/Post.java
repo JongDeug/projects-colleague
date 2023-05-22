@@ -16,7 +16,7 @@ public class Post {
     private String userId;
     private String title;
     private String content;
-    private int hit;
+    private int hit = 0;
     private LocalDateTime createTime;
     private boolean type;
 }
