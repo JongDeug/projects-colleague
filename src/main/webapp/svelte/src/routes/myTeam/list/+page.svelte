@@ -5,6 +5,9 @@
 	import SmallHeader from '../../../component/SmallHeader.svelte';
 	import axios from "axios";
 
+	let userId = sessionStorage.getItem("loginMember");
+	let teamList = [];
+
 	function setList(){
 
 		const res = axios.get('/api/team/myTeam/list',
@@ -14,10 +17,7 @@
 					}
 				})
 				.then(response => {
-					userName = response.data.name;
-					userEmail = response.data.email;
-					userPhoneNum = response.data.phoneNum;
-					userDepartment = response.data.department;
+					teamList = response.data.data;
 				})
 				.catch(error => console.log(error))
 		console.log(res);

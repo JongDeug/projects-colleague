@@ -1,7 +1,6 @@
 package com.joinus.joinus.controller;
 
 import com.joinus.joinus.domain.Member;
-import com.joinus.joinus.domain.TechStack;
 import com.joinus.joinus.dto.ChangePasswordForm;
 import com.joinus.joinus.dto.Response;
 import com.joinus.joinus.service.MemberService;
@@ -111,10 +110,4 @@ public class MemberController {
             member = memberService.searchMember(memberId).get();
         return member.getName();
     }
-
-    @GetMapping("/techStack")
-    public List<TechStack> getData(){
-        return techStackService.getList();
-    }
-
 }

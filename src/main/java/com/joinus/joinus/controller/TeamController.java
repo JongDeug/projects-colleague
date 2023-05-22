@@ -51,13 +51,20 @@ public class TeamController {
 
         return response;
     }
-    @GetMapping("/myTeam/list")
-    public Response getTeamList(HttpServletRequest request) {
+    @GetMapping("/myTeam/list")     //  로그인 한 상태로 내팀 리스트
+    public Response getMyTeamList(HttpServletRequest request) {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
         Response response = new Response();
         response.setData(teamService.findMyTeams(member.getId()));
         response.setRedirect("/myPage/myTeam");
+        return response;
+    }
+    @GetMapping("/list")        //  로그인 상관없이 타 유저 팀 리스트
+    public Response getTeamList(@RequestBody String userId) {
+        Response response = new Response();
+        response.setData(teamService.findMyTeams(userId));
+        response.setRedirect("/team/list");
         return response;
     }
     @GetMapping("/detail")

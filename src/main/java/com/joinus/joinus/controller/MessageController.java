@@ -10,18 +10,44 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/message")
 @RequiredArgsConstructor
 public class MessageController {
     private final MessageService messageService;
     @GetMapping("/list")
-    public List<Message> getMessageList(HttpServletRequest request) {
+    public Response getAllMessages(HttpServletRequest request) {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
-        return messageService.readMessageList(member.getId());
+
+        Response response = new Response();
+        response.setData(messageService.getAll());
+        response.setRedirect("/postMsg");
+
+        return response;
+    }
+    @GetMapping("/list/received")
+    public Response getReceivedMessages(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+        Response response = new Response();
+        response.setData(messageService.getReceivedList(member.getId()));
+        response.setRedirect("/postMsg");
+
+        return response;
+    }
+
+    @GetMapping("/list/sent")
+    public Response getSentMessages(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+        Response response = new Response();
+        response.setData(messageService.getSentList(member.getId()));
+        response.setRedirect("/postMsg");
+
+        return response;
     }
 
     @GetMapping("/detail")

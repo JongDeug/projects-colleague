@@ -17,8 +17,18 @@ public class MessageService {
     public void createMessage(Message message){
         messageRepository.save(message);
     }
-    public List<Message> readMessageList(String memberId){
-        return messageRepository.findMessagesByReceiver(memberId).get();
+    public List<Message> getAll(){
+        return messageRepository.findAll();
+    }
+    public List<Message> getReceivedList(String memberId){
+        if (messageRepository.findMessagesByReceiver(memberId).isPresent())
+            return messageRepository.findMessagesByReceiver(memberId).get();
+        return null;
+    }
+    public List<Message> getSentList(String memberId){
+        if (messageRepository.findMessagesBySender(memberId).isPresent())
+            return messageRepository.findMessagesBySender(memberId).get();
+        return null;
     }
     public Message readMessageDetail(Long messageId){
         return messageRepository.findById(messageId).get();

@@ -1,14 +1,10 @@
 package com.joinus.joinus.controller;
 
-import com.joinus.joinus.domain.Member;
+import com.joinus.joinus.domain.TechStack;
 import com.joinus.joinus.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,12 +20,12 @@ public class ManagerController {
     private final TechStackService techStackService;
     private final ManagerService managerService;
 
-    @PostMapping("/tech")
-    public ModelAndView memberList(Model model){
-        List<Member> members = memberService.findMembers();
-        model.addAttribute("members", members);
-        return new ModelAndView("/member/member-list");
+    @GetMapping("/tech")
+    public List<TechStack> getStacks(){
+        return techStackService.getList();
     }
-
-
+    @PostMapping("/tech")
+    public void addStack(@RequestBody String stack){
+        techStackService.addStack(stack);
+    }
 }

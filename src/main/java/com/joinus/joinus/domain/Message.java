@@ -14,6 +14,7 @@ public class Message {
     private Long id;
     private String sender;
     private String receiver;
+    private String title;   //  굳이?
     private String content;
     private LocalDateTime sendTime;
 }

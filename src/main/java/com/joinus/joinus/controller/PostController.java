@@ -83,4 +83,12 @@ public class PostController {
         response.setRedirect("/myPage/myPosts");
         return response;
     }
+
+    @GetMapping("/search")
+    public Response searchPost(@RequestBody String text){
+        Response response = new Response();
+        response.setData(postService.search(text)); //  post list
+        response.setRedirect("/myPage/myPosts");
+        return response;
+    }
 }

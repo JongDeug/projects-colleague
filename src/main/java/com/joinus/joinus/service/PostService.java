@@ -1,6 +1,5 @@
 package com.joinus.joinus.service;
 
-import com.joinus.joinus.domain.Member;
 import com.joinus.joinus.domain.Post;
 import com.joinus.joinus.persistence.PostRepository;
 import jakarta.transaction.Transactional;
@@ -8,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,5 +42,13 @@ public class PostService {
         if (postRepository.findPostsByUserId(memberId).isPresent())
             return postRepository.findPostsByUserId(memberId).get();
         else return null;
+    }
+    public List<Post> search(String text){
+        List<Post> posts = new ArrayList<>();
+        if (postRepository.findPostsByTitleContaining(text).isPresent())
+            posts.addAll(postRepository.findPostsByTitleContaining(text).get());
+        if (postRepository.findPostsByContentContaining(text).isPresent())
+            posts.addAll(postRepository.findPostsByContentContaining(text).get());
+        return posts;
     }
 }

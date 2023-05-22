@@ -18,7 +18,7 @@
 	let userInfo="";
 	let userBlog="";
 	let userGit="";
-	let teckStack = [];
+	let techStack = [];
 	function setProfile(){
 
 		const res = axios.get('/api/member/profile/update',
@@ -33,12 +33,18 @@
 					userInfo = response.data.data.info;
 					userBlog = response.data.data.blog;
 					userGit = response.data.data.gitAddress;
+					techStack = response.data.data.techStack;
 				})
 				.catch(error => console.log(error))
 		console.log(res);
 	}
-	function getTeckStack(){
-		const res = axios.get('/api/')
+	function getTechStackList(){
+		const res = axios.get('/api/manager/tech')
+				.then(response => {
+					techStack = response.data;
+				})
+				.catch(error => console.log(error))
+		console.log(res);
 	}
 	function updateProfile(){
 		userName = document.getElementById("name").value;
