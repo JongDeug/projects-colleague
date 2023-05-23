@@ -6,7 +6,7 @@
 	import { Toggle, Label, Select } from 'flowbite-svelte';
 	import axios from "axios";
 
-	let abc = sessionStorage.getItem("loginMember");
+	let userId = sessionStorage.getItem("loginMember");
 
 	let selected;
 
@@ -25,11 +25,13 @@
 	$: console.log(content);
 
 	let title;
+
+	//	게시글 작성
 	function createPost(){
 		const res = axios.post('/api/post/create',
 				{
 					title : title,
-					userId : abc,
+					userId : userId,
 					content : content.text,
 				})
 				.then(response => {

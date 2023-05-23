@@ -8,16 +8,16 @@
 	let userId = sessionStorage.getItem("loginMember");
 	let teamList = [];
 
-	function setList(){
+	// 로그인 상태에서 내가 속한 팀 리스트 가져오기 ( 내가 리더인 팀, 내가 멤버인 팀 전부다 )
+	function getMyTeams(){
 
 		const res = axios.get('/api/team/myTeam/list',
 				{
-					params:{
-						id : userId
-					}
+
 				})
 				.then(response => {
 					teamList = response.data.data;
+					console.log(teamList);
 				})
 				.catch(error => console.log(error))
 		console.log(res);

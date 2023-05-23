@@ -15,6 +15,7 @@
 	let userBlog="";
 	let userGit="";
 
+	// 세션 id로 프로필 정보 가져오기
 	function setProfile(){
 
 		const res = axios.get('/api/member/profile/update',
@@ -29,6 +30,7 @@
 					userInfo = response.data.data.info;
 					userBlog = response.data.data.blog;
 					userGit = response.data.data.gitAddress;
+					techStack = response.data.data.techStack;
 				})
 				.catch(error => console.log(error))
 		console.log(res);

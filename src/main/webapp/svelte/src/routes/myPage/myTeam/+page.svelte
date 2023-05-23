@@ -57,7 +57,9 @@
 			(t) => t.leader.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
 	);
 
-	function getList(){
+
+	// 로그인 상태에서 내가 속한 팀 리스트 가져오기 ( 내가 리더인 팀, 내가 멤버인 팀 전부다 )
+	function getMyTeams(){
 
 		const res = axios.get('/api/team/myTeam/list',
 				{
@@ -70,28 +72,22 @@
 				.catch(error => console.log(error))
 		console.log(res);
 	}
-	function getDetail(){
-		let teamId;
-		let teamPw;
-		let teamName;
-		let teamInfo;
-		let teamLeader;
-		let teamPeople;
-		const res = axios.get('/api/team/myTeam/list',
+
+	//	로그인 상관없이 팀 id로 팀 엔티티 가져오기
+	function getDetail(teamId){
+		let team = [];
+		const res = axios.get('/api/team/detail',
 				{
 					params:{
 						id : teamId
 					}
 				})
 				.then(response => {
-					teamPw = response.data.pw;
-					teamName = response.data.name;
-					teamInfo = response.data.info;
-					teamLeader = response.data.leader;
-					teamPeople = response.data.people;
+					team = response.data.data;
 				})
 				.catch(error => console.log(error))
 		console.log(res);
+		return team;
 	}
 
 	const previous = () => {
@@ -101,7 +97,7 @@
 		alert('Next btn clicked. Make a call to your server to fetch data.');
 	};
 
-	getList();
+	getMyTeams();
 
 </script>
 

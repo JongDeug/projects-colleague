@@ -78,6 +78,88 @@
 		color = 'yellow';
 		receiveCheckModal = true;
 	};
+
+	//	message domain 참조
+
+	// 내가 보낸 메시지 목록
+	function getSentMessages(){
+		let sentMessages = [];	//	message list 형식
+
+		const res = axios.get('/api/message/list/sent',
+				{
+				})
+				.then(response => {
+					sentMessages = response.data.data;
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+
+		return sentMessages;
+	}
+	// 내가 받은 메시지 목록
+	function getReceivedMessages(){
+		let receivedMessages = [];	//	message list 형식
+
+		const res = axios.get('/api/message/list/received',
+				{
+				})
+				.then(response => {
+					receivedMessages = response.data.data;
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+
+		return receivedMessages;
+	}
+
+	// 쪽지 id로 상세 조회
+	function getMessageDetail(messageId){
+		let message = [];	//	message domain 참조
+
+		const res = axios.get('/api/message/detail',
+				{
+					params:{
+						messageId : messageId
+					}
+				})
+				.then(response => {
+					message = response.data.data;
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+
+		return message;
+	}
+
+	//	쪽지 작성
+	function createMessage(){
+		const res = axios.post('/api/message/create',
+				{
+					sender : teamName,
+					receiver : teamInfo,
+					title : teamPw,
+					content : teamMembers,
+				})
+				.then(response => {
+					if (response.data.data == "success")
+						alert("create success");
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
+	//	쪽지 삭제
+	function deleteMessage(messageId){
+		const res = axios.post('/api/message/delete',
+				{
+					messageId : messageId
+				})
+				.then(response => {
+					if (response.data.data == "success")
+						alert("delete success");
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
 </script>
 
 <SmallHeader header="Post Message" />

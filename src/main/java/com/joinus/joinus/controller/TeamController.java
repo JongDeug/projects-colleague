@@ -37,11 +37,11 @@ public class TeamController {
         team.setPw(teamForm.getTeamPw());
         team.setInfo(teamForm.getTeamInfo());
 
-//        for (String str : teamForm.getMemberIds()){
-//            if (memberService.searchMember(str).isPresent())
-//                members.add(memberService.searchMember(str).get());
-//        }
-//        team.setMembers(members);
+        for (String str : teamForm.getMemberIds()){
+            if (memberService.searchMember(str).isPresent())
+                members.add(memberService.searchMember(str).get());
+        }
+        team.setMembers(members);
 
         teamService.makeTeam(team);
 
@@ -68,15 +68,20 @@ public class TeamController {
         return response;
     }
     @GetMapping("/detail")
-    public Team getTeamInfo(@RequestParam("teamId") Long teamId){
-        Team team = teamService.findTeamById(teamId);
-
-        return teamService.findTeamById(teamId);
+    public Response getTeamInfo(@RequestParam("teamId") Long teamId){
+        Response response = new Response();
+        response.setData(teamService.findTeamById(teamId));
+        response.setRedirect("/team/detail");
+        return response;
     }
     @PostMapping("/myTeam/update")
-    public String updateTeamInfo(@RequestBody Team team){
+    public Response updateTeamInfo(@RequestBody Team team){
         teamService.updateTeam(team);
-        return "ok";
+
+        Response response = new Response();
+        response.setData("success");
+        response.setRedirect("/team/detail");
+        return response;
     }
     
     @GetMapping("/{teamId}/manage/minutes")

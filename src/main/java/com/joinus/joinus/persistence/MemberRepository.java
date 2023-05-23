@@ -17,4 +17,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     Optional<Member> findMemberByPwAndEmail(String id, String email);
 
     Optional<List<Member>> findByTechStackIn(Set<String> stack);
+
+    Optional<List<Member>> findMembersByNameContains(String name);
+
 }

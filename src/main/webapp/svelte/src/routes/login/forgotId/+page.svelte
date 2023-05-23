@@ -4,6 +4,8 @@
 	import { Label, Input } from 'flowbite-svelte';
 	import axios from "axios";
 
+
+	// 이름 이메일 폰번호로 아이디 찾기
 	function findId(){
 		let name = document.getElementById("name").value;
 		let email = document.getElementById("email").value;
@@ -16,7 +18,7 @@
 					phoneNum : phoneNum,
 				})
 				.then(response => {
-					if (response.data.data == "empty")
+					if (response.data.data == "user not exist")
 						alert("member not exist")
 					else
 						alert(response.data.data)

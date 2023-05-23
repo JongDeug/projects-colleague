@@ -70,6 +70,12 @@ public class MemberService{
         return members;
     }
 
+    public List<Member> getMembersByName(String name){
+        if (memberRepository.findMembersByNameContains(name).isPresent())
+            return memberRepository.findMembersByNameContains(name).get();
+        return null;
+    }
+
 
     /**
      * 관리자용 전체 회원 조회

@@ -26,6 +26,10 @@
 
 	let value;
 
+	// 팀에 소속될 회원 id 저장될 리스트
+	let teamMembers = [];
+
+	// 팀 만들기
 	function createTeam(){
 		let teamName = document.getElementById("teamName").value;
 		let teamInfo = document.getElementById("teamInfo").value;
@@ -35,6 +39,7 @@
 					teamName : teamName,
 					teamInfo : teamInfo,
 					teamPw : teamPw,
+					memberIds : teamMembers,
 				})
 				.then(response => {
 					if (response.data.data == "success")
@@ -43,8 +48,21 @@
 				.catch(error => console.log(error))
 		console.log(res);
 	}
-	function searchUser(){
+	function searchUsers(userName){
+		let members = [];
 
+		const res = axios.get('/api/member/name',
+				{
+					params:{
+						userName : userName
+					}
+				})
+				.then(response => {
+					members = response.data.data;
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+		return members;
 	}
 </script>
 

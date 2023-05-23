@@ -13,6 +13,23 @@
 		ListgroupItem,
 		Avatar
 	} from 'flowbite-svelte';
+
+	//	로그인 상관없이 팀 id로 팀 엔티티 가져오기
+	function getDetail(teamId){
+		let team = [];
+		const res = axios.get('/api/team/detail',
+				{
+					params:{
+						id : teamId
+					}
+				})
+				.then(response => {
+					team = response.data.data;
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+		return team;
+	}
 </script>
 
 <SmallHeader header="Team Introduction" style="lg:px-52" />

@@ -104,10 +104,12 @@ public class MemberController {
     }
 
     @GetMapping("/name")
-    public String memberName(@RequestParam String memberId){
-        Member member = new Member();
-        if (memberService.searchMember(memberId).isPresent())
-            member = memberService.searchMember(memberId).get();
-        return member.getName();
+    public Response memberName(@RequestParam String userName){
+        List<Member> members = memberService.getMembersByName(userName);
+
+        Response response = new Response();
+        response.setData(members);
+        response.setRedirect("no required");
+        return response;
     }
 }

@@ -16,23 +16,43 @@
 
 	let post = [];
 
-	function getUserName(memberId){
-		let userName;
+	// 회원 이름으로 유저들 리스트 받아오기
+	function searchUsers(userName){
+		let members = [];
 
 		const res = axios.get('/api/member/name',
+				{
+					params:{
+						userName : userName
+					}
+				})
+				.then(response => {
+					members = response.data.data;
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+		return members;
+	}
+
+	//	회원 id로 이름 받아오기
+	function getUser(memberId){
+		let member = [];
+
+		const res = axios.get('/api/member/search',
 				{
 					params:{
 						memberId : memberId
 					}
 				})
 				.then(response => {
-					userName = response.data;
+					member = response.data.data;
 				})
 				.catch(error => console.log(error))
 		console.log(res);
-		return userName;
+		return member;
 	}
 
+	// 게시글 상세정보 게시글 id 파라미터로 줘서 Post 엔티티로 받아오기
 	function getPost(postId){
 		const res = axios.get('/api/post/detail',
 				{
@@ -46,7 +66,7 @@
 					content = post.content;
 					createTime = post.createTime;
 					hit = post.hit;
-					writer = getUserName(post.userId);
+					writer = getUser(post.userId).name;
 				})
 				.catch(error => console.log(error))
 		console.log(res);

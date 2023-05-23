@@ -51,8 +51,11 @@ public class MessageController {
     }
 
     @GetMapping("/detail")
-    public Message getMessageDetail(Long messageId){
-        return messageService.readMessageDetail(messageId);
+    public Response getMessageDetail(@RequestParam Long messageId){
+        Response response = new Response();
+        response.setData(messageService.readMessageDetail(messageId));
+        response.setRedirect("/postMsg/detail");
+        return response;
     }
 
     @PostMapping("/create")
@@ -63,15 +66,15 @@ public class MessageController {
         messageService.createMessage(message);
         Response response = new Response();
         response.setData("success");
-        response.setRedirect("oo");
+        response.setRedirect("/postMsg");
         return response;
     }
     @PostMapping("/delete")
-    public Response delete(@RequestParam Long messageId) {
+    public Response delete(@RequestBody Long messageId) {
         messageService.deleteMessage(messageId);
         Response response = new Response();
         response.setData("success");
-        response.setRedirect("oo");
+        response.setRedirect("/postMsg");
         return response;
     }
 }

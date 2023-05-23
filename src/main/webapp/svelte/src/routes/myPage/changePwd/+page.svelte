@@ -9,8 +9,10 @@
 
 
 
-	let userId = "qwe"	//	로그인 세션 유지 아이디
-	function updateProfile(){
+	let userId = sessionStorage.getItem("loginMember");
+
+	// 비밀번호 변경
+	function updatePw(){
 		let curPw = document.getElementById("curPw").value;
 		let newPw = document.getElementById("newPw").value;
 		let newPwCheck = document.getElementById("newPwCheck").value;
@@ -62,6 +64,6 @@
 			</div>
 		</div>
 
-		<ConfrimBtn content="비밀번호 변경 확인" color="blue" style="w-[100%] py-4 shadow-md" on:click={updateProfile}/>
+		<ConfrimBtn content="비밀번호 변경 확인" color="blue" style="w-[100%] py-4 shadow-md" on:click={updatePw}/>
 	</div>
 </Layout>

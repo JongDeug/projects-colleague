@@ -6,6 +6,8 @@
 	import axios from "axios";
 	import {error} from "@sveltejs/kit";
 	let realId;
+
+	//	회원가입 할 때 중복아이디 체크용
 	function checkId() {
 		let userId = document.getElementById("userId").value;
 		const res = axios.post('/api/member/duplicateCheck',
@@ -25,6 +27,8 @@
 				.catch(error => console.log(error))
 		console.log(res);
 	}
+
+	//	회원가입 메소드
 	function join(){
 		let userId = realId;
 		let pw = document.getElementById("pw").value;

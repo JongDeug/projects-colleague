@@ -64,6 +64,8 @@
 	let userId = sessionStorage.getItem("loginMember");
 	let posts = [];
 
+
+	// 내 게시글 목록 가져오기
 	function setPosts(){
 
 		const res = axios.get('/api/post/myPost',

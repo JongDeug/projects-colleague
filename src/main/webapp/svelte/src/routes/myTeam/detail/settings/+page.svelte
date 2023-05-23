@@ -32,6 +32,41 @@
 		{ value: 'fr', name: 'France' }
 	];
 	let value;
+
+	//	로그인 상관없이 팀 id로 팀 엔티티 가져오기
+	function getDetail(teamId){
+		let team = [];
+		const res = axios.get('/api/team/detail',
+				{
+					params:{
+						id : teamId
+					}
+				})
+				.then(response => {
+					team = response.data.data;
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+		return team;
+	}
+
+	//	팀 정보 업데이트
+	function updateTeam(teamId){
+		const res = axios.post('/api/team/myTeam/update',
+				{
+					teamId : teamId,
+					teamName : teamName,
+					teamInfo : teamInfo,
+					teamPw : teamPw,
+					memberIds : teamMembers,
+				})
+				.then(response => {
+					if (response.data.data == "success")
+						alert("create success")
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
 </script>
 
 <!-- 팀 명  -->

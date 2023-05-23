@@ -5,6 +5,7 @@
 	import axios from "axios";
 	import ConfrimBtn from "../../../component/ConfirmBtn.svelte";
 
+	// 아이디 이메일로 비밀번호 가져옴
 	function findPw(){
 		let userId = document.getElementById("userId").value;
 		let email = document.getElementById("email").value;
@@ -15,7 +16,7 @@
 					email : email,
 				})
 				.then(response => {
-					if (response.data.data == "empty")
+					if (response.data.data == "user not exist")
 						alert("member not exist")
 					else
 						alert(response.data.data)

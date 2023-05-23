@@ -19,6 +19,8 @@
 	let userBlog="";
 	let userGit="";
 	let techStack = [];
+
+	// 세션 id로 프로필 정보 가져오기
 	function setProfile(){
 
 		const res = axios.get('/api/member/profile/update',
@@ -38,6 +40,9 @@
 				.catch(error => console.log(error))
 		console.log(res);
 	}
+
+	// db에 저장되어있는 모든 기술스택 가져오기
+	// 가져온것들 표나 버튼으로 쭉 나열하고 거기서 클릭해서 선택하는식으로?
 	function getTechStackList(){
 		const res = axios.get('/api/manager/tech')
 				.then(response => {
@@ -46,6 +51,8 @@
 				.catch(error => console.log(error))
 		console.log(res);
 	}
+
+	// 사용자 프로필 업데이트하기
 	function updateProfile(){
 		userName = document.getElementById("name").value;
 		userEmail = document.getElementById("email").value;
