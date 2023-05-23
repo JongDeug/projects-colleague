@@ -1,7 +1,6 @@
 package com.joinus.joinus.service;
 
 import com.joinus.joinus.domain.Member;
-import com.joinus.joinus.dto.Response;
 import com.joinus.joinus.persistence.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +26,10 @@ public class MemberService{
         return memberRepository.findById(memberId)
                 .isPresent();
     }
+    public boolean validateDuplicateEmail(String email) {
+        return memberRepository.findMemberByEmail(email)
+                .isPresent();
+    }
     public void updateMember(Member member){
         memberRepository.save(member);
     }
@@ -50,9 +53,8 @@ public class MemberService{
     }
 
     public String findPw(String id, String email){
-        Response response = new Response();
-        if (memberRepository.findMemberByPwAndEmail(id, email).isPresent()){
-            return memberRepository.findMemberByPwAndEmail(id, email).get().getPw();
+        if (memberRepository.findMemberByIdAndEmail(id, email).isPresent()){
+            return memberRepository.findMemberByIdAndEmail(id, email).get().getPw();
         }
         else {
             return "user not exist";

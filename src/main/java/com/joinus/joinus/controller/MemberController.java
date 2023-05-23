@@ -26,7 +26,9 @@ public class MemberController {
     @PostMapping("/join")
     public Response join(@RequestBody Member member){
         Response response = new Response();
-        if (memberService.join(member).equals(member.getId()))
+        if (duplicateEmailCheck(member.getEmail()))
+            response.setData("duplicated email address");
+        else if (memberService.join(member).equals(member.getId()))
             response.setData("success");
         else response.setData("failure");
         response.setRedirect("/login");
@@ -36,6 +38,10 @@ public class MemberController {
     @PostMapping("/duplicateCheck")
     public boolean duplicateIdCheck(@RequestBody Member member){    //  requestparam, 생략 string id, modelattribute는 작동이 안됨 일단 dto로 박아놓음
         return memberService.validateDuplicateMember(member.getId());       //  간단한 기능이라, 리다이렉트 필요없어서 bool로 함
+    }
+
+    public boolean duplicateEmailCheck(String email){
+        return memberService.validateDuplicateEmail((email));
     }
 
     @GetMapping("/profile/update")
