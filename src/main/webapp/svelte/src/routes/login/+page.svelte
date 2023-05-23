@@ -19,6 +19,7 @@
 				.then(response => {
 					if (response.data.data == "success")
 					{
+						sessionStorage.setItem("loginMember", userId);
 						alert("login success");
 						redirect(300, response.data.redirect);
 					}

@@ -94,11 +94,4 @@ public class TeamController {
 
         return "/team/manage-calendar";
     }
-
-    @GetMapping("/list")
-    public ModelAndView teamList(Model model){
-        List<Team> teams = teamService.findMyTeams("qwe");
-        model.addAttribute("teams", teams);
-        return new ModelAndView("/team/team-list");
-    }
 }

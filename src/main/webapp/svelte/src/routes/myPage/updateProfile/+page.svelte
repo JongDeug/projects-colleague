@@ -38,7 +38,7 @@
 					techStack = response.data.data.techStack;
 				})
 				.catch(error => console.log(error))
-		console.log(res);
+		console.log(userId);
 	}
 
 	// db에 저장되어있는 모든 기술스택 가져오기

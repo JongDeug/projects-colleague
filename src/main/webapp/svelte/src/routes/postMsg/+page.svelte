@@ -20,6 +20,7 @@
 		TabItem
 	} from 'flowbite-svelte';
 	import { page } from '$app/stores';
+	import axios from "axios";
 
 	let sendModal = false;
 	let receiveCheckModal = false;
