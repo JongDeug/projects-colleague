@@ -58,12 +58,18 @@ public class MemberController {
     public Response updateProfile(@RequestBody Member member){
         memberService.updateMember(member);
         Response response = new Response();
-        if (duplicateEmailCheck(member.getEmail()))
-            response.setData("duplicated email address");
+        Member mem = memberService.findOne(member.getId()).get();
+        if (!(member.getEmail().equals(mem.getEmail()))){
+            if (duplicateEmailCheck(member.getEmail()))
+                response.setData("duplicated email address");
+        }
         else response.setData("success");
         response.setRedirect("/myPage/updateProfile");
         return response;
     }
+
+
+
     @PostMapping("/profile/changePwd")
     public String changePwd(@RequestBody ChangePasswordForm pf){
         memberService.updatePW(pf.getMemberId(), pf.getCurPw(), pf.getNewPw(), pf.getNewPwCheck());

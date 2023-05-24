@@ -16,7 +16,7 @@ public class TechStackService {
 
     public void addStack(String stack){
         TechStack techStack = new TechStack();
-        techStack.setTeckStack(stack);
+        techStack.setTechStack(stack);
         techStackRepository.save(techStack);
     }
     public List<TechStack> getList(){

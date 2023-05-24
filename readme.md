@@ -26,6 +26,7 @@
 * 멀티 폼 데이터(사진 할 때 참고)
 * 쪽지 -> 웹소켓 (실시간)
 * member team -> manytomany 나중에 수정 필요할수도
+* 회원 탈퇴하면 연관데이터 삭제하는거
 
 ### 프론트 함수원형
 * getUserName 함수 board/detail에 있음

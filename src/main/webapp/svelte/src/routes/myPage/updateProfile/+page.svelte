@@ -52,6 +52,10 @@
 		console.log(res);
 	}
 
+	let userStack = new Set();
+	userStack.add("Java");
+	userStack.add("JavaScript");
+
 	// 사용자 프로필 업데이트하기
 	function updateProfile(){
 		userName = document.getElementById("name").value;
@@ -71,7 +75,8 @@
 					info : userInfo,
 					blog : userBlog,
 					gitAddress : userGit,
-					profileImg:"aa"
+					profileImg:"aa",
+					techStack : userStack,
 
 				})
 				.then(response => {

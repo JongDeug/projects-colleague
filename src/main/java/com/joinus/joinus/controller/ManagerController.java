@@ -58,8 +58,6 @@ public class ManagerController {
         techStackService.addStack("MongoDB");
         techStackService.addStack("ElasticSearch");
         techStackService.addStack("kotlin");
-        techStackService.addStack("mssql");
-        techStackService.addStack("reactnative");
         techStackService.addStack("C");
         techStackService.addStack("C++");
         techStackService.addStack("C#");
