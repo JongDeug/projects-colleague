@@ -21,12 +21,13 @@
 * 팀/게시글에서 바디 누르면 디테일로 넘어가는거 + 파라미터 넘기는거
 * 팀 만들 때 팀원 추가하는거
 ### 스프링
-* 유저 프로필 사진, 팀 배경화면 사진
+* 유저 프로필 사진, 팀 배경화면 사wls
+* 멀티 폼 데이터(사진 할 때 참고)
+* 회원 탈퇴
+* 쪽지 -> 웹소켓 (실시간)
 * member team -> manytomany 나중에 수정 필요할수도
 * 팀 상태 따라 찾기나 보기 설정 (teamService 진행중인 팀 찾기에서 processing)
-* 게시글 작성할 때 프론트쪽에서 세션스토리지 id 안따짐
 
 ### 프론트 함수원형
 * getUserName 함수 board/detail에 있음
 * getTechStack 함수 myPage/updateProfile에 잇음
-* 

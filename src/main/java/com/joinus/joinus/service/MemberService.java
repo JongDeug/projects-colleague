@@ -78,6 +78,10 @@ public class MemberService{
         return null;
     }
 
+    public void deleteMember(Member member){
+        memberRepository.delete(member);
+    }
+
 
     /**
      * 관리자용 전체 회원 조회

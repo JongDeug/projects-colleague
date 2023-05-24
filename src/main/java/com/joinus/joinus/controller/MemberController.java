@@ -103,6 +103,16 @@ public class MemberController {
         response.setRedirect("no required");
         return response;
     }
+    @PostMapping("/delete")
+    public Response delete(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
+        memberService.deleteMember(member);
+        Response response = new Response();
+        response.setData("success");
+        response.setRedirect("/");
+        return response;
+    }
 
     @GetMapping("/list")
     public ModelAndView memberList(Model model){
