@@ -58,7 +58,9 @@ public class MemberController {
     public Response updateProfile(@RequestBody Member member){
         memberService.updateMember(member);
         Response response = new Response();
-        response.setData("success");
+        if (duplicateEmailCheck(member.getEmail()))
+            response.setData("duplicated email address");
+        else response.setData("success");
         response.setRedirect("/myPage/updateProfile");
         return response;
     }

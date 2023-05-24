@@ -77,7 +77,7 @@
 				.then(response => {
 					if (response.data.data == "success")
 						alert("update success")
-					else alert("update failure")
+					else alert(response.data.data)
 				})
 				.catch(error => console.log(error))
 		console.log(res);

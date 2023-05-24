@@ -57,6 +57,12 @@
 			(t) => t.leader.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
 	);
 
+	let size = 5;
+	let idx = 0;
+	let total = 0;
+	let showData = [];
+	let totalPage = Math.ceil(total / size);
+
 
 	// 로그인 상태에서 내가 속한 팀 리스트 가져오기 ( 내가 리더인 팀, 내가 멤버인 팀 전부다 )
 	function getMyTeams(){

@@ -28,4 +28,59 @@ public class ManagerController {
     public void addStack(@RequestBody String stack){
         techStackService.addStack(stack);
     }
+
+
+    //  test 기술스택 셋업
+    @GetMapping("/setStack")
+    public String setStack(){
+        techStackService.addStack("Django");
+        techStackService.addStack("ExpressJS");
+        techStackService.addStack("NodeJS");
+        techStackService.addStack("Spring");
+        techStackService.addStack("SpringBoot");
+        techStackService.addStack("WebRTC");
+        techStackService.addStack("Angular");
+        techStackService.addStack("GraphQL");
+        techStackService.addStack("NextJS");
+        techStackService.addStack("React Context");
+        techStackService.addStack("ReactiveX");
+        techStackService.addStack("ReactJs");
+        techStackService.addStack("React Query");
+        techStackService.addStack("Redux");
+        techStackService.addStack("Svelte");
+        techStackService.addStack("Tailwind");
+        techStackService.addStack("Unity");
+        techStackService.addStack("VueJs");
+        techStackService.addStack("React Native");
+        techStackService.addStack("OracleDB");
+        techStackService.addStack("MySQL");
+        techStackService.addStack("MSSQL");
+        techStackService.addStack("MongoDB");
+        techStackService.addStack("ElasticSearch");
+        techStackService.addStack("kotlin");
+        techStackService.addStack("mssql");
+        techStackService.addStack("reactnative");
+        techStackService.addStack("C");
+        techStackService.addStack("C++");
+        techStackService.addStack("C#");
+        techStackService.addStack("Go");
+        techStackService.addStack("Java");
+        techStackService.addStack("Javacript");
+        techStackService.addStack("Kotlin");
+        techStackService.addStack("MATLAB");
+        techStackService.addStack("PHP");
+        techStackService.addStack("Python");
+        techStackService.addStack("R");
+        techStackService.addStack("Ruby");
+        techStackService.addStack("Rust");
+        techStackService.addStack("Scala");
+        techStackService.addStack("Swift");
+        techStackService.addStack("Typescript");
+        techStackService.addStack("Kafka");
+        techStackService.addStack("Pytorch");
+        techStackService.addStack("Tensorflow");
+        techStackService.addStack("Github");
+
+        return "Stacks Added";
+    }
 }

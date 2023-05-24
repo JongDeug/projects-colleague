@@ -8,7 +8,7 @@ spring:
     ansi:
       enabled: always
   datasource:
-    url: jdbc:h2:tcp://localhost/~/joinus
+    url: jdbc:h2:~/joinus
     username: sa
     password:
     driver-class-name: org.h2.Driver
