@@ -69,8 +69,6 @@ public class MemberController {
         return response;
     }
 
-
-
     @PostMapping("/profile/changePwd")
     public String changePwd(@RequestBody ChangePasswordForm pf){
         memberService.updatePW(pf.getMemberId(), pf.getCurPw(), pf.getNewPw(), pf.getNewPwCheck());
