@@ -56,14 +56,15 @@ public class MemberController {
     }
     @PostMapping("/profile/update")
     public Response updateProfile(@RequestBody Member member){
-        memberService.updateMember(member);
         Response response = new Response();
         Member mem = memberService.findOne(member.getId()).get();
-        if (!(member.getEmail().equals(mem.getEmail()))){
-            if (duplicateEmailCheck(member.getEmail()))
-                response.setData("duplicated email address");
+        member.setPw(mem.getPw());
+        if ((!(member.getEmail().equals(mem.getEmail()))) && duplicateEmailCheck(member.getEmail()))
+            response.setData("duplicated email address");
+        else {
+            memberService.updateMember(member);
+            response.setData("success");
         }
-        else response.setData("success");
         response.setRedirect("/myPage/updateProfile");
         return response;
     }

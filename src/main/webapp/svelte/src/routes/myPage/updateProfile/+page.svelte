@@ -52,9 +52,7 @@
 		console.log(res);
 	}
 
-	let userStack = new Set();
-	userStack.add("Java");
-	userStack.add("JavaScript");
+	let userStack = []
 
 	// 사용자 프로필 업데이트하기
 	function updateProfile(){
@@ -65,6 +63,11 @@
 		userInfo = document.getElementById("info").value;
 		userBlog = document.getElementById("blog").value;
 		userGit = document.getElementById("git").value;
+
+
+		// userStack.push("Java");
+		// userStack.push("JavaScript");
+
 		const res = axios.post('/api/member/profile/update',
 				{
 					id : userId,
