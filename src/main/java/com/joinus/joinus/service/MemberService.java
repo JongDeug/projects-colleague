@@ -60,7 +60,6 @@ public class MemberService{
             return "user not exist";
         }
     }
-
     public Optional<List<Member>> searchMember(String memberId){
         return memberRepository.findMembersByIdContains(memberId);
     }

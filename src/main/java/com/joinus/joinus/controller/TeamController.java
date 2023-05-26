@@ -37,8 +37,8 @@ public class TeamController {
         team.setInfo(teamForm.getTeamInfo());
 
         for (String str : teamForm.getMemberIds()){
-            if (memberService.searchMember(str).isPresent())
-                members.add(memberService.searchMember(str).get());
+            if (memberService.findOne(str).isPresent())
+                members.add(memberService.findOne(str).get());
         }
         team.setMembers(members);
 
