@@ -32,11 +32,9 @@ public class PostService {
         }
     }
 
-    public void update(Post post, String memberId){
-        if (post.getUserId().equals(memberId)){
-            post.setCreateTime(LocalDateTime.now());
-            postRepository.save(post);
-        }
+    public void update(Post post){
+        post.setCreateTime(LocalDateTime.now());
+        postRepository.save(post);
     }
     public List<Post> postList(){
         return postRepository.findAll();

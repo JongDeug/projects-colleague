@@ -42,7 +42,10 @@ public class PostController {
     @GetMapping("/detail")
     public Response getPostDetail(@RequestParam Long postId){
         Post post =  postService.postDetail(postId);
+
         post.setHit(post.getHit()+1);
+        postService.update(post);
+
         Response response = new Response();
         response.setData(post);
         response.setRedirect("/board/detail");
@@ -61,7 +64,7 @@ public class PostController {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
-        postService.update(post, member.getId());
+        postService.update(post);
 
         Response response = new Response();
         response.setData("success");
