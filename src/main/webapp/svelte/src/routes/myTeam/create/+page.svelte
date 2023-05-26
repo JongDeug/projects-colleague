@@ -26,7 +26,7 @@
 
 	let value;
 
-	// 팀에 소속될 회원 id 저장될 리스트
+	// 팀에 소속될 회원 id 저장될 리스트, 리더도 여기에 포함해야함
 	let teamMembers = [];
 
 	// 팀 만들기
@@ -34,6 +34,10 @@
 		let teamName = document.getElementById("teamName").value;
 		let teamInfo = document.getElementById("teamInfo").value;
 		let teamPw = document.getElementById("teamPw").value;
+
+		//	리더는 선택사항. 팀 만들 때 정해도되고 나중에 정해도되고
+		let teamLeader = document.getElementById("teamLeader").value;
+
 		const res = axios.post('/api/team/create',
 				{
 					teamName : teamName,
@@ -47,6 +51,24 @@
 				})
 				.catch(error => console.log(error))
 		console.log(res);
+	}
+
+	//	아이디 입력받아서 member 객체 반환하는 함수
+	function searchUserById(userId){
+		let member = [];
+
+		const res = axios.get('/api/member/search',
+				{
+					params:{
+						memberId : userId
+					}
+				})
+				.then(response => {
+					member = response.data.data;
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+		return member;
 	}
 	function searchUsers(userName){
 		let members = [];

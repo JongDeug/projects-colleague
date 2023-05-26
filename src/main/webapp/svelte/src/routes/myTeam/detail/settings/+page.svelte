@@ -16,6 +16,7 @@
 		Textarea,
 		Fileupload
 	} from 'flowbite-svelte';
+	import axios from "axios";
 
 	let textareaprops = {
 		id: 'message',
@@ -35,7 +36,7 @@
 
 	//	로그인 상관없이 팀 id로 팀 엔티티 가져오기
 	function getDetail(teamId){
-		let team = [];
+		let team = [];	//	팀 객체 (domain 참고)
 		const res = axios.get('/api/team/detail',
 				{
 					params:{

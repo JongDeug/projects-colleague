@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +76,17 @@ public class TeamController {
     @PostMapping("/myTeam/update")
     public Response updateTeamInfo(@RequestBody Team team){
         teamService.updateTeam(team);
+
+        Response response = new Response();
+        response.setData("success");
+        response.setRedirect("/team/detail");
+        return response;
+    }
+
+    //  그냥 위에꺼 써도 되지만 혹시몰라서
+    @PostMapping("/changeLeader")
+    public Response changeLeader(@RequestParam Long teamId, @RequestParam String memberId){
+        teamService.changeLeader(teamId, memberId);
 
         Response response = new Response();
         response.setData("success");
