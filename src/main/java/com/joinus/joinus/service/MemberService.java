@@ -61,8 +61,8 @@ public class MemberService{
         }
     }
 
-    public Optional<Member> searchMember(String memberId){
-        return memberRepository.findMemberById(memberId);
+    public Optional<List<Member>> searchMember(String memberId){
+        return memberRepository.findMembersByIdContains(memberId);
     }
 
 

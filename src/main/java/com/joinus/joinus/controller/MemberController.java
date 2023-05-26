@@ -104,10 +104,11 @@ public class MemberController {
         Response response = new Response();
         if (memberService.searchMember(memberId).isPresent())
             response.setData(memberService.searchMember(memberId).get());
-        else response.setData("failure");
+        else response.setData("not exist");
         response.setRedirect("no required");
         return response;
     }
+    @GetMapping("/")
     @PostMapping("/delete")
     public Response delete(HttpServletRequest request){
         HttpSession session = request.getSession();
