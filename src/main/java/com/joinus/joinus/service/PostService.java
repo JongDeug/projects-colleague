@@ -17,8 +17,8 @@ public class PostService {
     private final PostRepository postRepository;
 
     public Post findPost(Long postId){
-        if (postRepository.findById(postId).isPresent())
-            return postRepository.findById(postId).get();
+        if (postRepository.findPostById(postId).isPresent())
+            return postRepository.findPostById(postId).get();
         else return null;
     }
 

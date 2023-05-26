@@ -90,7 +90,7 @@
 		console.log(res);
 	}
 	function updatePost(){
-		const res = axios.post('/api/post/detail',
+		const res = axios.post('/api/post/detail/edit',
 				{
 					id : postId,
 					userId : userId,
