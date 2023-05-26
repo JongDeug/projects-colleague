@@ -42,6 +42,15 @@ public class PostController {
     @GetMapping("/detail")
     public Response getPostDetail(@RequestParam Long postId){
         Post post =  postService.postDetail(postId);
+        post.setHit(post.getHit()+1);
+        Response response = new Response();
+        response.setData(post);
+        response.setRedirect("/board/detail");
+        return response;
+    }
+    @GetMapping("/detail/edit")
+    public Response getPostDetailForUpdate(@RequestParam Long postId){
+        Post post =  postService.postDetail(postId);
         Response response = new Response();
         response.setData(post);
         response.setRedirect("/board/detail");

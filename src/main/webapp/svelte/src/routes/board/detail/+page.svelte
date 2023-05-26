@@ -71,6 +71,37 @@
 				.catch(error => console.log(error))
 		console.log(res);
 	}
+	function getPostWithNoHit(){
+		const res = axios.get('/api/post/detail/edit',
+				{
+					params:{
+						postId : postId
+					}
+				})
+				.then(response => {
+					post = response.data.data;
+					title = post.title;
+					content = post.content;
+					createTime = post.createTime;
+					hit = post.hit;
+					writer = getUser(post.userId).name;
+				})
+	}
+	function updatePost(){
+		const res = axios.post('/api/post/detail',
+				{
+					id : postId,
+					userId : userId,
+					title : title,
+					content : content.text,
+					hit : hit
+				})
+				.then(response => {
+					alert(response.data.data)
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
 
 	getPost(postId);
 
