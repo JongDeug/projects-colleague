@@ -16,6 +16,12 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
 
+    public Post findPost(Long postId){
+        if (postRepository.findById(postId).isPresent())
+            return postRepository.findById(postId).get();
+        else return null;
+    }
+
     public void create(Post post){
         post.setCreateTime(LocalDateTime.now());
         postRepository.save(post);

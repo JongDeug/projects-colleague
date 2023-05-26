@@ -51,7 +51,7 @@
 	let posts = [];
 
 	// 게시글 리스트 list<post>로 받아옴
-	function getPosts(){
+	function getPosts(){;
 		const res = axios.get('/api/post/list',
 				{
 				})

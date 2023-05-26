@@ -86,6 +86,8 @@
 					hit = post.hit;
 					writer = getUser(post.userId).name;
 				})
+				.catch(error => console.log(error))
+		console.log(res);
 	}
 	function updatePost(){
 		const res = axios.post('/api/post/detail',
@@ -95,6 +97,18 @@
 					title : title,
 					content : content.text,
 					hit : hit
+				})
+				.then(response => {
+					alert(response.data.data)
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
+
+	function deletePost(){
+		const res = axios.post('/api/post/detail/delete',
+				{
+					postId : postId,
 				})
 				.then(response => {
 					alert(response.data.data)

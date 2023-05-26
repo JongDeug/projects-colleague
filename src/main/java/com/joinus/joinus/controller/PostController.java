@@ -69,9 +69,10 @@ public class PostController {
         return response;
     }
     @PostMapping("/detail/delete")
-    public Response deletePost(@RequestBody Post post, HttpServletRequest request){
+    public Response deletePost(@RequestBody Long postId, HttpServletRequest request){
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
+        Post post = postService.findPost(postId);
 
         postService.delete(post, member.getId());
 
