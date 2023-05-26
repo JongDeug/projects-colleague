@@ -94,7 +94,7 @@ public class PostController {
     }
 
     @GetMapping("/search")
-    public Response searchPost(@RequestBody String text){
+    public Response searchPost(@RequestParam String text){
         Response response = new Response();
         response.setData(postService.search(text)); //  post list
         response.setRedirect("/myPage/myPosts");

@@ -62,6 +62,22 @@
 		console.log(res);
 	}
 
+	//	str 문자열이 포함된 제목이나 내용의 게시글 모두 검색
+	function searchPost(str){
+		const res = axios.get('/api/post/search',
+				{
+					params:{
+						text : str
+					}
+				})
+				.then(response => {
+					posts = response.data.data;	//	검색 결과
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
+
+
 	const previous = () => {
 		alert('Previous btn clicked. Make a call to your server to fetch data.');
 	};

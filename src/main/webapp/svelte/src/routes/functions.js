@@ -91,7 +91,7 @@ function findId(){
         .then(response => {
             if (response.data.data == "user not exist")
                 alert("member not exist")
-            else
+            elseㄴㄷ
                 alert(response.data.data)
         })
         .catch(error => console.log(error))
