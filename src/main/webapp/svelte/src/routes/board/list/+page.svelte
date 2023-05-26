@@ -77,6 +77,14 @@
 		console.log(res);
 	}
 
+	function deleteUser(){
+		const res = axios.post('/api/member/delete')
+				.then(response => {
+					alert(response.data.data)
+				})
+				.catch(error => console.log(error))
+		console.log(res);
+	}
 
 	const previous = () => {
 		alert('Previous btn clicked. Make a call to your server to fetch data.');
