@@ -108,7 +108,9 @@
 	function deletePost(){
 		const res = axios.post('/api/post/detail/delete',
 				{
-					postId : postId,
+					params:{
+						postId : postId
+					}
 				})
 				.then(response => {
 					alert(response.data.data)
