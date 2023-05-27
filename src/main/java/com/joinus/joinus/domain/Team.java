@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,6 +22,9 @@ public class Team {
     private String info;    //  간단한 팀 소개글
     private String leader;  //  팀 리더 아이디
     private String state = "stabilized";    //  팀 상태
+    private String teamGit;
+    private LocalDateTime createTime;
+    private String teamPic;
 
     @ElementCollection
     private Set<String> members = new HashSet<>();

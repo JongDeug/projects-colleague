@@ -1,38 +1,27 @@
 package com.joinus.joinus.service;
 
-import com.joinus.joinus.domain.Member;
 import com.joinus.joinus.domain.Team;
-import com.joinus.joinus.dto.TeamForm;
 import com.joinus.joinus.persistence.MemberRepository;
 import com.joinus.joinus.persistence.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class TeamService{
     private final TeamRepository teamRepository;
     private final MemberRepository memberRepository;
 
-    public void makeTeam(TeamForm teamForm){
-        Team team = new Team();
-        List<Member> members = new ArrayList<>();
-
-        team.setLeader(teamForm.getLeaderId());
-        team.setName(teamForm.getTeamName());
-        team.setPw(teamForm.getTeamPw());
-        team.setInfo(teamForm.getTeamInfo());
-
-        for (String str : teamForm.getMemberIds()){
-            if (memberRepository.findMemberById(str).isPresent()) {
-                team.addMember(str);
-            }
-        }
+    public void makeTeam(Team team){
+        team.setCreateTime(LocalDateTime.now());
         teamRepository.save(team);
     }
 

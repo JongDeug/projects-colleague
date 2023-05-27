@@ -3,7 +3,6 @@ package com.joinus.joinus.controller;
 import com.joinus.joinus.domain.Member;
 import com.joinus.joinus.domain.Team;
 import com.joinus.joinus.dto.Response;
-import com.joinus.joinus.dto.TeamForm;
 import com.joinus.joinus.service.MemberService;
 import com.joinus.joinus.service.TeamService;
 import com.joinus.joinus.web.validation.SessionConst;
@@ -21,12 +20,12 @@ public class TeamController {
     private final MemberService memberService;
 
     @PostMapping("/create")
-    public Response makeTeam(@RequestBody TeamForm teamForm, HttpServletRequest request) {
+    public Response makeTeam(@RequestBody Team team, HttpServletRequest request) {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
 
-        teamService.makeTeam(teamForm);
+        teamService.makeTeam(team);
 
         Response response = new Response();
         response.setData("success");
@@ -60,6 +59,8 @@ public class TeamController {
     }
     @PostMapping("/myTeam/update")
     public Response updateTeamInfo(@RequestBody Team team){
+        System.out.println("team = " + team);
+        System.out.println("before executing update team method");
         teamService.updateTeam(team);
 
         Response response = new Response();
