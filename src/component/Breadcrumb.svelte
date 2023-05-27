@@ -19,7 +19,7 @@
 		class="flex px-5 py-3 text-gray-700 border-2 rounded-lg  border-indigo-200 dark:bg-gray-800 dark:border-gray-700"
 	>
 		<BreadcrumbItem href="/" home>홈</BreadcrumbItem>
-		<BreadcrumbItem href="/">{prevContent}</BreadcrumbItem>
-		<BreadcrumbItem href="/">{nextContent}</BreadcrumbItem>
+		<BreadcrumbItem href="/myTeam/list">{prevContent}</BreadcrumbItem>
+		<BreadcrumbItem >{nextContent}</BreadcrumbItem>
 	</Breadcrumb>
 {/if}

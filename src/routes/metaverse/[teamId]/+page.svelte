@@ -1,6 +1,9 @@
 <script>
 	import { start } from './config';
-	start();
+	/** @type {import("./$types").PageData} */
+	export let data;
+
+	start(data.teamId);
 </script>
 
 <svelte:head>

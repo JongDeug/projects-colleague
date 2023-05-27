@@ -43,49 +43,49 @@ export default class WaitingScene extends Phaser.Scene {
         // 키보드
         this.cursorKeys = this.input.keyboard.createCursorKeys();
         // 플레이어
-        this.load.spritesheet('character00', 'assets/Character_000.png', {
+        this.load.spritesheet('character00', '/assets/Character_000.png', {
             frameWidth: 24,
             frameHeight: 24
         });
-        this.load.spritesheet('character01', 'assets/Character_001.png', {
+        this.load.spritesheet('character01', '/assets/Character_001.png', {
             frameWidth: 24,
             frameHeight: 24
         });
-        this.load.spritesheet('character02', 'assets/Character_002.png', {
+        this.load.spritesheet('character02', '/assets/Character_002.png', {
             frameWidth: 24,
             frameHeight: 24
         });
-        this.load.spritesheet('character03', 'assets/Character_003.png', {
+        this.load.spritesheet('character03', '/assets/Character_003.png', {
             frameWidth: 24,
             frameHeight: 24
         });
-        this.load.spritesheet('character04', 'assets/Character_004.png', {
+        this.load.spritesheet('character04', '/assets/Character_004.png', {
             frameWidth: 24,
             frameHeight: 24
         });
-        this.load.spritesheet('character05', 'assets/Character_005.png', {
+        this.load.spritesheet('character05', '/assets/Character_005.png', {
             frameWidth: 24,
             frameHeight: 24
         });
-        this.load.spritesheet('character06', 'assets/Character_006.png', {
+        this.load.spritesheet('character06', '/assets/Character_006.png', {
             frameWidth: 24,
             frameHeight: 24
         });
-        this.load.spritesheet('character07', 'assets/Character_007.png', {
+        this.load.spritesheet('character07', '/assets/Character_007.png', {
             frameWidth: 24,
             frameHeight: 24
         });
-        this.load.spritesheet('character08', 'assets/Character_008.png', {
+        this.load.spritesheet('character08', '/assets/Character_008.png', {
             frameWidth: 24,
             frameHeight: 24
         });
-        this.load.spritesheet('character09', 'assets/Character_009.png', {
+        this.load.spritesheet('character09', '/assets/Character_009.png', {
             frameWidth: 24,
             frameHeight: 24
         });
         // 맵, 타일
-        this.load.image('waitingTiles', 'assets/waitingTiles.png');
-        this.load.tilemapTiledJSON('map', 'assets/waiting.json');
+        this.load.image('waitingTiles', '/assets/waitingTiles.png');
+        this.load.tilemapTiledJSON('map', '/assets/waiting.json');
         // UI
         this.uiController.preload();
     }

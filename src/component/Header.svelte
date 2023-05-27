@@ -11,6 +11,7 @@
   import { URL } from "../routes/env";
   import * as localStorage from "../routes/localStorage";
   import { onMount } from "svelte";
+  import { page } from "$app/stores";
 
 
   let profileStatus = false;
@@ -23,7 +24,18 @@
     mobileMenu = !mobileMenu;
   };
 
-  let current = "Board";
+  // url 받아오기
+
+  let path = $page.url.pathname;
+  let pathArray = path.split("/")[1];
+  let current;
+  if (pathArray === "") {
+    current = "Board";
+  } else if (pathArray === "myTeam") {
+    current = "MyTeam";
+  } else {
+    current = "UserRecommendation";
+  }
 
   let sendModal = false;
   let color;
@@ -58,8 +70,8 @@
 
   let userInfo = [];
   onMount(async () => {
-    let loginMember = localStorage.getWithExpiry('loginMember');
-    if(loginMember){
+    let loginMember = localStorage.getWithExpiry("loginMember");
+    if (loginMember) {
       await axios.get(`${URL}/api/member/profile/update`,
         { withCredentials: true })
         .then(response => {
@@ -190,15 +202,15 @@
                     >쪽지함
                     </a>
                     <!-- svelte-ignore a11y-invalid-attribute -->
-<!--                    <a-->
-<!--                      href=""-->
-<!--                      class="block px-4 py-2 m-2 text-gray-700 rounded-lg hover:bg-slate-300"-->
-<!--                      on:click={() => {-->
-<!--											color = 'yellow';-->
-<!--											sendModal = true;-->
-<!--										}}-->
-<!--                    >질문하기-->
-<!--                    </a>-->
+                    <!--                    <a-->
+                    <!--                      href=""-->
+                    <!--                      class="block px-4 py-2 m-2 text-gray-700 rounded-lg hover:bg-slate-300"-->
+                    <!--                      on:click={() => {-->
+                    <!--											color = 'yellow';-->
+                    <!--											sendModal = true;-->
+                    <!--										}}-->
+                    <!--                    >질문하기-->
+                    <!--                    </a>-->
                     <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
 
                     <!-- svelte-ignore a11y-invalid-attribute -->
@@ -252,13 +264,13 @@
 						: ''} hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md font-medium"
           on:click={() => (current = 'UserRecommendation')}>유저 추천</a
         >
-        <a
-          href="/faq"
-          class="{current === 'FAQ'
-						? 'bg-gray-900 text-white'
-						: ''} hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md font-medium"
-          on:click={() => (current = 'FAQ')}>FAQ</a
-        >
+        <!--        <a-->
+        <!--          href="/faq"-->
+        <!--          class="{current === 'FAQ'-->
+        <!--						? 'bg-gray-900 text-white'-->
+        <!--						: ''} hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md font-medium"-->
+        <!--          on:click={() => (current = 'FAQ')}>FAQ</a-->
+        <!--        >-->
       </div>
       <div class="border-t border-gray-700 pt-4 pb-3">
         <div class="flex items-center px-5">
@@ -293,15 +305,15 @@
           >쪽지</a
           >
           <!-- svelte-ignore a11y-invalid-attribute -->
-<!--          <a-->
-<!--            href="#"-->
-<!--            class="block rounded-md px-3 py-2 font-medium hover:bg-gray-700 hover:text-white"-->
-<!--            on:click={() => {-->
-<!--							color = 'yellow';-->
-<!--							sendModal = true;-->
-<!--						}}-->
-<!--          >질문하기-->
-<!--          </a>-->
+          <!--          <a-->
+          <!--            href="#"-->
+          <!--            class="block rounded-md px-3 py-2 font-medium hover:bg-gray-700 hover:text-white"-->
+          <!--            on:click={() => {-->
+          <!--							color = 'yellow';-->
+          <!--							sendModal = true;-->
+          <!--						}}-->
+          <!--          >질문하기-->
+          <!--          </a>-->
           <!-- svelte-ignore a11y-invalid-attribute -->
           <a
             on:click={logout}

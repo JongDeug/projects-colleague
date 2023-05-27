@@ -13,7 +13,7 @@ export default class MeetingMinutes implements UserInterface {
 		this._group = this._scene.add.group();
 
 		const meetingMinutesButton = this._scene.add
-			.sprite(640, 42, 'uiButtons', 4)
+			.sprite(700, 42, 'uiButtons', 4)
 			.setName('meetingMinutesButton')
 			.setScale(2, 2)
 			.setInteractive()

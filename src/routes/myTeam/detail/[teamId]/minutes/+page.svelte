@@ -1,9 +1,9 @@
 <script>
-	import Sidebar from '../../../../component/SidebarMyTeam.svelte';
-	import Breadcrumb from '../../../../component/Breadcrumb.svelte';
-	import TableSearch from '../../../../component/TableSearch.svelte';
-	import Layout from '../../../../component/Layout.svelte';
-	import SmallHeader from '../../../../component/SmallHeader.svelte';
+	import Sidebar from '../../../../../component/SidebarMyTeam.svelte';
+	import Breadcrumb from '../../../../../component/Breadcrumb.svelte';
+	import TableSearch from '../../../../../component/TableSearch.svelte';
+	import Layout from '../../../../../component/Layout.svelte';
+	import SmallHeader from '../../../../../component/SmallHeader.svelte';
 	import {
 		Table,
 		TableBody,
@@ -15,6 +15,9 @@
 		Pagination
 	} from 'flowbite-svelte';
 	import { page } from '$app/stores';
+
+	/** @type {import("./$types").PageData} */
+	export let data;
 
 	let searchTerm = '';
 	let items = [
@@ -62,7 +65,7 @@
 <SmallHeader header="abcd" />
 
 <Layout style="flex justify-center">
-	<Sidebar />
+	<Sidebar teamId="{data.teamId}"/>
 
 	<div class="ml-5 block w-[70%]">
 		<Breadcrumb prevContent="내 팀" nextContent="회의록" />

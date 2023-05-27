@@ -144,6 +144,8 @@ export default class HomePlayer extends Player {
 					// });
 					//
 					// this.scene.scene.start('meetingScene', { fromTo: 'fromHomeToMeeting' });
+					// 회의방 입장
+
 					window.open(`http://localhost:8000/meeting/${this.connection.teamId}`);
 				}
 			}

@@ -21,7 +21,7 @@ export default class Calendar implements UserInterface {
 
 		const calendar = {
 			button: this._scene.add
-				.sprite(700, 38, 'uiButtons', 0)
+				.sprite(760, 38, 'uiButtons', 0)
 				.setName('calendarButton')
 				.setScale(2, 2)
 				.setInteractive()

@@ -9,6 +9,9 @@
 	} from 'flowbite-svelte';
 	let spanClass = 'flex-1 ml-3 whitespace-nowrap';
 
+	export let teamId;
+	// console.log(teamId);
+
 	let site = {
 		name: 'Join.Us',
 		href: '/board/list',
@@ -20,7 +23,7 @@
 	<div class="overflow-y-auto py-4 px-3 border-2 rounded-lg border-indigo-200">
 		<SidebarBrand {site} id="logo" spanClass="self-center whitespace-nowrap"/>
 		<SidebarGroup>
-			<SidebarItem label="대시보드" href="/myTeam/detail/dashboard">
+			<SidebarItem label="대시보드" href="/myTeam/detail/{teamId}">
 				<svelte:fragment slot="icon">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +45,7 @@
 				</svelte:fragment>
 			</SidebarItem>
 
-			<SidebarItem label="회의록" href="/myTeam/detail/minutes">
+			<SidebarItem label="회의록" href="/myTeam/detail/{teamId}/minutes">
 				<svelte:fragment slot="icon">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +65,7 @@
 					>
 				</svelte:fragment>
 			</SidebarItem>
-			<SidebarItem label="캘린더" href="/myTeam/detail/calendar">
+			<SidebarItem label="캘린더" href="/myTeam/detail/{teamId}/calendar">
 				<svelte:fragment slot="icon">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +86,7 @@
 					>
 				</svelte:fragment>
 			</SidebarItem>
-			<SidebarItem label="설정" href="/myTeam/detail/settings">
+			<SidebarItem label="설정" href="/myTeam/detail/{teamId}/settings">
 				<svelte:fragment slot="icon">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"

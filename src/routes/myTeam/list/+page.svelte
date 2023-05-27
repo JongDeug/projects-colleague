@@ -5,7 +5,7 @@
   import SmallHeader from "../../../component/SmallHeader.svelte";
   import { onMount } from "svelte";
   import axios from "axios";
-  import {URL} from "../../env";
+  import { URL } from "../../env";
 
 
   let userId = sessionStorage.getItem("loginMember");
@@ -28,8 +28,9 @@
 
 <Layout>
   <div class="grid grid-cols-4 grid-rows-2 gap-4">
-    <Card usage="MyTeam" />
-    <Card usage="MyTeam" img="/images/image.png" />
+    {#each teamList as team}
+      <Card usage="MyTeam" teamName={team.name} teamIntro={team.info} teamId={team.id} />
+    {/each}
 
     <CardPlaceholder />
     <CardPlaceholder />

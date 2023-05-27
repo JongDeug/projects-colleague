@@ -1,14 +1,12 @@
-import WaitingScene from '../../metaverse/scene/waiting';
-import HomeScene from '../../metaverse/scene/home';
-import LoginScene from '../../metaverse/scene/login';
-import MeetingScene from '../../metaverse/scene/meeting';
-
-import Connection from '../../metaverse/interaction/connection';
+import WaitingScene from '../../../metaverse/scene/waiting';
+import HomeScene from '../../../metaverse/scene/home';
+import LoginScene from '../../../metaverse/scene/login';
+import MeetingScene from '../../../metaverse/scene/meeting';
+import Connection from '../../../metaverse/interaction/connection';
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin';
 
 
-
-export const start = () => {
+export const start = (teamId) => {
     // 게임 환경 변수
     const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
@@ -52,8 +50,8 @@ export const start = () => {
     game.scene.add('homeScene', homeScene, false);
     game.scene.add('meetingScene', meetingScene, false);
 
-    const teamId = '1234';
     const connection = Connection.getInstance();
+    // teamId 주입
     connection.teamId = teamId;
     connection.loginScene = loginScene;
     connection.waitingScene = waitingScene;

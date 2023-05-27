@@ -92,7 +92,6 @@
     }
   };
 
-  // 내이름까지 가져와야와서 넣어놔야함
   const searchUsers = async (memberId) => {
     if (memberId) {
       await axios.get(`${URL}/api/member/search`,
@@ -104,9 +103,6 @@
         })
         .then(response => {
           members = response.data.data;
-          // let copyMember = response.data.data;
-          // console.log(response.data.data);
-          // members = copyMember.filter((member) => member.id !== userId);
         })
         .catch(error => console.log(error));
     } else {

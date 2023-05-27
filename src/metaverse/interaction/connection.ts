@@ -1,12 +1,8 @@
 import { Client, Room } from 'colyseus.js';
-import { io } from "socket.io-client";
 
 export default class Connection {
 	private static instance: Connection;
 	private client: Client;
-	//
-	public socket: any;
-	//
 	private _loginScene: any;
 	private _waitingScene: any;
 	private _homeScene: any;
