@@ -28,12 +28,12 @@
   const deleteTeam = async (teamId) => {
     await getTeam(teamId);
     if (userId === team.leader) {
-      await axios.post(`${URL}/api/team/myTeam/delete`,
+      await axios.post(`${URL}/api/team/myTeam/delete`, { withCredentials: true },
         {
           params: {
             teamId: teamId
           }
-        }, { withCredentials: true })
+        })
         .then(response => {
           if (response.data.data == "success") {
             alert("update success");
