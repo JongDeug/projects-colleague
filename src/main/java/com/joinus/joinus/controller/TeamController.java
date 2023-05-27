@@ -59,8 +59,7 @@ public class TeamController {
     }
     @PostMapping("/myTeam/update")
     public Response updateTeamInfo(@RequestBody Team team){
-        System.out.println("team = " + team);
-        System.out.println("before executing update team method");
+        team.setCreateTime(teamService.findTeamById(team.getId()).getCreateTime());
         teamService.updateTeam(team);
 
         Response response = new Response();
