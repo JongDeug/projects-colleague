@@ -11,9 +11,9 @@ export default class Connection {
 	private _waitingScene: any;
 	private _homeScene: any;
 	private _meetingScene: any;
+	public teamId: any;
 	private _room: Room;
 	private _playerState: { [sessionId: string]: any } = {};
-	private _teamId;
 	chatDB: string;
 	// private _playerSessionIds: any;
 	// state한 것이 무엇이 있냐, 모든 플레이어를 모아놓은. 플레이어의 위치 정보, 플레이어의 키 인풋
@@ -32,15 +32,13 @@ export default class Connection {
 		playerImg: string
 	): Promise<boolean> {
 		try {
-			const URL = 'http://localhost:3000/';
-			// const URL = "https://c733-112-217-167-202.ngrok-free.app/";
-			this.socket = io(URL, {
-				withCredentials: true
-			});
-
-
 			this.client = new Client('ws://localhost:2567');
+			// this.client = new Client('wss://nasty-carpets-tie.loca.lt/ws');
+
 			console.log('Joining Room...');
+
+			this.teamId = teamId;
+
 			this.room = await this.client.joinOrCreate('metaverse', {
 				teamId: teamId,
 				username: username,
@@ -170,9 +168,6 @@ export default class Connection {
 		this._playerState = state;
 	}
 
-	public set teamId(teamId: string) {
-		this._teamId = teamId;
-	}
 
 	public set loginScene(loginScene: Phaser.Scene) {
 		this._loginScene = loginScene;

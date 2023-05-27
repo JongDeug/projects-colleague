@@ -11,10 +11,15 @@
 
     initCall(_roomId, _email);
 
-    const myFace = document.getElementById("myFace");
+    const shareScreen = document.getElementById("shareScreen");
     const muteBtn = document.getElementById("mute");
     const cameraBtn = document.getElementById("camera");
+    const shareScreenBtn = document.getElementById("screen");
     const camerasSelect = document.getElementById("cameras");
+    const syncBtn = document.getElementById("sync");
+    const sendBtn = document.getElementById("sendBtn");
+    const textInput = document.getElementById("textInput");
+    const textArea = document.querySelector("textarea");
 
     let myStream;
     let streams = [];
@@ -23,8 +28,8 @@
     let myPeerConnection;
     let peerConnections;
 
-    const URL = "http://localhost:3000/";
-    // const URL = "https://c733-112-217-167-202.ngrok-free.app/";
+    // const URL = "http://localhost:3000/";
+    const URL = "https://c5f9-222-103-180-169.ngrok-free.app/";
     const socket = io(URL, {
       withCredentials: true
     });
@@ -44,12 +49,21 @@
           }
           camerasSelect.appendChild(option);
         });
+
+        const option = document.createElement("option");
+        option.value = "hi";
+        option.innerText = "hi";
+        camerasSelect.appendChild(option);
+
       } catch (e) {
         console.log(e);
       }
     };
 
-    async function getMedia(deviceId) {
+    async function getMedia(deviceId, sort) {
+      const myFace = document.getElementById("myFace");
+
+
       const initialConstrains = {
         audio: true,
         video: { facingMode: "user" }
@@ -59,18 +73,40 @@
         video: { deviceId: { exact: deviceId } }
       };
       try {
-        myStream = await navigator.mediaDevices.getUserMedia(
-          deviceId ? cameraConstrains : initialConstrains
-        );
-        myFace.srcObject = myStream;
-        // console.log(myFace.);
-        if (!deviceId) {
-          await getCameras();
+        if (sort === "display") {
+          // navigator.mediaDevices.getUserMedia({
+          //   audio: true
+          // }).then(async (audioStream) => {
+          //   myStream = await navigator.mediaDevices.getDisplayMedia({
+          //     audio: true,
+          //     video: true
+          //   });
+          //   myStream.addTrack(audioStream.getAudioTracks()[0]);
+          // });
+
+          myStream = await navigator.mediaDevices.getDisplayMedia({
+            audio: false,
+            video: true
+          });
+          myFace.srcObject = myStream;
+        } else if (sort === "user" || sort === undefined || sort === null) {
+          myStream = await navigator.mediaDevices.getUserMedia(
+            deviceId ? cameraConstrains : initialConstrains
+          );
+          myFace.srcObject = myStream;
+          if (!deviceId) {
+            await getCameras();
+          }
+
+          myFace.addEventListener("click", () => {
+            shareScreen.srcObject = myStream;
+          });
         }
       } catch (e) {
         console.log(e);
       }
     }
+
 
     // Connection ================================================================
     async function initCall(roomId, email) {
@@ -79,7 +115,6 @@
       socket.emit("join_room", { room: roomId, email: email });
       makeConnection(socket.id, email, socket, myStream);
     }
-
 
     function makeConnection(socketId, email, socket, myStream) {
       myPeerConnection = new RTCPeerConnection({
@@ -109,22 +144,34 @@
 
       myPeerConnection.addEventListener("addstream", (data) => {
         console.log("got an event from my peer");
-        streams.push(data.stream);
-        renderStream();
-        console.log(peerConnections);
+        streams[socketId] = data.stream;
+        renderStream(socketId);
       });
 
       // ontrack
       myStream.getTracks().forEach(track => myPeerConnection.addTrack(track, myStream));
     }
 
-    function renderStream() {
-      const peerFace1 = document.getElementById("peerFace1");
-      const peerFace2 = document.getElementById("peerFace2");
-      const peerFace3 = document.getElementById("peerFace3");
-      peerFace1.srcObject = streams[0];
-      peerFace2.srcObject = streams[1];
-      peerFace3.srcObject = streams[2];
+    function renderStream(socketId) {
+      const videoContainer = document.getElementById("videoContainer");
+      videoContainer.innerHTML += `<video id="${socketId}" class="w-full h-full object-fill" autoplay playsinline width="200"></video>`;
+
+      for (const key in peerConnections) {
+        const peerFace = document.getElementById(`${key}`);
+        if (peerFace) {
+          peerFace.srcObject = streams[key];
+
+          peerFace.addEventListener("click", () => {
+            if (streams[socketId]) shareScreen.srcObject = streams[socketId];
+          });
+        }
+      }
+
+      const myFace = document.getElementById("myFace");
+      myFace.srcObject = myStream;
+      myFace.addEventListener("click", () => {
+        if (myStream) shareScreen.srcObject = myStream;
+      });
     }
 
     // HTML control ==============================================================
@@ -177,11 +224,75 @@
       }
     }
 
+    async function handleShareScreenClick() {
+      await getMedia(undefined, "display");
+      const shareScreenTrack = myStream.getVideoTracks()[0];
+      console.log(shareScreenTrack);
+      for (const key in peerConnections) {
+        const videoSender = peerConnections[key].getSenders().find((sender) => sender.track.kind === "video");
+        await videoSender.replaceTrack(shareScreenTrack);
+      }
+      shareScreen.srcObject = myStream;
+    }
+
+    async function handleSyncClick() {
+      await getMedia(camerasSelect.value);
+      const videoTrack = myStream.getVideoTracks()[0];
+      // test
+      for (const key in peerConnections) {
+        const videoSender = peerConnections[key].getSenders().find((sender) => sender.track.kind === "video");
+        await videoSender.replaceTrack(videoTrack);
+      }
+    }
+
+    syncBtn.addEventListener("click", handleSyncClick);
     muteBtn.addEventListener("click", handleMuteClick);
     cameraBtn.addEventListener("click", handleCameraClick);
+    shareScreenBtn.addEventListener("click", handleShareScreenClick);
     camerasSelect.addEventListener("input", handleCameraChange);
 
+
+    // Chat ====================================================================
+    let textInputValue;
+    textInput.addEventListener("input", (e) => {
+      textInputValue = textInput.value;
+    });
+
+    textInput.addEventListener("keypress", (event) => {
+      // If the user presses the "Enter" key on the keyboard
+      if (event.key === "Enter") {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Trigger the button element with a click
+        sendBtn.click();
+      }
+    });
+
+    sendBtn.addEventListener("click", () => {
+      if (textInputValue) {
+        socket.emit("chat", textInputValue);
+        textInput.value = "";
+      }
+    });
+
+    socket.on("getChat", (receive) => {
+      textArea.value += `${receive.sendUser.id} : ${receive.content}\r\n`;
+      textArea.scrollTop = textArea.scrollHeight;
+    });
+
     // WebRTC Interaction ========================================================
+
+    socket.on("room_full", () => {
+      window.alert("full room");
+    });
+
+    socket.on("user_exit", (data) => {
+      peerConnections[data.id].close();
+      delete peerConnections[data.id];
+      const peerFace = document.getElementById(`${data.id}`);
+      peerFace.remove();
+      delete streams[data.id];
+    });
 
     // First Come
     socket.on("all_users", async (allUsers) => {
@@ -236,27 +347,29 @@
         myPeerConnection.addIceCandidate(ice.ice).then(() => console.log("received the candidate"));
       }
     });
+
+
   });
 </script>
 
-<main class=" h-screen">
-  <div id="call" class="w-[1011.2px] p-5 bg-amber-100 h-full grid grid-cols-3 gap-4 content-around m-auto">
-    <video id="peerFace1" autoplay playsinline width="300" height="300"
-           class="border-4 border-indigo-600"></video>
-    <video id="peerFace2" autoplay playsinline width="300" height="300"
-           class="border-4 border-indigo-600"></video>
-    <video id="peerFace3" autoplay playsinline width="300" height="300"
-           class="border-4 border-indigo-600"></video>
 
-    <div class="col-start-2 flex space-x-2 items-start">
-      <video id="myFace" autoplay playsinline width="300" height="300"
-             class="border-4 border-indigo-600"></video>
+<main class="bg-black h-screen relative">
+  <div id="call"
+       style="background-image: url('/assets/meetingBackground.png'); background-repeat: no-repeat; background-size: cover;"
+       class="w-[80%] p-5 m-auto h-full flex space-x-3">
+    <!--    shareScreen-->
+    <div class="relative h-full w-[70%]">
+      <video id="shareScreen" autoplay playsinline
+             class="border-2 rounded-xl absolute l-0 t-0 w-full h-full object-fill">
+      </video>
+    </div>
 
-      <div class="w-[200px] h-[200px] border-4 border-indigo-600">
+    <div class="w-[30%] h-full">
+      <div class="mb-3">
         <select id="cameras"
-                class="block p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></select>
+                class="w-full block p-2 mb-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"></select>
 
-        <div class="flex space-x-2">
+        <div class="flex space-x-2 justify-between">
           <button id="mute"
                   class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -273,6 +386,56 @@
                     d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
             </svg>
           </button>
+          <button id="sync"
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+          </button>
+          <button id="screen"
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <span>원하시는 비디오를 클릭해주세요.</span>
+      </div>
+
+      <div id="videoContainer" class="mb-3 w-full grid grid-cols-2 gap-2 border-2">
+        <!--    myFace-->
+        <video id="myFace" class="w-full h-full object-fill" autoplay playsinline></video>
+        <!--    peerFace-->
+      </div>
+
+      <div class="border-2 rounded h-[36%] bg-white">
+        <div class="rounded-xl w-full h-[80%] p-0.5">
+          <textarea readonly style="resize:none;" class="w-full h-full rounded"></textarea>
+        </div>
+        <div
+          class="flex flex-row items-center rounded-xl bg-white w-full justify-between"
+        >
+          <div class="w-[70%]">
+            <input
+              type="text"
+              id="textInput" class="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+            />
+          </div>
+          <div>
+            <button
+              id="sendBtn"
+              class="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-2 flex-shrink-0"
+            >
+              <span>보내기</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -11,6 +11,7 @@
 		header == 'FAQ' ||
 		header == 'Post Message' ||
 		header == 'Create Post' ||
+		header == 'Update Post' ||
 		header == 'User Detail' ||
 		header == 'Post Detail' ||
 		header == 'Question And Report Detail'

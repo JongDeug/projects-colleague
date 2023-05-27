@@ -27,7 +27,7 @@ export default Arena({
 		const allowedOrigins = [
 			'http://localhost:8000',
 			'https://master--preeminent-douhua-939041.netlify.app',
-			'https://7699-112-217-167-202.ngrok-free.app'
+			'https://7854-222-103-180-169.ngrok-free.app',
 		];
 		const server = createServer(app);
 		const io = new Server(server, {
@@ -49,7 +49,8 @@ export default Arena({
 					const length = users[data.room].length;
 					// 인원 제한
 					if (length === maximum) {
-						socket.to(socket.id).emit('room_full');
+						console.log('warning');
+						socket.emit('room_full');
 						return;
 					}
 					users[data.room].push({ id: socket.id, email: data.email });
@@ -61,8 +62,6 @@ export default Arena({
 				socketToRoom[socket.id] = data.room;
 				socket.join(data.room);
 				console.log(`[${socketToRoom[socket.id]}]: ${socket.id} enter`);
-
-				console.log(users);
 
 				// 본인을 제외한 같은 room의 user array
 				const usersInThisRoom = users[data.room].filter((user: any) => user.id !== socket.id);
@@ -84,7 +83,6 @@ export default Arena({
 			});
 
 			socket.on('answer', (answer) => {
-				// socket.broadcast.emit('getAnswer', answer);
 				socket.to(answer.answerReceiveId).emit('getAnswer', {
 					answer: answer.answer,
 					answerSendId: answer.answerSendId
@@ -92,12 +90,42 @@ export default Arena({
 			});
 
 			socket.on('ice', (ice) => {
-				// socket.broadcast.emit("getIce", ice);
 				socket.to(ice.iceReceiveId).emit('getIce', {
 					ice: ice.ice,
 					iceSendId: ice.iceSendId
 				});
 			});
+
+			socket.on('disconnect', () => {
+				console.log(`[${socketToRoom[socket.id]}]: ${socket.id} exit`);
+				const roomID = socketToRoom[socket.id];
+				let room = users[roomID];
+				if (room) {
+					room = room.filter((user: any) => user.id !== socket.id);
+					users[roomID] = room;
+					if (room.length === 0) {
+						delete users[roomID];
+						return;
+					}
+				}
+				socket.to(roomID).emit('user_exit', { id: socket.id });
+				console.log(users);
+			});
+
+			socket.on("chat", (content) => {
+				const roomID = socketToRoom[socket.id];
+				// room in users...
+				const room = users[roomID];
+				if (room) {
+					const sendUser = room.find((user:any) => user.id === socket.id);
+					const send = {
+						sendUser: sendUser,
+						content: content
+					}
+					io.to(roomID).emit('getChat', send);
+				}
+			});
+
 		});
 
 		server.listen(3000, () => console.log(`Listening on port 3000`));

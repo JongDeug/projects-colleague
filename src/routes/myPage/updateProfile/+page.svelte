@@ -1,112 +1,210 @@
 <script>
-	import Sidebar from '../../../component/SidebarMyPage.svelte';
-	import Svg from '../../../component/Svg.svelte';
-	import Avatar from '../../../component/Avatar.svelte';
-	import ConfirmBtn from '../../../component/ConfirmBtn.svelte';
-	import Breadcrumb from '../../../component/Breadcrumb.svelte';
-	import Layout from '../../../component/Layout.svelte';
-	import SmallHeader from '../../../component/SmallHeader.svelte';
-	import { Label, Input, InputAddon, ButtonGroup, Checkbox, Fileupload } from 'flowbite-svelte';
+  import Sidebar from "../../../component/SidebarMyPage.svelte";
+  import Svg from "../../../component/Svg.svelte";
+  import Avatar from "../../../component/Avatar.svelte";
+  import ConfirmBtn from "../../../component/ConfirmBtn.svelte";
+  import Breadcrumb from "../../../component/Breadcrumb.svelte";
+  import Layout from "../../../component/Layout.svelte";
+  import SmallHeader from "../../../component/SmallHeader.svelte";
+  import { Label, Input, InputAddon, ButtonGroup, Checkbox, Fileupload } from "flowbite-svelte";
+  import { afterUpdate, beforeUpdate, onMount } from "svelte";
+  import axios from "axios";
+  import { URL } from "../../env";
+  import { browser } from "$app/environment";
 
-	let value;
+  let value; //? 프사
+
+  let userInfo = [];
+  let techStack = [];
+  let userTechStack;
+  onMount(async () => {
+    await axios.get(`${URL}/api/member/profile/update`,
+      { withCredentials: true })
+      .then(response => {
+        userInfo = response.data.data;
+        console.log(userInfo);
+      })
+      .catch(error => console.log(error));
+
+    // await axios.get(`${URL}/api/manager/setStack`, {withCredentials:true})
+    //   .then(response => {
+    //     console.log(response);
+    //   })
+    //   .catch(error => console.log(error));
+
+    // 기술스택
+    await axios.get(`${URL}/api/manager/tech`, { withCredentials: true })
+      .then(response => {
+        techStack = response.data;
+      })
+      .catch(error => console.log(error));
+  });
+
+
+  afterUpdate(async () => {
+    if (userInfo.techStack && techStack) {
+      techStack.forEach((tech) => {
+        userInfo.techStack.forEach((item) => {
+          if (item === tech.techStack) {
+            const checkbox = document.getElementById(`${tech.id}`);
+            if (checkbox) {
+              checkbox.checked = true;
+            }
+          }
+        });
+      });
+    }
+  });
+
+
+  const updateProfile = async () => {
+    // let copy = new Set();
+    let copy = [];
+    techStack.forEach((tech) => {
+      const checkbox = document.getElementById(`${tech.id}`);
+      if (checkbox.checked) {
+        console.log(checkbox.value);
+        console.log(tech.id);
+        // const item = {
+        //   id: tech.id,
+        //   techStack: checkbox.value,
+        // }
+        // copy.add(checkbox.value);
+        copy.push(checkbox.value);
+      }
+    });
+    console.log(copy);
+
+    await axios.post(`${URL}/api/member/profile/update`,
+      {
+        id: userInfo.id,
+        name: userInfo.name,
+        pw: userInfo.pw,
+        email: userInfo.email,
+        phoneNum: userInfo.phoneNum,
+        department: userInfo.department,
+        info: userInfo.info,
+        blog: userInfo.blog,
+        gitAddress: userInfo.gitAddress,
+        techStack: copy,
+        profileImg: "aa"
+      },
+      { withCredentials: true })
+      .then(response => {
+        if (response.data.data == "success") {
+          alert("update success");
+          if (browser) {
+            window.location.href = `/myPage/updateProfile`;
+          }
+        } else alert(response.data.data);
+      })
+      .catch(error => console.log(error));
+  };
+
+
 </script>
 
 <SmallHeader header="My Page" />
 
 <Layout style="flex justify-center">
-	<Sidebar />
+  <Sidebar />
 
-	<div class="ml-5 block w-[70%]">
-		<Breadcrumb prevContent="설정" nextContent="회원정보 수정" />
+  <div class="ml-5 block w-[70%]">
+    <Breadcrumb prevContent="설정" nextContent="회원정보 수정" />
 
-		<!-- 사용자 -->
-		<div class="mt-3 p-10 rounded-lg shadow-md border">
-			<h1 class="font-bold mb-7">사용자</h1>
-			<!-- 이름 -->
-			<div class="mb-6 w-[70%]">
-				<Label for="website-admin" class="block mb-2">이름</Label>
-				<ButtonGroup class="w-full">
-					<InputAddon>
-						<Svg svgName="이름" />
-					</InputAddon>
-					<Input id="website-admin" placeholder="elonmusk" />
-				</ButtonGroup>
-			</div>
+    <!-- 사용자 -->
+    <div class="mt-3 p-10 rounded-lg shadow-md border">
+      <h1 class="font-bold mb-7">사용자</h1>
+      <!-- 이름 -->
+      <div class="mb-6 w-[70%]">
+        <Label for="website-admin" class="block mb-2">이름</Label>
+        <ButtonGroup class="w-full">
+          <InputAddon>
+            <Svg svgName="이름" />
+          </InputAddon>
+          <Input bind:value={userInfo.name} id="website-admin" placeholder="elonmusk" />
+        </ButtonGroup>
+      </div>
 
-			<!-- 이메일 -->
-			<div class="mb-6 w-[70%]">
-				<Label for="email" class="block mb-2">이메일</Label>
-				<ButtonGroup class="w-full">
-					<InputAddon>
-						<Svg svgName="이메일" />
-					</InputAddon>
-					<Input id="email" type="email" placeholder="name@gmail.com" />
-				</ButtonGroup>
-			</div>
+      <!-- 이메일 -->
+      <div class="mb-6 w-[70%]">
+        <Label for="email" class="block mb-2">이메일</Label>
+        <ButtonGroup class="w-full">
+          <InputAddon>
+            <Svg svgName="이메일" />
+          </InputAddon>
+          <Input bind:value={userInfo.email} id="email" type="email" placeholder="name@gmail.com" />
+        </ButtonGroup>
+      </div>
 
-			<!-- 전화번호 -->
-			<div class="mb-6 w-[70%]">
-				<Label for="phoneNumber" class="block mb-2">전화번호</Label>
-				<ButtonGroup class="w-full">
-					<InputAddon>
-						<Svg svgName="전화번호" />
-					</InputAddon>
-					<Input id="phoneNumber" type="tel" placeholder="010-####-####" />
-				</ButtonGroup>
-			</div>
+      <!-- 전화번호 -->
+      <div class="mb-6 w-[70%]">
+        <Label for="phoneNumber" class="block mb-2">전화번호</Label>
+        <ButtonGroup class="w-full">
+          <InputAddon>
+            <Svg svgName="전화번호" />
+          </InputAddon>
+          <Input bind:value={userInfo.phoneNum} id="phoneNumber" type="tel" placeholder="010-####-####" />
+        </ButtonGroup>
+      </div>
 
-			<!-- 소속 -->
-			<div class="mb-6 w-[70%]">
-				<Label for="phoneNumber" class="block mb-2">소속</Label>
-				<ButtonGroup class="w-full">
-					<InputAddon>
-						<Svg svgName="소속" />
-					</InputAddon>
-					<Input id="phoneNumber" type="tel" placeholder="010-####-####" />
-				</ButtonGroup>
-			</div>
+      <!-- 소속 -->
+      <div class="mb-6 w-[70%]">
+        <Label for="department" class="block mb-2">소속</Label>
+        <ButtonGroup class="w-full">
+          <InputAddon>
+            <Svg svgName="소속" />
+          </InputAddon>
+          <Input bind:value={userInfo.department} id="department" type="tel" placeholder="010-####-####" />
+        </ButtonGroup>
+      </div>
 
-			<div class="w-[70%]">
-				<Label class="mb-3">프로필 사진</Label>
-				<div class="flex items-center">
-					<Avatar use="My Page" />
-					<Fileupload bind:value />
-				</div>
-			</div>
-		</div>
+      <div class="w-[70%]">
+        <Label class="mb-3">프로필 사진</Label>
+        <div class="flex items-center">
+          <Avatar use="My Page" />
+          <Fileupload bind:value />
+        </div>
+      </div>
+    </div>
 
-		<!-- 개인 포트폴리오 -->
-		<div class="mt-3 p-10 rounded-lg shadow-md border mb-3">
-			<h1 class="font-bold mb-7">개인 포트폴리오</h1>
-			<!-- 간단한 자기소개 -->
-			<div class="mb-6 w-[70%]">
-				<Label for="default-input" class="block mb-2">간단한 자기소개</Label>
-				<Input id="default-input" placeholder="Default input" />
-			</div>
+    <!-- 개인 포트폴리오 -->
+    <div class="mt-3 p-10 rounded-lg shadow-md border mb-3">
+      <h1 class="font-bold mb-7">개인 포트폴리오</h1>
+      <!-- 간단한 자기소개 -->
+      <div class="mb-6 w-[70%]">
+        <Label for="default-input" class="block mb-2">간단한 자기소개</Label>
+        <Input bind:value={userInfo.info} id="default-input" placeholder="Default input" />
+      </div>
 
-			<!-- 웹사이트 -->
-			<div class="mb-6 w-[70%]">
-				<Label for="default-input" class="block mb-2">웹사이트</Label>
-				<Input id="default-input" placeholder="Default input" />
-			</div>
+      <!-- 웹사이트 -->
+      <div class="mb-6 w-[70%]">
+        <Label for="default-input" class="block mb-2">웹사이트</Label>
+        <Input bind:value={userInfo.blog} id="default-input" placeholder="Default input" />
+      </div>
 
-			<!-- 깃허브 주소 -->
-			<div class="mb-6 w-[70%]">
-				<Label for="default-input" class="block mb-2">깃허브 주소</Label>
-				<Input id="default-input" placeholder="Default input" />
-			</div>
+      <!-- 깃허브 주소 -->
+      <div class="mb-6 w-[70%]">
+        <Label for="default-input" class="block mb-2">깃허브 주소</Label>
+        <Input bind:value={userInfo.gitAddress} id="default-input" placeholder="Default input" />
+      </div>
 
-			<!-- 기술스택 -->
-			<div class="mb-6 w-[70%]">
-				<Label for="default-input" class="block mb-2">기술스택</Label>
-				<div class="grid grid-cols-2 gap-4">
-					<Checkbox>Default checkbox</Checkbox>
-					<Checkbox checked>Checked state</Checkbox>
-					<Checkbox checked>Checked state</Checkbox>
-				</div>
-			</div>
-		</div>
+      <!-- 기술스택 -->
+      <div class="mb-6 w-[100%]">
+        <Label for="default-input" class="block mb-2">기술스택</Label>
+        <div class="grid grid-cols-4 gap-2">
+          {#each techStack as tech, i}
+            <label class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+              <input
+                type="checkbox" id={tech.id} value={tech.techStack}
+                class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-700 dark:border-gray-600 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600">
+              {tech.techStack}
+            </label>
+          {/each}
+        </div>
+      </div>
+    </div>
 
-		<ConfirmBtn content="회원정보 수정 확인" color="blue" style="w-[100%] py-4 shadow-md" />
-	</div>
+    <ConfirmBtn on:click={updateProfile} content="회원정보 수정 확인" color="blue" style="w-[100%] py-4 shadow-md" />
+  </div>
 </Layout>

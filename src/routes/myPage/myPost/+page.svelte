@@ -1,108 +1,116 @@
 <script>
-	import Sidebar from '../../../component/SidebarMyPage.svelte';
-	import Breadcrumb from '../../../component/Breadcrumb.svelte';
-	import TableSearch from '../../../component/TableSearch.svelte';
-	import Layout from '../../../component/Layout.svelte';
-	import SmallHeader from '../../../component/SmallHeader.svelte';
-	import {
-		Table,
-		TableBody,
-		TableBodyCell,
-		TableBodyRow,
-		TableHead,
-		TableHeadCell,
-		Checkbox,
-		Pagination
-	} from 'flowbite-svelte';
+  import Sidebar from "../../../component/SidebarMyPage.svelte";
+  import Breadcrumb from "../../../component/Breadcrumb.svelte";
+  import TableSearch from "../../../component/TableSearch.svelte";
+  import Layout from "../../../component/Layout.svelte";
+  import SmallHeader from "../../../component/SmallHeader.svelte";
+  import {
+    Table,
+    TableBody,
+    TableBodyCell,
+    TableBodyRow,
+    TableHead,
+    TableHeadCell,
+    Checkbox,
+    Pagination
+  } from "flowbite-svelte";
 
-	import { page } from '$app/stores';
+  import { page } from "$app/stores";
 
-	let searchTerm = '';
-	let items = [
-		{ id: 1, maker: 'Toyota', type: 'ABC', make: 2017 },
-		{ id: 2, maker: 'Ford', type: 'CDE', make: 2018 },
-		{ id: 3, maker: 'Volvo', type: 'FGH', make: 2019 },
-		{ id: 4, maker: 'Saab', type: 'IJK', make: 2020 }
-	];
-	$: filteredItems = items.filter(
-		(item) => item.maker.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
-	);
+  let searchTerm = "";
 
-	$: activeUrl = $page.url.searchParams.get('page');
+  import { paginate, LightPaginationNav } from "svelte-paginate";
+  import { onMount } from "svelte";
+  import axios from "axios";
+  import { URL } from "../../env";
+  import { browser } from "$app/environment";
 
-	let pages = [
-		{ name: '1', href: '/components/pagination?page=1' },
-		{ name: '2', href: '/components/pagination?page=2' },
-		{ name: '3', href: '/components/pagination?page=3' },
-		{ name: '4', href: '/components/pagination?page=4' },
-		{ name: '5', href: '/components/pagination?page=5' }
-	];
+  export let items = [];
+  onMount(async () => {
+    await axios.get(`${URL}/api/post/myPost`,
+      { withCredentials: true })
+      .then(response => {
+        let posts = response.data.data;
+        for (const post of posts) {
+          post.createTime = post.createTime.split("T")[0];
+        }
+        items = posts;
+      })
+      .catch(error => console.log(error));
+  });
 
-	$: {
-		pages.forEach((page) => {
-			let splitUrl = page.href.split('?');
-			let queryString = splitUrl.slice(1).join('?');
-			const hrefParams = new URLSearchParams(queryString);
-			let hrefValue = hrefParams.get('page');
-			if (hrefValue === activeUrl) {
-				page.active = true;
-			} else {
-				page.active = false;
-			}
-		});
-		pages = pages;
-	}
+  let currentPage = 1;
+  let pageSize = 3;
+  $: paginatedItems = paginate({ items, pageSize, currentPage });
 
-	const previous = () => {
-		alert('Previous btn clicked. Make a call to your server to fetch data.');
-	};
-	const next = () => {
-		alert('Next btn clicked. Make a call to your server to fetch data.');
-	};
-
+  const getSearchInput = (event) => {
+    const str = event.detail.message;
+    if(str){
+      axios.get(`${URL}/api/post/search`, {
+        params: {
+          text: str
+        },
+        withCredentials: true,
+      })
+        .then(response => {
+          // items = response.data.data;	//	검색 결과
+          let posts = response.data.data;
+          for (const post of posts) {
+            post.createTime = post.createTime.split("T")[0];
+          }
+          items = posts;
+        })
+        .catch(error => console.log(error));
+    }
+  };
 </script>
 
 <SmallHeader header="My Page" />
 
 <Layout style="flex justify-center">
-	<Sidebar />
+  <Sidebar />
 
-	<div class="ml-5 block w-[70%]">
-		<Breadcrumb prevContent="설정" nextContent="내가 작성한 게시글" />
+  <div class="ml-5 block w-[70%]">
+    <Breadcrumb prevContent="설정" nextContent="내가 작성한 게시글" />
 
-		<div class="mt-3 p-10 rounded-lg shadow-md border">
-			<h1 class="font-bold mb-7">내가 작성한 게시글</h1>
+    <div class="mt-3 p-10 rounded-lg shadow-md border">
+      <h1 class="font-bold mb-7">내가 작성한 게시글</h1>
 
-			<TableSearch content="게시글 작성" color="blue">
-				<Table hoverable={true}>
-					<TableHead>
-						<TableHeadCell class="!p-4">
-							<Checkbox />
-						</TableHeadCell>
-						<TableHeadCell>제목</TableHeadCell>
-						<TableHeadCell>글쓴이</TableHeadCell>
-						<TableHeadCell>날짜</TableHeadCell>
-						<TableHeadCell>조회수</TableHeadCell>
-					</TableHead>
-					<TableBody>
-						{#each filteredItems as item}
-							<TableBodyRow>
-								<TableBodyCell class="!p-4">
-									<Checkbox />
-								</TableBodyCell>
-								<TableBodyCell>{item.id}</TableBodyCell>
-								<TableBodyCell>{item.maker}</TableBodyCell>
-								<TableBodyCell>{item.type}</TableBodyCell>
-								<TableBodyCell>{item.make}</TableBodyCell>
-							</TableBodyRow>
-						{/each}
-					</TableBody>
-				</Table>
-			</TableSearch>
+      <TableSearch content="게시글 작성" color="blue" on:changeSearchInput={getSearchInput}>
+        <Table hoverable={true}>
+          <TableHead>
+            <TableHeadCell>제목</TableHeadCell>
+            <TableHeadCell>글쓴이</TableHeadCell>
+            <TableHeadCell>날짜</TableHeadCell>
+            <TableHeadCell>조회수</TableHeadCell>
+          </TableHead>
+          <TableBody>
+            {#each paginatedItems as item}
+              <TableBodyRow on:click={() => {
+                if(browser) window.location.href = `/board/detail/${item.id}`;
+              }}>
+                <TableBodyCell>{item.title}</TableBodyCell>
+                <TableBodyCell>{item.userId}</TableBodyCell>
+                <TableBodyCell>{item.createTime}</TableBodyCell>
+                <TableBodyCell>{item.hit}</TableBodyCell>
+              </TableBodyRow>
+            {/each}
+          </TableBody>
+        </Table>
+      </TableSearch>
 
-			<div class="flex mt-5 justify-end">
-				<Pagination {pages} on:previous={previous} on:next={next} />
-			</div>
-		</div>
-	</div>
+      <div class="flex justify-center mt-3">
+        <LightPaginationNav
+          totalItems="{items.length}"
+          pageSize="{pageSize}"
+          currentPage="{currentPage}"
+          limit="{1}"
+          showStepOptions="{true}"
+          on:setPage="{(e) => {
+            currentPage = e.detail.page
+          }}"
+        />
+      </div>
+    </div>
+  </div>
 </Layout>

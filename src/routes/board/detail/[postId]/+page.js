@@ -2,9 +2,9 @@ import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
 export function load({ params }) {
-  if (params.roomId) {
+  if (params.postId) {
     return {
-      roomId: params.roomId,
+      postId: params.postId,
     };
   }
 

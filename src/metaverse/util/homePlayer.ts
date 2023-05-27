@@ -138,13 +138,13 @@ export default class HomePlayer extends Player {
 					this.currentPlayer = null;
 
 					// Remove animation
-					const numberStr = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'];
-					numberStr.forEach((item) => {
-						this.removeAnims(item);
-					});
-
-					this.scene.scene.start('meetingScene', { fromTo: 'fromHomeToMeeting' });
-					return;
+					// const numberStr = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'];
+					// numberStr.forEach((item) => {
+					// 	this.removeAnims(item);
+					// });
+					//
+					// this.scene.scene.start('meetingScene', { fromTo: 'fromHomeToMeeting' });
+					window.open(`http://localhost:8000/meeting/${this.connection.teamId}`);
 				}
 			}
 

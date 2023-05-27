@@ -1,13 +1,45 @@
 <script>
-  import Layout from "../../../component/Layout.svelte";
-  import Quill from "../../../component/Quill.svelte";
-  import SmallHeader from "../../../component/SmallHeader.svelte";
-  import ConfirmBtn from "../../../component/ConfirmBtn.svelte";
+  import Layout from "../../../../component/Layout.svelte";
+  import Quill from "../../../../component/Quill.svelte";
+  import SmallHeader from "../../../../component/SmallHeader.svelte";
+  import ConfirmBtn from "../../../../component/ConfirmBtn.svelte";
   import { Toggle, Label, Select } from "flowbite-svelte";
   import axios from "axios";
-  import { URL } from "../../env";
-  import * as localStorage from "../../localStorage";
+  import { URL } from "../../../env";
+  import * as localStorage from "../../../localStorage";
   import { browser } from "$app/environment";
+  import { onMount } from "svelte";
+
+  /** @type {import("./$types").PageData} */
+  export let data;
+
+
+  let content = { html: "", text: "" };
+  $: console.log(content);
+  let title;
+
+  export let post = [];
+  onMount(async () => {
+    await axios.get(`${URL}/api/post/detail/edit`,
+      {
+        params: {
+          postId: data.postId
+        }
+      }, { withCredentials: true })
+      .then(response => {
+        let copy = response.data.data;
+        let date = copy.createTime.split("T")[0];
+        let time = copy.createTime.split("T")[1].split(".")[0];
+
+        copy.createTime = date + " | " + time;
+        post = copy;
+        console.log(post);
+
+        content.html = post.content;
+        title = post.title;
+      })
+      .catch(error => console.log(error));
+  });
 
   let selected;
 
@@ -16,38 +48,33 @@
     previewStatus = !previewStatus;
   };
 
-  let content = { html: "", text: "" };
-  $: console.log(content);
-
-  let title;
-
   let userId = localStorage.getWithExpiry("loginMember");
-  const createPost = async () => {
+  const updatePost = async () => {
     if (!title) {
       alert("제목을 입력해주세요");
     } else {
       await axios.post(`${URL}/api/post/create`,
         {
+          id: post.id,
+          userId: post.userId,
           title: title,
-          userId: userId,
-          content: content.html
+          content: content.html,
+          hit: post.hit
         }, { withCredentials: true })
         .then(response => {
           if (response.data.data == "success") {
-            alert("create success");
+            alert("update success");
             if (browser) {
               window.location.href = "/";
             }
           }
-
         })
         .catch(error => console.log(error));
     }
-
   };
 </script>
 
-<SmallHeader header="Create Post" />
+<SmallHeader header="Update Post" />
 
 <Layout>
   {#if !previewStatus}
@@ -67,10 +94,6 @@
       <div class="flex justify-between mt-5">
         <!-- 태그 및 공지 설정 -->
         <div class="flex items-center">
-          <!--					<Label class="mr-3">태그 설정 :</Label>-->
-          <!--					<div class="mr-4 w-64">-->
-          <!--						<Select items={countries} bind:value={selected} />-->
-          <!--					</div>-->
           <!-- 공지 설정은 관리자만 -->
           <div>
             <Toggle>공지 설정</Toggle>
@@ -79,10 +102,8 @@
 
         <!-- 버튼 -->
         <div>
-          <ConfirmBtn on:click={createPost} content="저장" color="blue" />
+          <ConfirmBtn on:click={updatePost} content="수정" color="blue" />
           <ConfirmBtn content="미리보기" color="blue" on:click={handlePreviewBtn} />
-          <!-- <Button content="저장" /> -->
-          <!-- <Button content="Preview" on:click={handlePreviewBtn} /> -->
         </div>
       </div>
     </div>
@@ -102,10 +123,6 @@
     <div class="flex justify-between mt-5">
       <!-- 태그 및 공지 설정 -->
       <div class="flex items-center">
-        <!--				<Label class="mr-3">태그 설정 :</Label>-->
-        <!--				<div class="mr-4 w-64">-->
-        <!--					<Select items={countries} bind:value={selected} />-->
-        <!--				</div>-->
         <div>
           <Toggle>공지 설정</Toggle>
         </div>
@@ -113,7 +130,7 @@
 
       <!-- 버튼 -->
       <div>
-        <ConfirmBtn on:click={createPost} content="저장" color="blue" />
+        <ConfirmBtn on:click={updatePost} content="수정" color="blue" />
         <ConfirmBtn content="돌아가기" color="blue" on:click={handlePreviewBtn} />
       </div>
     </div>

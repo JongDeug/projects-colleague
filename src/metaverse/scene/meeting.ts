@@ -10,7 +10,6 @@ interface SceneItems {
 
 interface WebRTCItems {
 	connection: {
-		socket: any;
 		url: any;
 		myStream: any;
 		streams: any;
@@ -52,7 +51,6 @@ export default class MeetingScene extends Phaser.Scene {
 		};
 		this.webRTCItems = {
 			connection: {
-				socket: null,
 				url: null,
 				myStream: null,
 				streams: null,
@@ -148,18 +146,23 @@ export default class MeetingScene extends Phaser.Scene {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		await this.getMedia();
+
+
 		const roomName = '1234';
 		const testEmail = 'testEmail@naver.com';
-		this.webRTCItems.connection.socket.emit('join_room', { room: roomName, email: testEmail });
+		this.connection.room.send('join_room', {room: roomName, email: testEmail});
+		// this.webRTCItems.connection.socket.emit('join_room', { room: roomName, email: testEmail });
 		this.makeConnection(
-			this.webRTCItems.connection.socket.id,
+			// this.webRTCItems.connection.socket.id,
+			this.connection.room.sessionId,
 			testEmail,
-			this.webRTCItems.connection.socket,
+			// this.webRTCItems.connection.socket,
 			this.webRTCItems.connection.myStream
 		);
 	}
 
-	makeConnection(socketId, email, socket, myStream) {
+	// makeConnection(socketId, email, socket, myStream) {
+	makeConnection(socketId, email, myStream) {
 		this.webRTCItems.connection.myPeerConnection = new RTCPeerConnection({
 			iceServers: [
 				{
@@ -181,15 +184,21 @@ export default class MeetingScene extends Phaser.Scene {
 
 		this.webRTCItems.connection.myPeerConnection.addEventListener('icecandidate', (data) => {
 			console.log('sent the candidate');
-			socket.emit('ice', {
-				ice: data.candidate,
-				iceSendId: socket.id,
-				iceReceiveId: socketId
-			});
+			this.connection.room.send('ice', {
+					ice: data.candidate,
+					iceSendId: this.connection.room.sessionId,
+					iceReceiveId: socketId
+			})
+			// socket.emit('ice', {
+			// 	ice: data.candidate,
+			// 	iceSendId: socket.id,
+			// 	iceReceiveId: socketId
+			// });
 		});
 
 		this.webRTCItems.connection.myPeerConnection.addEventListener('addstream', (data) => {
 			console.log('got an event from my peer');
+			console.log(this.webRTCItems.connection.peerConnections);
 			this.webRTCItems.connection.streams.push(data.stream);
 			this.renderStream();
 		});
@@ -201,16 +210,20 @@ export default class MeetingScene extends Phaser.Scene {
 	}
 
 	renderStream() {
-		this.webRTCItems.ui.peerFace1.srcObject = this.webRTCItems.connection.streams[0];
-		this.webRTCItems.ui.peerFace2.srcObject = this.webRTCItems.connection.streams[1];
-		this.webRTCItems.ui.peerFace3.srcObject = this.webRTCItems.connection.streams[2];
-		this.webRTCItems.ui.phaserPeerFace1.video = this.webRTCItems.ui.peerFace1;
-		this.webRTCItems.ui.phaserPeerFace2.video = this.webRTCItems.ui.peerFace2;
-		this.webRTCItems.ui.phaserPeerFace3.video = this.webRTCItems.ui.peerFace3;
+		// this.webRTCItems.ui.peerFace1.srcObject = this.webRTCItems.connection.streams[0];
+		// this.webRTCItems.ui.peerFace2.srcObject = this.webRTCItems.connection.streams[1];
+		// this.webRTCItems.ui.peerFace3.srcObject = this.webRTCItems.connection.streams[2];
+		// this.webRTCItems.ui.phaserPeerFace1.video = this.webRTCItems.ui.peerFace1;
+		// this.webRTCItems.ui.phaserPeerFace2.video = this.webRTCItems.ui.peerFace2;
+		// this.webRTCItems.ui.phaserPeerFace3.video = this.webRTCItems.ui.peerFace3;
 
-		this.webRTCItems.ui.phaserPeerFace1.play();
-		this.webRTCItems.ui.phaserPeerFace2.play();
-		this.webRTCItems.ui.phaserPeerFace3.play();
+		// this.add.existing(this.webRTCItems.ui.phaserPeerFace1);
+		// this.add.existing(this.webRTCItems.ui.phaserPeerFace2);
+		// this.add.existing(this.webRTCItems.ui.phaserPeerFace3);
+		//
+		// this.webRTCItems.ui.phaserPeerFace1.play();
+		// this.webRTCItems.ui.phaserPeerFace2.play();
+		// this.webRTCItems.ui.phaserPeerFace3.play();
 	}
 
 	handleMuteClick() {
@@ -265,68 +278,68 @@ export default class MeetingScene extends Phaser.Scene {
 	}
 
 	async create() {
-		// try {
-		// 	const map = this.make.tilemap({ key: 'meeting' });
-		// 	const tileSet = map.addTilesetImage('meetingTiles', 'meetingTiles', 32, 32);
-		// 	this.sceneItems.layer = map.createLayer('Tile Layer 1', tileSet, 0, 0).setDepth(0);
-		// } catch (e) {
-		// 	console.error('맵 생성 에러', e);
-		// }
+		try {
+			const map = this.make.tilemap({ key: 'meeting' });
+			const tileSet = map.addTilesetImage('meetingTiles', 'meetingTiles', 32, 32);
+			this.sceneItems.layer = map.createLayer('Tile Layer 1', tileSet, 0, 0).setDepth(0);
+		} catch (e) {
+			console.error('맵 생성 에러', e);
+		}
 		//
-		// ui setting
-		this.add.dom(500, 500).createFromCache('meeting').setOrigin(0.5, 0.5).setScale(0.35, 0.35);
-		this.webRTCItems.ui.camerasSelect = document.getElementById('cameras');
-		this.webRTCItems.ui.muteBtn = document.getElementById('mute');
-		this.webRTCItems.ui.cameraBtn = document.getElementById('camera');
-
-		this.webRTCItems.ui.muteBtn.addEventListener('click', this.handleMuteClick);
-		this.webRTCItems.ui.cameraBtn.addEventListener('click', this.handleCameraClick);
-		this.webRTCItems.ui.camerasSelect.addEventListener('input', this.handleCameraChange);
+		// // ui setting
+		// this.add.dom(500, 500).createFromCache('meeting').setOrigin(0.5, 0.5).setScale(0.35, 0.35);
+		// this.webRTCItems.ui.camerasSelect = document.getElementById('cameras');
+		// this.webRTCItems.ui.muteBtn = document.getElementById('mute');
+		// this.webRTCItems.ui.cameraBtn = document.getElementById('camera');
+		//
+		// this.webRTCItems.ui.muteBtn.addEventListener('click', this.handleMuteClick);
+		// this.webRTCItems.ui.cameraBtn.addEventListener('click', this.handleCameraClick);
+		// this.webRTCItems.ui.camerasSelect.addEventListener('input', this.handleCameraChange);
 
 		// 1
-		this.webRTCItems.ui.peerFace1 = document.createElement('video');
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		this.webRTCItems.ui.peerFace1.playsinline = true;
-		// this.webRTCItems.ui.peerFace1.srcObject = this.webRTCItems.connection.myStream;
-		this.webRTCItems.ui.peerFace1.autoplay = true;
-
-		this.webRTCItems.ui.phaserPeerFace1 = new Phaser.GameObjects.Video(this, 400, 500);
-		// this.webRTCItems.ui.phaserPeerFace1.video = this.webRTCItems.ui.peerFace1;
-		this.webRTCItems.ui.phaserPeerFace1.setOrigin(0.5, 0.5);
-		this.webRTCItems.ui.phaserPeerFace1.setScale(0.35, 0.35);
-		this.add.existing(this.webRTCItems.ui.phaserPeerFace1);
-		// this.webRTCItems.ui.phaserPeerFace1.play();
-
-		// 2
-		this.webRTCItems.ui.peerFace2 = document.createElement('video');
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		this.webRTCItems.ui.peerFace2.playsinline = true;
-		// this.webRTCItems.ui.peerFace1.srcObject = this.webRTCItems.connection.myStream;
-		this.webRTCItems.ui.peerFace2.autoplay = true;
-
-		this.webRTCItems.ui.phaserPeerFace2 = new Phaser.GameObjects.Video(this, 400, 500);
-		// this.webRTCItems.ui.phaserPeerFace2.video = this.webRTCItems.ui.peerFace2;
-		this.webRTCItems.ui.phaserPeerFace2.setOrigin(0.5, 0.5);
-		this.webRTCItems.ui.phaserPeerFace2.setScale(0.35, 0.35);
-		this.add.existing(this.webRTCItems.ui.phaserPeerFace2);
-		// this.webRTCItems.ui.phaserPeerFace2.play();
-
-		// 3
-		this.webRTCItems.ui.peerFace3 = document.createElement('video');
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		this.webRTCItems.ui.peerFace3.playsinline = true;
-		// this.webRTCItems.ui.peerFace1.srcObject = this.webRTCItems.connection.myStream;
-		this.webRTCItems.ui.peerFace3.autoplay = true;
-
-		this.webRTCItems.ui.phaserPeerFace3 = new Phaser.GameObjects.Video(this, 400, 500);
-		// this.webRTCItems.ui.phaserPeerFace3.video = this.webRTCItems.ui.peerFace3;
-		this.webRTCItems.ui.phaserPeerFace3.setOrigin(0.5, 0.5);
-		this.webRTCItems.ui.phaserPeerFace3.setScale(0.35, 0.35);
-		this.add.existing(this.webRTCItems.ui.phaserPeerFace3);
-		// this.webRTCItems.ui.phaserPeerFace3.play();
+		// this.webRTCItems.ui.peerFace1 = document.createElement('video');
+		// // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// // @ts-ignore
+		// this.webRTCItems.ui.peerFace1.playsinline = true;
+		// // this.webRTCItems.ui.peerFace1.srcObject = this.webRTCItems.connection.myStream;
+		// this.webRTCItems.ui.peerFace1.autoplay = true;
+		//
+		// this.webRTCItems.ui.phaserPeerFace1 = new Phaser.GameObjects.Video(this, 400, 500);
+		// // this.webRTCItems.ui.phaserPeerFace1.video = this.webRTCItems.ui.peerFace1;
+		// this.webRTCItems.ui.phaserPeerFace1.setOrigin(0.5, 0.5);
+		// this.webRTCItems.ui.phaserPeerFace1.setScale(0.35, 0.35);
+		// // this.add.existing(this.webRTCItems.ui.phaserPeerFace1);
+		// // this.webRTCItems.ui.phaserPeerFace1.play();
+		//
+		// // 2
+		// this.webRTCItems.ui.peerFace2 = document.createElement('video');
+		// // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// // @ts-ignore
+		// this.webRTCItems.ui.peerFace2.playsinline = true;
+		// // this.webRTCItems.ui.peerFace1.srcObject = this.webRTCItems.connection.myStream;
+		// this.webRTCItems.ui.peerFace2.autoplay = true;
+		//
+		// this.webRTCItems.ui.phaserPeerFace2 = new Phaser.GameObjects.Video(this, 400, 500);
+		// // this.webRTCItems.ui.phaserPeerFace2.video = this.webRTCItems.ui.peerFace2;
+		// this.webRTCItems.ui.phaserPeerFace2.setOrigin(0.5, 0.5);
+		// this.webRTCItems.ui.phaserPeerFace2.setScale(0.35, 0.35);
+		// // this.add.existing(this.webRTCItems.ui.phaserPeerFace2);
+		// // this.webRTCItems.ui.phaserPeerFace2.play();
+		//
+		// // 3
+		// this.webRTCItems.ui.peerFace3 = document.createElement('video');
+		// // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// // @ts-ignore
+		// this.webRTCItems.ui.peerFace3.playsinline = true;
+		// // this.webRTCItems.ui.peerFace1.srcObject = this.webRTCItems.connection.myStream;
+		// this.webRTCItems.ui.peerFace3.autoplay = true;
+		//
+		// this.webRTCItems.ui.phaserPeerFace3 = new Phaser.GameObjects.Video(this, 400, 500);
+		// // this.webRTCItems.ui.phaserPeerFace3.video = this.webRTCItems.ui.peerFace3;
+		// this.webRTCItems.ui.phaserPeerFace3.setOrigin(0.5, 0.5);
+		// this.webRTCItems.ui.phaserPeerFace3.setScale(0.35, 0.35);
+		// // this.add.existing(this.webRTCItems.ui.phaserPeerFace3);
+		// // this.webRTCItems.ui.phaserPeerFace3.play();
 
 		// start webrtc test
 		// this.webRTCItems.connection.url = 'http://localhost:3000/';
@@ -334,13 +347,22 @@ export default class MeetingScene extends Phaser.Scene {
 		// this.webRTCItems.connection.socket = io(this.webRTCItems.connection.url, {
 		// 	withCredentials: true
 		// });
-		this.webRTCItems.connection.socket = this.connection.socket;
-
+		// this.webRTCItems.connection.socket = this.connection.socket;
 
 		this.webRTCItems.connection.streams = [];
-		await this.initCall();
+		// await this.initCall();
 
-		// UI 생성
+		// 메인 카메라, UI 카메라 생성 및 설정
+		// this.cameras.main.setBounds(0, 0, 800, 600);
+		// this.sceneItems.uiCam = this.cameras.add(0, 0, 800, 600);
+		// this.cameras.main.fadeIn(2000);
+		// this.sceneItems.uiCam.fadeIn(2000);
+		// this.cameras.main.setZoom(2);
+		// this.sceneItems.uiCam.ignore([
+		// 	this.sceneItems.layer,
+		// ]);
+		//
+		// // UI 생성
 		// this.uiController.create();
 		// this.uiController.event();
 		// if (this.connection.chatDB != null) {
@@ -348,18 +370,18 @@ export default class MeetingScene extends Phaser.Scene {
 		// }
 
 
-		const canvas = document.querySelector("canvas");
-		const gl = this.game.canvas.getContext('webgl');
-
-		canvas.addEventListener(
-			"webglcontextrestored",
-			(e) => {
-				console.log(e);
-			},
-			false
-		);
-
-		gl.getExtension("WEBGL_lose_context").restoreContext();
+		// const canvas = document.querySelector("canvas");
+		// const gl = this.game.canvas.getContext('webgl');
+		//
+		// canvas.addEventListener(
+		// 	"webglcontextrestored",
+		// 	(e) => {
+		// 		e.preventDefault();
+		// 		console.log(e);
+		// 	},
+		// 	false
+		// );
+		// gl.getExtension("WEBGL_lose_context").restoreContext();
 
 		// WebRTC ==================================================================
 
@@ -372,72 +394,150 @@ export default class MeetingScene extends Phaser.Scene {
 		// WebRTC Interaction ========================================================
 
 		// First Come
-		this.webRTCItems.connection.socket.on('all_users', async (allUsers) => {
+
+		this.connection.room.onMessage('all_users', async(allUsers)=> {
 			const length = allUsers.length;
 			for (let i = 0; i < length; i++) {
 				this.makeConnection(
 					allUsers[i].id,
 					allUsers[i].email,
-					this.webRTCItems.connection.socket,
+					// this.webRTCItems.connection.socket,
 					this.webRTCItems.connection.myStream
 				);
-				const peerConnection = this.webRTCItems.connection.peerConnections[allUsers[i].id];
-				if (peerConnection) {
-					const offer = await peerConnection.createOffer();
-					await peerConnection.setLocalDescription(offer);
-					console.log(`sent the offer`);
-					this.webRTCItems.connection.socket.emit('offer', {
-						offer: offer,
-						offerSendId: this.webRTCItems.connection.socket.id,
-						//
-						//
-						//
-						// 고쳐야함.
-						offerSendEmail: "testEmail",
-						offerReceiveId: allUsers[i].id
-					});
+
+				if(allUsers[i].id !== this.connection.room.sessionId){
+					const peerConnection = this.webRTCItems.connection.peerConnections[allUsers[i].id];
+					if (peerConnection) {
+						const offer = await peerConnection.createOffer();
+						await peerConnection.setLocalDescription(offer);
+						console.log(`sent the offer`);
+						this.connection.room.send('offer', {
+							offer: offer,
+							offerSendId: this.connection.room.sessionId,
+							//
+							// 고쳐야함.
+							offerSendEmail: "testEmail",
+							offerReceiveId: allUsers[i].id
+						})
+						// this.webRTCItems.connection.socket.emit('offer', {
+						// 	offer: offer,
+						// 	offerSendId: this.webRTCItems.connection.socket.id,
+						// 	//
+						// 	//
+						// 	//
+						// 	// 고쳐야함.
+						// 	offerSendEmail: "testEmail",
+						// 	offerReceiveId: allUsers[i].id
+						// });
+					}
 				}
 			}
 		});
+		// this.webRTCItems.connection.socket.on('all_users', async (allUsers) => {
+		// 	const length = allUsers.length;
+		// 	for (let i = 0; i < length; i++) {
+		// 		this.makeConnection(
+		// 			allUsers[i].id,
+		// 			allUsers[i].email,
+		// 			// this.webRTCItems.connection.socket,
+		// 			this.webRTCItems.connection.myStream
+		// 		);
+		// 		const peerConnection = this.webRTCItems.connection.peerConnections[allUsers[i].id];
+		// 		if (peerConnection) {
+		// 			const offer = await peerConnection.createOffer();
+		// 			await peerConnection.setLocalDescription(offer);
+		// 			console.log(`sent the offer`);
+		// 			this.webRTCItems.connection.socket.emit('offer', {
+		// 				offer: offer,
+		// 				offerSendId: this.webRTCItems.connection.socket.id,
+		// 				//
+		// 				//
+		// 				//
+		// 				// 고쳐야함.
+		// 				offerSendEmail: "testEmail",
+		// 				offerReceiveId: allUsers[i].id
+		// 			});
+		// 		}
+		// 	}
+		// });
 
 		// Last Come
-		this.webRTCItems.connection.socket.on('getOffer', async (offer) => {
-			console.log('received the offer');
-			this.makeConnection(
-				offer.offerSendId,
-				offer.offerSendEmail,
-				this.webRTCItems.connection.socket,
-				this.webRTCItems.connection.myStream
-			);
-			const peerConnection = this.webRTCItems.connection.peerConnections[offer.offerSendId];
-			if (peerConnection) {
-				await peerConnection.setRemoteDescription(offer.offer);
-				const answer = await peerConnection.createAnswer();
-				await peerConnection.setLocalDescription(answer);
-				console.log(`sent the answer`);
-				this.webRTCItems.connection.socket.emit('answer', {
-					answer: answer,
-					answerSendId: this.webRTCItems.connection.socket.id,
-					answerReceiveId: offer.offerSendId
-				});
-			}
+		this.connection.room.onMessage('getOffer', async (offer) => {
+				console.log('received the offer');
+				this.makeConnection(
+					offer.offerSendId,
+					offer.offerSendEmail,
+					// this.webRTCItems.connection.socket,
+					this.webRTCItems.connection.myStream
+				);
+				const peerConnection = this.webRTCItems.connection.peerConnections[offer.offerSendId];
+				if (peerConnection) {
+					await peerConnection.setRemoteDescription(offer.offer);
+					const answer = await peerConnection.createAnswer();
+					await peerConnection.setLocalDescription(answer);
+					console.log(`sent the answer`);
+					this.connection.room.send('answer', {
+							answer: answer,
+							answerSendId: this.connection.room.sessionId,
+							answerReceiveId: offer.offerSendId
+					})
+					// this.webRTCItems.connection.socket.emit('answer', {
+					// 	answer: answer,
+					// 	answerSendId: this.webRTCItems.connection.socket.id,
+					// 	answerReceiveId: offer.offerSendId
+					// });
+				}
 		});
+		// this.webRTCItems.connection.socket.on('getOffer', async (offer) => {
+		// 	console.log('received the offer');
+		// 	this.makeConnection(
+		// 		offer.offerSendId,
+		// 		offer.offerSendEmail,
+		// 		this.webRTCItems.connection.socket,
+		// 		this.webRTCItems.connection.myStream
+		// 	);
+		// 	const peerConnection = this.webRTCItems.connection.peerConnections[offer.offerSendId];
+		// 	if (peerConnection) {
+		// 		await peerConnection.setRemoteDescription(offer.offer);
+		// 		const answer = await peerConnection.createAnswer();
+		// 		await peerConnection.setLocalDescription(answer);
+		// 		console.log(`sent the answer`);
+		// 		this.webRTCItems.connection.socket.emit('answer', {
+		// 			answer: answer,
+		// 			answerSendId: this.webRTCItems.connection.socket.id,
+		// 			answerReceiveId: offer.offerSendId
+		// 		});
+		// 	}
+		// });
 
 		// First Come
-		this.webRTCItems.connection.socket.on('getAnswer', async (answer) => {
+		this.connection.room.onMessage('getAnswer', async (answer) => {
 			console.log('received the answer');
 			const peerConnection = this.webRTCItems.connection.peerConnections[answer.answerSendId];
 			if (peerConnection) {
 				await peerConnection.setRemoteDescription(answer.answer);
 			}
 		});
+		// this.webRTCItems.connection.socket.on('getAnswer', async (answer) => {
+		// 	console.log('received the answer');
+		// 	const peerConnection = this.webRTCItems.connection.peerConnections[answer.answerSendId];
+		// 	if (peerConnection) {
+		// 		await peerConnection.setRemoteDescription(answer.answer);
+		// 	}
+		// });
 
-		this.webRTCItems.connection.socket.on('getIce', (ice) => {
+		this.connection.room.onMessage('getIce', (ice) => {
 			const myPeerConnection = this.webRTCItems.connection.peerConnections[ice.iceSendId];
 			if (myPeerConnection) {
 				myPeerConnection.addIceCandidate(ice.ice).then(() => console.log('received the candidate'));
 			}
-		});
+		})
+		// this.webRTCItems.connection.socket.on('getIce', (ice) => {
+		// 	const myPeerConnection = this.webRTCItems.connection.peerConnections[ice.iceSendId];
+		// 	if (myPeerConnection) {
+		// 		myPeerConnection.addIceCandidate(ice.ice).then(() => console.log('received the candidate'));
+		// 	}
+		// });
 	}
 
 	update() {

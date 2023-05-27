@@ -201,9 +201,8 @@ export default class WaitingScene extends Phaser.Scene {
                 name.setVisible(false);
                 delete this.waitingPlayer.playerEntities[sessionId];
                 delete this.waitingPlayer.playerNames[sessionId];
-            }
-        })
-
+        }
+        });
     }
 
 
