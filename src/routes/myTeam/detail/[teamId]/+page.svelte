@@ -1,10 +1,10 @@
 <script>
-	import Sidebar from '../../../../component/SidebarMyTeam.svelte';
-	import Breadcrumb from '../../../../component/Breadcrumb.svelte';
-	import ConfrimBtn from '../../../../component/ConfirmBtn.svelte';
-	import Svg from '../../../../component/Svg.svelte';
-	import Layout from '../../../../component/Layout.svelte';
-	import SmallHeader from '../../../../component/SmallHeader.svelte';
+	import Sidebar from '../../../../../component/SidebarMyTeam.svelte';
+	import Breadcrumb from '../../../../../component/Breadcrumb.svelte';
+	import ConfrimBtn from '../../../../../component/ConfirmBtn.svelte';
+	import Svg from '../../../../../component/Svg.svelte';
+	import Layout from '../../../../../component/Layout.svelte';
+	import SmallHeader from '../../../../../component/SmallHeader.svelte';
 	import {
 		Blockquote,
 		Heading,
