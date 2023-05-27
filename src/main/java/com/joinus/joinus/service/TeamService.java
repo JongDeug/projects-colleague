@@ -29,10 +29,10 @@ public class TeamService{
         for (String str : teamForm.getMemberIds()){
             if (memberRepository.findMemberById(str).isPresent()) {
                 team.addMember(memberRepository.findMemberById(str).get());
-                members.add(memberRepository.findMemberById(str).get());
+//                members.add(memberRepository.findMemberById(str).get());
             }
         }
-        team.setMembers(members);
+//        team.setMembers(members);
 
         teamRepository.save(team);
     }

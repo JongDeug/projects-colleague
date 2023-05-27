@@ -26,5 +26,7 @@ public class Team {
     {
         if (!this.members.contains(member))
             this.members.add(member);
+        if (!member.getTeams().contains(this))
+            member.addTeam(this);
     }
 }
