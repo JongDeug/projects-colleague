@@ -79,6 +79,18 @@ public class TeamController {
         response.setRedirect("/team/detail");
         return response;
     }
+
+    @PostMapping("/changeState")
+    public Response changeState(@RequestParam Long teamId, @RequestParam String state){
+        Team team = teamService.findTeamById(teamId);
+        team.setState(state);
+        teamService.updateTeam(team);
+
+        Response response = new Response();
+        response.setData("success");
+        response.setRedirect("/team/detail");
+        return response;
+    }
     
     @GetMapping("/{teamId}/manage/minutes")
     public String getMinutesList(@PathVariable("teamId") Long teamId, Model model){
