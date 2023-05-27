@@ -85,7 +85,7 @@
 		const res = axios.get('/api/team/detail',
 				{
 					params:{
-						id : teamId
+						teamId : teamId
 					}
 				})
 				.then(response => {
