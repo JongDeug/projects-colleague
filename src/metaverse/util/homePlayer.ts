@@ -146,8 +146,8 @@ export default class HomePlayer extends Player {
 					// this.scene.scene.start('meetingScene', { fromTo: 'fromHomeToMeeting' });
 					// 회의방 입장
 
-					this.connection._homeScene.createDialog();
-					// window.open(`http://localhost:8000/meeting/${this.connection.teamId}`);
+					// this.connection._homeScene.uiController.dialogCreate();
+					window.open(`http://localhost:8000/meeting/${this.connection.teamId}`);
 				}
 			}
 

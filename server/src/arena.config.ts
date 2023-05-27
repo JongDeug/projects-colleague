@@ -53,6 +53,13 @@ export default Arena({
 						socket.emit('room_full');
 						return;
 					}
+
+					const alreadyExist = users[data.room].find((user: any) => user.email === data.email);
+					if(alreadyExist){
+						socket.emit("already");
+						return;
+					}
+
 					users[data.room].push({ id: socket.id, email: data.email });
 				} else {
 					// room no exist

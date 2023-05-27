@@ -5,6 +5,7 @@ import MeetingMinutes from './meetingMinutes';
 // import Setting from './setting';
 import Chat from './chat';
 import type Connection from '../interaction/connection';
+// import Dialog from "./dialog";
 
 export default class UIController {
 	_scene: Phaser.Scene;
@@ -14,6 +15,7 @@ export default class UIController {
 	_calendar: Calendar;
 	_fullscreen: FullScreen;
 	_meetingMinutes: MeetingMinutes;
+	// _dialog: Dialog;
 	// _setting: Setting;
 	_chat: Chat;
 	_uiContainer = {
@@ -47,6 +49,7 @@ export default class UIController {
 		this._meetingMinutes = new MeetingMinutes(this._scene);
 		// this._setting = new Setting(this._scene);
 		this._chat = new Chat(this._scene);
+		// this._dialog = new Dialog(this._scene);
 	}
 
 	preload(): void {
@@ -73,6 +76,10 @@ export default class UIController {
 		this._meetingMinutes.create();
 		// this._setting.create();
 	}
+
+	// dialogCreate() : void {
+	// 	this._dialog.create();
+	// }
 
 	event(): void {
 		this.initialize(this._calendar.group);
