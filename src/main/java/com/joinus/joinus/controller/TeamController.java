@@ -91,7 +91,7 @@ public class TeamController {
         return response;
     }
 
-    @GetMapping("/myTeam/delete")
+    @PostMapping("/myTeam/delete")
     public Response deleteTeam(@RequestParam Long teamId){
         teamService.deleteTeam(teamId);
 
