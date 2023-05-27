@@ -28,6 +28,8 @@ public class Member {
     private String gitAddress;
     private boolean roleType = false;
 
+
+    //  사실상 안쓰는데?
     @ManyToMany(mappedBy = "members")
     private List<Team> teams = new ArrayList<>();
 

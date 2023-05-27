@@ -1,6 +1,9 @@
 package com.joinus.joinus.service;
 
+import com.joinus.joinus.domain.Member;
 import com.joinus.joinus.domain.Team;
+import com.joinus.joinus.dto.TeamForm;
+import com.joinus.joinus.persistence.MemberRepository;
 import com.joinus.joinus.persistence.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,8 +15,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeamService{
     private final TeamRepository teamRepository;
+    private final MemberRepository memberRepository;
 
-    public void makeTeam(Team team){
+    public void makeTeam(TeamForm teamForm){
+        Team team = new Team();
+        List<Member> members = new ArrayList<>();
+
+        team.setLeader(teamForm.getLeaderId());
+        team.setName(teamForm.getTeamName());
+        team.setPw(teamForm.getTeamPw());
+        team.setInfo(teamForm.getTeamInfo());
+
+        for (String str : teamForm.getMemberIds()){
+            if (memberRepository.findMemberById(str).isPresent()) {
+                team.addMember(memberRepository.findMemberById(str).get());
+                members.add(memberRepository.findMemberById(str).get());
+            }
+        }
+        team.setMembers(members);
+
         teamRepository.save(team);
     }
 

@@ -34,6 +34,7 @@
 		let teamName = document.getElementById("teamName").value;
 		let teamInfo = document.getElementById("teamInfo").value;
 		let teamPw = document.getElementById("teamPw").value;
+		let leaderId = document.getElementById("leaderId").value;	//	여기에 팀 리더 맡을 유저의 id 저장하기
 
 		//	리더는 선택사항. 팀 만들 때 정해도되고 나중에 정해도되고
 		let teamLeader = document.getElementById("teamLeader").value;
@@ -42,8 +43,9 @@
 				{
 					teamName : teamName,
 					teamInfo : teamInfo,
-					teamPw : teamPw,
+					leaderId : leaderId,
 					memberIds : teamMembers,
+					teamPw : teamPw,
 				})
 				.then(response => {
 					if (response.data.data == "success")

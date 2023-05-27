@@ -25,5 +25,4 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     Optional<List<Member>> findByTechStackIn(Set<String> stack);
 
     Optional<List<Member>> findMembersByNameContains(String name);
-
 }

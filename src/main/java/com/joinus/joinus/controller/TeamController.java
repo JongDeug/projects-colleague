@@ -13,9 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/team")
 @RequiredArgsConstructor
@@ -28,21 +25,8 @@ public class TeamController {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
-        Team team = new Team();
-        List<Member> members = new ArrayList<>();
 
-        team.setLeader(member.getId());
-        team.setName(teamForm.getTeamName());
-        team.setPw(teamForm.getTeamPw());
-        team.setInfo(teamForm.getTeamInfo());
-
-        for (String str : teamForm.getMemberIds()){
-            if (memberService.findOne(str).isPresent())
-                members.add(memberService.findOne(str).get());
-        }
-        team.setMembers(members);
-
-        teamService.makeTeam(team);
+        teamService.makeTeam(teamForm);
 
         Response response = new Response();
         response.setData("success");
