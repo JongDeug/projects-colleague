@@ -17,12 +17,17 @@
 	import { onMount } from "svelte";
 	import axios from "axios";
 	import { URL } from "../../env";
+	import { browser } from "$app/environment";
 
 	export let items = [];
 	onMount(async () => {
 		await axios.get(`${URL}/api/team/myTeam/list`, { withCredentials: true })
 			.then(response => {
 				items = response.data.data;
+				console.log(items);
+				items.forEach((item) => {
+					item.createTime = item.createTime.split("T")[0];
+				})
 			})
 			.catch(error => console.log(error));
 	});
@@ -53,11 +58,15 @@
 					</TableHead>
 					<TableBody>
 						{#each paginatedItems as item}
-							<TableBodyRow>
+							<TableBodyRow on:click={() => {
+								if(browser)	{
+									window.location.href = `/myTeam/detail/${item.id}`;
+								}
+							}}>
 								<TableBodyCell>{item.name}</TableBodyCell>
 								<TableBodyCell>{item.members.length}</TableBodyCell>
 								<TableBodyCell>{item.state}</TableBodyCell>
-								<TableBodyCell>{item.make}</TableBodyCell>
+								<TableBodyCell>{item.createTime}</TableBodyCell>
 							</TableBodyRow>
 						{/each}
 					</TableBody>

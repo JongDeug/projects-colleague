@@ -5,7 +5,7 @@ export default class Connection {
 	private client: Client;
 	private _loginScene: any;
 	private _waitingScene: any;
-	private _homeScene: any;
+	public _homeScene: any;
 	private _meetingScene: any;
 	public teamId: any;
 	private _room: Room;

@@ -74,11 +74,13 @@
 
       await axios.post(`${URL}/api/team/create`,
         {
-          teamName: teamName,
-          teamInfo: teamInfo,
-          teamPw: teamPw,
-          leaderId: teamLeader,
-          memberIds: memberIds,
+          name: teamName,
+          info: teamInfo,
+          pw: teamPw,
+          leader: teamLeader,
+          members: memberIds,
+          teamGit: "임시주소",
+          teamPic: "사진 추후",
         }, { withCredentials: true })
         .then(response => {
           if (response.data.data == "success"){

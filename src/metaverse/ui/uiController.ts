@@ -240,6 +240,8 @@ export default class UIController {
 		// 굳이 setName을 통해서 edit할 필요 없을듯. loginScene 참고.
 	}
 
+
+
 	initialize(group: Phaser.GameObjects.Group) {
 		group.getChildren().forEach((object: any) => {
 			// if (object.name === 'settingContainer') {

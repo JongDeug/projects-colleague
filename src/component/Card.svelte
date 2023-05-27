@@ -44,7 +44,7 @@
 {:else if usage == 'Profile'}
   <!-- svelte-ignore a11y-invalid-attribute -->
   <a
-    href="#"
+    href="/myTeam/introduce/{teamId}"
     class="bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md flex max-w-sm flex-col md:flex-row md:max-w-xl hover:bg-gray-100 dark:hover:bg-gray-700"
   >
     {#if !!img}

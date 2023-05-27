@@ -19,6 +19,7 @@
 	import { onMount } from "svelte";
 	import axios from "axios";
 	import { URL } from "../../../../env";
+	import { browser } from "$app/environment";
 
 	/** @type {import("./$types").PageData} */
 	export let data;
@@ -53,16 +54,23 @@
 	const updateTeam = async (teamId) => {
 		await axios.post(`${URL}/api/team/myTeam/update`,
 			{
-				teamId : teamId,
-				teamName : team.name,
-				teamLeader: teamLeader,
-				teamInfo : team.info,
-				teamPw : team.pw,
-				memberIds : teamMembers
+				id : teamId,
+				name: team.name,
+				leader: teamLeader,
+				info: team.info,
+				pw: team.pw,
+				state: "임시",
+				teamGit: team.teamGit,
+				teamPic: "사진 추후",
+				members: teamMembers,
 			}, {withCredentials: true})
 			.then(response => {
-				if (response.data.data == "success")
+				if (response.data.data == "success"){
 					alert("update success")
+					if(browser){
+						window.location.href = `/myTeam/detail/${data.teamId}/settings`;
+					}
+				}
 			})
 			.catch(error => console.log(error));
 	}
@@ -185,7 +193,7 @@
 
 			<div class="w-[70%] mb-6">
 				<Label for="default-input" class="block mb-2">깃허브 주소</Label>
-				<Input id="default-input" placeholder="Default input" />
+				<Input bind:value={team.teamGit} id="default-input" placeholder="Default input" />
 			</div>
 
 			<div class="w-[70%]">

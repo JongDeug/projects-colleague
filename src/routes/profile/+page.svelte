@@ -11,6 +11,7 @@
 
   export let userInfo = [];
   let techStack = [];
+  export let teamList = [];
   onMount(async () => {
     axios.get(`${URL}/api/member/profile/update`,
       { withCredentials: true })
@@ -18,9 +19,17 @@
         userInfo = response.data.data;
         let copyStack = [];
         userInfo.techStack.forEach((tech) => {
-          copyStack.push({name: tech, color: `#${Math.floor(Math.random()*16777215).toString(16)}`});
+          copyStack.push({ name: tech, color: `#${Math.floor(Math.random() * 16777215).toString(16)}` });
         });
         techStack = copyStack;
+      })
+      .catch(error => console.log(error));
+
+    // 로그인 상태에서 내가 속한 팀 리스트 가져오기 ( 내가 리더인 팀, 내가 멤버인 팀 전부다 )
+    await axios.get(`${URL}/api/team/myTeam/list`, { withCredentials: true })
+      .then(response => {
+        teamList = response.data.data;
+        console.log(teamList);
       })
       .catch(error => console.log(error));
   });
@@ -78,7 +87,7 @@
             style="background-color: {tech.color}"
             class="text-center rounded-xl focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2"
           >
-          {tech.name}
+            {tech.name}
           </a>
         {/each}
       </div>
@@ -87,27 +96,19 @@
   <div class=" w-[80%] p-10 mb-3 bg-white m-auto shadow-lg border rounded-xl">
 
 
-          <h1 class="font-bold mb-7">과거 팀 이력</h1>
-          <!-- 웹사이트 -->
-          <div class="grid grid-cols-2 gap-4">
-            <Card usage="Profile" img="/images/image.png">
-              <h5 class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
-                Noteworthy technology acquisitions 2021
-              </h5>
-              <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 leading-tight">
-                Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse
-                chronological order.
-              </p>
-            </Card>
-            <Card usage="Profile">
-              <h5 class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
-                Noteworthy technology acquisitions 2021
-              </h5>
-              <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 leading-tight">
-                Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse
-                chronological order.
-              </p>
-            </Card>
-          </div>
-          </div>
-          </Layout>
+    <h1 class="font-bold mb-7">과거 팀 이력</h1>
+    <!-- 웹사이트 -->
+    <div class="grid grid-cols-2 gap-4">
+      {#each teamList as team}
+        <Card usage="Profile" teamName={team.name} teamIntro={team.info} teamId={team.id} >
+          <h5 class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
+            {team.name}
+          </h5>
+          <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 leading-tight">
+            {team.info}
+          </p>
+        </Card>
+      {/each}
+    </div>
+  </div>
+</Layout>

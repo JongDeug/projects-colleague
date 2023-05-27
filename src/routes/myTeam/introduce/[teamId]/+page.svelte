@@ -1,10 +1,7 @@
 <script>
-  import Sidebar from "../../../../component/SidebarMyTeam.svelte";
-  import Breadcrumb from "../../../../component/Breadcrumb.svelte";
-  import ConfrimBtn from "../../../../component/ConfirmBtn.svelte";
   import Svg from "../../../../component/Svg.svelte";
-  import Layout from "../../../../component/Layout.svelte";
   import SmallHeader from "../../../../component/SmallHeader.svelte";
+  import Layout from "../../../../component/Layout.svelte";
   import {
     Blockquote,
     Heading,
@@ -19,7 +16,7 @@
   import { onMount } from "svelte";
   import axios from "axios";
   import { URL } from "../../../env";
-  import { browser } from "$app/environment";
+
 
   /** @type {import("./$types").PageData} */
   export let data;
@@ -45,21 +42,10 @@
   });
 </script>
 
-<!-- 팀 명  -->
-<SmallHeader header="{team.name}" />
-
+<SmallHeader header="Team Introduction" style="lg:px-52" />
 <Layout style="flex justify-center">
-  <Sidebar teamId={data.teamId} />
-
-  <div class="ml-5 block w-[70%]">
-    <Breadcrumb prevContent="내 팀" nextContent="대시보드" />
-    <ConfrimBtn content="회의 시작하기" color="blue" style="w-[100%] py-4 mt-3 shadow-md" on:click={() => {
-      if(browser){
-        window.location.href = `/metaverse/${data.teamId}`;
-      }
-    }}/>
-
-    <div class="flex justify-between mb-3 mt-3">
+  <div class="w-[71%]">
+    <div class="flex justify-between mb-6">
       <div class="rounded-lg shadow-md border w-[30%] p-5">
         <h3>팀장</h3>
         <p>{team.leader}</p>
@@ -88,14 +74,14 @@
       <Listgroup active class="mb-6">
         <h5 class="text-center bg-blue-500 text-white font-bold rounded-t-lg">팀원 목록</h5>
         {#each teamMembers as member}
-          <ListgroupItem class="font-semibold gap-2">
+          <ListgroupItem class=" font-semibold gap-2">
             <Avatar src="" size="xs" />
             {member}
           </ListgroupItem>
         {/each}
       </Listgroup>
 
-      <div class="w-full">
+      <div>
         <Label for="default-input" class="block mb-2">깃허브 주소</Label>
         <Input bind:value={team.teamGit} id="default-input" placeholder="Default input" readonly />
       </div>
