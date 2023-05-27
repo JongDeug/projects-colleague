@@ -42,6 +42,10 @@ public class TeamService{
         teamRepository.save(team);
     }
 
+    public void deleteTeam(Long teamId){
+        teamRepository.delete(teamRepository.findTeamById(teamId).get());
+    }
+
     public void changeLeader(Long teamId, String memberId){
         Team team = teamRepository.findTeamById(teamId).get();
         team.setLeader(memberId);

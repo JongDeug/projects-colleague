@@ -90,6 +90,16 @@ public class TeamController {
         response.setRedirect("/team/detail");
         return response;
     }
+
+    @GetMapping("/myTeam/delete")
+    public Response deleteTeam(@RequestParam Long teamId){
+        teamService.deleteTeam(teamId);
+
+        Response response = new Response();
+        response.setData("success");
+        response.setRedirect("/team/detail");
+        return response;
+    }
     
     @GetMapping("/{teamId}/manage/minutes")
     public String getMinutesList(@PathVariable("teamId") Long teamId, Model model){
