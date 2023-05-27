@@ -70,7 +70,7 @@ public class TeamController {
     }
 
     //  그냥 위에꺼 써도 되지만 혹시몰라서
-    @PostMapping("/changeLeader")
+    @PostMapping("/myTeam/changeLeader")
     public Response changeLeader(@RequestParam Long teamId, @RequestParam String memberId){
         teamService.changeLeader(teamId, memberId);
 
@@ -80,7 +80,7 @@ public class TeamController {
         return response;
     }
 
-    @PostMapping("/changeState")
+    @PostMapping("/myTeam/changeState")
     public Response changeState(@RequestParam Long teamId, @RequestParam String state){
         Team team = teamService.findTeamById(teamId);
         team.setState(state);
