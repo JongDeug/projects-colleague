@@ -39,6 +39,7 @@ public class TeamController {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
         Response response = new Response();
+
         response.setData(teamService.findMyTeams(member.getId()));
         response.setRedirect("/myPage/myTeam");
         return response;

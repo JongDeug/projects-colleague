@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -28,19 +30,18 @@ public class TeamService{
 
         for (String str : teamForm.getMemberIds()){
             if (memberRepository.findMemberById(str).isPresent()) {
-                team.addMember(memberRepository.findMemberById(str).get());
-//                members.add(memberRepository.findMemberById(str).get());
+                team.addMember(str);
             }
         }
-//        team.setMembers(members);
-
         teamRepository.save(team);
     }
 
     public List<Team> findMyTeams(String memberId){
         List<Team> teams = new ArrayList<>();
-        if (teamRepository.findTeamsByMembersId(memberId).isPresent())
-            teams.addAll(teamRepository.findTeamsByMembersId(memberId).get());
+        Set<String> targetId = new HashSet<>();
+        targetId.add(memberId);
+        if (teamRepository.findTeamsByMembersIn(targetId).isPresent())
+            teams.addAll(teamRepository.findTeamsByMembersIn(targetId).get());
         return teams;
     }
 

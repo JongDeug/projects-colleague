@@ -1,11 +1,14 @@
 package com.joinus.joinus.domain;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -19,14 +22,11 @@ public class Team {
     private String leader;  //  팀 리더 아이디
     private String state = "stabilized";    //  팀 상태
 
-    @ManyToMany //  얘가 주인
-    private List<Member> members = new ArrayList<>();   //  팀 구성원 id 리스트
+    @ElementCollection
+    private Set<String> members = new HashSet<>();
 
-    public void addMember(Member member)
+    public void addMember(String memberId)
     {
-        if (!this.members.contains(member))
-            this.members.add(member);
-        if (!member.getTeams().contains(this))
-            member.addTeam(this);
+        members.add(memberId);
     }
 }

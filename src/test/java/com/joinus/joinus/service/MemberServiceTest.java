@@ -39,7 +39,8 @@ class MemberServiceTest {
         memberRepository.save(member2);
 
         Set<String> findStack = new HashSet<>();
-        findStack.add("spring");
+        findStack.add("string");
+        findStack.add("python");
 
         //when
         List<Member> result = memberRepository.findByTechStackIn(findStack).get();

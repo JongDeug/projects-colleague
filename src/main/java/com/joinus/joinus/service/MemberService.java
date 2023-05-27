@@ -90,6 +90,6 @@ public class MemberService{
     }
 
     public Optional<Member> findOne(String memberId){
-        return memberRepository.findById(memberId);
+        return memberRepository.findMemberById(memberId);
     }
 }

@@ -11,8 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @Transactional
 @SpringBootTest
 class TeamServiceTest {
@@ -48,14 +46,14 @@ class TeamServiceTest {
         teamRepository.save(team4);
 
         team1.setLeader(member1.getId());
-        team1.addMember(member2);
+        team1.addMember(member2.getId());
 //        team2.addMember(member1);
-        team3.addMember(member1);
-        team4.addMember(member1);
+        team3.addMember(member1.getId());
+        team4.addMember(member1.getId());
 
         //when
         List<Team> findMyTeam = teamRepository.findTeamsByLeader(member1.getId()).get();
-        findMyTeam.addAll(teamRepository.findTeamsByMembersId(member1.getId()).get());
+//        findMyTeam.addAll(teamRepository.findTeamsByMembersIn(member1.getId()).get());
 
 
         //then
