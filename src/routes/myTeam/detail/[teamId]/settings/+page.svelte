@@ -147,16 +147,16 @@
         <Toggle bind:checked={toggle}>{toggleText}</Toggle>
       </div>
 
-      <div class="mb-6 w-[70%]">
+      <div class="mb-6 ">
         <Label for="default-input" class="block mb-2">팀 명</Label>
         <Input bind:value={team.name} id="default-input" placeholder="Default input" />
       </div>
-      <div class="mb-6 w-[70%]">
+      <div class="mb-6 ">
         <Label for="message" class="block mb-2">팀 소개</Label>
         <Textarea {...textareaprops} bind:value={team.info} />
       </div>
 
-      <div class="mb-6 relative w-[70%]">
+      <div class="mb-6 relative ">
         <div class="">
           <Label for="phoneNumber" class="block mb-2">팀원 리스트</Label>
           <Search size="md" bind:value={searchInput} />
@@ -195,26 +195,26 @@
         </div>
       </div>
 
-      <div class="mb-6 w-[70%]">
+      <div class="mb-6 ">
         <Label
         > 팀 리더 설정
           <Select class="mt-2" items={selectTeamMembers} bind:value={teamLeader} />
         </Label>
       </div>
 
-      <div class="w-[70%] mb-6">
+      <div class=" mb-6">
         <Label class="mb-3">팀 배경 사진</Label>
         <div class="flex items-end">
           <Fileupload bind:value />
         </div>
       </div>
 
-      <div class="w-[70%] mb-6">
+      <div class=" mb-6">
         <Label for="default-input" class="block mb-2">깃허브 주소</Label>
         <Input bind:value={team.teamGit} id="default-input" placeholder="Default input" />
       </div>
 
-      <div class="w-[70%]">
+      <div class="">
         <Label for="default-input" class="block mb-2">회의방 비밀번호</Label>
         <Input bind:value={team.pw} id="default-input" placeholder="Default input" />
       </div>

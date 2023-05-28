@@ -116,7 +116,7 @@
     <div class="mt-3 p-10 rounded-lg shadow-md border">
       <h1 class="font-bold mb-7">사용자</h1>
       <!-- 이름 -->
-      <div class="mb-6 w-[70%]">
+      <div class="mb-6 ">
         <Label for="website-admin" class="block mb-2">이름</Label>
         <ButtonGroup class="w-full">
           <InputAddon>
@@ -127,7 +127,7 @@
       </div>
 
       <!-- 이메일 -->
-      <div class="mb-6 w-[70%]">
+      <div class="mb-6 ">
         <Label for="email" class="block mb-2">이메일</Label>
         <ButtonGroup class="w-full">
           <InputAddon>
@@ -138,7 +138,7 @@
       </div>
 
       <!-- 전화번호 -->
-      <div class="mb-6 w-[70%]">
+      <div class="mb-6 ">
         <Label for="phoneNumber" class="block mb-2">전화번호</Label>
         <ButtonGroup class="w-full">
           <InputAddon>
@@ -149,7 +149,7 @@
       </div>
 
       <!-- 소속 -->
-      <div class="mb-6 w-[70%]">
+      <div class="mb-6 ">
         <Label for="department" class="block mb-2">소속</Label>
         <ButtonGroup class="w-full">
           <InputAddon>
@@ -159,7 +159,7 @@
         </ButtonGroup>
       </div>
 
-      <div class="w-[70%]">
+      <div class="">
         <Label class="mb-3">프로필 사진</Label>
         <div class="flex items-center">
           <Avatar use="My Page" />
@@ -172,25 +172,25 @@
     <div class="mt-3 p-10 rounded-lg shadow-md border mb-3">
       <h1 class="font-bold mb-7">개인 포트폴리오</h1>
       <!-- 간단한 자기소개 -->
-      <div class="mb-6 w-[70%]">
+      <div class="mb-6 ">
         <Label for="default-input" class="block mb-2">간단한 자기소개</Label>
         <Input bind:value={userInfo.info} id="default-input" placeholder="Default input" />
       </div>
 
       <!-- 웹사이트 -->
-      <div class="mb-6 w-[70%]">
+      <div class="mb-6 ">
         <Label for="default-input" class="block mb-2">웹사이트</Label>
         <Input bind:value={userInfo.blog} id="default-input" placeholder="Default input" />
       </div>
 
       <!-- 깃허브 주소 -->
-      <div class="mb-6 w-[70%]">
+      <div class="mb-6 ">
         <Label for="default-input" class="block mb-2">깃허브 주소</Label>
         <Input bind:value={userInfo.gitAddress} id="default-input" placeholder="Default input" />
       </div>
 
       <!-- 기술스택 -->
-      <div class="mb-6 w-[100%]">
+      <div class="mb-6">
         <Label for="default-input" class="block mb-2">기술스택</Label>
         <div class="grid grid-cols-4 gap-2">
           {#each techStack as tech, i}

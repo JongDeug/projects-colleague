@@ -25,10 +25,10 @@
 			center: 'title',
 			right: 'dayGridMonth,listWeek'
 		},
-		events: [{ id: '1', title: 'New Event', start: new Date() }],
+		events: [{ id: '1', title: '어허어', start: new Date() }],
 		dateClick: handleDateClick,
 		select: (info) => {
-			console.log(info.start);
+			console.log(info);
 		},
 		eventClick: (info) => {
 			console.log(info.event.id); // event에 위 처럼 id를 설정할 수 있고 그 아이디를 통해 events 배열에서 걸러서 지울 수 있음.
@@ -44,7 +44,7 @@
 				...events,
 				{
 					id: '2',
-					title: 'New Event',
+					title: '어허어허',
 					start: event.date
 				}
 			];
