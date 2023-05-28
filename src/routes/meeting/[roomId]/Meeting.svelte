@@ -35,8 +35,8 @@
     let myPeerConnection;
     let peerConnections;
 
-    const URL = "http://localhost:3000/";
-    // const URL = "https://c5f9-222-103-180-169.ngrok-free.app/";
+    // const URL = "http://localhost:3000/";
+    const URL = "https://1875-222-103-180-169.ngrok-free.app/";
     const socket = io(URL, {
       withCredentials: true
     });
