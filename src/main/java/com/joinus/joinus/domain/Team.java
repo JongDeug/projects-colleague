@@ -21,7 +21,7 @@ public class Team {
     private String name;    //  팀 이름
     private String info;    //  간단한 팀 소개글
     private String leader;  //  팀 리더 아이디
-    private String state = "stabilized";    //  팀 상태
+    private String state = "진행 중";    //  팀 상태
     private String teamGit;
     private LocalDateTime createTime;
     private String teamPic;
