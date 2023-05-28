@@ -20,8 +20,8 @@
         {
           loginId: userId,
           loginPw: userPw
-        // }, { withCredentials: true })
-    }, )
+        }, { withCredentials: true })
+    // }, )
         .then(response => {
           if (response.data.data == "success") {
             alert("login success");

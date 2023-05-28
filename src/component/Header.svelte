@@ -73,9 +73,9 @@
   onMount(async () => {
     let loginMember = localStorage.getWithExpiry("loginMember");
     if (loginMember) {
-      await axios.get(`${URL}/api/member/profile/update`
-        // { withCredentials: true })
-      )
+      await axios.get(`${URL}/api/member/profile/update`,
+        { withCredentials: true })
+      // )
         .then(response => {
           userInfo = response.data.data;
         })
