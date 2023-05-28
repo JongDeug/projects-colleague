@@ -74,7 +74,8 @@
     let loginMember = localStorage.getWithExpiry("loginMember");
     if (loginMember) {
       await axios.get(`${URL}/api/member/profile/update`,
-        { withCredentials: true })
+        // { withCredentials: true })
+      )
         .then(response => {
           userInfo = response.data.data;
         })
