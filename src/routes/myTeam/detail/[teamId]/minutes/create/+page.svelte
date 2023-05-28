@@ -6,11 +6,36 @@
   import {page} from "$app/stores";
   import { Button, CloseButton, Input, Label, Textarea } from "flowbite-svelte";
   import ConfrimBtn from "../../../../../../component/ConfirmBtn.svelte";
+  import axios from "axios";
+  import {URL} from "../../../../../env";
+  import { browser } from "$app/environment";
 
   let path = $page.url.pathname;
   let pathArray = path.split("/")[3];
   // console.log(pathArray);
 
+  const createMinutes = async (teamId) => {
+    await axios.post(`${URL}/api/minutes/create`,
+      {
+        // teamId: teamId,
+        meetingName: "여기에 회의록 이름 입력",
+        location: "여기에 회의 장소 입력",
+        agenda: "여기에 회의 의제 입력",
+        content: "여기에 회의 내용 입력",
+        improvements: "여기에 지적사항 및 조치내용 입력",
+        writerDepartment: "여기에 작성자 소속 입력",
+        writerName: "여기에 작성자 이름 입력",
+      }, { withCredentials: true })
+      .then(response => {
+        if (response.data.data == "success") {
+          alert("create success");
+          // if (browser) {
+          //   window.location.href = `/myTeam/detail/${data.teamId}/settings`;
+          // }
+        }
+      })
+      .catch(error => console.log(error));
+  };
 </script>
 
 <SmallHeader header="abcd" />
@@ -55,6 +80,6 @@
       </form>
     </div>
 <!--    <Button type="submit" class="w-full"> 회의록 생성</Button>-->
-    <ConfrimBtn content="회의록 생성" color="blue" style="w-[100%] py-4 shadow-md" svgName="회의록 작성"/>
+    <ConfrimBtn content="회의록 생성" color="blue" style="w-[100%] py-4 shadow-md" svgName="회의록 작성" on:click={() => createMinutes(pathArray)}/>
   </div>
 </Layout>
