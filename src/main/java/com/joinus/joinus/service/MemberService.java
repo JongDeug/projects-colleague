@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @Transactional
@@ -67,7 +66,6 @@ public class MemberService{
 
     public List<Member> recommendUsers(String memberId){
         Member member = memberRepository.findMemberById(memberId).get();
-        Set<String> techStacks = member.getTechStack();
         if (memberRepository.findMembersByTechStackIn(member.getTechStack()).isPresent())
             return memberRepository.findMembersByTechStackIn(member.getTechStack()).get();
         return null;
