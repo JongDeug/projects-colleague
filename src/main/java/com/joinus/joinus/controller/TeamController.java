@@ -44,7 +44,7 @@ public class TeamController {
         return response;
     }
     @GetMapping("/list")        //  로그인 상관없이 타 유저 팀 리스트
-    public Response getTeamList(@RequestBody String userId) {
+    public Response getTeamList(@RequestParam String userId) {
         Response response = new Response();
         response.setData(teamService.findMyTeams(userId));
         response.setRedirect("/team/list");
