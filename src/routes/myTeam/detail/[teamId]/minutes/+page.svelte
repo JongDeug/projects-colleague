@@ -72,7 +72,7 @@
 
 		<div class="rounded-lg shadow-md border p-10 mt-3">
 			<h1 class="font-bold mb-7">회의록</h1>
-			<TableSearch content="회의록 작성" color="blue">
+			<TableSearch content="회의록 작성" color="blue" location="/myTeam/detail/{data.teamId}/minutes/create">
 				<Table hoverable={true}>
 					<TableHead>
 						<TableHeadCell class="!p-4">

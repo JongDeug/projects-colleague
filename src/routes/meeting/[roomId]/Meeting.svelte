@@ -1,15 +1,22 @@
 <script>
   import { onMount } from "svelte";
   import { io } from "socket.io-client";
+  import * as localStorage from "../../localStorage";
 
   export let roomId;
 
   onMount(() => {
     let _roomId;
     $: _roomId = roomId;
-    let _email = "test";
 
-    initCall(_roomId, _email);
+    let userId = localStorage.getWithExpiry('loginMember');
+    let _email = userId;
+
+    if(_email){
+      initCall(_roomId, _email);
+    }else{
+      alert("로그인 후 이용해주세요");
+    }
 
     const shareScreen = document.getElementById("shareScreen");
     const muteBtn = document.getElementById("mute");
@@ -276,7 +283,7 @@
     });
 
     socket.on("getChat", (receive) => {
-      textArea.value += `${receive.sendUser.id} : ${receive.content}\r\n`;
+      textArea.value += `${receive.sendUser.email} : ${receive.content}\r\n`;
       textArea.scrollTop = textArea.scrollHeight;
     });
 

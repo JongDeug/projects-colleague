@@ -8,6 +8,7 @@ export default class Connection {
 	public _homeScene: any;
 	private _meetingScene: any;
 	public teamId: any;
+	public userId: any;
 	private _room: Room;
 	private _playerState: { [sessionId: string]: any } = {};
 	chatDB: string;
@@ -34,14 +35,25 @@ export default class Connection {
 			console.log('Joining Room...');
 
 			this.teamId = teamId;
+			console.log(this.userId);
 
-			this.room = await this.client.joinOrCreate('metaverse', {
-				teamId: teamId,
-				username: username,
-				password: password,
-				playerImg: playerImg
-			});
+			await this.client
+				.joinOrCreate('metaverse', {
+					teamId: teamId,
+					username: username,
+					userId: this.userId,
+					password: password,
+					playerImg: playerImg
+				})
+				.then((room) => this.room = room)
+				.catch((e) => {
+					console.log(e);
+					if(e.message === "Already Exist"){
+						alert(`${e.message}`);
+					}
+				});
 			console.log('Joined successfully!');
+
 
 			// 이벤트 등록
 			this.registerEvent();
@@ -163,7 +175,6 @@ export default class Connection {
 	public set playerState(state) {
 		this._playerState = state;
 	}
-
 
 	public set loginScene(loginScene: Phaser.Scene) {
 		this._loginScene = loginScene;

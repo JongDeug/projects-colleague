@@ -2,6 +2,7 @@ import { Schema, Context, type, MapSchema } from "@colyseus/schema";
 
 export class Player extends Schema {
   @type("string") name: string;
+  @type("string") userId: string;
   @type("string") img: string;
   @type("string") currentScene: string;
   @type("number") x: number;

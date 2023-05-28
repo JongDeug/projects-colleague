@@ -53,7 +53,7 @@
 					<TableHead>
 						<TableHeadCell>팀 명</TableHeadCell>
 						<TableHeadCell>팀원 수</TableHeadCell>
-						<TableHeadCell>팀원 상태</TableHeadCell>
+						<TableHeadCell>팀 상태</TableHeadCell>
 						<TableHeadCell>생성일자</TableHeadCell>
 					</TableHead>
 					<TableBody>

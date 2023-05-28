@@ -6,7 +6,6 @@
   import Svg from "./Svg.svelte";
   import ConfirmBtn from "./ConfirmBtn.svelte";
   import axios from "axios";
-  import { goto } from "$app/navigation";
   import { browser } from "$app/environment";
   import { URL } from "../routes/env";
   import * as localStorage from "../routes/localStorage";
@@ -33,8 +32,10 @@
     current = "Board";
   } else if (pathArray === "myTeam") {
     current = "MyTeam";
-  } else {
+  } else if (pathArray === "userRecommendation") {
     current = "UserRecommendation";
+  } else {
+    current = null;
   }
 
   let sendModal = false;
@@ -183,7 +184,7 @@
                     on:clickOutside={handleProfileStatus}
                   >
                     <a
-                      href="/profile"
+                      href="/profile/{userInfo.id}"
                       class="block px-4 py-2 m-2 text-gray-700 rounded-lg hover:bg-slate-300 font-bold"
                     >
                       <span class="mb-2 inline-block">{userInfo.name}</span> <br />@{userInfo.id}

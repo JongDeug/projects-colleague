@@ -15,7 +15,8 @@
     // 로그인 상태에서 내가 속한 팀 리스트 가져오기 ( 내가 리더인 팀, 내가 멤버인 팀 전부다 )
     await axios.get(`${URL}/api/team/myTeam/list`, { withCredentials: true })
       .then(response => {
-        teamList = response.data.data;
+        let copyTeamList = response.data.data;
+        teamList = copyTeamList.filter((team) => team.state === "진행 중");
         console.log(teamList);
       })
       .catch(error => console.log(error));
@@ -32,11 +33,6 @@
       <Card usage="MyTeam" teamName={team.name} teamIntro={team.info} teamId={team.id} />
     {/each}
 
-    <CardPlaceholder />
-    <CardPlaceholder />
-    <CardPlaceholder />
-    <CardPlaceholder />
-    <CardPlaceholder />
     <CardPlaceholder />
   </div>
 </Layout>

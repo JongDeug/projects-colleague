@@ -1,35 +1,63 @@
 <script>
-  import Avatar from "../../component/Avatar.svelte";
-  import ConfirmBtn from "../../component/ConfirmBtn.svelte";
-  import Card from "../../component/Card.svelte";
-  import Layout from "../../component/Layout.svelte";
+  import Avatar from "../../../component/Avatar.svelte";
+  import ConfirmBtn from "../../../component/ConfirmBtn.svelte";
+  import Card from "../../../component/Card.svelte";
+  import Layout from "../../../component/Layout.svelte";
   import { Input, Label } from "flowbite-svelte";
   import { onMount } from "svelte";
-  import { URL } from "../env";
+  import { URL } from "../../env";
   import axios from "axios";
-  import Svg from "../../component/Svg.svelte";
+  import Svg from "../../../component/Svg.svelte";
+
+  /** @type {import("./$types").PageData} */
+  export let data;
 
   export let userInfo = [];
   let techStack = [];
   export let teamList = [];
   onMount(async () => {
-    axios.get(`${URL}/api/member/profile/update`,
-      { withCredentials: true })
+    // get, post 두 개 있는데 get은 요청만.
+    // axios.get(`${URL}/api/member/profile/update`,
+    //   { withCredentials: true })
+    //   .then(response => {
+    //     userInfo = response.data.data;
+    //     let copyStack = [];
+    //     userInfo.techStack.forEach((tech) => {
+    //       copyStack.push({ name: tech, color: `#${Math.floor(Math.random() * 16777215).toString(16)}` });
+    //     });
+    //     techStack = copyStack;
+    //   })
+    //   .catch(error => console.log(error));
+    // 유저 정보 get
+    await axios.get(`${URL}/api/member/search`,
+      {
+        params: {
+          memberId: data.userId
+        },
+        withCredentials: true
+      })
       .then(response => {
-        userInfo = response.data.data;
+        let members = response.data.data;
+        userInfo = members[0];
         let copyStack = [];
         userInfo.techStack.forEach((tech) => {
           copyStack.push({ name: tech, color: `#${Math.floor(Math.random() * 16777215).toString(16)}` });
         });
         techStack = copyStack;
+        console.log(userInfo);
       })
       .catch(error => console.log(error));
 
     // 로그인 상태에서 내가 속한 팀 리스트 가져오기 ( 내가 리더인 팀, 내가 멤버인 팀 전부다 )
-    await axios.get(`${URL}/api/team/myTeam/list`, { withCredentials: true })
+    await axios.get(`${URL}/api/team/list`, {
+      params: {
+        userId: data.userId
+      },
+      withCredentials: true
+    })
       .then(response => {
         teamList = response.data.data;
-        console.log(teamList);
+        // console.log(teamList);
       })
       .catch(error => console.log(error));
   });
@@ -100,7 +128,7 @@
     <!-- 웹사이트 -->
     <div class="grid grid-cols-2 gap-4">
       {#each teamList as team}
-        <Card usage="Profile" teamName={team.name} teamIntro={team.info} teamId={team.id} >
+        <Card usage="Profile" teamName={team.name} teamIntro={team.info} teamId={team.id}>
           <h5 class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
             {team.name}
           </h5>

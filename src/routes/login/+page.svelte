@@ -61,12 +61,12 @@
     <div>
       <form>
         <div class="mb-6">
-          <Label for="email" class="mb-2">이메일</Label>
-          <Input bind:value={userId} type="email" id="email" placeholder="john.doe@company.com" required />
+          <Label for="email" class="mb-2">아이디</Label>
+          <Input bind:value={userId} type="email" id="email" required />
         </div>
         <div class="mb-6">
           <Label for="password" class="mb-2">패스워드</Label>
-          <Input bind:value={userPw} type="password" id="password" placeholder="•••••••••" required />
+          <Input bind:value={userPw} type="password" id="password" required />
         </div>
         <ConfirmBtn content="계속" color="blue" style="w-[100%]" on:click={login} />
 
