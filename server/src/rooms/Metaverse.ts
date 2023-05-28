@@ -1,6 +1,8 @@
 import { Room, Client, ServerError } from 'colyseus';
 import { MetaverseState, Player } from './schema/MetaverseState';
 import { IncomingMessage } from 'http';
+import axios from 'axios';
+import { URL } from '../../../src/routes/env';
 
 export class Metaverse extends Room<MetaverseState> {
 	private users: any = {};
@@ -9,68 +11,6 @@ export class Metaverse extends Room<MetaverseState> {
 
 	onCreate(options: any): void | Promise<any> {
 		this.setState(new MetaverseState());
-
-		// WebRTC
-		this.onMessage('join_room', (client, data) => {
-			if (this.users[data.room]) {
-				const length = this.users[data.room].length;
-				// 인원 제한
-				if (length === this.maximum) {
-					client.send('room_full');
-					return;
-				}
-				this.users[data.room].push({ id: client.id, email: data.email });
-			} else {
-				// room no exist
-				this.users[data.room] = [{ id: client.id, email: data.email }];
-			}
-
-			// this.socketToRoom[socket.id] = data.room;
-			// socket.join(data.room);
-			// console.log(users);
-
-			// 본인을 제외한 같은 room의 user array
-			const usersInThisRoom = this.users[data.room].filter((user: any) => user.id !== client.id);
-			console.log(usersInThisRoom);
-
-			// 본인에게 해당 user array를 전송
-			// 새로 접속하는 user가 이미 방에 있는 user들에게 offer(signal)를 보내기 위해
-			// io.sockets.to(socket.id).emit('all_users', usersInThisRoom);
-			// this.broadcast('all_users', usersInThisRoom, {except: client});
-			this.clients.forEach((client) => {
-				client.send('all_users', usersInThisRoom);
-			});
-			// this.broadcast('all_users', usersInThisRoom);
-		});
-
-		this.onMessage('offer', (client, offer) => {
-			const findClient = this.clients.find((client) => client.id === offer.offerReceiveId);
-			findClient.send('getOffer', {
-				offer: offer.offer,
-				offerSendId: offer.offerSendId,
-				offerSendEmail: offer.offerSendEmail
-			});
-		});
-
-		this.onMessage('answer', (client, answer) => {
-			const findClient = this.clients.find((client) => client.id === answer.answerReceiveId);
-			findClient.send('getAnswer', {
-				answer: answer.answer,
-				answerSendId: answer.answerSendId
-			});
-		});
-
-		this.onMessage('ice', (client, ice) => {
-			const findClient = this.clients.find((client) => client.id === ice.iceReceiveId);
-			findClient.send('getIce', {
-				ice: ice.ice,
-				iceSendId: ice.iceSendId
-			});
-			// socket.to(ice.iceReceiveId).emit('getIce', {
-			//     ice: ice.ice,
-			//     iceSendId: ice.iceSendId
-			// });
-		});
 
 		// 방향 메시지 핸들러
 		this.onMessage('keyboard', (client, input) => {
@@ -149,49 +89,70 @@ export class Metaverse extends Room<MetaverseState> {
 	// }
 
 	async onJoin(client: Client, options?: any, auth?: any): Promise<any> {
-			const flag = this.clients.find((client) => {
-				const player = this.state.players.get(client.sessionId);
-				if(player){
-					if(player.userId === options.userId){
-							return true;
-						}else{
-							return false;
-					}
+		const userExist = this.clients.find((client) => {
+			const player = this.state.players.get(client.sessionId);
+			if (player) {
+				if (player.userId === options.userId) {
+					return true;
+				} else {
+					return false;
 				}
-			});
-			// console.log(flag);
-
-			// 이미 존재하면 접속 X
-			if(flag){
-				throw new Error('Already Exist');
 			}
-			// 입장
-			else{
-				// Metaverse 입장
-				console.log(client.sessionId, 'joined!');
-				// create Player instance
-				const player = new Player();
-				// initialize
-				player.name = options.username;
-				player.userId = options.userId;
-				player.img = options.playerImg;
-				player.x = 175;
-				player.y = 16;
-				player.currentScene = 'waitingScene';
-				player.left = false;
-				player.right = false;
-				player.up = false;
-				player.down = false;
+		});
+		// console.log(flag);
+		let passwordCheck;
+		await axios
+			.get(`${URL}/api/team/detail`, {
+				params: {
+					teamId: options.teamId
+				},
+				withCredentials: true
+			})
+			.then((response) => {
+				const team = response.data.data;
+				if (team.pw === options.password) {
+					passwordCheck = true;
+				} else {
+					passwordCheck = false;
+				}
+			})
+			.catch((error) => console.log(error));
 
-				this.state.players.set(client.sessionId, player);
-				// 채팅 입장
-				const payload = {
-					sessionId: client.sessionId,
-					username: player.name,
-					serverImg: player.img
-				};
-				this.broadcast('enterWaitingScene', payload);
-			}
+		// 이미 존재하면 접속 X
+		if (userExist) {
+			throw new Error('Already Exist');
+		}
+		// 비번 체킹
+		else if (!passwordCheck) {
+			throw new Error("Password doesn't match");
+		}
+		// 입장
+		else {
+			// Metaverse 입장
+			console.log(client.sessionId, 'joined!');
+			// create Player instance
+			const player = new Player();
+			// initialize
+			player.name = options.username;
+			player.userId = options.userId;
+			player.img = options.playerImg;
+			player.x = 175;
+			player.y = 16;
+			player.currentScene = 'waitingScene';
+			player.left = false;
+			player.right = false;
+			player.up = false;
+			player.down = false;
+
+			this.state.players.set(client.sessionId, player);
+			// 채팅 입장
+			const payload = {
+				sessionId: client.sessionId,
+				username: player.name,
+				serverImg: player.img
+			};
+			this.broadcast('enterWaitingScene', payload);
+		}
 	}
 
 	onLeave(client: Client, consented?: boolean): void | Promise<any> {

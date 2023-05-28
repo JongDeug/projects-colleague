@@ -9,6 +9,8 @@ import cors from 'cors';
  * Import your Room files
  */
 import { Metaverse } from './rooms/Metaverse';
+import axios from "axios";
+import { URL } from "../../src/routes/env";
 
 export default Arena({
 	getId: () => 'Your Colyseus App',
@@ -22,12 +24,11 @@ export default Arena({
 
 	initializeExpress: (app) => {
 		// colyseus monitor
+
 		app.use('/colyseus', monitor());
 
 		const allowedOrigins = [
 			'http://localhost:8000',
-			'https://master--preeminent-douhua-939041.netlify.app',
-			'https://7854-222-103-180-169.ngrok-free.app',
 		];
 		const server = createServer(app);
 		const io = new Server(server, {
@@ -121,6 +122,7 @@ export default Arena({
 
 			socket.on("chat", (content) => {
 				const roomID = socketToRoom[socket.id];
+				console.log(content);
 				// room in users...
 				const room = users[roomID];
 				if (room) {

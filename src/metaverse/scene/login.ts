@@ -92,8 +92,8 @@ export default class LoginScene extends Phaser.Scene {
         const x = 400;
         const y = 450;
         const title = 'Create User';
-        let username = '이름';
-        let password = '1234';
+        let username = '닉네임';
+        let password = '****';
 
         const markPassword = (password) => {
             return new Array(password.length + 1).join('•');

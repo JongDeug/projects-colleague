@@ -30,7 +30,7 @@ export default class Connection {
 	): Promise<boolean> {
 		try {
 			this.client = new Client('ws://localhost:2567');
-			// this.client = new Client('wss://nasty-carpets-tie.loca.lt/ws');
+			// this.client = new Client('wss://9d23-222-103-180-169.ngrok-free.app/ws');
 
 			console.log('Joining Room...');
 
@@ -49,7 +49,10 @@ export default class Connection {
 				.catch((e) => {
 					console.log(e);
 					if(e.message === "Already Exist"){
-						alert(`${e.message}`);
+						alert("이미 입장하였습니다.");
+					}
+					if(e.message === "Password doesn't match"){
+						alert("패스워드 불일치")
 					}
 				});
 			console.log('Joined successfully!');
