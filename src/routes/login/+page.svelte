@@ -16,7 +16,7 @@
     if (!userId || !userPw) {
       alert("input id, pw");
     } else {
-      const res = axios.post(`${URL}/api/login`,
+      const res = axios.post(`/api/login`,
         {
           loginId: userId,
           loginPw: userPw

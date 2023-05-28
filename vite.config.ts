@@ -10,14 +10,16 @@ export default defineConfig({
   // 	include: ['@fullcalendar/common']
   // }
   server: {
-    port: 8000,
-    strictPort: true,
-    // proxy: {
-    //   "/api": {
-    //     target: "http://localhost:8080/",
-    //     changeOrigin: true,
-    //     rewrite: (path) => path.replace(/^\/api/, ""),
-    //   }
-    // },
+    // port: 8000,
+    // strictPort: true,
+    proxy: {
+      // "/api": {
+      //   target: "https://98a7-222-103-180-169.ngrok-free.app",
+      //   changeOrigin: true,
+      //   secure: false,
+      //   rewrite: (path) => path.replace(/^\/api/, ""),
+      // }
+      '/api': 'https://98a7-222-103-180-169.ngrok-free.app',
+    },
   }
 });
