@@ -23,6 +23,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     Optional<Member> findMemberByIdAndEmail(String id, String email);
 
     Optional<List<Member>> findByTechStackIn(Set<String> stack);
+    Optional<List<Member>> findMembersByTechStackIn(Set<String> stack);
 
     Optional<List<Member>> findMembersByNameContains(String name);
 }

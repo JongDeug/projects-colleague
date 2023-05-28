@@ -93,8 +93,9 @@ public class MemberController {
     public Response recommendUsers(HttpServletRequest request){
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
         Response response = new Response();
-        response.setData(memberService.recommendUsers(member));
+        response.setData(memberService.recommendUsers(member.getId()));
         response.setRedirect("/userRecommendation");
         return response;
     }

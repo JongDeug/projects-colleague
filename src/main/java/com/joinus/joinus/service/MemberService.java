@@ -65,10 +65,12 @@ public class MemberService{
     }
 
 
-    public List<Member> recommendUsers(Member member){
+    public List<Member> recommendUsers(String memberId){
+        Member member = memberRepository.findMemberById(memberId).get();
         Set<String> techStacks = member.getTechStack();
-        List<Member> members = memberRepository.findByTechStackIn(techStacks).get();
-        return members;
+        if (memberRepository.findMembersByTechStackIn(member.getTechStack()).isPresent())
+            return memberRepository.findMembersByTechStackIn(member.getTechStack()).get();
+        return null;
     }
 
     public List<Member> getMembersByName(String name){
