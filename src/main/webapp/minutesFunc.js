@@ -95,6 +95,21 @@ const updateMinutes = async (minutesId) => {
 };
 
 
+const searchMinutes = async (text) => {
+    await axios.get(`${URL}/api/minutes/search`,
+        {
+            params: {
+                text: text
+            },
+            withCredentials: true
+        })
+        .then(response => {
+            minutes = response.data.data;
+            console.log(minutes);
+        })
+        .catch(error => console.log(error));
+};
+
 
 
 //  회의록 삭제하기

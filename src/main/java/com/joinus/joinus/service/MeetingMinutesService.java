@@ -38,4 +38,10 @@ public class MeetingMinutesService {
     public void deleteMinutes(Long minutesId){
         meetingMinutesRepository.delete(meetingMinutesRepository.findById(minutesId).get());
     }
+
+    public List<MeetingMinutes> search(String str){
+        if (meetingMinutesRepository.findAllByMeetingNameContains(str).isPresent())
+            return meetingMinutesRepository.findAllByMeetingNameContains(str).get();
+        return null;
+    }
 }

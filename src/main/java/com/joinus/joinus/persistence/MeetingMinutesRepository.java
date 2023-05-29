@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface MeetingMinutesRepository extends JpaRepository<MeetingMinutes, Long> {
     Optional<List<MeetingMinutes>> findAllByTeamId(Long teamId);
+    Optional<List<MeetingMinutes>> findAllByMeetingNameContains(String name);
 }

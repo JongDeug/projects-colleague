@@ -62,4 +62,13 @@ public class MinutesController {
 
         return response;
     }
+
+    @GetMapping("/search")
+    public Response search(@RequestParam String text){
+        Response response = new Response();
+        response.setData(meetingMinutesService.search(text));
+        response.setRedirect("/");
+
+        return response;
+    }
 }
