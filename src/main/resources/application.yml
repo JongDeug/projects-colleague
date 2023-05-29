@@ -1,6 +1,12 @@
 loggin:
   level:
     root: info
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: none
+        secure: true
 spring:
   messages:
     basename: errors

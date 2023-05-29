@@ -13,7 +13,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class MeetingMinutesService {
-    private MeetingMinutesRepository meetingMinutesRepository;
+    private final MeetingMinutesRepository meetingMinutesRepository;
 
     public void makeMinutes(MeetingMinutes meetingMinutes){
         meetingMinutes.setCreateTime(LocalDateTime.now());

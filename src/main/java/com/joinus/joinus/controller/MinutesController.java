@@ -4,11 +4,13 @@ import com.joinus.joinus.domain.MeetingMinutes;
 import com.joinus.joinus.dto.Response;
 import com.joinus.joinus.service.MeetingMinutesService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/minutes")
 @RequiredArgsConstructor
+@Slf4j
 public class MinutesController {
     private final MeetingMinutesService meetingMinutesService;
 
@@ -33,6 +35,7 @@ public class MinutesController {
     @PostMapping("/create")
     public Response create(@RequestBody MeetingMinutes minutes){
         Response response = new Response();
+//        log.info("info={}", minutes);
         meetingMinutesService.makeMinutes(minutes);
         response.setData("success");
         response.setRedirect("/");
