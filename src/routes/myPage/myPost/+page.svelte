@@ -17,7 +17,6 @@
 
   import { page } from "$app/stores";
 
-  let searchTerm = "";
 
   import { paginate, LightPaginationNav } from "svelte-paginate";
   import { onMount } from "svelte";

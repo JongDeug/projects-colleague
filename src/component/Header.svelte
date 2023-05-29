@@ -78,6 +78,7 @@
       // )
         .then(response => {
           userInfo = response.data.data;
+          console.log(userInfo);
         })
         .catch(error => console.log(error));
     }
