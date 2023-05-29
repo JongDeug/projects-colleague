@@ -27,7 +27,7 @@ public class MeetingMinutesService {
     public void updateMinutes(MeetingMinutes meetingMinutes){
         MeetingMinutes meetingMinutes1 = meetingMinutesRepository.findById(meetingMinutes.getId()).get();
         meetingMinutes.setTeamId(meetingMinutes1.getTeamId());
-        meetingMinutes.setCreateTime(meetingMinutes.getCreateTime());
+        meetingMinutes.setCreateTime(meetingMinutes1.getCreateTime());
         meetingMinutesRepository.save(meetingMinutes);
     }
 
