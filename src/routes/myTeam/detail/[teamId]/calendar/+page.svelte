@@ -10,7 +10,7 @@
   import listPlugin from "@fullcalendar/list";
   import interactionPlugin from "@fullcalendar/interaction";
 
-  import { onMount } from "svelte";
+  import { afterUpdate, onMount } from "svelte";
   import axios from "axios";
   import { URL } from "../../../../env";
 
@@ -26,72 +26,117 @@
     headerToolbar: {
       left: "prev,next today",
       center: "title",
-      // right: "dayGridMonth,timeGridWeek,timeGridDay"
       right: "dayGridMonth,listWeek"
     },
     events: [],
     dateClick: handleDateClick,
     select: handleSelectClick,
-    eventClick: (info) => {
-      // event 클릭 시 삭제
-      info.event.remove();
-    }
+    eventClick: handleEventClick
   };
 
-  function handleSelectClick(info) {
-    console.log(info);
+  const deleteEvent = async (eventId) => {
+    await axios.post(`${URL}/api/calendar/delete`, { withCredentials: true },
+      {
+        params: {
+          calendarId: eventId
+        }
+      })
+      .then(response => {
+        if (response.data.data == "success") {
+          alert("delete success");
+        }
+      })
+      .catch(error => console.log(error));
+  };
+
+  //  일정 생성 (서버 DB에 저장)
+  const createEvent = async (teamId, title, start, end) => {
+    await axios.post(`${URL}/api/calendar/create`,
+      {
+        title: title,
+        startDate: start,
+        endDate: end
+      }, {
+        params: {
+          teamId: data.teamId
+        },
+        withCredentials: true
+      })
+      .then(response => {
+        if (response.data.data == "success") {
+          alert("create success");
+        }
+      })
+      .catch(error => console.log(error));
+  };
+
+  async function handleEventClick(info) {
+    // info.event.id 찾아서 삭제
+    await deleteEvent(info.event.id);
+    await rerender();
+  }
+
+  async function handleSelectClick(info) {
     const diff = Math.abs(info.end - info.start);
     // 하루보다 커야함
     if (diff > 86400000) {
       let eventName = prompt("이벤트명");
-      const { events } = options;
-
-      // 처음 Event 를 가져오고 로딩
-      // 추가할땐 api로 추가하고 집어넣고 => 로딩
-      const calendarEvents = [
-        ...events,
-        {
-          id: "2",
-          title: eventName,
-          start: info.startStr,
-          end: info.endStr
-        }
-      ];
-      options = {
-        ...options,
-        events: calendarEvents
-      };
+      if(eventName){
+        await createEvent(data.teamId, eventName, info.startStr, info.endStr);
+        await rerender();
+      }
     }
   }
 
-  function handleDateClick(event) {
-    console.log(event.date);
+  async function handleDateClick(event) {
     let eventName = prompt("이벤트명");
     let eventTime = prompt("시간", event.date);
-    const { events } = options;
-    const calendarEvents = [
-      ...events,
-      {
-        id: "2",
-        title: eventName,
-        start: new Date(eventTime),
-        end: null,
+    if(eventName && eventTime){
+      await createEvent(data.teamId, eventName, eventTime, null);
+      await rerender();
+    }
+  }
+
+  const rerender = async () => {
+    await getEventList();
+    eventList.forEach((event) => {
+      if (event.endDate !== null) {
+        calendarEvents = [...calendarEvents, {
+          id: event.id,
+          title: event.title,
+          start: event.startDate,
+          end: event.endDate
+        }];
+      } else {
+        calendarEvents = [...calendarEvents, {
+          id: event.id,
+          title: event.title,
+          start: new Date(event.startDate),
+          end: new Date(event.endDate)
+        }];
       }
-    ];
+    });
+  };
+
+  let calendarEvents = [];
+  $: {
     options = {
       ...options,
       events: calendarEvents
     };
+    calendarEvents = [];
+    console.log(calendarEvents);
+    console.log("hi");
   }
 
   let calendarEl;
-  export let calendar;
+  let calendar;
   $: if (calendar) {
     calendar = new Calendar(calendarEl, options);
     calendar.render();
   }
 
-  let eventList = [];
+  export let eventList = [];
   onMount(async () => {
     // event 리스트 가져오기
     await axios.get(`${URL}/api/calendar/list`,
@@ -103,15 +148,54 @@
       })
       .then(response => {
         eventList = response.data.data;
-        console.log(eventList);
+        // console.log(eventList);
       })
       .catch(error => console.log(error));
+
+    eventList.forEach((event) => {
+      if (event.endDate !== null) {
+        calendarEvents = [...calendarEvents, {
+          id: event.id,
+          title: event.title,
+          start: event.startDate,
+          end: event.endDate
+        }];
+      } else {
+        calendarEvents = [...calendarEvents, {
+          id: event.id,
+          title: event.title,
+          start: new Date(event.startDate),
+          end: new Date(event.endDate)
+        }];
+      }
+    });
+
+    options = {
+      ...options,
+      events: calendarEvents
+    };
 
     calendar = new Calendar(calendarEl, options);
     calendar.render();
     await getTeam(data.teamId);
   });
 
+  const getEventList = async () => {
+    await axios.get(`${URL}/api/calendar/list`,
+      {
+        params: {
+          teamId: data.teamId
+        },
+        withCredentials: true
+      })
+      .then(response => {
+        eventList = response.data.data;
+      })
+      .catch(error => console.log(error));
+  };
+
+
+  // team 구하기
   let team = [];
   const getTeam = async (teamId) => {
     await axios.get(`${URL}/api/team/detail`,
@@ -123,12 +207,9 @@
       })
       .then(response => {
         team = response.data.data;
-        console.log(team);
       })
       .catch(error => console.log(error));
   };
-
-
 </script>
 
 <SmallHeader header="{team.name}" />
