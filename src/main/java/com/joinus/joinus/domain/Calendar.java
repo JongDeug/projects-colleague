@@ -14,7 +14,7 @@ public class Calendar {
     @Id @GeneratedValue
     private Long id;
     private String title;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private Long teamId;
 }

@@ -35,7 +35,7 @@ public class CalendarController {
 
     @PostMapping("/delete")
     public Response delete(@RequestParam Long calendarId){
-        calendarService.delete((calendarId));
+        calendarService.delete(calendarId);
 
         Response response = new Response();
         response.setData("success");
