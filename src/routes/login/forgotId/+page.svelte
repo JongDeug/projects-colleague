@@ -33,16 +33,16 @@
 
     <div class="mb-6">
       <Label for="success" class="block mb-2">이름</Label>
-      <Input bind:value={name} id="success" placeholder="Success input" />
+      <Input bind:value={name} id="success" />
     </div>
     <div class="mb-6">
       <Label for="success" class="block mb-2">이메일</Label>
-      <Input bind:value={email} id="success" placeholder="Success input" type="email" />
+      <Input bind:value={email} id="success" placeholder="abcd@gmail.com" type="email" />
     </div>
 
     <div class="mb-10">
       <Label for="success" class="block mb-2">전화번호</Label>
-      <Input bind:value={phoneNum} id="success" placeholder="010-1234-1234" type="tel" />
+      <Input bind:value={phoneNum} id="success" placeholder="01012341234" type="tel" />
     </div>
 
     <ConfrimBtn on:click={findId} content="확인" color="blue" style="w-[100%]" />

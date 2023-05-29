@@ -122,7 +122,7 @@
           <InputAddon>
             <Svg svgName="이름" />
           </InputAddon>
-          <Input bind:value={userInfo.name} id="website-admin" placeholder="elonmusk" />
+          <Input bind:value={userInfo.name} id="website-admin" />
         </ButtonGroup>
       </div>
 
@@ -133,7 +133,7 @@
           <InputAddon>
             <Svg svgName="이메일" />
           </InputAddon>
-          <Input bind:value={userInfo.email} id="email" type="email" placeholder="name@gmail.com" />
+          <Input bind:value={userInfo.email} id="email" type="email" />
         </ButtonGroup>
       </div>
 
@@ -144,7 +144,7 @@
           <InputAddon>
             <Svg svgName="전화번호" />
           </InputAddon>
-          <Input bind:value={userInfo.phoneNum} id="phoneNumber" type="tel" placeholder="010-####-####" />
+          <Input bind:value={userInfo.phoneNum} id="phoneNumber" type="tel" />
         </ButtonGroup>
       </div>
 
@@ -155,7 +155,7 @@
           <InputAddon>
             <Svg svgName="소속" />
           </InputAddon>
-          <Input bind:value={userInfo.department} id="department" type="tel" placeholder="010-####-####" />
+          <Input bind:value={userInfo.department} id="department" type="tel" />
         </ButtonGroup>
       </div>
 
@@ -174,19 +174,19 @@
       <!-- 간단한 자기소개 -->
       <div class="mb-6 ">
         <Label for="default-input" class="block mb-2">간단한 자기소개</Label>
-        <Input bind:value={userInfo.info} id="default-input" placeholder="Default input" />
+        <Input bind:value={userInfo.info} id="default-input" />
       </div>
 
       <!-- 웹사이트 -->
       <div class="mb-6 ">
         <Label for="default-input" class="block mb-2">웹사이트</Label>
-        <Input bind:value={userInfo.blog} id="default-input" placeholder="Default input" />
+        <Input bind:value={userInfo.blog} id="default-input" />
       </div>
 
       <!-- 깃허브 주소 -->
       <div class="mb-6 ">
         <Label for="default-input" class="block mb-2">깃허브 주소</Label>
-        <Input bind:value={userInfo.gitAddress} id="default-input" placeholder="Default input" />
+        <Input bind:value={userInfo.gitAddress} id="default-input" />
       </div>
 
       <!-- 기술스택 -->

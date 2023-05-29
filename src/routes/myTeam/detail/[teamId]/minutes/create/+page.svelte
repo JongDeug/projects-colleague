@@ -13,7 +13,6 @@
 
   let path = $page.url.pathname;
   let pathArray = path.split("/")[3];
-  // console.log(pathArray);
 
   let _meetingName;
   let _location;
@@ -46,9 +45,9 @@
       .catch(error => console.log(error));
   };
 
-  onMount(async ()=> {
+  onMount(async () => {
     await getTeam(pathArray);
-  })
+  });
   let team = [];
   const getTeam = async (teamId) => {
     await axios.get(`${URL}/api/team/detail`,
@@ -79,23 +78,23 @@
 
       <div class="mb-6">
         <Label for="title" class="block mb-2">회의명</Label>
-        <Input bind:value={_meetingName} id="title" name="title" required placeholder="Apple Keynote" />
+        <Input bind:value={_meetingName} id="title" name="title" required />
       </div>
       <div class="mb-6">
         <Label for="title" class="block mb-2">장소</Label>
-        <Input bind:value={_location} id="title" name="title" required placeholder="Apple Keynote" />
+        <Input bind:value={_location} id="title" name="title" required />
       </div>
       <div class="mb-6">
         <Label for="title" class="block mb-2">의안</Label>
-        <Input bind:value={_agenda} id="title" name="title" required placeholder="Apple Keynote" />
+        <Input bind:value={_agenda} id="title" name="title" required />
       </div>
       <div class="mb-6">
         <Label for="description" class="mb-2">토의내용</Label>
-        <Textarea bind:value={_content} id="message" placeholder="Write event description..." rows="4" name="message" />
+        <Textarea bind:value={_content} id="message" rows="4" name="message" />
       </div>
       <div class="mb-6">
         <Label for="description" class="mb-2">지난 발표시 지적사항 및 조치 내용</Label>
-        <Textarea bind:value={_improvements} id="message" placeholder="Write event description..." rows="4" name="message" />
+        <Textarea bind:value={_improvements} id="message" rows="4" name="message" />
       </div>
       <div class="mb-6">
         <Label for="title" class="block mb-2">작성자</Label>

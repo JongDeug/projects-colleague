@@ -95,23 +95,23 @@
 
       <div class="mb-6">
         <Label for="title" class="block mb-2">회의명</Label>
-        <Input bind:value={minute.meetingName} readonly id="title" name="title" required placeholder="Apple Keynote" />
+        <Input bind:value={minute.meetingName} readonly id="title" name="title" required />
       </div>
       <div class="mb-6">
         <Label for="title" class="block mb-2">장소</Label>
-        <Input bind:value={minute.location} readonly id="title" name="title" required placeholder="Apple Keynote" />
+        <Input bind:value={minute.location} readonly id="title" name="title" required  />
       </div>
       <div class="mb-6">
         <Label for="title" class="block mb-2">의안</Label>
-        <Input bind:value={minute.agenda} readonly id="title" name="title" required placeholder="Apple Keynote" />
+        <Input bind:value={minute.agenda} readonly id="title" name="title" required  />
       </div>
       <div class="mb-6">
         <Label for="description" class="mb-2">토의내용</Label>
-        <Textarea bind:value={minute.content} readonly id="message" placeholder="Write event description..." rows="4" name="message" />
+        <Textarea bind:value={minute.content} readonly id="message" rows="4" name="message" />
       </div>
       <div class="mb-6">
         <Label for="description" class="mb-2">지난 발표시 지적사항 및 조치 내용</Label>
-        <Textarea bind:value={minute.improvements} readonly id="message" placeholder="Write event description..." rows="4" name="message" />
+        <Textarea bind:value={minute.improvements} readonly id="message"  rows="4" name="message" />
       </div>
       <div class="mb-6">
         <Label for="title" class="block mb-2">작성자</Label>

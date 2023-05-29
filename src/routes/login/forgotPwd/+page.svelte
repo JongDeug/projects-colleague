@@ -9,8 +9,6 @@
   let userId;
   let email;
   const findPw = async () => {
-    // let userId = document.getElementById("userId").value;
-    // let email = document.getElementById("email").value;
     await axios.post(`${URL}/api/member/find/pw`,
       {
         id: userId,
@@ -35,11 +33,11 @@
 
     <div class="mb-6">
       <Label for="success" class="block mb-2">아이디</Label>
-      <Input bind:value={userId} id="success" placeholder="Success input" />
+      <Input bind:value={userId} id="success" />
     </div>
     <div class="mb-10">
       <Label for="success" class="block mb-2">이메일</Label>
-      <Input bind:value={email} id="success" placeholder="Success input" />
+      <Input bind:value={email} id="success" placeholder="abcd@gmail.com" />
     </div>
 
     <ConfirmBtn on:click={findPw}  content="확인" color="blue" style="w-[100%]" />

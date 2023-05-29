@@ -57,7 +57,7 @@
 
 <Layout>
   <div class="px-5">
-    <h1 class="">{post.title}</h1>
+    <h1 class="mb-5">{post.title}</h1>
     <div class="relative flex mb-2 justify-between">
       <div class="flex space-x-5">
         <p class="flex items-center">

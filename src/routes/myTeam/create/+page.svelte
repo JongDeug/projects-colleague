@@ -79,7 +79,7 @@
           pw: teamPw,
           leader: teamLeader,
           members: memberIds,
-          teamGit: "임시주소",
+          teamGit: "주소를 입력하지 않았습니다.",
           teamPic: "사진 추후",
         }, { withCredentials: true })
         .then(response => {

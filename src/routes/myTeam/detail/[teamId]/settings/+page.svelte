@@ -149,7 +149,7 @@
 
       <div class="mb-6 ">
         <Label for="default-input" class="block mb-2">팀 명</Label>
-        <Input bind:value={team.name} id="default-input" placeholder="Default input" />
+        <Input bind:value={team.name} />
       </div>
       <div class="mb-6 ">
         <Label for="message" class="block mb-2">팀 소개</Label>
@@ -211,12 +211,12 @@
 
       <div class=" mb-6">
         <Label for="default-input" class="block mb-2">깃허브 주소</Label>
-        <Input bind:value={team.teamGit} id="default-input" placeholder="Default input" />
+        <Input bind:value={team.teamGit} />
       </div>
 
       <div class="">
         <Label for="default-input" class="block mb-2">회의방 비밀번호</Label>
-        <Input bind:value={team.pw} id="default-input" placeholder="Default input" />
+        <Input bind:value={team.pw} type="password" />
       </div>
     </div>
     <ConfrimBtn content="저장" color="blue" style="w-[100%] py-4 shadow-md" on:click={() => updateTeam(data.teamId)} />

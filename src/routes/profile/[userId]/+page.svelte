@@ -81,9 +81,9 @@
         <div>
           <h1 class="font-bold">{userInfo.name}</h1>
           <p class="mt-3">
-            {userInfo.info ? userInfo.info : "자기소개를 작성해주세요"}
+            {userInfo.info ? userInfo.info : "자기소개가 없습니다."}
           </p>
-          <span class="inline-block mt-3">{userInfo.department ? userInfo.department : "부서를 기입해주세요"}</span>
+          <span class="inline-block mt-3">{userInfo.department ? userInfo.department : "부서가 없습니다."}</span>
         </div>
       </div>
     </div>
@@ -94,23 +94,23 @@
     <!-- 웹사이트 -->
     <div class="mb-6 w-[70%]">
       <Label for="default-input" class="block mb-2">웹사이트 주소</Label>
-      <Input bind:value={userInfo.blog} id="default-input" placeholder="Default input" readonly />
+      <Input bind:value={userInfo.blog} id="default-input" readonly />
     </div>
 
     <!-- 깃허브 주소 -->
     <div class="mb-6 w-[70%]">
       <Label for="default-input" class="block mb-2">깃허브 주소</Label>
-      <Input bind:value={userInfo.gitAddress} id="default-input" placeholder="Default input" readonly />
+      <Input bind:value={userInfo.gitAddress} id="default-input" readonly />
     </div>
 
     <!-- 기술스택 -->
     <div class="mb-6 w-[70%]">
       <Label for="default-input" class="block mb-2">기술스택</Label>
       <div class="grid grid-cols-3 gap-4">
-        <!--				<ConfirmBtn content="기술스택1" color="yellow" on:click={(e) => e.preventDefault();} />-->
+        {#if !techStack[0]}
+          <span class="col-span-3">#기술스택을 설정하지 않았습니다.</span>
+        {/if}
         {#each techStack as tech }
-          <!--				<ConfirmBtn content="기술스택2" color="blue" />-->
-          <!--				<ConfirmBtn content="기술스택3" color="red" />-->
           <a
             style="background-color: {tech.color}"
             class="text-center rounded-xl focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2"
