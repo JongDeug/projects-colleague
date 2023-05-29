@@ -19,14 +19,6 @@
   export let data;
 
 
-  let _meetingName;
-  let _location;
-  let _agenda;
-  let _content;
-  let _improvements;
-  let _writerDepartment;
-  let _writerName;
-
   let minute = [];
   onMount(async () => {
     await axios.get(`${URL}/api/minutes/detail`,
@@ -41,6 +33,9 @@
         console.log(minute);
       })
       .catch(error => console.log(error));
+
+    // 팀명
+    await getTeam(pathArray);
   });
 
 
@@ -61,9 +56,27 @@
       })
       .catch(error => console.log(error));
   };
+
+
+
+  let team = [];
+  const getTeam = async (teamId) => {
+    await axios.get(`${URL}/api/team/detail`,
+      {
+        params: {
+          teamId: teamId
+        },
+        withCredentials: true
+      })
+      .then(response => {
+        team = response.data.data;
+        console.log(team);
+      })
+      .catch(error => console.log(error));
+  };
 </script>
 
-<SmallHeader header="abcd" />
+<SmallHeader header="{team.name}" />
 
 <Layout style="flex justify-center">
   <Sidebar teamId="{pathArray}" />

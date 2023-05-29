@@ -33,6 +33,9 @@
         console.log(minute);
       })
       .catch(error => console.log(error));
+
+
+    await getTeam(pathArray);
   });
 
 
@@ -60,9 +63,25 @@
       .catch(error => console.log(error));
   };
 
+
+  let team = [];
+  const getTeam = async (teamId) => {
+    await axios.get(`${URL}/api/team/detail`,
+      {
+        params: {
+          teamId: teamId
+        },
+        withCredentials: true
+      })
+      .then(response => {
+        team = response.data.data;
+        console.log(team);
+      })
+      .catch(error => console.log(error));
+  };
 </script>
 
-<SmallHeader header="abcd" />
+<SmallHeader header="{team.name}" />
 
 <Layout style="flex justify-center">
   <Sidebar teamId="{pathArray}" />

@@ -9,6 +9,7 @@
   import axios from "axios";
   import { URL } from "../../../../../env";
   import { browser } from "$app/environment";
+  import { onMount } from "svelte";
 
   let path = $page.url.pathname;
   let pathArray = path.split("/")[3];
@@ -44,9 +45,28 @@
       })
       .catch(error => console.log(error));
   };
+
+  onMount(async ()=> {
+    await getTeam(pathArray);
+  })
+  let team = [];
+  const getTeam = async (teamId) => {
+    await axios.get(`${URL}/api/team/detail`,
+      {
+        params: {
+          teamId: teamId
+        },
+        withCredentials: true
+      })
+      .then(response => {
+        team = response.data.data;
+        console.log(team);
+      })
+      .catch(error => console.log(error));
+  };
 </script>
 
-<SmallHeader header="abcd" />
+<SmallHeader header="{team.name}" />
 
 <Layout style="flex justify-center">
   <Sidebar teamId="{pathArray}" />

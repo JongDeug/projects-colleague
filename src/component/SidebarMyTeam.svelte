@@ -19,7 +19,6 @@
 
   let site = {
     name: "Join.Us",
-    href: "/board/list",
     img: "/images/JoinUs.png"
   };
 
@@ -27,24 +26,27 @@
   const userId = localStorage.getWithExpiry("loginMember");
   const deleteTeam = async (teamId) => {
     await getTeam(teamId);
-    if (userId === team.leader) {
-      await axios.post(`${URL}/api/team/myTeam/delete`, { withCredentials: true },
-        {
-          params: {
-            teamId: teamId
-          }
-        })
-        .then(response => {
-          if (response.data.data == "success") {
-            alert("update success");
-            if (browser) {
-              window.location.href = "/myTeam/list";
+    let confirm = prompt("삭제하실려면 yes를 입력해주세요");
+    if (confirm === "yes") {
+      if (userId === team.leader) {
+        await axios.post(`${URL}/api/team/myTeam/delete`, { withCredentials: true },
+          {
+            params: {
+              teamId: teamId
             }
-          }
-        })
-        .catch(error => console.log(error));
-    } else {
-      alert("Team Leader가 아닙니다.");
+          })
+          .then(response => {
+            if (response.data.data == "success") {
+              alert("update success");
+              if (browser) {
+                window.location.href = "/myTeam/list";
+              }
+            }
+          })
+          .catch(error => console.log(error));
+      } else {
+        alert("Team Leader가 아닙니다.");
+      }
     }
   };
 

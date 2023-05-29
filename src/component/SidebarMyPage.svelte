@@ -8,20 +8,18 @@
     SidebarDropdownWrapper
   } from "flowbite-svelte";
   import axios from "axios";
-  import {URL} from "../routes/env";
+  import { URL } from "../routes/env";
   import * as localStorage from "../routes/localStorage";
   import { browser } from "$app/environment";
 
-  let spanClass = "flex-1 ml-3 whitespace-nowrap";
 
   let site = {
     name: "Join.Us",
-    href: "/board/list",
     img: "/images/JoinUs.png"
   };
 
   const deleteUser = async () => {
-    await axios.post(`${URL}/api/member/delete`, {},{ withCredentials: true })
+    await axios.post(`${URL}/api/member/delete`, {}, { withCredentials: true })
       .then(response => {
         alert(response.data.data);
         localStorage.removeItem("loginMember");
@@ -58,7 +56,7 @@
         </svelte:fragment>
         <SidebarDropdownItem label="회원정보 수정" href="/myPage/updateProfile" />
         <SidebarDropdownItem label="비밀번호 변경" href="/myPage/changePwd" />
-        <SidebarDropdownItem label="회원 탈퇴" on:click={deleteUser}/>
+        <SidebarDropdownItem label="회원 탈퇴" on:click={deleteUser} />
       </SidebarDropdownWrapper>
 
       <SidebarItem label="내 팀" href="/myPage/myTeam">

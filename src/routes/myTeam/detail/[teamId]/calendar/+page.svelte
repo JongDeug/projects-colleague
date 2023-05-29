@@ -11,6 +11,8 @@
   import interactionPlugin from "@fullcalendar/interaction";
 
   import { onMount } from "svelte";
+  import axios from "axios";
+  import { URL } from "../../../../env";
 
   /** @type {import("./$types").PageData} */
   export let data;
@@ -27,7 +29,7 @@
       // right: "dayGridMonth,timeGridWeek,timeGridDay"
       right: "dayGridMonth,listWeek"
     },
-    events: [{ id: "1", title: "어허어", start: new Date(), end: null }],
+    events: [],
     dateClick: handleDateClick,
     select: handleSelectClick,
     eventClick: (info) => {
@@ -89,13 +91,47 @@
     calendar.render();
   }
 
+  let eventList = [];
   onMount(async () => {
+    // event 리스트 가져오기
+    await axios.get(`${URL}/api/calendar/list`,
+      {
+        params: {
+          teamId: data.teamId
+        },
+        withCredentials: true
+      })
+      .then(response => {
+        eventList = response.data.data;
+        console.log(eventList);
+      })
+      .catch(error => console.log(error));
+
     calendar = new Calendar(calendarEl, options);
     calendar.render();
+    await getTeam(data.teamId);
   });
+
+  let team = [];
+  const getTeam = async (teamId) => {
+    await axios.get(`${URL}/api/team/detail`,
+      {
+        params: {
+          teamId: teamId
+        },
+        withCredentials: true
+      })
+      .then(response => {
+        team = response.data.data;
+        console.log(team);
+      })
+      .catch(error => console.log(error));
+  };
+
+
 </script>
 
-<SmallHeader header="abcd" />
+<SmallHeader header="{team.name}" />
 <Layout style="flex justify-center">
   <Sidebar teamId="{data.teamId}" />
 
