@@ -5,7 +5,7 @@ import MeetingMinutes from './meetingMinutes';
 // import Setting from './setting';
 import Chat from './chat';
 import type Connection from '../interaction/connection';
-// import Dialog from "./dialog";
+
 
 export default class UIController {
 	_scene: Phaser.Scene;
@@ -15,15 +15,8 @@ export default class UIController {
 	_calendar: Calendar;
 	_fullscreen: FullScreen;
 	_meetingMinutes: MeetingMinutes;
-	// _dialog: Dialog;
-	// _setting: Setting;
 	_chat: Chat;
 	_uiContainer = {
-		// settingButton: null,
-		// settingContainer: null,
-		// settingMenu: null,
-		// settingMenuItemCam: null,
-		// settingMenuItemVoice: null,
 		fullscreenButton: null,
 		calendarButton: null,
 		calendarContainer: null,
@@ -44,7 +37,7 @@ export default class UIController {
 		};
 		this._connection = connection;
 
-		this._calendar = new Calendar(this._scene);
+		this._calendar = new Calendar(this._scene, this._connection);
 		this._fullscreen = new FullScreen(this._scene);
 		this._meetingMinutes = new MeetingMinutes(this._scene);
 		// this._setting = new Setting(this._scene);
@@ -69,59 +62,19 @@ export default class UIController {
 		// this._scene.load.html('meeting', 'html/meeting.html');
 	}
 
-	create(): void {
-		this._calendar.create();
+	async create(): Promise<void> {
+		await this._calendar.create();
 		this._chat.create();
 		this._fullscreen.create();
 		this._meetingMinutes.create();
 		// this._setting.create();
 	}
 
-	// dialogCreate() : void {
-	// 	this._dialog.create();
-	// }
-
 	event(): void {
 		this.initialize(this._calendar.group);
 		this.initialize(this._chat.group);
 		this.initialize(this._fullscreen.group);
-		// this.initialize(this._setting.group);
 		this.initialize(this._meetingMinutes.group);
-		//
-		// console.log(this._uiContainer.calendarContainer);
-		// console.log(this._uiContainer.calendarContent);
-		// console.log(this._uiContainer.calendarBoard);
-		// console.log(this._uiContainer.calendarButton);
-		//
-		// this._uiContainer.settingButton.on(
-		// 	'pointerup',
-		// 	() => {
-		// 		if (!!this._status.settingButton == true) {
-		// 			this._status.settingButton = false;
-		// 			this._uiContainer.settingButton.setFrame(2);
-		// 			this._uiContainer.settingContainer.setVisible(false);
-		// 			this._scene.cameras.main.setAlpha(1);
-		// 		} else {
-		// 			this._status.settingButton = true;
-		// 			this._status.calendarButton = false;
-		// 			this._status.meetingMinutesButton = false;
-		// 			this._uiContainer.settingButton.setFrame(3);
-		// 			this._uiContainer.calendarButton.setFrame(0);
-		// 			this._uiContainer.meetingMinutesButton.setFrame(4);
-		// 			this._uiContainer.settingContainer.setVisible(true);
-		// 			this._scene.cameras.main.setAlpha(0.5);
-		// 		}
-		// 	},
-		// 	this
-		// );
-		//
-		// this._uiContainer.settingMenuItemVoice.on(
-		// 	'pointerup',
-		// 	() => {
-		// 		console.log('hi');
-		// 	},
-		// 	this
-		// );
 
 		// full
 		this._uiContainer.fullscreenButton.on(
@@ -143,7 +96,7 @@ export default class UIController {
 		// cal
 		this._uiContainer.calendarButton.on(
 			'pointerup',
-			() => {
+			async () => {
 				if (!!this._status.calendarButton == true) {
 					this._status.calendarButton = false;
 					this._uiContainer.calendarButton.setFrame(0);
@@ -155,15 +108,17 @@ export default class UIController {
 				} else {
 					this._status.calendarButton = true;
 					//test
+					// await this._calendar.create();
+					setTimeout(() => {
+						this._calendar.createCalendar();
+					}, 10)
+
 					this._uiContainer.calendarContent.setVisible(true);
 					this._uiContainer.calendarBoard.setVisible(true);
 
-					this._status.settingButton = false;
 					this._status.meetingMinutesButton = false;
 					this._uiContainer.calendarButton.setFrame(1);
-					// this._uiContainer.settingButton.setFrame(2);
 					this._uiContainer.meetingMinutesButton.setFrame(4);
-					// this._uiContainer.settingContainer.setVisible(false);
 					this._scene.cameras.main.setAlpha(0.5);
 				}
 			},
@@ -247,8 +202,6 @@ export default class UIController {
 		// 굳이 setName을 통해서 edit할 필요 없을듯. loginScene 참고.
 	}
 
-
-
 	initialize(group: Phaser.GameObjects.Group) {
 		group.getChildren().forEach((object: any) => {
 			// if (object.name === 'settingContainer') {
@@ -278,7 +231,6 @@ export default class UIController {
 				this._uiContainer.calendarContent.setVisible(false);
 			}
 			if (object.name === 'calendarButton') this._uiContainer.calendarButton = object;
-
 
 			if (object.name === 'meetingMinutesButton') this._uiContainer.meetingMinutesButton = object;
 

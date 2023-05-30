@@ -6,17 +6,185 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
-import scrollPlugin from '@fullcalendar/scrollgrid';
+import axios from 'axios';
+import { URL } from '../../routes/env';
+import type Connection from '../interaction/connection';
 
 export default class Calendar implements UserInterface {
 	_scene: Phaser.Scene;
+	_connection: Connection;
+
 	private _group: Phaser.GameObjects.Group;
 
-	constructor(scene) {
+	constructor(scene, connection) {
 		this._scene = scene;
+		this._connection = connection;
 	}
 
-	create(): void {
+	async createCalendar() {
+		const teamId = this._connection.teamId;
+		let eventList = [];
+		let calendarEvents = [];
+
+		let options = {
+			plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
+			initialView: 'dayGridMonth',
+			editable: true,
+			selectable: true,
+			selectMirror: true,
+			headerToolbar: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'dayGridMonth,listWeek'
+			},
+			events: [],
+			dateClick: handleDateClick,
+			select: handleSelectClick,
+			eventClick: handleEventClick,
+			contentHeight: 510
+		};
+
+
+		// start
+		await render(teamId);
+
+		async function createEvent(teamId, title, start, end) {
+			await axios
+				.post(
+					`${URL}/api/calendar/create`,
+					{
+						title: title,
+						startDate: start,
+						endDate: end
+					},
+					{
+						params: {
+							teamId: teamId
+						},
+						withCredentials: true
+					}
+				)
+				.then((response) => {
+					if (response.data.data == 'success') {
+						alert('create success');
+					}
+				})
+				.catch((error) => console.log(error));
+		}
+
+		async function deleteEvent(eventId) {
+			await axios
+				.post(
+					`${URL}/api/calendar/delete`,
+					{ withCredentials: true },
+					{
+						params: {
+							calendarId: eventId
+						}
+					}
+				)
+				.then((response) => {
+					if (response.data.data == 'success') {
+						alert('delete success');
+					}
+				})
+				.catch((error) => console.log(error));
+		}
+
+		async function handleSelectClick(info) {
+			calendarEvents = [];
+			const diff = Math.abs(info.end - info.start);
+			// 하루보다 커야함
+			if (diff > 86400000) {
+				const eventName = prompt('이벤트명');
+				console.log(eventName);
+				if (eventName) {
+					await createEvent(teamId, eventName, info.startStr, info.endStr);
+					await render(teamId);
+				}
+			}
+		}
+
+		async function handleDateClick(event) {
+			calendarEvents = [];
+			const eventName = prompt('이벤트명');
+			const eventTime = prompt('시간', event.date);
+			if (eventName && eventTime) {
+				await createEvent(teamId, eventName, eventTime, null);
+				await render(teamId);
+			}
+		}
+
+		async function handleEventClick(info) {
+			if (confirm('삭제 하실겁니까?')) {
+				calendarEvents = [];
+				await deleteEvent(info.event.id);
+				await render(teamId);
+			}
+		}
+
+		async function getEventList(teamId) {
+			await axios
+				.get(`${URL}/api/calendar/list`, {
+					params: {
+						teamId: teamId
+					},
+					withCredentials: true
+				})
+				.then((response) => {
+					eventList = response.data.data;
+					eventList.forEach((event) => {
+						if (event.endDate !== null) {
+							calendarEvents = [
+								...calendarEvents,
+								{
+									id: event.id,
+									title: event.title,
+									start: event.startDate,
+									end: event.endDate
+								}
+							];
+						} else {
+							calendarEvents = [
+								...calendarEvents,
+								{
+									id: event.id,
+									title: event.title,
+									start: new Date(event.startDate),
+									end: new Date(event.endDate)
+								}
+							];
+						}
+					});
+					options = {
+						...options,
+						events: calendarEvents
+					};
+				})
+				.catch((error) => console.log(error));
+		}
+
+		async function render(teamId) {
+			try {
+				await getEventList(teamId);
+
+				const calendarEl = document.getElementById('calendar');
+				// console.log(this._options);
+				const calendarT = new CalendarT.Calendar(calendarEl, options);
+				calendarT.render();
+
+				const topNav = document.querySelector('.fc-header-toolbar');
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				topNav.style.fontSize = 'x-small';
+			} catch (e) {
+				console.log('render error', e);
+			}
+		}
+
+	}
+
+	async create(): Promise<void> {
 		this._group = this._scene.add.group();
 
 		const calendar = {
@@ -34,70 +202,13 @@ export default class Calendar implements UserInterface {
 				.setInteractive()
 				.setDepth(1),
 			content: this._scene.add
-				.dom(400, 110)
+				.dom(400, 50)
 				.createFromCache('calendar')
-				.setOrigin(0.5, 0.5)
+				// .setOrigin(0.5, 0.5)
+				.setScale(0.794, 0.8)
 				.setName('calendarContent')
 				.setDepth(1)
 		};
-
-		let options = {
-			plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, scrollPlugin],
-			// fullcalendar free trial
-			schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
-			dayMinWidth: 80,
-			stickyFooterScrollbar: true,
-			initialView: 'dayGridMonth',
-			contentHeight: 390,
-			editable: true,
-			selectable: true,
-			headerToolbar: {
-				left: 'prev,next today',
-				center: 'title',
-				right: 'dayGridMonth,listWeek'
-			},
-			events: [{ id: '1', title: 'New Event', start: new Date() }],
-			dateClick: handleDateClick,
-			select: (info) => {
-				console.log(info.start);
-			},
-			eventClick: (info) => {
-				console.log(info.event.id); // event에 위 처럼 id를 설정할 수 있고 그 아이디를 통해 events 배열에서 걸러서 지울 수 있음.
-				// 즉 중요한 db는 events 객체임!
-				// info.event.remove();
-			}
-		};
-
-		try {
-			if (calendar.content.active) {
-				// document.addEventListener('DOMContentLoaded', () => {
-				const calendarEl = document.getElementById('calendar')!;
-				// console.log(calendarEl);
-				const calendarT = new CalendarT.Calendar(calendarEl, options);
-				calendarT.render();
-				// });
-			}
-		} catch (e) {
-			console.log('render error', e);
-		}
-
-		function handleDateClick(event) {
-			if (confirm('Would you like to add an event to ' + event.dateStr + ' ?')) {
-				const { events } = options;
-				const calendarEvents = [
-					...events,
-					{
-						id: '2',
-						title: 'New Event',
-						start: event.date
-					}
-				];
-				options = {
-					...options,
-					events: calendarEvents
-				};
-			}
-		}
 
 		this._group.add(calendar.button);
 		this._group.add(calendar.board);

@@ -137,17 +137,9 @@ export default class HomePlayer extends Player {
 				if (sessionId === this.connection.room.sessionId) {
 					this.currentPlayer = null;
 
-					// Remove animation
-					// const numberStr = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'];
-					// numberStr.forEach((item) => {
-					// 	this.removeAnims(item);
-					// });
-					//
-					// this.scene.scene.start('meetingScene', { fromTo: 'fromHomeToMeeting' });
-					// 회의방 입장
-
-					// this.connection._homeScene.uiController.dialogCreate();
-					window.open(`http://localhost:8000/meeting/${this.connection.teamId}`);
+					if(confirm("회의방을 입장하시겠습니까?")){
+						window.open(`http://localhost:8000/meeting/${this.connection.teamId}`);
+					}
 				}
 			}
 

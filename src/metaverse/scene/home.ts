@@ -59,7 +59,7 @@ export default class HomeScene extends Phaser.Scene {
 		this.uiController.preload();
 	}
 
-	create() {
+	async create() {
 		// 생성
 		try {
 			// 맵 생성
@@ -156,9 +156,8 @@ export default class HomeScene extends Phaser.Scene {
 			this.createPlayerAnimation('right09', 6, 8, 'character09');
 
 			// UI 생성
-			this.uiController.create();
+			await this.uiController.create();
 			this.uiController.event();
-			// console.log(this.connection.chatDB);
 			if (this.connection.chatDB != null) {
 				this.uiController._uiContainer.chatUI.setText(this.connection.chatDB);
 			}

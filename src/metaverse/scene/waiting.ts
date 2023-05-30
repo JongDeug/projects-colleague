@@ -2,7 +2,6 @@ import Phaser from 'phaser';
 import UIController from '../ui/uiController';
 import Connection from '../interaction/connection';
 import WaitingPlayer from '../util/waitingPlayer';
-
 interface SceneItems {
     uiCam: Phaser.Cameras.Scene2D.Camera,
     belowLayer: Phaser.Tilemaps.TilemapLayer,
@@ -90,7 +89,7 @@ export default class WaitingScene extends Phaser.Scene {
         this.uiController.preload();
     }
 
-    create() {
+    async create() {
         // await this.connection.connect(this.connection.teamId);
         // const connected = await this.connection.connect(this.connection.teamId, 'sdfsdf', 'sdf');
         // 생성
@@ -181,10 +180,9 @@ export default class WaitingScene extends Phaser.Scene {
             this.createPlayerAnimation('right09', 6, 8, 'character09');
 
             // UI 생성
-            this.uiController.create();
-
+            await this.uiController.create();
             this.uiController.event();
-            if(this.connection.chatDB != null){
+            if (this.connection.chatDB != null) {
                 this.uiController._uiContainer.chatUI.setText(this.connection.chatDB);
             }
         } catch (e) {
@@ -201,7 +199,7 @@ export default class WaitingScene extends Phaser.Scene {
                 name.setVisible(false);
                 delete this.waitingPlayer.playerEntities[sessionId];
                 delete this.waitingPlayer.playerNames[sessionId];
-        }
+            }
         });
     }
 
