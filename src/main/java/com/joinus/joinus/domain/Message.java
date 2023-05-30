@@ -17,4 +17,5 @@ public class Message {
     private String title;   //  굳이?
     private String content;
     private LocalDateTime sendTime;
+    private boolean checked;
 }
