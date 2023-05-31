@@ -17,4 +17,6 @@ public class Message {
     private String content;
     private LocalDateTime sendTime;
     private boolean checked = false;
+    private boolean receiverDeleted = false;
+    private boolean senderDeleted = false;
 }

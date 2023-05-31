@@ -49,18 +49,27 @@ public class MessageController {
         return response;
     }
 
-    @GetMapping("/detail")
-    public Response getMessageDetail(@RequestParam Long messageId){
+    @PostMapping("/detail")
+    public Response getMessageDetail(@RequestParam Long messageId, @RequestParam Boolean check){
+        messageService.updateMessage(messageId, check);
+
         Response response = new Response();
         response.setData(messageService.readMessageDetail(messageId));
         response.setRedirect("/postMsg/detail");
         return response;
     }
 
-
-    @PostMapping("/delete")
-    public Response delete(@RequestBody Long messageId) {
-        messageService.deleteMessage(messageId);
+    @PostMapping("/delete/sender")
+    public Response deleteBySender(@RequestParam Long messageId) {
+        messageService.deleteMessage(messageId, "sender");
+        Response response = new Response();
+        response.setData("success");
+        response.setRedirect("/postMsg");
+        return response;
+    }
+    @PostMapping("/delete/receiver")
+    public Response deleteByReceiver(@RequestParam Long messageId) {
+        messageService.deleteMessage(messageId, "receiver");
         Response response = new Response();
         response.setData("success");
         response.setRedirect("/postMsg");

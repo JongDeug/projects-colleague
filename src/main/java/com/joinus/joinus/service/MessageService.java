@@ -4,8 +4,6 @@ import com.joinus.joinus.domain.Message;
 import com.joinus.joinus.dto.MessageForm;
 import com.joinus.joinus.persistence.MessageRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,13 +42,23 @@ public class MessageService {
     public Message readMessageDetail(Long messageId){
         return messageRepository.findById(messageId).get();
     }
-    public void deleteMessage(Long messageId){
+    public void deleteMessage(Long messageId, String actor){
         Message message = messageRepository.findById(messageId).get();
-        messageRepository.delete(message);
+
+        if (actor.equals("sender"))
+            message.setSenderDeleted(true);
+        else if (actor.equals("receiver"))
+            message.setReceiverDeleted(true);
+
+        if (message.isSenderDeleted() && message.isReceiverDeleted())
+            messageRepository.delete(message);
+        else
+            messageRepository.save(message);
     }
 
-    @MessageMapping("/{userId}")
-    public void message(@DestinationVariable("userId") Long userId) {
-        messagingTemplate.convertAndSend("/sub/" + userId, "alarm socket connection completed.");
+    public void updateMessage(Long messageId, boolean check){
+        Message message = messageRepository.findById(messageId).get();
+        message.setChecked(check);
+        messageRepository.save(message);
     }
 }
