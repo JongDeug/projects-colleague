@@ -22,7 +22,7 @@ public class MessageService {
 
 
     public void createMessage(Message message){
-        messagingTemplate.convertAndSend("/sub/" + message.getReceiver(), message.getContent());
+//        messagingTemplate.convertAndSend("/sub/" + message.getReceiver(), message.getContent());
         message.setSendTime(LocalDateTime.now());
         messageRepository.save(message);
     }
