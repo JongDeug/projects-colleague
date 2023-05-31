@@ -14,7 +14,6 @@ public class Message {
     private Long id;
     private String sender;
     private String receiver;
-    private String title;
     private String content;
     private LocalDateTime sendTime;
     private boolean checked = false;

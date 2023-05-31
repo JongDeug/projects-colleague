@@ -1,7 +1,7 @@
 package com.joinus.joinus.controller;
 
 import com.joinus.joinus.domain.Member;
-import com.joinus.joinus.domain.Message;
+import com.joinus.joinus.dto.MessageForm;
 import com.joinus.joinus.dto.Response;
 import com.joinus.joinus.service.MessageService;
 import com.joinus.joinus.web.validation.SessionConst;
@@ -61,19 +61,6 @@ public class MessageController {
     }
 
 
-    @PostMapping("/create")
-    @MessageMapping("/hello")
-    @SendTo("/topic/roomId")
-    public Response create(@RequestBody Message message, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
-        message.setSender(member.getId());
-        messageService.createMessage(message);
-        Response response = new Response();
-        response.setData("success");
-        response.setRedirect("/postMsg");
-        return response;
-    }
     @PostMapping("/delete")
     public Response delete(@RequestBody Long messageId) {
         messageService.deleteMessage(messageId);
@@ -83,5 +70,12 @@ public class MessageController {
         return response;
     }
 
+    //  메시지 작성 메소드 (create)
+    @MessageMapping("/hello")
+    @SendTo("/topic/roomId")
+    public MessageForm create(MessageForm messageForm) {
+        messageService.createMessage(messageForm);
+        return messageForm;
+    }
 
 }

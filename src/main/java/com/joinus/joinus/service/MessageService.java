@@ -1,6 +1,7 @@
 package com.joinus.joinus.service;
 
 import com.joinus.joinus.domain.Message;
+import com.joinus.joinus.dto.MessageForm;
 import com.joinus.joinus.persistence.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -21,8 +22,11 @@ public class MessageService {
 
 
 
-    public void createMessage(Message message){
-//        messagingTemplate.convertAndSend("/sub/" + message.getReceiver(), message.getContent());
+    public void createMessage(MessageForm messageForm){
+        Message message = new Message();
+        message.setSender(messageForm.getSender());
+        message.setReceiver(messageForm.getReceiver());
+        message.setContent(messageForm.getContent());
         message.setSendTime(LocalDateTime.now());
         messageRepository.save(message);
     }
