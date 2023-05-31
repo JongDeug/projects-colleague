@@ -35,7 +35,6 @@ export default class Connection {
 			console.log('Joining Room...');
 
 			this.teamId = teamId;
-			console.log(this.userId);
 
 			await this.client
 				.joinOrCreate('metaverse', {

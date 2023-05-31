@@ -9,6 +9,10 @@ export default defineConfig({
   // optimizeDeps: {
   // 	include: ['@fullcalendar/common']
   // }
+  // // sockjs error
+  // define: {
+  //   'global': {},
+  // },
   server: {
     port: 8000,
     strictPort: true,

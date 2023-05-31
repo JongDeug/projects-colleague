@@ -205,22 +205,6 @@ export default class LoginScene extends Phaser.Scene {
         })
         // this.add.existing(carousel);
 
-        // this.add.graphics({
-        //     lineStyle: {
-        //         width: 3,
-        //         color: 0xff0000,
-        //         alpha: 1
-        //     }
-        // })
-        //     .strokeRect(
-        //         400 - (carousel.width / 2),
-        //         230 - (carousel.height / 2),
-        //         carousel.width,
-        //         carousel.height
-        //     )
-        //     .setDepth(1)
-
-
         // // event
         loginDialog.on('login', async (username, password, playerImg) => {
             const connected = await this.connection.connect(this.connection.teamId, username, password, playerImg);

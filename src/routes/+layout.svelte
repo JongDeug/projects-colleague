@@ -8,6 +8,9 @@
   let path = $page.url.pathname;
   let pathArray = path.split("/");
 
+  const bubble = (event) => {
+    console.log(event.detail.message);
+  }
 </script>
 
 {#if pathArray[1] === 'admin'}
@@ -25,7 +28,7 @@
 {:else}
   <div class="min-h-full">
     <Header />
-    <main class="min-h-[700px] w-full">
+    <main class="min-h-[700px] w-full" >
       <slot />
     </main>
     <Footer />
