@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +20,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class LoginController {
     private final LoginService loginService;
+    private final SimpMessageSendingOperations messagingTemplate;
 
     @PostMapping("/login")
     public Response login(@Validated @RequestBody LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request){
-
-
         Response response = new Response();
         Member loginMember = loginService.login(loginForm.getLoginId(), loginForm.getLoginPw());
         if(loginMember == null){
@@ -36,6 +36,8 @@ public class LoginController {
         //세션이 있으면 있는 세션반환, 없으면 신규 세션을 생성
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
+
+        messagingTemplate.convertAndSend("/sub/" + loginForm.getLoginId(), "alarm socket connection completed.");
 
         response.setData("success");
         response.setRedirect("/");

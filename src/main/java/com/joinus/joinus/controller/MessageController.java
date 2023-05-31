@@ -58,6 +58,7 @@ public class MessageController {
         return response;
     }
 
+
     @PostMapping("/create")
     public Response create(@RequestBody Message message, HttpServletRequest request) {
         HttpSession session = request.getSession();

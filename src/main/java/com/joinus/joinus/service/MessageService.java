@@ -3,9 +3,13 @@ package com.joinus.joinus.service;
 import com.joinus.joinus.domain.Message;
 import com.joinus.joinus.persistence.MessageRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -13,8 +17,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MessageService {
     private final MessageRepository messageRepository;
+    private final SimpMessageSendingOperations messagingTemplate;
+
+
 
     public void createMessage(Message message){
+        messagingTemplate.convertAndSend("/sub/" + message.getReceiver(), message.getContent());
+        message.setSendTime(LocalDateTime.now());
         messageRepository.save(message);
     }
     public List<Message> getAll(){
@@ -38,4 +47,8 @@ public class MessageService {
         messageRepository.delete(message);
     }
 
+    @MessageMapping("/{userId}")
+    public void message(@DestinationVariable("userId") Long userId) {
+        messagingTemplate.convertAndSend("/sub/" + userId, "alarm socket connection completed.");
+    }
 }
