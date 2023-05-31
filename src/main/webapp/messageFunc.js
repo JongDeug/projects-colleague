@@ -96,8 +96,26 @@
         .catch(error => console.log(error));
 };
 
-    const deleteMessage = async (messageId) => {
-    await axios.post(`${URL}/api/message/delete`,
+    const deleteByReceiver = async (messageId) => {
+    await axios.post(`${URL}/api/message/delete/receiver`,
+        {
+            params:{
+                messageId : messageId
+            }
+        }, { withCredentials: true })
+        .then(response => {
+            if (response.data.data == "success") {
+                alert("delete success");
+                if (browser) {
+                    window.location.href = `/postMsg`;
+                }
+            }
+        })
+        .catch(error => console.log(error));
+};
+
+    const deleteBySender = async (messageId) => {
+    await axios.post(`${URL}/api/message/delete/sender`,
         {
             params:{
                 messageId : messageId
@@ -116,10 +134,12 @@
 
     const getDetail = async (messageId) => {
     let message = [];
-    await axios.get(`${URL}/api/message/detail`,
+    await axios.post(`${URL}/api/message/detail`,
 {
     params:{
-    messageId : messageId
+    messageId : messageId,
+    check : true    //  or false    ( 상세조회 요청하는 유저 id가 받는사람이랑 같으면 true, 아니면 false )
+
 }
 }, { withCredentials: true })
     .then(response => {

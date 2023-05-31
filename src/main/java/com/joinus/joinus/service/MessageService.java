@@ -30,13 +30,13 @@ public class MessageService {
         return messageRepository.findAll();
     }
     public List<Message> getReceivedList(String memberId){
-        if (messageRepository.findMessagesByReceiver(memberId).isPresent())
-            return messageRepository.findMessagesByReceiver(memberId).get();
+        if (messageRepository.findMessagesByReceiverAndReceiverDeleted(memberId, false).isPresent())
+            return messageRepository.findMessagesByReceiverAndReceiverDeleted(memberId, false).get();
         return null;
     }
     public List<Message> getSentList(String memberId){
-        if (messageRepository.findMessagesBySender(memberId).isPresent())
-            return messageRepository.findMessagesBySender(memberId).get();
+        if (messageRepository.findMessagesBySenderAndSenderDeleted(memberId, false).isPresent())
+            return messageRepository.findMessagesBySenderAndSenderDeleted(memberId, false).get();
         return null;
     }
     public Message readMessageDetail(Long messageId){
