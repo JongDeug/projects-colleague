@@ -20,8 +20,6 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final SimpMessageSendingOperations messagingTemplate;
 
-
-
     public void createMessage(MessageForm messageForm){
         Message message = new Message();
         message.setSender(messageForm.getSender());

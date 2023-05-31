@@ -1,15 +1,12 @@
 package com.joinus.joinus.controller;
 
 import com.joinus.joinus.domain.Member;
-import com.joinus.joinus.dto.MessageForm;
 import com.joinus.joinus.dto.Response;
 import com.joinus.joinus.service.MessageService;
 import com.joinus.joinus.web.validation.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -69,13 +66,4 @@ public class MessageController {
         response.setRedirect("/postMsg");
         return response;
     }
-
-    //  메시지 작성 메소드 (create)
-    @MessageMapping("/hello")
-    @SendTo("/topic/roomId")
-    public MessageForm create(MessageForm messageForm) {
-        messageService.createMessage(messageForm);
-        return messageForm;
-    }
-
 }
