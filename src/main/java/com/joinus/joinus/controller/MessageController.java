@@ -8,6 +8,8 @@ import com.joinus.joinus.web.validation.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -60,6 +62,8 @@ public class MessageController {
 
 
     @PostMapping("/create")
+    @MessageMapping("/hello")
+    @SendTo("/topic/roomId")
     public Response create(@RequestBody Message message, HttpServletRequest request) {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
@@ -78,4 +82,6 @@ public class MessageController {
         response.setRedirect("/postMsg");
         return response;
     }
+
+
 }

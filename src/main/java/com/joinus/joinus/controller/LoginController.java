@@ -37,8 +37,6 @@ public class LoginController {
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
 
-        messagingTemplate.convertAndSend("/sub/" + loginForm.getLoginId(), "alarm socket connection completed.");
-
         response.setData("success");
         response.setRedirect("/");
 
