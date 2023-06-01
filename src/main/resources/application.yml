@@ -7,6 +7,10 @@ server:
       cookie:
         same-site: none
         secure: true
+    multipart:
+      location: D:\\Desktop\\Spring\\joinus\\src\\main\\resources
+      maxFileSize: 200MB
+      maxRequestSize: 100MB
 spring:
   messages:
     basename: errors
