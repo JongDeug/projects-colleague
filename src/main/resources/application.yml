@@ -7,11 +7,12 @@ server:
       cookie:
         same-site: none
         secure: true
+spring:
+  servlet:
     multipart:
-      location: D:\\Desktop\\Spring\\joinus\\src\\main\\resources
+      enabled: true
       maxFileSize: 200MB
       maxRequestSize: 100MB
-spring:
   messages:
     basename: errors
   output:

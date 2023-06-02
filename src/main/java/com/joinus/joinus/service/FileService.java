@@ -11,25 +11,25 @@ import java.io.File;
 @RequiredArgsConstructor
 @Slf4j
 public class FileService {
-    public String uploadFile(MultipartFile[] uploadFile, String type, String id){
-        String uploadPath = "C:\\Users\\user\\Desktop\\Spring\\join-us-web-back-end\\src\\main\\resources\\" + type + "\\" + id;
-        String fileName;
+    public String uploadFile(MultipartFile uploadFile, String type, String id){
+        String uploadPath = "C:\\Users\\user\\Desktop\\Spring\\join-us-web-back-end\\src\\main\\webapp\\" + type;//+ "\\" + id;
 
-        for (MultipartFile multipartFile : uploadFile){
-            log.info("#############################");
-            log.info("파일명 : ", multipartFile.getOriginalFilename());
-            log.info("파일 크기 : ", multipartFile.getSize());
+        File uploadFolder = new File(uploadPath, id);
+        if (!uploadFolder.exists())
+            uploadFolder.mkdirs();
 
-            File saveFile = new File(uploadPath, multipartFile.getOriginalFilename());
-            fileName = multipartFile.getOriginalFilename();
-            try{
-                multipartFile.transferTo(saveFile);
-            }
-            catch (Exception e){
-                log.error(e.getMessage());
-            }
+        log.info("#############################");
+        log.info("파일명 : {}", uploadFile.getOriginalFilename());
+        log.info("파일 크기 : {}", uploadFile.getSize());
+
+        File saveFile = new File(uploadFolder, uploadFile.getOriginalFilename());
+        try{
+            uploadFile.transferTo(saveFile);
+        }
+        catch (Exception e){
+            log.error(e.getMessage());
         }
         return "success";
-
     }
+
 }
