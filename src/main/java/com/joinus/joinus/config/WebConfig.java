@@ -11,11 +11,10 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer{
 
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowCredentials(true).allowedOrigins("http://127.0.0.1:8000", "http://localhost:8000", "http://localhost:8080");
+                .allowCredentials(true).allowedOrigins("http://127.0.0.1:8000", "http://localhost:8000");
 //        .allowedOrigins("http://localhost:8080", "http://localhost:8081");
     }
 

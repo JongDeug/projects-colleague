@@ -1,5 +1,10 @@
 package com.joinus.joinus.service;
 
+import com.joinus.joinus.domain.Member;
+import com.joinus.joinus.domain.Team;
+import com.joinus.joinus.persistence.MemberRepository;
+import com.joinus.joinus.persistence.TeamRepository;
+import com.joinus.joinus.web.validation.FileConst;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,25 +16,51 @@ import java.io.File;
 @RequiredArgsConstructor
 @Slf4j
 public class FileService {
-    public String uploadFile(MultipartFile uploadFile, String type, String id){
-        String uploadPath = "C:\\Users\\user\\Desktop\\Spring\\join-us-web-back-end\\src\\main\\webapp\\" + type;//+ "\\" + id;
-
-        File uploadFolder = new File(uploadPath, id);
-        if (!uploadFolder.exists())
+    private final MemberRepository memberRepository;
+    private final TeamRepository teamRepository;
+    public String uploadFile(MultipartFile uploadFile, String type, String id) {
+        String path = FileConst.UPLOAD_PATH + type;
+        File uploadFolder = new File(path, id);
+        if (!uploadFolder.exists()){
             uploadFolder.mkdirs();
-
+            log.info("{} 디렉토리 생성됨 ", uploadFolder.getAbsolutePath());
+        }
         log.info("#############################");
         log.info("파일명 : {}", uploadFile.getOriginalFilename());
-        log.info("파일 크기 : {}", uploadFile.getSize());
+        log.info("파일 크기 : {} byte", uploadFile.getSize());
 
-        File saveFile = new File(uploadFolder, uploadFile.getOriginalFilename());
-        try{
-            uploadFile.transferTo(saveFile);
+        if (type.equals("member")){
+            Member member = memberRepository.findMemberById(id).get();
+            member.setProfileImg(uploadFile.getOriginalFilename());
+            memberRepository.save(member);
         }
-        catch (Exception e){
+        else if (type.equals("team")){
+            Team team = teamRepository.findTeamById(Long.parseLong(id)).get();
+            team.setTeamPic(uploadFile.getOriginalFilename());
+            teamRepository.save(team);
+        }
+        File saveFile = new File(uploadFolder, uploadFile.getOriginalFilename());
+        try {
+            uploadFile.transferTo(saveFile);
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
-        return "success";
+        return uploadFolder.getAbsolutePath();
     }
+    public File downloadFile(String type, String id){
+        String path = FileConst.UPLOAD_PATH + type + "\\" + id;
+        String fileName = null;
+        if (type.equals("member")){
+            Member member = memberRepository.findMemberById(id).get();
+            fileName = member.getProfileImg();
+        }
+        else if (type.equals("team")){
+            Team team = teamRepository.findTeamById(Long.parseLong(id)).get();
+            fileName = team.getTeamPic();
+        }
+        File file = new File(path, fileName);
 
+//        MultipartFile multipartFile = new CommonsMul
+        return file;
+    }
 }
