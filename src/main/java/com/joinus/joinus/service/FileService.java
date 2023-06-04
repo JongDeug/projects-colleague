@@ -5,6 +5,7 @@ import com.joinus.joinus.domain.Team;
 import com.joinus.joinus.persistence.MemberRepository;
 import com.joinus.joinus.persistence.TeamRepository;
 import com.joinus.joinus.web.validation.FileConst;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.io.File;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class FileService {
     private final MemberRepository memberRepository;
     private final TeamRepository teamRepository;
@@ -45,7 +47,7 @@ public class FileService {
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-        return uploadFolder.getAbsolutePath();
+        return uploadFile.getOriginalFilename();
     }
     public File downloadFile(String type, String id){
         String path = FileConst.UPLOAD_PATH + type + "\\" + id;

@@ -15,8 +15,8 @@ const uploadImg = async () => {
         {
             params: {
                 uploadFile: formData,
-                type: "member",
-                id: userId
+                type: "member", //  회원 프로필이면 member, 팀 배경화면이면 team
+                id: userId  //  회원 프로필이면 유저 아이디, 팀 배경화면은 teamId
             },
             withCredentials: true,
             enctype: "multipart/form-data",
@@ -36,8 +36,8 @@ const downloadImg = async () => {
     await axios.get(`${URL}/api/file/download/test`,
         {
             params: {
-                type : "member",
-                id : "qwe"
+                type : "member",    //  회원 프로필이면 member, 팀 배경화면이면 team
+                id : "qwe"      //  회원 프로필이면 유저 아이디, 팀 배경화면은 teamId
             },
             withCredentials: true,
             responseType: 'blob'
@@ -53,7 +53,10 @@ const downloadImg = async () => {
 downloadImg();
 
 //  임시로 폼 형식 전송 사용 중
-<form action="{URL}/api/file/upload/test" method="post" encType="multipart/form-data">
+<Avatar use="My Page" img = {userImg}/>
+<form action="{URL}/api/file/upload/test" method="post" enctype="multipart/form-data">
     <input type="file" name="uploadFile">
-        <button>Submit</button>
+        <input style="display:none" type="text" name="type" value="member">
+            <input style="display:none" type="text" name="id" value={userId}>
+                <button>Submit</button>
 </form>
