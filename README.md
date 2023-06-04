@@ -30,3 +30,4 @@
 * Avatar.svelte에 src="{img}"로 설정 ( 미리보기 )
 * svelte -> spring 이미지 업로드 할 때 form 말고 axios로 바꾸기
 * 이미지 다운로드 (spring -> svelte) axios 안에 responseType : "blob" 하고 블롭 이미지 src로 변환해서 사용
+* 팀 생성에 팀이미지 없앰
