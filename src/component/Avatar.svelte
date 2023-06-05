@@ -15,14 +15,14 @@
 </div> -->
 <script>
 	export let use;
-	export let img = null;
+	export let img;
 </script>
 
 {#if use === 'User Recommendation' && !!img}
 	<!-- 이미지 있을 때 -->
 	<img
 		alt=""
-		src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+		src="{img}"
 		class="rounded-full w-24 h-24 bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-300"
 	/>
 {:else if use === 'User Recommendation'}

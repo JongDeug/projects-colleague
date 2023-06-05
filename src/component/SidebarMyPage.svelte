@@ -19,15 +19,18 @@
   };
 
   const deleteUser = async () => {
-    await axios.post(`${URL}/api/member/delete`, {}, { withCredentials: true })
-      .then(response => {
-        alert(response.data.data);
-        localStorage.removeItem("loginMember");
-        if (browser) {
-          window.location.href = response.data.redirect;
-        }
-      })
-      .catch(error => console.log(error));
+    let confirm = prompt("삭제하실려면 yes를 입력해주세요");
+    if(confirm === "yes"){
+      await axios.post(`${URL}/api/member/delete`, {}, { withCredentials: true })
+        .then(response => {
+          alert(response.data.data);
+          localStorage.removeItem("loginMember");
+          if (browser) {
+            window.location.href = response.data.redirect;
+          }
+        })
+        .catch(error => console.log(error));
+    }
   };
 </script>
 

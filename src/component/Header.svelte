@@ -110,24 +110,29 @@
         .catch(error => console.log(error));
     }
 
-    let downloadedImg;
-    await axios.get(`${URL}/api/file/download`,
-      {
-        params: {
-          type: "member",    //  회원 프로필이면 member, 팀 배경화면이면 team
-          id: loginMember//  회원 프로필이면 유저 아이디, 팀 배경화면은 teamId
-        },
-        withCredentials: true,
-        responseType: "blob"
-      })
-      .then(response => {
-        downloadedImg = response.data;
-        // console.log(response.data);
-        if (browser) {
-          img = window.URL.createObjectURL(downloadedImg);
-        }
-      })
-      .catch(error => console.log(error));
+    if(loginMember){
+      let downloadedImg;
+      await axios.get(`${URL}/api/file/download`,
+        {
+          params: {
+            type: "member",    //  회원 프로필이면 member, 팀 배경화면이면 team
+            id: loginMember//  회원 프로필이면 유저 아이디, 팀 배경화면은 teamId
+          },
+          withCredentials: true,
+          responseType: "blob"
+        })
+        .then(response => {
+          downloadedImg = response.data;
+          if (downloadedImg.size === 0)
+            img = null;
+          else{
+            if(browser){
+              img = window.URL.createObjectURL(downloadedImg);
+            }
+          }
+        })
+        .catch(error => console.log(error));
+    }
   });
 
   // 조회

@@ -8,6 +8,7 @@
   import { URL } from "../../env";
   import axios from "axios";
   import Svg from "../../../component/Svg.svelte";
+  import * as localStorage from "../../localStorage";
   import { browser } from "$app/environment";
 
   /** @type {import("./$types").PageData} */
@@ -67,17 +68,25 @@
     await axios.get(`${URL}/api/file/download`,
       {
         params: {
-          type : "member",    //  회원 프로필이면 member, 팀 배경화면이면 team
-          id : data.userId//  회원 프로필이면 유저 아이디, 팀 배경화면은 teamId
+          type: "member",    //  회원 프로필이면 member, 팀 배경화면이면 team
+          id: data.userId//  회원 프로필이면 유저 아이디, 팀 배경화면은 teamId
         },
         withCredentials: true,
-        responseType: 'blob'
+        responseType: "blob"
       })
       .then(response => {
+        // downloadedImg = response.data;
+        // console.log(response.data);
+        // if (browser) {
+        //   img = window.URL.createObjectURL(downloadedImg);
+        // }
         downloadedImg = response.data;
-        console.log(response.data);
-        if(browser){
-          img = window.URL.createObjectURL(downloadedImg);
+        if (downloadedImg.size === 0)
+          img = null;
+        else{
+          if(browser){
+            img = window.URL.createObjectURL(downloadedImg);
+          }
         }
       })
       .catch(error => console.log(error));
@@ -95,9 +104,17 @@
           responseType: "blob"
         })
         .then(response => {
+          // downloadedImg = response.data;
+          // if (browser) {
+          //   team.img = window.URL.createObjectURL(downloadedImg);
+          // }
           downloadedImg = response.data;
-          if (browser) {
-            team.img = window.URL.createObjectURL(downloadedImg);
+          if (downloadedImg.size === 0)
+            team.img = null;
+          else {
+            if (browser) {
+              team.img = window.URL.createObjectURL(downloadedImg);
+            }
           }
         })
         .catch(error => console.log(error));
@@ -108,6 +125,7 @@
   });
 
 
+  const userId = localStorage.getWithExpiry("loginMember");
 </script>
 
 <Layout use="Profile">
@@ -118,9 +136,15 @@
     >
       <Avatar use="Profile" img="{img}" />
 
-      <div class="flex justify-end space-x-2 p-10">
-        <ConfirmBtn content="프로필 수정하기" color="blue" location="/myPage/updateProfile" />
-      </div>
+      {#if data.userId === userId}
+        <div class="flex justify-end space-x-2 p-10">
+          <ConfirmBtn content="프로필 수정하기" color="blue" location="/myPage/updateProfile" />
+        </div>
+      {:else}
+        <div class="flex justify-end space-x-2 p-10">
+          <ConfirmBtn content="" color="white" location="" />
+        </div>
+      {/if}
 
       <div class="text-center">
         <div>

@@ -76,10 +76,18 @@
         responseType: 'blob'
       })
       .then(response => {
+        // downloadedImg = response.data;
+        // console.log(response.data);
+        // if(browser){
+        //   img = window.URL.createObjectURL(downloadedImg);
+        // }
         downloadedImg = response.data;
-        console.log(response.data);
-        if(browser){
-          img = window.URL.createObjectURL(downloadedImg);
+        if (downloadedImg.size === 0)
+          img = null;
+        else{
+          if(browser){
+            img = window.URL.createObjectURL(downloadedImg);
+          }
         }
       })
       .catch(error => console.log(error));
