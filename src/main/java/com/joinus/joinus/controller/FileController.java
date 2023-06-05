@@ -51,13 +51,17 @@ public class FileController {
     }
 
     @PostMapping("/upload/test")
-    public void uploadTest(MultipartFile multipartFile, String type, String id, Model model){
+    public String uploadTest(MultipartFile multipartFile, String type, String id, Model model){
         fileService.uploadFile(multipartFile, type, id);
+        return "success";
     }
 
     @GetMapping("/download")
     public Resource downloadTest(@RequestParam String type, @RequestParam String id) throws MalformedURLException {
-        return new UrlResource("file:" + fileService.downloadFile(type, id));
+        if (fileService.downloadFile(type, id) == null)
+            return null;
+        else
+            return new UrlResource("file:" + fileService.downloadFile(type, id));
     }
     @GetMapping("/download/test")
     public File download(@RequestParam String type, @RequestParam String id) throws IOException {

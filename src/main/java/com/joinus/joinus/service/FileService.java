@@ -60,9 +60,9 @@ public class FileService {
             Team team = teamRepository.findTeamById(Long.parseLong(id)).get();
             fileName = team.getTeamPic();
         }
-        File file = new File(path, fileName);
-
-//        MultipartFile multipartFile = new CommonsMul
-        return file;
+        if (fileName != null)
+            return new File(path, fileName);
+        else
+            return null;
     }
 }
