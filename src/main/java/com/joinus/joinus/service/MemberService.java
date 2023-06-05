@@ -1,6 +1,7 @@
 package com.joinus.joinus.service;
 
 import com.joinus.joinus.domain.Member;
+import com.joinus.joinus.domain.Message;
 import com.joinus.joinus.domain.Post;
 import com.joinus.joinus.domain.Team;
 import com.joinus.joinus.persistence.*;
@@ -101,7 +102,8 @@ public class MemberService{
                     Set<String> teamMembers = t.getMembers();
                     teamMembers.remove(targetId);
                     t.setMembers(teamMembers);
-                    t.setLeader(teamMembers.stream().findAny().get());
+                    if (t.getLeader().equals(targetId))
+                        t.setLeader(teamMembers.stream().findAny().get());
                     teamRepository.save(t);
                 }
 
@@ -117,7 +119,31 @@ public class MemberService{
             }
         }
 
+        //  쪽지 연관관계
+        if (messageRepository.findMessagesBySender(targetId).isPresent()){
+            List<Message> messages = messageRepository.findMessagesBySender(targetId).get();
+            for (Message m : messages){
+                m.setSender("탈퇴한 회원");
+                m.setSenderDeleted(true);
+                messageRepository.save(m);
+            }
+        }
+        if (messageRepository.findMessagesByReceiver(targetId).isPresent()){
+            List<Message> messages = messageRepository.findMessagesByReceiver(targetId).get();
+            for (Message m : messages){
+                m.setReceiver("탈퇴한 회원");
+                m.setReceiverDeleted(true);
+                messageRepository.save(m);
+            }
+        }
 
+        //  회의록 수정
+
+
+
+
+        
+        //  마지막으로 회원 삭제
         memberRepository.delete(member);
     }
 

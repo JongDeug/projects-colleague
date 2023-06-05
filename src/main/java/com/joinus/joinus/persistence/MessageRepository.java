@@ -9,5 +9,7 @@ import java.util.Optional;
 public interface MessageRepository extends JpaRepository<Message, Long> {
     Optional<List<Message>> findMessagesByReceiverAndReceiverDeleted(String memberId, boolean isDeleted);
     Optional<List<Message>> findMessagesBySenderAndSenderDeleted(String memberId, boolean isDeleted);
-//    Optional<Message>
+
+    Optional<List<Message>> findMessagesByReceiver(String memberId);
+    Optional<List<Message>> findMessagesBySender(String memberId);
 }
