@@ -158,31 +158,31 @@
 <SmallHeader header="{team.name}"/>
 <Layout style="flex justify-center">
     <Sidebar teamId="{data.teamId}"/>
-    <div className="ml-5 block w-[70%]">
+    <div class="ml-5 block w-[70%]">
         <Breadcrumb prevContent="내 팀" nextContent="설정"/>
 
-        <div className="mt-3 p-10 rounded-lg shadow-md border mb-3">
-            <div className="flex items-center mb-7 space-x-5">
-                <h1 className="font-bold">설정</h1>
+        <div class="mt-3 p-10 rounded-lg shadow-md border mb-3">
+            <div class="flex items-center mb-7 space-x-5">
+                <h1 class="font-bold">설정</h1>
                 <Toggle bind:checked={toggle}>{toggleText}</Toggle>
             </div>
 
-            <div className="mb-6 ">
+            <div class="mb-6 ">
                 <Label for="default-input" class="block mb-2">팀 명</Label>
                 <Input bind:value={team.name}/>
             </div>
-            <div className="mb-6 ">
+            <div class="mb-6 ">
                 <Label for="message" class="block mb-2">팀 소개</Label>
                 <Textarea {...textareaprops} bind:value={team.info}/>
             </div>
 
-            <div className="mb-6 relative ">
-                <div className="">
+            <div class="mb-6 relative ">
+                <div class="">
                     <Label for="phoneNumber" class="block mb-2">팀원 리스트</Label>
                     <Search size="md" bind:value={searchInput}/>
                 </div>
 
-                <div className="absolute t-0 r-0 w-full">
+                <div class="absolute t-0 r-0 w-full">
                     <Listgroup active>
                         {#each members as member}
                         <ListgroupItem class="font-semibold gap-2" on:click={() => {
@@ -224,9 +224,9 @@
                 </Label>
             </div>
 
-            <div className=" mb-6">
+            <div class=" mb-6">
                 <Label class="mb-3">팀 배경 사진</Label>
-                <div className="flex items-end">
+                <div class="flex items-end">
                     <form action="{URL}/api/file/upload/test" method="post" id="fileForm" encType="multipart/form-data"
                           target="blankifr">
                         <input bind:files type="file" name="multipartFile">
@@ -238,12 +238,12 @@
                 </div>
             </div>
 
-            <div className=" mb-6">
+            <div class=" mb-6">
                 <Label for="default-input" class="block mb-2">깃허브 주소</Label>
                 <Input bind:value={team.teamGit}/>
             </div>
 
-            <div className="">
+            <div class="">
                 <Label for="default-input" class="block mb-2">회의방 비밀번호</Label>
                 <Input bind:value={team.pw} type="password"/>
             </div>

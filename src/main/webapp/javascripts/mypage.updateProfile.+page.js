@@ -231,14 +231,14 @@
 <Layout style="flex justify-center">
     <Sidebar/>
 
-    <div className="ml-5 block w-[70%]">
+    <div class="ml-5 block w-[70%]">
         <Breadcrumb prevContent="설정" nextContent="회원정보 수정"/>
 
         <!-- 사용자 -->
-        <div className="mt-3 p-10 rounded-lg shadow-md border">
-            <h1 className="font-bold mb-7">사용자</h1>
+        <div class="mt-3 p-10 rounded-lg shadow-md border">
+            <h1 class="font-bold mb-7">사용자</h1>
             <!-- 이름 -->
-            <div className="mb-6 ">
+            <div class="mb-6 ">
                 <Label for="website-admin" class="block mb-2">이름</Label>
                 <ButtonGroup class="w-full">
                     <InputAddon>
@@ -249,7 +249,7 @@
             </div>
 
             <!-- 이메일 -->
-            <div className="mb-6 ">
+            <div class="mb-6 ">
                 <Label for="email" class="block mb-2">이메일</Label>
                 <ButtonGroup class="w-full">
                     <InputAddon>
@@ -260,7 +260,7 @@
             </div>
 
             <!-- 전화번호 -->
-            <div className="mb-6 ">
+            <div class="mb-6 ">
                 <Label for="phoneNumber" class="block mb-2">전화번호</Label>
                 <ButtonGroup class="w-full">
                     <InputAddon>
@@ -271,7 +271,7 @@
             </div>
 
             <!-- 소속 -->
-            <div className="mb-6 ">
+            <div class="mb-6 ">
                 <Label for="department" class="block mb-2">소속</Label>
                 <ButtonGroup class="w-full">
                     <InputAddon>
@@ -281,9 +281,9 @@
                 </ButtonGroup>
             </div>
 
-            <div className="">
+            <div class="">
                 <Label class="mb-3">프로필 사진</Label>
-                <div className="flex items-center">
+                <div class="flex items-center">
                     <Avatar use="My Page" img={Img}/>
                     <!--          <Fileupload bind:value={files} />-->
                     <form action="{URL}/api/file/upload/test" method="post" id="fileForm" encType="multipart/form-data"
@@ -303,35 +303,35 @@
         </div>
 
         <!-- 개인 포트폴리오 -->
-        <div className="mt-3 p-10 rounded-lg shadow-md border mb-3">
-            <h1 className="font-bold mb-7">개인 포트폴리오</h1>
+        <div class="mt-3 p-10 rounded-lg shadow-md border mb-3">
+            <h1 class="font-bold mb-7">개인 포트폴리오</h1>
             <!-- 간단한 자기소개 -->
-            <div className="mb-6 ">
+            <div class="mb-6 ">
                 <Label for="default-input" class="block mb-2">간단한 자기소개</Label>
                 <Input bind:value={userInfo.info} id="default-input"/>
             </div>
 
             <!-- 웹사이트 -->
-            <div className="mb-6 ">
+            <div class="mb-6 ">
                 <Label for="default-input" class="block mb-2">웹사이트</Label>
                 <Input bind:value={userInfo.blog} id="default-input"/>
             </div>
 
             <!-- 깃허브 주소 -->
-            <div className="mb-6 ">
+            <div class="mb-6 ">
                 <Label for="default-input" class="block mb-2">깃허브 주소</Label>
                 <Input bind:value={userInfo.gitAddress} id="default-input"/>
             </div>
 
             <!-- 기술스택 -->
-            <div className="mb-6">
+            <div class="mb-6">
                 <Label for="default-input" class="block mb-2">기술스택</Label>
-                <div className="grid grid-cols-4 gap-2">
+                <div class="grid grid-cols-4 gap-2">
                     {#each techStack as tech, i}
-                    <label className="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+                    <label class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
                         <input
                             type="checkbox" id={tech.id} value={tech.techStack}
-                            className="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-700 dark:border-gray-600 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600">
+                            class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-700 dark:border-gray-600 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600">
                             {tech.techStack}
                     </label>
                     {/each}
