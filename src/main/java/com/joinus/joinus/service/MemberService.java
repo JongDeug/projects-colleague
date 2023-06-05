@@ -1,19 +1,25 @@
 package com.joinus.joinus.service;
 
 import com.joinus.joinus.domain.Member;
-import com.joinus.joinus.persistence.MemberRepository;
+import com.joinus.joinus.domain.Post;
+import com.joinus.joinus.domain.Team;
+import com.joinus.joinus.persistence.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class MemberService{
     private final MemberRepository memberRepository;
+    private final TeamRepository teamRepository;
+    private final PostRepository postRepository;
+    private final MeetingMinutesRepository meetingMinutesRepository;
+    private final MessageRepository messageRepository;
+//    private final TechStackRepository techStackRepository;
 
     public String join(Member member){
 //        validateDuplicateMember(member.getId());    //  중복 id 체크
@@ -78,6 +84,40 @@ public class MemberService{
     }
 
     public void deleteMember(Member member){
+        //  완전 삭제
+        String targetId = member.getId();
+
+        //  팀 연관관계 삭제
+        Set<String> targetSet = new HashSet<>();
+        targetSet.add(targetId);
+        List<Team> teams = new ArrayList<>();
+        if (teamRepository.findTeamsByMembersIn(targetSet).isPresent()){
+            teams = teamRepository.findTeamsByMembersIn(targetSet).get();
+            for (Team t : teams){
+                //  1인 팀일 경우 팀 즉시삭제
+                if (t.getMembers().size() == 1)
+                    teamRepository.delete(t);
+                else{
+                    Set<String> teamMembers = t.getMembers();
+                    teamMembers.remove(targetId);
+                    t.setMembers(teamMembers);
+                    t.setLeader(teamMembers.stream().findAny().get());
+                    teamRepository.save(t);
+                }
+
+            }
+        }
+
+        //  포스트 연관관계
+        if (postRepository.findPostsByUserId(targetId).isPresent()){
+            List<Post> posts = postRepository.findPostsByUserId(targetId).get();
+            for (Post p : posts){
+                p.setUserId("탈퇴한 회원");
+                postRepository.save(p);
+            }
+        }
+
+
         memberRepository.delete(member);
     }
 

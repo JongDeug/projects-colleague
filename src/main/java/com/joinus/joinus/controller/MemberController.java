@@ -109,7 +109,6 @@ public class MemberController {
         response.setRedirect("no required");
         return response;
     }
-    @GetMapping("/")
     @PostMapping("/delete")
     public Response delete(HttpServletRequest request){
         HttpSession session = request.getSession();

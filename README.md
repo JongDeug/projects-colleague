@@ -10,13 +10,9 @@
 * 팀에 팀 상태 추가
 
 ## 수정 필요
-### DB
-* 회원정보에 사진 어케저장힐지
 ### 스벨트
 * 리다이렉트 설정 필요
 * 팀 상태 따라 찾기나 보기 설정 (teamService 진행중인 팀 찾기에서 processing)
-### 스프링
-* 유저 프로필 사진, 팀 배경화면 사진
 
 
 ## 회원 탈퇴하면 연관데이터 삭제하는거
@@ -26,7 +22,7 @@
 * 쪽지도 보낸거,받은거 전부 삭제 (게시글이랑 같은 문제땜에) 
 * 마지막으로 회원 데이터에서 삭제
 
-## 파일 업로드 할 때 프로젝트 폴더 위치 재설정 꼭 하기 (java/web/validation/FileConst.java)
+## 파일 업로드 할 때 프로젝트 폴더 위치 재설정 필요 (java/web/validation/FileConst.java)
 * Avatar.svelte에 src="{img}"로 설정 ( 미리보기 )
 * svelte -> spring 이미지 업로드 할 때 form 말고 axios로 바꾸기
 * 이미지 다운로드 (spring -> svelte) axios 안에 responseType : "blob" 하고 블롭 이미지 src로 변환해서 사용
