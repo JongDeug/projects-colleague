@@ -64,6 +64,7 @@
     current = null;
   }
 
+  let img;
   let sendModal = false;
   let color;
   let textareaprops = {
@@ -108,6 +109,25 @@
         })
         .catch(error => console.log(error));
     }
+
+    let downloadedImg;
+    await axios.get(`${URL}/api/file/download`,
+      {
+        params: {
+          type: "member",    //  회원 프로필이면 member, 팀 배경화면이면 team
+          id: loginMember//  회원 프로필이면 유저 아이디, 팀 배경화면은 teamId
+        },
+        withCredentials: true,
+        responseType: "blob"
+      })
+      .then(response => {
+        downloadedImg = response.data;
+        // console.log(response.data);
+        if (browser) {
+          img = window.URL.createObjectURL(downloadedImg);
+        }
+      })
+      .catch(error => console.log(error));
   });
 
   // 조회
@@ -227,11 +247,28 @@
                   class="flex max-w-xs items-center rounded-full bg-gray-800 focus:outline-none focus:ring-2 ring-red focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                   on:click={handleProfileStatus}
                 >
-                  <img
-                    class="h-10 w-10 rounded-full"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                  />
+                  {#if img}
+                    <img
+                      class="h-10 w-10 rounded-full"
+                      src={img}
+                      alt=""
+                    />
+
+                  {:else}
+                    <div class="w-10 h-10 flex">
+                      <svg
+                        class="text-gray-400 bg-gray-100 dark:bg-gray-600 rounded-full"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      ><path
+                        fill-rule="evenodd"
+                        d="M8 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                        clip-rule="evenodd"
+                      /></svg
+                      >
+                    </div>
+                  {/if}
                 </button>
 
                 <!-- 포스트 메시지 알림창 클릭 시 -->

@@ -15,12 +15,13 @@
     Select,
     Textarea,
     Fileupload,
-    Toggle
+    Toggle, Button
   } from "flowbite-svelte";
   import { onMount } from "svelte";
   import axios from "axios";
   import { URL } from "../../../../env";
   import { browser } from "$app/environment";
+  import Svg from "../../../../../component/Svg.svelte";
 
   /** @type {import("./$types").PageData} */
   export let data;
@@ -28,6 +29,17 @@
   export let team = [];   //   팀 객체 (domain 참고)
   let teamLength;
   let teamMembers = [];
+  let files = null;
+  let img = null;
+  $: {
+    if (files) {
+      let reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      reader.onload = e => {
+        img = e.target.result;
+      };
+    }
+  }
 
   let toggle;
   let toggleText;
@@ -61,11 +73,35 @@
         }
       })
       .catch(error => console.log(error));
+
+    // 사진
+    let downloadedImg
+    await axios.get(`${URL}/api/file/download`,
+      {
+        params: {
+          type : "team",    //  회원 프로필이면 member, 팀 배경화면이면 team
+          id : data.teamId//  회원 프로필이면 유저 아이디, 팀 배경화면은 teamId
+        },
+        withCredentials: true,
+        responseType: 'blob'
+      })
+      .then(response => {
+        downloadedImg = response.data;
+        console.log(response.data);
+        if(browser){
+          img = window.URL.createObjectURL(downloadedImg);
+        }
+      })
+      .catch(error => console.log(error));
   });
 
 
   //	팀 정보 업데이트
   const updateTeam = async (teamId) => {
+    let fileName = null;
+    if (files != null)
+      fileName = files[0].name;
+
     await axios.post(`${URL}/api/team/myTeam/update`,
       {
         id: teamId,
@@ -75,7 +111,7 @@
         pw: team.pw,
         state: toggleText,
         teamGit: team.teamGit,
-        teamPic: "사진 추후",
+        teamPic: fileName,
         members: teamMembers
       }, { withCredentials: true })
       .then(response => {
@@ -204,9 +240,36 @@
 
       <div class=" mb-6">
         <Label class="mb-3">팀 배경 사진</Label>
-        <div class="flex items-end">
-          <Fileupload bind:value />
+        {#if img}
+          <img
+            class="flex justify-center items-center mb-4 h-48 rounded"
+            src="{img}"
+            alt=""
+          />
+        {:else}
+          <div
+            class="flex justify-center items-center mb-4 h-48 bg-gray-300 rounded"
+          >
+            <Svg svgName="사진" />
+          </div>
+        {/if}
+
+        <div className="flex items-end">
+          <form action="{URL}/api/file/upload/test" method="post" id="fileForm" encType="multipart/form-data"
+                target="blankifr">
+            <div class="flex justify-between">
+              <input bind:files type="file" name="multipartFile" class="border-2 border-black rounded mr-3">
+              <input style=" display:none" type="text" name="type" value="team">
+              <input style="display:none" type="text" name="id" value={data.teamId}>
+              <!--            <button type="submit">사진 저장</button>-->
+              <Button color="dark" type="submit">사진 저장</Button>
+              <iframe name="blankifr" style="display:none;"></iframe>
+            </div>
+          </form>
         </div>
+        <!--        <Avatar use="My Page" img={img} />-->
+        <!--        <img src="{img}">-->
+
       </div>
 
       <div class=" mb-6">

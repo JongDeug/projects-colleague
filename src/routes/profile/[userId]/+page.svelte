@@ -8,11 +8,13 @@
   import { URL } from "../../env";
   import axios from "axios";
   import Svg from "../../../component/Svg.svelte";
+  import { browser } from "$app/environment";
 
   /** @type {import("./$types").PageData} */
   export let data;
 
   export let userInfo = [];
+  let img;
   let techStack = [];
   export let teamList = [];
   onMount(async () => {
@@ -49,6 +51,7 @@
       .catch(error => console.log(error));
 
     // 로그인 상태에서 내가 속한 팀 리스트 가져오기 ( 내가 리더인 팀, 내가 멤버인 팀 전부다 )
+    let copyTeamList;
     await axios.get(`${URL}/api/team/list`, {
       params: {
         userId: data.userId
@@ -56,10 +59,52 @@
       withCredentials: true
     })
       .then(response => {
-        teamList = response.data.data;
-        // console.log(teamList);
+        copyTeamList = response.data.data;
       })
       .catch(error => console.log(error));
+
+    let downloadedImg;
+    await axios.get(`${URL}/api/file/download`,
+      {
+        params: {
+          type : "member",    //  회원 프로필이면 member, 팀 배경화면이면 team
+          id : data.userId//  회원 프로필이면 유저 아이디, 팀 배경화면은 teamId
+        },
+        withCredentials: true,
+        responseType: 'blob'
+      })
+      .then(response => {
+        downloadedImg = response.data;
+        console.log(response.data);
+        if(browser){
+          img = window.URL.createObjectURL(downloadedImg);
+        }
+      })
+      .catch(error => console.log(error));
+
+    for (const team of copyTeamList) {
+      // 사진
+      let downloadedImg;
+      await axios.get(`${URL}/api/file/download`,
+        {
+          params: {
+            type: "team",    //  회원 프로필이면 member, 팀 배경화면이면 team
+            id: team.id//  회원 프로필이면 유저 아이디, 팀 배경화면은 teamId
+          },
+          withCredentials: true,
+          responseType: "blob"
+        })
+        .then(response => {
+          downloadedImg = response.data;
+          if (browser) {
+            team.img = window.URL.createObjectURL(downloadedImg);
+          }
+        })
+        .catch(error => console.log(error));
+    }
+    teamList = copyTeamList;
+    console.log(teamList);
+
   });
 
 
@@ -71,7 +116,7 @@
     <div
       class="w-[80%] h-80 rounded-xl bg-white absolute top-[70%] left-1/2 transform -translate-x-1/2 shadow-md border"
     >
-      <Avatar use="Profile" img="d" />
+      <Avatar use="Profile" img="{img}" />
 
       <div class="flex justify-end space-x-2 p-10">
         <ConfirmBtn content="프로필 수정하기" color="blue" location="/myPage/updateProfile" />
@@ -128,7 +173,7 @@
     <!-- 웹사이트 -->
     <div class="grid grid-cols-2 gap-4">
       {#each teamList as team}
-        <Card usage="Profile" teamName={team.name} teamIntro={team.info} teamId={team.id}>
+        <Card usage="Profile" teamName={team.name} teamIntro={team.info} teamId={team.id} img="{team.img}">
           <h5 class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
             {team.name}
           </h5>

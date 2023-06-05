@@ -51,7 +51,7 @@
     > -->
 	<img
 		alt=""
-		src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+		src="{img}"
 		class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full p-1 ring-8 ring-black dark:ring-gray-500 w-40 h-40 bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-300"
 	/>
 	<!-- </div> -->
@@ -78,7 +78,7 @@
 	<!-- 이미지 있을 때 -->
 	<img
 		alt=""
-		src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+		src={img}
 		class="mr-5 rounded-full p-1 ring-4 ring-black dark:ring-gray-500 w-14 h-14 bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-300"
 	/>
 {:else if use === 'My Page'}

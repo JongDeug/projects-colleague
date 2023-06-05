@@ -16,12 +16,14 @@
   import { onMount } from "svelte";
   import axios from "axios";
   import { URL } from "../../../env";
+  import { browser } from "$app/environment";
 
 
   /** @type {import("./$types").PageData} */
   export let data;
 
   export let team = [];   //   팀 객체 (domain 참고)
+  let img;
   let teamLength;
   let teamMembers = [];
   onMount(async () => {
@@ -37,6 +39,27 @@
         console.log(team);
         teamLength = team.members.length;
         teamMembers = team.members;
+      })
+      .catch(error => console.log(error));
+
+
+    // 사진
+    let downloadedImg
+    await axios.get(`${URL}/api/file/download`,
+      {
+        params: {
+          type : "team",    //  회원 프로필이면 member, 팀 배경화면이면 team
+          id : data.teamId//  회원 프로필이면 유저 아이디, 팀 배경화면은 teamId
+        },
+        withCredentials: true,
+        responseType: 'blob'
+      })
+      .then(response => {
+        downloadedImg = response.data;
+        console.log(response.data);
+        if(browser){
+          img = window.URL.createObjectURL(downloadedImg);
+        }
       })
       .catch(error => console.log(error));
   });
@@ -61,10 +84,13 @@
     </div>
 
     <div class="rounded-lg shadow-md border p-10">
-      <!-- <Img src="/images/image.png" size="max-w-lg" /> -->
-      <div class="flex justify-center items-center mb-10 h-60 bg-gray-300 rounded dark:bg-gray-700">
-        <Svg svgName="사진" />
-      </div>
+      {#if img}
+        <Img src="{img}" size="w-full h-[440px] mb-5" />
+      {:else }
+        <div class="flex justify-center items-center mb-10 h-60 bg-gray-300 rounded dark:bg-gray-700">
+          <Svg svgName="사진" />
+        </div>
+      {/if}
       <Heading tag="h1" class="mb-10">{team.name}</Heading>
       <Blockquote size="xl" class="mb-10">
         <Svg svgName="인용" />

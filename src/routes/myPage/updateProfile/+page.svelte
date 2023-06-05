@@ -6,13 +6,38 @@
   import Breadcrumb from "../../../component/Breadcrumb.svelte";
   import Layout from "../../../component/Layout.svelte";
   import SmallHeader from "../../../component/SmallHeader.svelte";
-  import { Label, Input, InputAddon, ButtonGroup, Checkbox, Fileupload } from "flowbite-svelte";
+  import { Label, Input, InputAddon, ButtonGroup, Checkbox, Fileupload, Button } from "flowbite-svelte";
   import { afterUpdate, beforeUpdate, onMount } from "svelte";
   import axios from "axios";
   import { URL } from "../../env";
   import { browser } from "$app/environment";
+  import * as localStorage from "../../localStorage";
 
-  let value; //? 프사
+  // let avatar, fileinput;
+  // let image;
+  // const onFileSelected = (e) => {
+  //   image = e.target.files[0];
+  //   let reader = new FileReader();
+  //   reader.readAsDataURL(image);
+  //   reader.onload = e => {
+  //     avatar = e.target.result;
+  //   };
+  // };
+  // $: console.log(avatar);
+
+  let files = null;
+  let img = null;
+  const userId = localStorage.getWithExpiry("loginMember");
+  $: {
+    if (files) {
+      let reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      reader.onload = e => {
+        img = e.target.result;
+      };
+    }
+  }
+
 
   let userInfo = [];
   let techStack = [];
@@ -38,8 +63,27 @@
         techStack = response.data;
       })
       .catch(error => console.log(error));
-  });
 
+    // 이미지
+    let downloadedImg;
+    await axios.get(`${URL}/api/file/download`,
+      {
+        params: {
+          type : "member",    //  회원 프로필이면 member, 팀 배경화면이면 team
+          id : userId     //  회원 프로필이면 유저 아이디, 팀 배경화면은 teamId
+        },
+        withCredentials: true,
+        responseType: 'blob'
+      })
+      .then(response => {
+        downloadedImg = response.data;
+        console.log(response.data);
+        if(browser){
+          img = window.URL.createObjectURL(downloadedImg);
+        }
+      })
+      .catch(error => console.log(error));
+  });
 
   afterUpdate(async () => {
     if (userInfo.techStack && techStack) {
@@ -56,20 +100,43 @@
     }
   });
 
+  // const uploadFileTest = async (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+  //   await formData.append("file", image);
+  //
+  //   // await axios.post(`${URL}/api/file/upload/hi/hi`, formData, {
+  //   //   headers: {
+  //   //     "Content-Type": "multipart/form-data",
+  //   //   },
+  //   //   withCredentials: true
+  //   // })
+  //   await axios({
+  //     url: `${URL}/api/file/upload/hi/hi`,
+  //     method: "post",
+  //     headers: {
+  //       'Content-Type': 'multipart/form-data',
+  //     },
+  //     withCredentials: true,
+  //     data: formData,
+  //   })
+  //     .then(response => {
+  //     console.log(response.data);
+  //   })
+  //     .catch(error => console.log(error));
+  // };
+
 
   const updateProfile = async () => {
-    // let copy = new Set();
+    let fileName = null;
+    if (files != null) fileName = files[0].name;
+
     let copy = [];
     techStack.forEach((tech) => {
       const checkbox = document.getElementById(`${tech.id}`);
       if (checkbox.checked) {
         console.log(checkbox.value);
         console.log(tech.id);
-        // const item = {
-        //   id: tech.id,
-        //   techStack: checkbox.value,
-        // }
-        // copy.add(checkbox.value);
         copy.push(checkbox.value);
       }
     });
@@ -87,7 +154,7 @@
         blog: userInfo.blog,
         gitAddress: userInfo.gitAddress,
         techStack: copy,
-        profileImg: "aa"
+        profileImg: fileName
       },
       { withCredentials: true })
       .then(response => {
@@ -162,8 +229,18 @@
       <div class="">
         <Label class="mb-3">프로필 사진</Label>
         <div class="flex items-center">
-          <Avatar use="My Page" />
-          <Fileupload bind:value />
+          <!--          <Avatar use="My Page" img="{avatar}" />-->
+          <!--          <Fileupload bind:this={fileinput} on:change={(e)=>onFileSelected(e)} />-->
+          <Avatar use="My Page" img={img} />
+          <form action="{URL}/api/file/upload/test" method="post" id="fileForm" encType="multipart/form-data"
+                target="blankifr">
+            <input bind:files type="file" name="multipartFile" class="border-2 border-black rounded mr-3">
+            <input style="display:none" type="text" name="type" value="member">
+            <input style="display:none" type="text" name="id" value={userId}>
+<!--            <button type="submit" class="">사진 저장</button>-->
+            <Button color="dark" type="submit">사진 저장</Button>
+            <iframe name="blankifr" style="display:none;"></iframe>
+          </form>
         </div>
       </div>
     </div>
@@ -205,6 +282,7 @@
       </div>
     </div>
 
+    <!--    <ConfirmBtn on:click={updateProfile} content="회원정보 수정 확인" color="blue" style="w-[100%] py-4 shadow-md" />-->
     <ConfirmBtn on:click={updateProfile} content="회원정보 수정 확인" color="blue" style="w-[100%] py-4 shadow-md" />
   </div>
 </Layout>

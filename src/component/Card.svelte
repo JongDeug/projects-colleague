@@ -7,7 +7,7 @@
   export let teamName;
   export let teamIntro;
   export let teamId;
-  export let img = null;
+  export let img;
 </script>
 
 {#if usage == 'MyTeam'}
@@ -15,18 +15,23 @@
     <div
       class="bg-white h-96 dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md flex max-w-sm flex-col p-4 sm:p-6 "
     >
-      {#if !!img}
+      {#if img}
         <img
           class="flex justify-center items-center mb-4 h-48 rounded"
-          src="/images/image.png"
+          src={img}
           alt=""
         />
       {:else}
-        <div
-          class="flex justify-center items-center mb-4 h-48 bg-gray-300 rounded dark:bg-gray-700"
-        >
-          <Svg svgName="사진" />
-        </div>
+<!--        <div-->
+<!--          class="flex justify-center items-center mb-4 h-48 bg-gray-300 rounded dark:bg-gray-700"-->
+<!--        >-->
+<!--          <Svg svgName="사진" />-->
+<!--        </div>-->
+        <img
+          class="flex justify-center items-center mb-4 h-48 rounded"
+          src={img}
+          alt=""
+        />
       {/if}
 
       <h3 class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">{teamName}</h3>

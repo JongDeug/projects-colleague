@@ -19,6 +19,10 @@
   import { browser } from "$app/environment";
 
   let teamLeader;
+  let files = null;
+  let img = null;
+
+
 
   export let selectTeamMembers = [];
   $: console.log(selectTeamMembers);
@@ -80,7 +84,7 @@
           leader: teamLeader,
           members: memberIds,
           teamGit: "주소를 입력하지 않았습니다.",
-          teamPic: "사진 추후",
+          teamPic: null,
         }, { withCredentials: true })
         .then(response => {
           if (response.data.data == "success"){
@@ -180,12 +184,20 @@
       </Label>
     </div>
 
-    <div class="mb-6">
-      <Label class="mb-3">팀 배경 사진</Label>
-      <div class="flex items-center">
-        <Fileupload bind:value={teamBg} />
-      </div>
-    </div>
+<!--    <div class="mb-6">-->
+<!--      <Label class="mb-3">팀 배경 사진</Label>-->
+<!--      <div class="flex items-center">-->
+<!--        <Fileupload bind:value={teamBg} />-->
+<!--      </div>-->
+<!--      <form action="{URL}/api/file/upload/test" method="post" id="fileForm" encType="multipart/form-data"-->
+<!--            target="blankifr">-->
+<!--        <input bind:files type="file" name="multipartFile">-->
+<!--        <input style="display:none" type="text" name="type" value="team">-->
+<!--        <input style="display:none" type="text" name="id" value={data.teamId}>-->
+<!--        <button type="submit">사진 저장</button>-->
+<!--        <iframe name='blankifr' style='display:none;'></iframe>-->
+<!--      </form>-->
+<!--    </div>-->
 
     <div class="mb-10">
       <Label for="default-input" class="block mb-2">회의방 비밀번호</Label>
