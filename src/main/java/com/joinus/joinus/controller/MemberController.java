@@ -59,6 +59,8 @@ public class MemberController {
         Response response = new Response();
         Member mem = memberService.findOne(member.getId()).get();
         member.setPw(mem.getPw());
+        if (member.getProfileImg() == null)
+            member.setProfileImg(mem.getProfileImg());
         if ((!(member.getEmail().equals(mem.getEmail()))) && duplicateEmailCheck(member.getEmail()))
             response.setData("duplicated email address");
         else {

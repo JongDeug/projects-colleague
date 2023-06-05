@@ -63,33 +63,12 @@
 
 
     const updateProfile = async () => {
+    // document.getElementById('fileForm').submit();
     // let copy = new Set();
     let copy = [];
-    let uploadedImg;
-    // await axios.post(`${URL}/api/file/upload`,
-    //   {
-    //     params: {
-    //       uploadFile: files,
-    //       // uploadFile: formData,
-    //       type: "member",
-    //       id: userId
-    //     },
-    //
-    //     headers: {
-    //       // 'enctype' : "multipart/form-data",
-    //       'Content-Type': 'multipart/form-data'
-    //     }
-    //   },
-    //   {
-    //     withCredentials: true,
-    //     // enctype: "multipart/form-data",
-    //   })
-    //   .then(response => {
-    //     console.log(response.data)
-    //     uploadedImg = response.data;
-    //   })
-    //   .catch(error => console.log(error));
-
+    let fileName = null;
+    if (files != null)
+    fileName = files[0].name;
 
     techStack.forEach((tech) => {
     const checkbox = document.getElementById(`${tech.id}`);
@@ -120,7 +99,7 @@
     blog: userInfo.blog,
     gitAddress: userInfo.gitAddress,
     techStack: copy,
-    profileImg: files[0].name //  이미지 사진 원본 이름
+    profileImg: fileName //  이미지 사진 원본 이름
 },
 {withCredentials: true})
     .then(response => {
@@ -134,68 +113,8 @@
     .catch(error => console.log(error));
 };
 
-    let files;
-    let Img;
-
-    const uploadImg = async () => {
-    let fileForm = document.getElementById('fileForm');
-    const formData1 = new FormData(fileForm);
-
-
-
-    const formData = new FormData();
-    // formData.append("multipartFile", files[0]);
-
-
-    // formData.append("type", "member");
-    // formData.append("id", userId);
-
-    // console.log(files[0]);
-    // console.log(formData);
-
-
-    await axios.post(`${URL}/api/file/upload/2`,
-{
-    // multipartFile:formData,
-    // type:"member",
-    // id:userId,
-    formData1,
-    // params:{
-    //   multipartFile:formData1,
-    // type:"member",
-    // id:userId,
-    // }
-},
-{
-    withCredentials: true,
-    // enctype: "multipart/form-data",
-    // header:{
-    //   "Content-Type": "multipart/form-data",
-    // },
-    processData: false,
-    contentType: false,
-})
-    // await axios(
-    //   {
-    //     url : `${URL}/api/file/upload/1`,
-    //     method : "POST",
-    //     data : {
-    //       multipartFile:formData,
-    //           type:"member",
-    //           id:userId,
-    //     },
-    //     withCredentials: true,
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data'
-    //     }
-    //   }
-    // )
-    .then(response => {
-    console.log(response.data)
-})
-    .catch(error => console.log(error));
-
-};
+    let files = null;
+    let img = null;
 
 
     onMount(async () => {
@@ -212,18 +131,10 @@
     .then(response => {
     downloadedImg = response.data;
     // console.log(response.data);
-    Img = window.URL.createObjectURL(downloadedImg);
+    img = window.URL.createObjectURL(downloadedImg);
 })
     .catch(error => console.log(error));
 });
-
-    let submit = false
-
-    const handleSubmit = () => {
-    submit = true
-}
-
-
 </script>
 
 <SmallHeader header="My Page"/>
@@ -284,8 +195,7 @@
             <div class="">
                 <Label class="mb-3">프로필 사진</Label>
                 <div class="flex items-center">
-                    <Avatar use="My Page" img={Img}/>
-                    <!--          <Fileupload bind:value={files} />-->
+                    <Avatar use="My Page" img={img}/>
                     <form action="{URL}/api/file/upload/test" method="post" id="fileForm" encType="multipart/form-data"
                           target="blankifr">
                         <input bind:files type="file" name="multipartFile">
@@ -294,12 +204,11 @@
                                     <button type="submit">사진 저장</button>
                                     <iframe name='blankifr' style='display:none;'></iframe>
                     </form>
-                    <!--          <input bind:files type="file" id="files" name="files"/>-->
+                </div>
+                <div>
+                    <img src="{img}">
                 </div>
             </div>
-            <!--      <ConfirmBtn on:click={uploadImg} content="axios로 업로드 근데 안됨" color="blue" style="w-[100%] py-4 shadow-md" />-->
-            <!--      <img src="{Img}">-->
-
         </div>
 
         <!-- 개인 포트폴리오 -->

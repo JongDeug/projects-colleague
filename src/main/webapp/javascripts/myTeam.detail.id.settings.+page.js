@@ -1,9 +1,10 @@
 <script>
-    import Sidebar from "../../../../../component/SidebarMyTeam.svelte";
-    import Breadcrumb from "../../../../../component/Breadcrumb.svelte";
-    import ConfrimBtn from "../../../../../component/ConfirmBtn.svelte";
-    import Layout from "../../../../../component/Layout.svelte";
-    import SmallHeader from "../../../../../component/SmallHeader.svelte";
+    import Sidebar from "../../../../component/SidebarMyTeam.svelte";
+    import Breadcrumb from "../../../../component/Breadcrumb.svelte";
+    import ConfrimBtn from "../../../../component/ConfirmBtn.svelte";
+    import Layout from "../../../../component/Layout.svelte";
+    import SmallHeader from "../../../../component/SmallHeader.svelte";
+
     import {
     Avatar,
     CloseButton,
@@ -18,7 +19,7 @@
 } from "flowbite-svelte";
     import {onMount} from "svelte";
     import axios from "axios";
-    import {URL} from "../../../../env";
+    import {URL} from "../../../env";
     import {browser} from "$app/environment";
 
     /** @type {import("./$types").PageData} */
@@ -86,27 +87,30 @@
 
     // 팀 정보 업데이트
     const updateTeam = async (teamId) => {
+    let fileName = null;
+    if (files != null)
+    fileName = files[0].name;
     await axios.post(`${URL}/api/team/myTeam/update`,
-        {
-            id: teamId,
-            name: team.name,
-            leader: teamLeader,
-            info: team.info,
-            pw: team.pw,
-            state: toggleText,
-            teamGit: team.teamGit,
-            teamPic: files[0].name,
-            members: teamMembers
-        }, {withCredentials: true})
-        .then(response => {
-            if (response.data.data == "success") {
-                alert("update success");
-                if (browser) {
-                    window.location.href = `/myTeam/detail/${data.teamId}/settings`;
-                }
-            }
-        })
-        .catch(error => console.log(error));
+{
+    id: teamId,
+    name: team.name,
+    leader: teamLeader,
+    info: team.info,
+    pw: team.pw,
+    state: toggleText,
+    teamGit: team.teamGit,
+    teamPic: fileName,
+    members: teamMembers
+}, {withCredentials: true})
+    .then(response => {
+    if (response.data.data == "success") {
+    alert("update success");
+    if (browser) {
+    window.location.href = `/myTeam/detail/${data.teamId}/settings`;
+}
+}
+})
+    .catch(error => console.log(error));
 };
 
     let value;
@@ -158,31 +162,31 @@
 <SmallHeader header="{team.name}"/>
 <Layout style="flex justify-center">
     <Sidebar teamId="{data.teamId}"/>
-    <div class="ml-5 block w-[70%]">
+    <div className="ml-5 block w-[70%]">
         <Breadcrumb prevContent="내 팀" nextContent="설정"/>
 
-        <div class="mt-3 p-10 rounded-lg shadow-md border mb-3">
-            <div class="flex items-center mb-7 space-x-5">
-                <h1 class="font-bold">설정</h1>
+        <div className="mt-3 p-10 rounded-lg shadow-md border mb-3">
+            <div className="flex items-center mb-7 space-x-5">
+                <h1 className="font-bold">설정</h1>
                 <Toggle bind:checked={toggle}>{toggleText}</Toggle>
             </div>
 
-            <div class="mb-6 ">
+            <div className="mb-6 ">
                 <Label for="default-input" class="block mb-2">팀 명</Label>
                 <Input bind:value={team.name}/>
             </div>
-            <div class="mb-6 ">
+            <div className="mb-6 ">
                 <Label for="message" class="block mb-2">팀 소개</Label>
                 <Textarea {...textareaprops} bind:value={team.info}/>
             </div>
 
-            <div class="mb-6 relative ">
-                <div class="">
+            <div className="mb-6 relative ">
+                <div className="">
                     <Label for="phoneNumber" class="block mb-2">팀원 리스트</Label>
                     <Search size="md" bind:value={searchInput}/>
                 </div>
 
-                <div class="absolute t-0 r-0 w-full">
+                <div className="absolute t-0 r-0 w-full">
                     <Listgroup active>
                         {#each members as member}
                         <ListgroupItem class="font-semibold gap-2" on:click={() => {
@@ -224,9 +228,9 @@
                 </Label>
             </div>
 
-            <div class=" mb-6">
+            <div className=" mb-6">
                 <Label class="mb-3">팀 배경 사진</Label>
-                <div class="flex items-end">
+                <div className="flex items-end">
                     <form action="{URL}/api/file/upload/test" method="post" id="fileForm" encType="multipart/form-data"
                           target="blankifr">
                         <input bind:files type="file" name="multipartFile">
@@ -236,14 +240,15 @@
                                     <iframe name='blankifr' style='display:none;'></iframe>
                     </form>
                 </div>
+                <img src="{img}">
             </div>
 
-            <div class=" mb-6">
+            <div className=" mb-6">
                 <Label for="default-input" class="block mb-2">깃허브 주소</Label>
                 <Input bind:value={team.teamGit}/>
             </div>
 
-            <div class="">
+            <div className="">
                 <Label for="default-input" class="block mb-2">회의방 비밀번호</Label>
                 <Input bind:value={team.pw} type="password"/>
             </div>

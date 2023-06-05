@@ -24,6 +24,58 @@ let img;    //   서버에서 가져온 사진 정보
         .catch(error => console.log(error));
 });
 
+    // 유저 프로필 업데이트 (조금 수정)
+const updateProfile = async () => {
+    // document.getElementById('fileForm').submit();
+    // let copy = new Set();
+    let copy = [];
+    let fileName = null;
+    if (files != null)
+        fileName = files[0].name;
+
+    techStack.forEach((tech) => {
+        const checkbox = document.getElementById(`${tech.id}`);
+        if (checkbox.checked) {
+            console.log(checkbox.value);
+            console.log(tech.id);
+            // const item = {
+            //   id: tech.id,
+            //   techStack: checkbox.value,
+            // }
+            // copy.add(checkbox.value);
+            copy.push(checkbox.value);
+        }
+    });
+    console.log(copy);
+
+
+
+    await axios.post(`${URL}/api/member/profile/update`,
+        {
+            id: userInfo.id,
+            name: userInfo.name,
+            pw: userInfo.pw,
+            email: userInfo.email,
+            phoneNum: userInfo.phoneNum,
+            department: userInfo.department,
+            info: userInfo.info,
+            blog: userInfo.blog,
+            gitAddress: userInfo.gitAddress,
+            techStack: copy,
+            profileImg: fileName //  이미지 사진 원본 이름
+        },
+        {withCredentials: true})
+        .then(response => {
+            if (response.data.data == "success") {
+                alert("update success");
+                if (browser) {
+                    window.location.href = `/myPage/updateProfile`;
+                }
+            } else alert(response.data.data);
+        })
+        .catch(error => console.log(error));
+};
+
 
 
     //  사진 업로드

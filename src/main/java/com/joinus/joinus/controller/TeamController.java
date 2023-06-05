@@ -59,7 +59,10 @@ public class TeamController {
     }
     @PostMapping("/myTeam/update")
     public Response updateTeamInfo(@RequestBody Team team){
-        team.setCreateTime(teamService.findTeamById(team.getId()).getCreateTime());
+        Team findTeam = teamService.findTeamById(team.getId());
+        team.setCreateTime(findTeam.getCreateTime());
+        if (team.getTeamPic() == null)
+            team.setTeamPic(findTeam.getTeamPic());
         teamService.updateTeam(team);
 
         Response response = new Response();

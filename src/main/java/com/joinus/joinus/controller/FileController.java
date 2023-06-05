@@ -53,7 +53,6 @@ public class FileController {
     @PostMapping("/upload/test")
     public void uploadTest(MultipartFile multipartFile, String type, String id, Model model){
         fileService.uploadFile(multipartFile, type, id);
-//        return "redirect:/";
     }
 
     @GetMapping("/download")

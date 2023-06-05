@@ -5,24 +5,53 @@ let files;  //  업로드 한 사진 정보
 let img;    //   서버에서 가져온 사진 정보
 
     //  팀 배경화면 서버에서 가져오기
-    onMount(async () => {
+onMount(async () => {
     let downloadedImg
     await axios.get(`${URL}/api/file/download`,
-{
-    params: {
-    type : "team",    //  회원 프로필이면 member, 팀 배경화면이면 team
-    id : data.teamId//  회원 프로필이면 유저 아이디, 팀 배경화면은 teamId
-},
-    withCredentials: true,
-    responseType: 'blob'
-})
-    .then(response => {
-    downloadedImg = response.data;
-    // console.log(response.data);
-    img = window.URL.createObjectURL(downloadedImg);
-})
-    .catch(error => console.log(error));
+        {
+            params: {
+                type : "team",    //  회원 프로필이면 member, 팀 배경화면이면 team
+                id : data.teamId//  회원 프로필이면 유저 아이디, 팀 배경화면은 teamId
+            },
+            withCredentials: true,
+            responseType: 'blob'
+        })
+        .then(response => {
+            downloadedImg = response.data;
+            img = window.URL.createObjectURL(downloadedImg);
+        })
+        .catch(error => console.log(error));
 });
+
+
+
+//  수정된 updateTeam  (팀 사진 저장하는부분 수정됨)
+const updateTeam = async (teamId) => {
+    let fileName = null;
+    if (files != null)
+        fileName = files[0].name;
+    await axios.post(`${URL}/api/team/myTeam/update`,
+        {
+            id: teamId,
+            name: team.name,
+            leader: teamLeader,
+            info: team.info,
+            pw: team.pw,
+            state: toggleText,
+            teamGit: team.teamGit,
+            teamPic: fileName,
+            members: teamMembers
+        }, {withCredentials: true})
+        .then(response => {
+            if (response.data.data == "success") {
+                alert("update success");
+                if (browser) {
+                    window.location.href = `/myTeam/detail/${data.teamId}/settings`;
+                }
+            }
+        })
+        .catch(error => console.log(error));
+};
     
                 <Label class="mb-3">팀 배경 사진</Label>
                 <div className="flex items-end">
