@@ -2,6 +2,7 @@ package com.joinus.joinus.service;
 
 import com.joinus.joinus.domain.Member;
 import com.joinus.joinus.persistence.MemberRepository;
+import com.joinus.joinus.persistence.TechStackRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import java.util.Set;
 class MemberServiceTest {
     @Autowired
     MemberRepository memberRepository;
+    @Autowired
+    private TechStackRepository techStackRepository;
 
     @Test
     void 기술스택_조회(){
@@ -49,7 +52,22 @@ class MemberServiceTest {
         for(Member m : result){
             System.out.println(m.getName());
         }
+    }
+    @Test
+    void 회원탈퇴(){
+        //given
+        Member member1 = new Member();
+        member1.setId("1");
+        member1.setName("kim");
+        member1.addTechStack("c");
+        member1.addTechStack("java");
+        member1.addTechStack("spring");
+        member1.addTechStack("python");
 
+        //when
+        memberRepository.delete(member1);
 
+        //then
+        System.out.println(techStackRepository.findAll());
     }
 }
