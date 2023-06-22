@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>회원정보 수정 페이지</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<form th:object="${member}" method="post">
+    <!-- id -->
+    <input type="hidden" th:field="*{id}" />
+
+    <div class="form-group">
+        <label th:for="name">이름</label>
+        <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력하세요" />
+    </div>
+    <div class="form-group">
+        <label th:for="email">이메일</label>
+        <input type="text" th:field="*{email}" class="form-control" placeholder="이메일을 입력하세요" />
+    </div>
+    <div class="form-group">
+        <label th:for="phoneNum">전화번호</label>
+        <input type="text" th:field="*{phoneNum}" class="form-control" placeholder="전화번호를 입력하세요" />
+    </div>
+    <div class="form-group">
+        <label th:for="department">소속</label>
+        <input type="text" th:field="*{department}" class="form-control"  placeholder="소속을 입력하세요" />
+    </div>
+    <div class="form-group">
+        <label th:for="profileImg">프로필 사진</label>
+        <input type="text" th:field="*{profileImg}" class="form-control"  placeholder="프로필 사진을 입력하세요" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</body>
+</html>

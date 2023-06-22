@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>팀 목록</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>pw</th>
+        <th>이름</th>
+        <th>설명</th>
+        <th>팀장</th>
+        <th>팀원</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="team : ${teams}">
+        <td><span th:text="${team.id}"></span></td>
+        <td><span th:text="${team.pw}"></span></td>
+        <td><span th:text="${team.name}"></span></td>
+        <td><span th:text="${team.info}"></span></td>
+        <td><span th:text="${team.leader}"></span></td>
+        <td><span th:text="${team.people}"></span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>find pw result</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<form th:object="${member}" method="post">
+    <!-- id -->
+    <input type="hidden" th:field="*{id}" />
+    <div class="form-group">
+        <label th:for="newPW">새로운 비밀번호</label>
+        <input type="text" name = "newpw" class="form-control" placeholder="새 비밀번호 입력" />
+    </div>
+    <div class="form-group">
+        <label th:for="newPWcheck">비밀번호 확인</label>
+        <input type="text" name = "newpwcheck" class="form-control" placeholder="비밀번호 확인" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</body>
+</html>

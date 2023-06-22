@@ -1,0 +1,96 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.0.5'
+	id 'io.spring.dependency-management' version '1.1.0'
+	id 'jacoco'
+}
+
+group = 'com.joinus'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.projectlombok:lombok:1.18.22'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.webjars:sockjs-client:1.0.2'
+	implementation 'org.webjars:stomp-websocket:2.3.3'
+	implementation 'org.webjars:webjars-locator-core'
+
+	implementation('commons-io:commons-io:2.11.0')
+	implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4' /* Apache Commons FileUpload */
+
+
+	implementation group: 'org.springframework', name: 'spring-websocket', version: '6.0.9'
+	implementation group: 'org.springframework', name: 'spring-messaging', version: '6.0.9'
+
+
+
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	runtimeOnly 'com.h2database:h2'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+	finalizedBy 'jacocoTestReport'
+}
+jacoco {
+	toolVersion = '0.8.7'
+}
+jacocoTestReport {
+	reports {
+		html.enabled true
+		xml.enabled false
+		csv.enabled false
+	}
+	finalizedBy 'jacocoTestCoverageVerification'
+}
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			enabled = false // 활성화
+			element = 'CLASS' // 클래스 단위로 커버리지 체크
+			// includes = []
+
+			// 라인 커버리지를 최소한 80% 만족시켜야 합니다.
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.80
+			}
+
+			// 브랜치 커버리지를 최소한 80% 만족시켜야 합니다.
+			limit {
+				counter = 'BRANCH'
+				value = 'COVEREDRATIO'
+				minimum = 0.80
+			}
+
+			// 빈 줄을 제외한 코드의 라인수를 최대 200라인으로 제한합니다.
+			limit {
+				counter = 'LINE'
+				value = 'TOTALCOUNT'
+				maximum = 200
+			}
+
+
+			//excludes = []
+		}
+
+	}
+}
