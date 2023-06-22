@@ -28,6 +28,7 @@
   let img;
   let teamLength;
   let teamMembers = [];
+  let imgTeamMember = [];
   onMount(async () => {
     await axios.get(`${URL}/api/team/detail`,
       {
@@ -41,9 +42,9 @@
         console.log(team);
         teamLength = team.members.length;
         teamMembers = team.members;
+        console.log(teamMembers)
       })
       .catch(error => console.log(error));
-
 
     // 이미지
     let downloadedImg;

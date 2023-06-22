@@ -138,6 +138,7 @@ export default class HomePlayer extends Player {
 					this.currentPlayer = null;
 
 					if(confirm("회의방을 입장하시겠습니까?")){
+						// window.open(`https://86f0-112-217-167-202.ngrok-free.app/meeting/${this.connection.teamId}`);
 						window.open(`http://localhost:8000/meeting/${this.connection.teamId}`);
 					}
 				}

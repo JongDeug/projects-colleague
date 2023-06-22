@@ -9,6 +9,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import axios from 'axios';
 import { URL } from '../../routes/env';
 import type Connection from '../interaction/connection';
+import scrollGridPlugin from "@fullcalendar/scrollgrid"
 
 export default class Calendar implements UserInterface {
 	_scene: Phaser.Scene;
@@ -27,7 +28,9 @@ export default class Calendar implements UserInterface {
 		let calendarEvents = [];
 
 		let options = {
-			plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
+			plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, scrollGridPlugin],
+			schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+			dayMinWidth: 100,
 			initialView: 'dayGridMonth',
 			editable: true,
 			selectable: true,
@@ -204,8 +207,8 @@ export default class Calendar implements UserInterface {
 			content: this._scene.add
 				.dom(400, 50)
 				.createFromCache('calendar')
-				// .setOrigin(0.5, 0.5)
-				.setScale(0.794, 0.8)
+				// .setScale(0.794, 0.8)
+				.setScale(0.62, 0.8)
 				.setName('calendarContent')
 				.setDepth(1)
 		};

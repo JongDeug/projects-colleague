@@ -20,8 +20,9 @@
       {
         params: {
           postId: data.postId
-        }
-      }, { withCredentials: true })
+        },
+        withCredentials: true,
+      })
       .then(response => {
         let copy = response.data.data;
         let date = copy.createTime.split("T")[0];

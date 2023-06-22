@@ -77,6 +77,31 @@
           console.log(members);
         })
         .catch(error => console.log(error));
+
+      for(const mem of members){
+        let downloadedImg;
+        await axios.get(`${URL}/api/file/download`,
+          {
+            params: {
+              type: "member",    //  회원 프로필이면 member, 팀 배경화면이면 team
+              id: mem.id//  회원 프로필이면 유저 아이디, 팀 배경화면은 teamId
+            },
+            withCredentials: true,
+            responseType: "blob"
+          })
+          .then(response => {
+            downloadedImg = response.data;
+            if (downloadedImg.size === 0)
+              mem.img = null;
+            else{
+              if(browser){
+                mem.img = window.URL.createObjectURL(downloadedImg);
+              }
+            }
+          })
+          .catch(error => console.log(error));
+      }
+      members = members;
     } else {
       members = [];
     }
@@ -160,7 +185,9 @@
       .then(response => {
         getMessage = response.data.data;
         if(check){
-          postMsgCount.update(postMsgCount => postMsgCount -= 1);
+          if(postMsgCount > 0){
+            postMsgCount.update(postMsgCount => postMsgCount -= 1);
+          }
         }
       })
       .catch(error => console.log(error));
@@ -346,13 +373,19 @@
       <Textarea {...textareaprops} readonly bind:value={getMessage.content} />
     </div>
     <svelte:fragment slot="footer">
-      <div class="flex justify-start w-[100%]">
+      <div class="flex justify-between w-[100%]">
         <ConfirmBtn
           content="삭제"
           color="red"
           on:click={async () => {
             await deleteByReceiver(getMessage.id);
 					}}
+        />
+
+        <ConfirmBtn
+          content="프로필 확인하기"
+          color="blue"
+          location="/profile/{getMessage.sender}"
         />
       </div>
     </svelte:fragment>
@@ -399,7 +432,7 @@
               members = [];
               searchInput = "";
             }}>
-                <Avatar src="" size="xs" />
+                <Avatar src="{member.img}" size="xs" />
                 {member.id}
               </ListgroupItem>
             {/each}

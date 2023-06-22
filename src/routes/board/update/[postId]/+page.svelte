@@ -24,8 +24,9 @@
       {
         params: {
           postId: data.postId
-        }
-      }, { withCredentials: true })
+        },
+        withCredentials: true
+      })
       .then(response => {
         let copy = response.data.data;
         let date = copy.createTime.split("T")[0];
@@ -43,7 +44,7 @@
 
   let selected;
 
-  let previewStatus = false;
+  let previewStatus = true;
   const handlePreviewBtn = () => {
     previewStatus = !previewStatus;
   };

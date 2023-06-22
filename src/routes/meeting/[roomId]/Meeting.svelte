@@ -9,12 +9,12 @@
     let _roomId;
     $: _roomId = roomId;
 
-    let userId = localStorage.getWithExpiry('loginMember');
+    let userId = localStorage.getWithExpiry("loginMember");
     let _email = userId;
 
-    if(_email){
+    if (_email) {
       initCall(_roomId, _email);
-    }else{
+    } else {
       alert("로그인 후 이용해주세요");
     }
 
@@ -35,8 +35,10 @@
     let myPeerConnection;
     let peerConnections;
 
-    // const URL = "http://localhost:3000/";
-    const URL = "https://1875-222-103-180-169.ngrok-free.app/";
+    const URL = "http://localhost:3000/";
+    // const URL = "https://0bf7-121-183-110-76.ngrok-free.app/";
+    // const URL = "https://9d2e-112-217-167-202.ngrok-free.app/";
+    // const URL = "https://9d2e-112-217-167-202.ngrok-free.app/";
     const socket = io(URL, {
       withCredentials: true
     });
@@ -56,12 +58,6 @@
           }
           camerasSelect.appendChild(option);
         });
-
-        const option = document.createElement("option");
-        option.value = "hi";
-        option.innerText = "hi";
-        camerasSelect.appendChild(option);
-
       } catch (e) {
         console.log(e);
       }
@@ -70,48 +66,61 @@
     async function getMedia(deviceId, sort) {
       const myFace = document.getElementById("myFace");
 
-
       const initialConstrains = {
         audio: true,
-        video: { facingMode: "user" }
+        // video: { facingMode: "user" }
+        video: true,
       };
       const cameraConstrains = {
         audio: true,
         video: { deviceId: { exact: deviceId } }
       };
-      try {
-        if (sort === "display") {
-          // navigator.mediaDevices.getUserMedia({
-          //   audio: true
-          // }).then(async (audioStream) => {
-          //   myStream = await navigator.mediaDevices.getDisplayMedia({
-          //     audio: true,
-          //     video: true
-          //   });
-          //   myStream.addTrack(audioStream.getAudioTracks()[0]);
-          // });
+      // try {
+      if (sort === "display") {
+        // navigator.mediaDevices.getUserMedia({
+        //   audio: true
+        // }).then(async (audioStream) => {
+        //   myStream = await navigator.mediaDevices.getDisplayMedia({
+        //     audio: true,
+        //     video: true
+        //   });
+        //   myStream.addTrack(audioStream.getAudioTracks()[0]);
+        // });
 
+        try {
           myStream = await navigator.mediaDevices.getDisplayMedia({
             audio: false,
             video: true
           });
-          myFace.srcObject = myStream;
-        } else if (sort === "user" || sort === undefined || sort === null) {
+        } catch (e) {
+          myStream = await navigator.mediaDevices.getDisplayMedia({
+            audio: false,
+            video: true
+          });
+        }
+        myFace.srcObject = myStream;
+      } else if (sort === "user" || sort === undefined || sort === null) {
+        try {
           myStream = await navigator.mediaDevices.getUserMedia(
             deviceId ? cameraConstrains : initialConstrains
           );
-          myFace.srcObject = myStream;
           if (!deviceId) {
             await getCameras();
           }
-
-          myFace.addEventListener("click", () => {
-            shareScreen.srcObject = myStream;
+        } catch (e) {
+          myStream = await navigator.mediaDevices.getDisplayMedia({
+            audio: true,
+            video: true,
           });
         }
-      } catch (e) {
-        console.log(e);
+        myFace.srcObject = myStream;
+        myFace.addEventListener("click", () => {
+          shareScreen.srcObject = myStream;
+        });
       }
+      // } catch (e) {
+      //   console.log(e);
+      // }
     }
 
 
@@ -291,7 +300,7 @@
 
     socket.on("already", () => {
       window.alert("already exist");
-    })
+    });
 
     socket.on("room_full", () => {
       window.alert("full room");

@@ -29,7 +29,8 @@ export default Arena({
 
 		const allowedOrigins = [
 			'http://localhost:8000',
-			'https://5968-222-103-180-169.ngrok-free.app',
+			'http://localhost:2567',
+			'https://86f0-112-217-167-202.ngrok-free.app',
 		];
 		const server = createServer(app);
 		const io = new Server(server, {

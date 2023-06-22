@@ -30,7 +30,8 @@ export default class Connection {
 	): Promise<boolean> {
 		try {
 			this.client = new Client('ws://localhost:2567');
-			// this.client = new Client('wss://9d23-222-103-180-169.ngrok-free.app/ws');
+			// this.client = new Client('wss://c47a-121-183-110-76.ngrok-free.app/ws');
+			// this.client = new Client('wss://6626-112-217-167-202.ngrok-free.app/ws');
 
 			console.log('Joining Room...');
 

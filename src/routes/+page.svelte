@@ -32,6 +32,12 @@
       { withCredentials: true })
       .then(response => {
         let posts = response.data.data;
+        posts = posts.sort((a,b) => {
+          const dateA = new Date(a.createTime);
+          const dateB = new Date(b.createTime);
+          if(dateA < dateB) return 1;
+          if(dateA > dateB) return -1;
+        })
         for (const post of posts) {
           post.createTime = post.createTime.split("T")[0];
         }
@@ -40,7 +46,7 @@
       .catch(error => console.log(error));
   });
   let currentPage = 1;
-  let pageSize = 3;
+  let pageSize = 10;
   $: paginatedItems = paginate({ items, pageSize, currentPage });
 
 
@@ -56,6 +62,7 @@
         .then(response => {
           // items = response.data.data;	//	검색 결과
           let posts = response.data.data;
+          console.log(posts);
           for (const post of posts) {
             post.createTime = post.createTime.split("T")[0];
           }

@@ -36,8 +36,12 @@
         })
         .then(response => {
           downloadedImg = response.data;
-          if (browser) {
-            mem.img = window.URL.createObjectURL(downloadedImg);
+          if (downloadedImg.size === 0)
+            mem.img = null;
+          else{
+            if(browser){
+              mem.img = window.URL.createObjectURL(downloadedImg);
+            }
           }
         })
         .catch(error => console.log(error));
@@ -60,7 +64,7 @@
           <span class="text-sm text-gray-500 dark:text-gray-400">{member.info ? member.info : "자기소개가 없어요"}</span>
           <div class="flex mt-4 space-x-3 lg:mt-6">
             <ConfirmBtn content="상세보기" color="blue" location="/profile/{member.id}" />
-            <ConfirmBtn content="쪽지 보내기" color="light" txtColor="black" style="border" />
+            <ConfirmBtn content="쪽지 보내기" color="light" txtColor="black" style="border" location="/postMsg"/>
           </div>
         </div>
       </Card>

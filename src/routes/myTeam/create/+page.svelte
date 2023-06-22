@@ -109,8 +109,34 @@
         })
         .then(response => {
           members = response.data.data;
+          console.log(members)
         })
         .catch(error => console.log(error));
+
+      for(const mem of members){
+        let downloadedImg;
+        await axios.get(`${URL}/api/file/download`,
+          {
+            params: {
+              type: "member",    //  회원 프로필이면 member, 팀 배경화면이면 team
+              id: mem.id//  회원 프로필이면 유저 아이디, 팀 배경화면은 teamId
+            },
+            withCredentials: true,
+            responseType: "blob"
+          })
+          .then(response => {
+            downloadedImg = response.data;
+            if (downloadedImg.size === 0)
+              mem.img = null;
+            else{
+              if(browser){
+                mem.img = window.URL.createObjectURL(downloadedImg);
+              }
+            }
+          })
+          .catch(error => console.log(error));
+      }
+      members = members;
     } else {
       members = [];
     }
@@ -144,10 +170,10 @@
         <Search size="md" bind:value={searchInput} />
       </div>
 
-      <div class="absolute t-0 r-0 w-full">
+      <div class="absolute t-0 r-0 w-full relative">
         <Listgroup active>
           {#each members as member}
-            <ListgroupItem class="font-semibold gap-2" on:click={() => {
+            <ListgroupItem class="font-semibold gap-2 z-50" on:click={() => {
               let flag = teamMembers.find((person) => person.id === member.id);
               if(!flag){
                 teamMembers = [...teamMembers, member];
@@ -156,7 +182,7 @@
               members = [];
               searchInput = "";
             }}>
-              <Avatar src="" size="xs" />
+              <Avatar src="{member.img}" size="xs" />
               {member.id}
             </ListgroupItem>
           {/each}
@@ -167,8 +193,8 @@
         <Listgroup active>
           <h5 class="text-center bg-blue-500 text-white font-bold rounded-t-lg">팀원 목록</h5>
           {#each teamMembers as member}
-            <ListgroupItem class="font-semibold gap-2">
-              <Avatar src="" size="xs" />
+            <ListgroupItem class="font-semibold gap-2 z-0">
+              <Avatar src="{member.img}" size="xs" />
               {member.id}
               <CloseButton on:click={() => {exceptMember(member.id)}} />
             </ListgroupItem>
