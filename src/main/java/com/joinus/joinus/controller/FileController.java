@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,6 +55,11 @@ public class FileController {
     public String uploadTest(MultipartFile multipartFile, String type, String id, Model model){
         fileService.uploadFile(multipartFile, type, id);
         return "success";
+    }
+
+    @PostMapping(value = "/upload/hi", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public void uploadImage(MultipartFile multipartFile){
+        log.info("file=", multipartFile);
     }
 
     @GetMapping("/download")

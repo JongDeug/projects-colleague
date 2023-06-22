@@ -14,7 +14,7 @@ public class WebConfig implements WebMvcConfigurer{
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowCredentials(true).allowedOrigins("http://127.0.0.1:8000", "http://localhost:8000");
+                .allowCredentials(true).allowedOrigins("http://127.0.0.1:8000", "http://localhost:8000", "https://8077-121-183-110-76.ngrok-free.app");
 //        .allowedOrigins("http://localhost:8080", "http://localhost:8081");
     }
 

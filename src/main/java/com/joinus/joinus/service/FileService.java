@@ -50,7 +50,8 @@ public class FileService {
         return uploadFile.getOriginalFilename();
     }
     public File downloadFile(String type, String id){
-        String path = FileConst.UPLOAD_PATH + type + "\\" + id;
+//        String path = FileConst.UPLOAD_PATH + type + "\\" + id;
+        String path = FileConst.UPLOAD_PATH + type + "/" + id;
         String fileName = null;
         if (type.equals("member")){
             Member member = memberRepository.findMemberById(id).get();
